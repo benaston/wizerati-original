@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--possibly need to maintain relative position and then apply absolute positioning once the transition has occurred.-->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-shadow: 0 0 0 2px slategrey inset;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .flex {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-content: stretch;
+            align-items: flex-start;
+        }
+        
+        .absolute {
+            position: absolute;
+        }
+
+        .transition-width {
+            transition: width 2s ease-in-out;
+        }
+
+        .transition-margin {
+            transition: margin 2s ease-in-out;
+        }
+
+        .transition-margin-width {
+            transition: margin 2s ease-in-out, width 2s ease-in-out;
+        }
+
+        .flex-item {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: auto;
+        }
+
+        .red {
+            box-shadow: 0 0 0 4px red inset;
+        }
+
+        .yellow {
+            box-shadow: 0 0 0 4px yellow inset;
+        }
+
+        .green {
+            box-shadow: 0 0 0 4px green inset;
+        }
+
+        .blue {
+            box-shadow: 0 0 0 4px blue inset;
+        }
+
+        .orange {
+            box-shadow: 0 0 0 4px orange inset;
+        }
+
+        .inline-block {
+            display: inline-block;
+        }
+
+        .height-100 {
+            height: 100%;
+        }
+
+        .width-100px {
+            width: 100px;
+        }
+
+        .width-300 {
+            width: 300px;
+        }
+
+        .overflow-visible {
+            overflow: visible;
+        }
+
+        .overflow-scroll-x {
+            overflow-x: scroll;
+        }
+
+        .overflow-scroll-y {
+            overflow-y: scroll;
+        }
+
+        .fixed {
+            position: fixed;
+        }
+
+        .left-100px {
+            left:100px;
+        }
+        .top-100px {
+            top:100px;
+        }
+        .bg-radial-white{
+            background: -webkit-radial-gradient(center,ellipse cover,rgba(255,255,255,1) 0,rgba(255,255,255,.8) 81%,rgba(255,255,255,0) 100%);
+        }
+        .margin-left-300 {
+            margin-left:300px;
+        }
+        .padding-left-300 {
+            padding-left:300px;
+        }
+        .background-linear-blue {
+            background: -webkit-radial-gradient(center,ellipse cover, rgba(33,201,253,1) 0%,rgba(27,83,238,0) 100%)
+        }
+    </style>
+    <title></title>
+</head>
+<body data-ui-mode="1" class="height-100 overflow-scroll-x flex">
+<article class="inline-block height-100 width-300 blue search-panel transition-width fixed">
+    <article>
+        <p>search</p>
+    </article>
+</article><article class="inline-block height-100 width-300 red flex-item margin-left-300 first-non-search-item transition-margin-width">
+    <article class="width-300 background-linear-blue height-100 absolute">
+        <p>1</p>
+    </article>
+</article><article class="inline-block height-100 width-300 yellow flex-item transition-width">
+    <article class="width-300 background-linear-blue height-100 absolute">
+        <p>2</p>
+    </article>
+</article><article class="inline-block height-100 width-300 green flex-item transition-width">
+    <article class="width-300 background-linear-blue height-100 absolute">
+        <p>3</p>
+    </article>
+</article><article class="inline-block height-100 width-300 orange flex-item transition-width">
+    <article class="item-of-interest-content width-300 background-linear-blue height-100 absolute">
+        <p>4</p>
+    </article>
+</article><article class="inline-block height-100 width-100px orange flex-item transition-width">
+    <article>
+        <button onclick="javascript:document.querySelector('.items-of-interest-container').setAttribute('data-mode', '1')">show pinned items
+        </button>
+        <button onclick="javascript:document.querySelector('.items-of-interest-container').setAttribute('data-mode', '0')">hide pinned items
+        </button>
+    </article>
+</article>
+<nav class="fixed left-100px top-100px bg-radial-white">
+    <button onclick="javascript:(function(){ document.querySelector('.search-panel').style.width =  document.querySelector('.search-panel').style.width === '10px' ? '300px'  : '10px'; document.querySelector('.first-non-search-item').style.margin =  document.querySelector('.first-non-search-item').style.margin === '0px 0px 0px 10px' ? '0px 0px 0px 300px' : '0px 0px 0px 10px';}())">set width of sp</button>
+    <button onclick="javascript:(function(){ var els = document.querySelectorAll('.flex-item'); Array.prototype.slice.call(els, 0).map(function(e) { e.style.width =  e.style.width === '10px' ? '300px'  : '10px'; }); } ())">collapse items</button>
+</nav>
+</body>
+</html>

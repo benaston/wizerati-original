@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--possibly need to maintain relative position and then apply absolute positioning once the transition has occurred.-->
+    <style>
+        body{
+            margin:0;
+            padding:0;
+
+            box-shadow: 0 0 0 3px red;
+        }
+        body[data-ui-mode='1'] .items-of-interest-panel {
+            display: -webkit-box;
+
+        }
+        .items-of-interest-container[data-mode='1'] {
+            overflow: visible; /*attempt to prevent clipping of blurred pinned items*/
+        }
+
+        .items-of-interest-container[data-mode='1'] .item-of-interest:not(:first-child) {
+            overflow: visible; /*attempt to prevent clipping of blurred pinned items*/
+            /*position: absolute;*/
+            position: relative;
+            left: -420px;
+            -webkit-filter:blur(20px);
+            -webkit-transition: left 1s ease-in-out;
+        }
+        .items-of-interest-container[data-mode='1'] .item-of-interest:nth-child(3) {
+            left: 20px;
+        }
+        .items-of-interest-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            box-shadow: 0 0 1px 0 #000;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            display: inline-block;
+            box-shadow: 0 0 0 3px blue;
+            left: 100px; /*arbitrary positioning within the body*/
+
+        }
+
+        .items-of-interest-panel.buffer {
+            pointer-events: none;
+            opacity: 0!important;
+            transition: left .1s ease-in-out,opacity .1s ease-in-out;
+        }
+        .items-of-interest-panel {
+            left: 0;
+            display: none;
+            transition: left .2s ease-in-out,opacity .1s ease-in-out,width .2s ease-in-out;
+            position: absolute; /*required to ensure the buffer panel remains in the exact same position as the non-buffer*/
+            box-shadow: 0 0 0 1px black;
+        }
+        .lucid-columns-full-height {
+            /*position: relative;*/ /*must be commented out to ensure the buffer panel remains in the exact same position as the non-buffer*/
+            top: 0;
+            bottom: 0;
+            overflow: hidden;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            display: -webkit-box;
+            -webkit-box-align: stretch;
+            -webkit-box-orient: horizontal;
+        }
+        .item-of-interest {
+            position: relative; /*attempt to get the card-stacking animation working ok - avoid the flick between position types*/
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            background: linear;
+            -webkit-transition: left 1s ease-in-out;
+        }
+        .selected {
+            transition: width .3s ease-in-out 0s,opacity .3s ease-in-out;
+        }
+        .lucid-column {
+            -webkit-box-flex: 0;
+            -moz-box-flex: 0;
+            width: 436px;
+        }
+    </style>
+    <title></title>
+</head>
+<body data-ui-mode="1">
+<div class="items-of-interest-container">
+    <div id="items-of-interest-panel-1" class="items-of-interest-panel panel lucid-columns-full-height buffer">
+        <div class="centered-text handle handle-pinned-items btn-container">
+            <a href="/itemsofinterestpanelmode/update?mode=0" class="btn btn-primary btn-50"></a><div class="label">expand pinned items</div>
+        </div>
+    </div>
+    <div id="items-of-interest-panel-2" class="items-of-interest-panel panel lucid-columns-full-height"><article class="item-of-interest overflow-y-scroll overflow-x-hidden lucid-column selected" data-id="GUID5">
+        <div class="item-of-interest-width-maintainer">
+            <div id="top1" class="in-page-anchor-target"></div>
+            <article class="item-of-interest-content ">
+                <p>foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar</p>
+                <p>foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar</p>
+                <p>foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar</p>
+            </article>
+        </div>
+    </article><article class="item-of-interest overflow-y-scroll overflow-x-hidden lucid-column" data-id="GUID2" style="">
+        <div class="item-of-interest-width-maintainer">
+            <div id="top1" class="in-page-anchor-target"></div>
+            <article class="item-of-interest-content ">
+                <p>foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar</p>
+                <p>foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar</p>
+                <p>foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar
+                    foobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobarfoobar boobar</p>
+            </article>
+        </div>
+    </article>
+        <div class="centered-text handle handle-pinned-items btn-container" style="
+    -webkit-box-flex: 0;
+">
+            <button onclick="javascript:document.querySelector('.items-of-interest-container').setAttribute('data-mode', '1')" class="btn btn-primary btn-50"></button><div class="label">hide pinned items</div>
+            <button onclick="javascript:document.querySelector('.items-of-interest-container').setAttribute('data-mode', '0')" class="btn btn-primary btn-50"></button><div class="label">show pinned items</div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
