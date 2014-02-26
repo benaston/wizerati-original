@@ -6,7 +6,6 @@
         body {
             margin: 0;
             padding: 0;
-            box-shadow: 0 0 0 2px slategrey inset;
             position: absolute;
             top: 0;
             left: 0;
@@ -67,6 +66,10 @@
             box-shadow: 0 0 0 4px orange inset;
         }
 
+        .slate {
+            box-shadow: 0 0 0 2px slategrey inset;
+        }
+
         .inline-block {
             display: inline-block;
         }
@@ -123,7 +126,9 @@
         .margin-left-340 {
             margin-left:300px;
         }
-
+        .background-white-translucent {
+            background: rgba(255,255,255,.95);
+        }
         .background-linear-blue {
             background: -webkit-radial-gradient(center,ellipse cover, rgba(33,201,253,1) 0%,rgba(33,201,253,.7) 50%,rgba(27,83,238,0) 100%)
         }
@@ -137,19 +142,20 @@
         .z-index-1 {
             z-index: 1;
         }
-        .padding-20 {
-            padding: 20px;
+        .padding-horizontal-20 {
+            padding-left: 20px;
+            padding-right: 20px;
         }
     </style>
     <title></title>
 </head>
 <body data-ui-mode="1" class="height-100 overflow-scroll-x flex">
 <article class="inline-block height-100 width-300 blue transition-width fixed sem-search-panel ">
-    <article class="padding-20">
+    <article class="padding-horizontal-20">
         <p>search</p>
     </article>
 </article><article class="inline-block height-100 width-340 blue transition-margin-width-filter margin-left-340 sem-first-non-search-item sem-result-list-panel">
-    <article class="width-300 background-linear-pink height-100 absolute overflow-scroll-y padding-20">
+    <article class="width-300 background-linear-pink height-100 absolute overflow-scroll-y padding-horizontal-20">
         <ol>
             <li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li>
             <li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li>
@@ -163,8 +169,8 @@
             <li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li><li>result 1</li>
         </ol>
     </article>
-</article><article class="inline-block height-100 width-10 red flex-item transition-width z-index-1 sem-pinned-item">
-    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-20">
+</article><article class="inline-block height-100 width-10 flex-item transition-width z-index-1 sem-selected-item">
+    <article class="width-300 background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20">
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
@@ -175,34 +181,38 @@
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
     </article>
-</article><article class="inline-block height-100 width-10 red flex-item transition-width sem-selected-item">
-    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-20">
+</article><article class="inline-block height-100 width-10 flex-item transition-width sem-pinned-item">
+    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
         <p>1</p>
     </article>
-</article><article class="inline-block height-100 width-10 yellow flex-item transition-width sem-pinned-item">
-    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-20">
+</article><article class="inline-block height-100 width-10 flex-item transition-width sem-pinned-item">
+    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
         <p>2</p>
     </article>
-</article><article class="inline-block height-100 width-10 green flex-item transition-width sem-pinned-item">
-    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-20">
+</article><article class="inline-block height-100 width-10 flex-item transition-width sem-pinned-item">
+    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
         <p>3</p>
     </article>
-</article><article class="inline-block height-100 width-10 orange flex-item transition-width sem-pinned-item">
-    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-20">
+</article><article class="inline-block height-100 width-10  flex-item transition-width sem-pinned-item">
+    <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
         <p>4</p>
-    </article>
-</article><article class="inline-block height-100 width-100px orange flex-item transition-width">
-    <article>
-        <button onclick="javascript:document.querySelector('.items-of-interest-container').setAttribute('data-mode', '1')">show pinned items
-        </button>
-        <button onclick="javascript:document.querySelector('.items-of-interest-container').setAttribute('data-mode', '0')">hide pinned items
-        </button>
     </article>
 </article>
 <nav class="fixed left-100px top-100px bg-radial-white">
     <button onclick="javascript:(function(){ document.querySelector('.sem-search-panel').style.width =  document.querySelector('.sem-search-panel').style.width === '10px' ? '340px'  : '10px'; document.querySelector('.sem-first-non-search-item').style.margin =  document.querySelector('.sem-first-non-search-item').style.margin === '0px 0px 0px 10px' ? '0px 0px 0px 340px' : '0px 0px 0px 10px';}())">set width of sp</button>
     <button onclick="javascript:(function(){ var el = document.querySelector('.sem-result-list-panel'); el.style.width =  el.style.width === '10px' ? '340px'  : '10px'; el.style.width === '10px' ? el.style['-webkit-filter'] = 'blur(20px)'  : el.style['-webkit-filter'] = 'blur(0)'; }())">set width of result list panel</button>
-    <button onclick="javascript:(function(){ var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item'); Array.prototype.slice.call(els, 0).map(function(e) { e.style.width =  e.style.width === '10px' ? '340px'  : '10px'; }); } ())">collapse items</button>
+    <button onclick="javascript:(function(){
+        var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item');
+        var elsPinned = document.querySelectorAll('.sem-pinned-item');
+        Array.prototype.slice.call(els, 0).map(function(el) {
+            el.style.width =  el.style.width === '10px' ? '340px'  : '10px';
+        });
+//        setTimeout(function(){
+//            Array.prototype.slice.call(elsPinned, 0).map(function(el) {
+//                el.style.width === '10px' ? el.style['-webkit-filter'] = 'blur(20px)'  : el.style['-webkit-filter'] = 'blur(0)';
+//            });
+//        }, 2000);
+    }())">collapse items</button>
 </nav>
 </body>
 </html>
