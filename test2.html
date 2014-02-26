@@ -146,6 +146,14 @@
             padding-left: 20px;
             padding-right: 20px;
         }
+        .blur-temp {
+            top: 0;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            display: inline-block;
+            box-sizing: border-box;
+        }
     </style>
     <title></title>
 </head>
@@ -181,9 +189,12 @@
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
         <p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p><p>selected item</p>
     </article>
+</article><article class="inline-block height-100 width-10 flex-item transition-width sem-pinned-item"><article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
+        <p>1</p>
+    </article>
 </article><article class="inline-block height-100 width-10 flex-item transition-width sem-pinned-item">
     <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <p>1</p>
+        <p>blur layer</p>
     </article>
 </article><article class="inline-block height-100 width-10 flex-item transition-width sem-pinned-item">
     <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
@@ -197,8 +208,7 @@
     <article class="width-300 background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
         <p>4</p>
     </article>
-</article>
-<nav class="fixed left-100px top-100px bg-radial-white">
+</article><nav class="fixed left-100px top-100px bg-radial-white">
     <button onclick="javascript:(function(){ document.querySelector('.sem-search-panel').style.width =  document.querySelector('.sem-search-panel').style.width === '10px' ? '340px'  : '10px'; document.querySelector('.sem-first-non-search-item').style.margin =  document.querySelector('.sem-first-non-search-item').style.margin === '0px 0px 0px 10px' ? '0px 0px 0px 340px' : '0px 0px 0px 10px';}())">set width of sp</button>
     <button onclick="javascript:(function(){ var el = document.querySelector('.sem-result-list-panel'); el.style.width =  el.style.width === '10px' ? '340px'  : '10px'; el.style.width === '10px' ? el.style['-webkit-filter'] = 'blur(20px)'  : el.style['-webkit-filter'] = 'blur(0)'; }())">set width of result list panel</button>
     <button onclick="javascript:(function(){
@@ -216,3 +226,4 @@
 </nav>
 </body>
 </html>
+<!--Selected item (and all the items in the stack of pinned items) is re-sized according to window size using javascript. Clicking the pinned items stack determines whether the pinned items can be fit in the viewport at default size. If so then they are apportioned a fair fraction of the space. If not their default sizes are used... and then the deck of pinned items is unshuffled.-->
