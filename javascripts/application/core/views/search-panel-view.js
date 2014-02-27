@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '#search-panel',
+        _el = '.sem-search-panel',
         _searchPanelModeEnum = app.mod('enum').SearchPanelMode;
 
     this.$el = null;

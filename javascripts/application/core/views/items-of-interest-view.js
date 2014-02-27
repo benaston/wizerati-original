@@ -10,6 +10,9 @@
 
     var that = this,
         _el = '.sem-selected-item, .sem-pinned-item',
+        _elSelectedItem = '.sem-selected-item',
+        _elPinnedItems = '.sem-pinned-item',
+        _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _renderOptimizations = {};
 
     this.$el = null;
@@ -26,12 +29,24 @@
         return;
       }
 
-      that.$el.width(that.Model.getItemWidth());
+      var mode = that.Model.getMode();
+
+      if(mode === _modeEnum.Default) {
+        that.$elSelectedItem.children().width(that.Model.getItemWidth()-40);
+        that.$elPinnedItems.children().width(that.Model.getItemWidth()-40);
+        that.$el.width(10);
+      } else if (mode === _modeEnum.PinnedItemsExpanded ) {
+        that.$el.children().width(that.Model.getItemWidth()-40);
+        that.$el.width(that.Model.getItemWidth());
+      }
+
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     };
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.$elSelectedItem = $(_elSelectedItem);
+      that.$elPinnedItems = $(_elPinnedItems);
       that.render();
     };
 

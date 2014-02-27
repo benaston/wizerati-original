@@ -15,9 +15,9 @@
         throw "layout not supplied";
       }
 
-      _searchPanelModel.setMode(layout.searchPanelMode);
-      _resultListModel.setMode(layout.resultListMode);
-      _itemsOfInterestModel.setItemWidth({ itemWidth: layout.widthItemOfInterest });
+      _searchPanelModel.setMode(_searchPanelModel.getMode());
+      _resultListModel.setMode(resultListModel.getMode());
+      _itemsOfInterestModel.setItemWidth(layout.widthItemOfInterest);
     };
 
     function init() {

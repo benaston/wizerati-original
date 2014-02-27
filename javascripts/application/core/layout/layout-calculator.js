@@ -16,15 +16,15 @@
     this.calculate = function () {
       var newWidth = _defaultWidthItemOfInterest;
       var mode = itemsOfInterestView.Model.getMode();
-      var widthTakenBySearchAndResults = _searchPanelView.$el.width() - _resultListView.$el.width()
+      var widthTakenBySearchAndResults = _searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth
       var viewPortWidth = window.innerWidth;
 
       if (mode === _itemsOfInterestModeEnum.Default) {
-        newWidth = viewPortWidth - widthTakenBySearchAndResults - 60;
+        newWidth = viewPortWidth - widthTakenBySearchAndResults - 20;
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var numberOfItemsOfInterest = 3;
 
-        if ((_searchPanelView.$el.width() - _resultListView.$el.width() + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
+        if ((_searchPanelView.$el[0].clientWidth - _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResults) / numberOfItemsOfInterest;
         }
 
@@ -45,9 +45,8 @@
       }
 
       return {
-        searchPanelMode: _searchPanelView.Model.getMode(),
-        resultListMode: _resultListView.Model.getMode(),
-        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? Math.floor(newWidth) : _defaultWidthItemOfInterest,
+        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? Math.floor(newWidth-_itemOfInterestContentWidthDelta) : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
       };
     };
 

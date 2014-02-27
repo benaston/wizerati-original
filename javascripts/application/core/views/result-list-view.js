@@ -9,7 +9,7 @@
 
     var that = this,
         _el = '.sem-result-list',
-        _defaultWidth = 100,
+        _defaultWidth = 140,
         _minimizedWidth = 10,
         _modeEnum = app.mod('enum').ResultListMode;
 
@@ -17,7 +17,7 @@
     this.Model = null;
 
     this.render = function () {
-      if(that.Model.getMode === _modeEnum.Default) {
+      if(that.Model.getMode() === _modeEnum.Default) {
         that.$el.width(_defaultWidth);
       } else {
         that.$el.width(_minimizedWidth);
