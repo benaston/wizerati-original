@@ -1,0 +1,38 @@
+.search-panel {
+    display: inline-block;
+    height: 100%;
+    width: 320px;
+    box-shadow: 0 0 0 3px blue inset;
+    transition: width 2s ease-in-out;
+    position: fixed;
+}
+
+.result-list {
+    display: inline-block;
+    height: 100%;
+    width: 533px;
+    box-shadow: 0 0 0 3px blue inset;
+    transition: margin 2s ease-in-out, width 2s ease-in-out, -webkit-filter 2s ease-in-out;
+    margin-left: 320px;
+}
+
+.selected-item {
+    display: inline-block;
+    height: 100%;
+    width: 10px;
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+    z-index: 1;
+    transition: width 2s ease-in-out;
+}
+
+.pinned-item {
+    display: inline-block;
+    height: 100%;
+    width: 10px;
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+    transition: width 2s ease-in-out;
+}
