@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="stylesheets/vendor/lucid-style-reset.css"  />
+    <link rel="stylesheet" type="text/css" href="stylesheets/vendor/lucid-style-declarative.css"  />
+    <style></style>
+</head>
+<body data-ui-mode="1" class="height-100 overflow-scroll-x flex" data-pinned-items-mode="0">
+<div class="sem-search-panel inline-block height-100 width-140 blue transition-width fixed">
+    <div class="padding-horizontal-20">
+        <p>search</p>
+    </div>
+</div><div class="sem-first-non-search-item sem-result-list inline-block height-100 width-140 blue transition-margin-width-filter margin-left-140 ">
+    <div class="width-100px background-linear-pink height-100 absolute overflow-scroll-y padding-horizontal-20">
+        <ol>
+            <li style="font-size: 300px">r1</li>
+        </ol>
+    </div>
+</div><div class="sem-selected-item inline-block height-100 width-10 flex-item transition-width z-index-1 ">
+    <div class="width-100px background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20">
+        <li style="font-size: 300px">s</li>
+    </div>
+</div><div class="sem-pinned-item inline-block height-100 width-10 flex-item transition-width">
+    <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
+        <li style="font-size: 300px">p1</li>
+    </div> <!--could conceivably insert a blur item here via js -->
+</div><div class="sem-pinned-item inline-block height-100 width-10 flex-item transition-width">
+    <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
+        <li style="font-size: 300px">p2</li>
+    </div>
+</div><nav class="fixed left-100px top-100px bg-radial-white z-index-9999">
+    <button onclick="javascript:(function(){ document.querySelector('.sem-search-panel').style.width =  document.querySelector('.sem-search-panel').style.width === '10px' ? '140px'  : '10px'; document.querySelector('.sem-first-non-search-item').style.margin =  document.querySelector('.sem-first-non-search-item').style.margin === '0px 0px 0px 10px' ? '0px 0px 0px 140px' : '0px 0px 0px 10px';}())">set width of sp</button>
+    <button onclick="javascript:(function(){ var el = document.querySelector('.sem-result-list'); el.style.width =  el.style.width === '10px' ? '140px'  : '10px'; el.style.width === '10px' ? el.style['-webkit-filter'] = 'blur(20px)'  : el.style['-webkit-filter'] = 'blur(0)'; }())">set width of result list panel</button>
+    <button onclick="javascript:(function(){
+        var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item');
+        var elsPinned = document.querySelectorAll('.sem-pinned-item');
+        Array.prototype.slice.call(els, 0).map(function(el) {
+            console.log('width: %s', el.clientWidth);
+            el.style.width =  el.clientWidth === 10 ? '140px'  : '10px';
+        });
+
+        var currentMode = document.querySelector('body').getAttribute('data-pinned-items-mode');
+        var newValue = (currentMode === '1') ? '0' : '1';
+//        console.log('newValue: %s', newValue)
+        document.querySelector('body').setAttribute('data-pinned-items-mode', newValue);
+    }())">toggle pinned items</button>
+</nav>
+<script src="javascripts/vendor/zepto.min.js" />
+<script src="javascripts/vendor/decorator.js" />
+<script>
+    window.addEventListener('resize', function(){
+        if(document.querySelector('body').getAttribute('data-pinned-items-mode') === '0') {
+            var els = document.querySelectorAll('.sem-pinned-item > article, .sem-selected-item > article');
+            var newWidth = window.innerWidth - 140 - 140 - 60;
+            Array.prototype.slice.call(els, 0).map(function(el) {
+                newWidth = newWidth >= 100 ? newWidth : 100;
+                el.style.width = newWidth+'px';
+            });
+        } else if (document.querySelector('body').getAttribute('data-pinned-items-mode') === '1') {
+            var newWidth = 140;
+            var numberOfItemsOfInterest = 3;
+            if((140 + 140 + (140*numberOfItemsOfInterest)) < window.innerWidth) {
+                newWidth = (window.innerWidth - 140 - 140)/numberOfItemsOfInterest;
+            }
+
+            var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item');
+            console.log('window.innerWidth %s', window.innerWidth);
+            console.log('newWidth %s', newWidth);
+
+            Array.prototype.slice.call(els, 0).map(function(el) {
+                console.log('setting width %s for: %s ', newWidth, el);
+                newWidth = newWidth >= 140 ? newWidth : 140;
+                console.log('FOO: %s', el.querySelector('div'));
+                el.style.width = newWidth+'px';
+                el.querySelector('article').style.width = (newWidth - 40) + 'px';
+            });
+        }
+    });
+
+    function ItemsOfInterestModel {
+        if(!(this instanceof ItemsOfInterestModel)) {
+            return new ItemsOfInterestModel();
+        }
+
+        this.updateEventUri = 'update://ItemsOfInterestModel/';
+
+        this.getArePinnedItemsExpanded = function() {
+
+        };
+
+        this.setArePinnedItemsExpanded = function(value) {
+            _arePinnedItemsExpanded = value;
+
+            $.publish(that.updateEventUri);
+        };
+    }
+
+</script>
+</body>
+</html>
+
+<!--Selected item (and all the items in the stack of pinned items) is re-sized according to window size using javascript. Clicking the pinned items stack determines whether the pinned items can be fit in the viewport at default size. If so then they are apportioned a fair fraction of the space. If not their default sizes are used... and then the deck of pinned items is unshuffled.-->
