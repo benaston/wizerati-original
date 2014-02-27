@@ -29,17 +29,6 @@
         }
 
         console.log('LayoutCalculator::calculate: %s', newWidth);
-//        var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item');
-//        console.log('window.innerWidth %s', window.innerWidth);
-//        console.log('newWidth %s', newWidth);
-
-//        Array.prototype.slice.call(els, 0).map(function (el) {
-//          console.log('setting width %s for: %s ', newWidth, el);
-//          newWidth = newWidth >= 140 ? newWidth : 140;
-//          console.log('FOO: %s', el.querySelector('article'));
-//          el.style.width = newWidth + 'px';
-//          el.querySelector('article').style.width = (newWidth - 40) + 'px';
-//        });
       } else {
         throw "invalid itemsOfInterestView mode.";
       }

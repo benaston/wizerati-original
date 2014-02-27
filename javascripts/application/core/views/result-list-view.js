@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '.sem-result-list',
+        _el = '.result-list',
         _defaultWidth = 140,
         _minimizedWidth = 10,
         _modeEnum = app.mod('enum').ResultListMode;

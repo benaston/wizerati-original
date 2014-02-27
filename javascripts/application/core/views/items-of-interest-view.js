@@ -1,7 +1,6 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-//  throw "complete going through each of the views , removing everything but the layout behavior, add renderOptimize stuff to main";
   function ItemsOfInterestView(model) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
@@ -9,9 +8,9 @@
     }
 
     var that = this,
-        _el = '.sem-selected-item, .sem-pinned-item',
-        _elSelectedItem = '.sem-selected-item',
-        _elPinnedItems = '.sem-pinned-item',
+        _el = '.selected-item, .pinned-item',
+        _elSelectedItem = '.selected-item',
+        _elPinnedItems = '.pinned-item',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _renderOptimizations = {};
 

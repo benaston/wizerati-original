@@ -118,6 +118,7 @@ body {
 
 .bg-radial-white {
     background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0, rgba(255, 255, 255, .8) 81%, rgba(255, 255, 255, 0) 100%);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0, rgba(255, 255, 255, .8) 81%, rgba(255, 255, 255, 0) 100%);
 }
 
 .margin-left-140 {
@@ -137,11 +138,13 @@ body {
 }
 
 .background-linear-blue {
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(33, 201, 253, 1) 0%, rgba(33, 201, 253, .7) 50%, rgba(27, 83, 238, 0) 100%)
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(33, 201, 253, 1) 0%, rgba(33, 201, 253, .7) 50%, rgba(27, 83, 238, 0) 100%);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(33, 201, 253, 1) 0%, rgba(33, 201, 253, .7) 50%, rgba(27, 83, 238, 0) 100%);
 }
 
 .background-linear-pink {
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(201, 33, 253, 1) 0%, rgba(201, 33, 253, .7) 50%, rgba(83, 27, 238, 0) 100%)
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(201, 33, 253, 1) 0%, rgba(201, 33, 253, .7) 50%, rgba(83, 27, 238, 0) 100%);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(201, 33, 253, 1) 0%, rgba(201, 33, 253, .7) 50%, rgba(83, 27, 238, 0) 100%);
 }
 
 .blur {

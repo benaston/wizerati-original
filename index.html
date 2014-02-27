@@ -5,97 +5,66 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/vendor/lucid-style-declarative.css"  />
     <style></style>
 </head>
-<body data-ui-mode="1" class="height-100 overflow-scroll-x flex" data-pinned-items-mode="0">
-<div class="sem-search-panel inline-block height-100 width-140 blue transition-width fixed">
+<body data-ui-mode="1" class="height-100 overflow-scroll-x flex" data-items-of-interest-mode="0">
+<div class="search-panel inline-block height-100 width-140 blue transition-width fixed">
     <div class="padding-horizontal-20">
         <p>search</p>
     </div>
-</div><div class="sem-first-non-search-item sem-result-list inline-block height-100 width-140 blue transition-margin-width-filter margin-left-140 ">
+</div><article class="result-list inline-block height-100 width-140 blue transition-margin-width-filter margin-left-140 ">
     <div class="width-100px background-linear-pink height-100 absolute overflow-scroll-y padding-horizontal-20">
         <ol>
-            <li style="font-size: 300px">r1</li>
+            <li>r1</li>
+            <li>r2</li>
+            <li>r3</li>
         </ol>
     </div>
-</div><div class="sem-selected-item inline-block height-100 width-10 flex-item transition-width z-index-1 ">
+</article><article class="selected-item inline-block height-100 width-10 flex-item transition-width z-index-1 ">
     <div class="width-100px background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <li style="font-size: 300px">s</li>
+        <li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li>
+        <li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li>
+        <li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li>
+        <li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li><li>s item</li>
+        <li>s item siufdius sdoiudss item siufdius sdoiudss item siufdius sdoiudss item siufdius sdoiudss item siufdius sdoiudss item siufdius sdoiuds</li>
     </div>
-</div><div class="sem-pinned-item inline-block height-100 width-10 flex-item transition-width">
+</article><article class="pinned-item inline-block height-100 width-10 flex-item transition-width">
     <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <li style="font-size: 300px">p1</li>
+        <li>p1</li>
     </div> <!--could conceivably insert a blur item here via js -->
-</div><div class="sem-pinned-item inline-block height-100 width-10 flex-item transition-width">
+</article><article class="pinned-item inline-block height-100 width-10 flex-item transition-width">
     <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <li style="font-size: 300px">p2</li>
+        <li>p2</li>
     </div>
-</div><nav class="fixed left-100px top-100px bg-radial-white z-index-9999">
-    <button onclick="javascript:(function(){ document.querySelector('.sem-search-panel').style.width =  document.querySelector('.sem-search-panel').style.width === '10px' ? '140px'  : '10px'; document.querySelector('.sem-first-non-search-item').style.margin =  document.querySelector('.sem-first-non-search-item').style.margin === '0px 0px 0px 10px' ? '0px 0px 0px 140px' : '0px 0px 0px 10px';}())">set width of sp</button>
-    <button onclick="javascript:(function(){ var el = document.querySelector('.sem-result-list'); el.style.width =  el.style.width === '10px' ? '140px'  : '10px'; el.style.width === '10px' ? el.style['-webkit-filter'] = 'blur(20px)'  : el.style['-webkit-filter'] = 'blur(0)'; }())">set width of result list panel</button>
-    <button onclick="javascript:(function(){
-        var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item');
-        var elsPinned = document.querySelectorAll('.sem-pinned-item');
-        Array.prototype.slice.call(els, 0).map(function(el) {
-            console.log('width: %s', el.clientWidth);
-            el.style.width =  el.clientWidth === 10 ? '140px'  : '10px';
-        });
-
-        var currentMode = document.querySelector('body').getAttribute('data-pinned-items-mode');
-        var newValue = (currentMode === '1') ? '0' : '1';
-//        console.log('newValue: %s', newValue)
-        document.querySelector('body').setAttribute('data-pinned-items-mode', newValue);
-    }())">toggle pinned items</button>
-</nav>
-<script src="javascripts/vendor/zepto.min.js" />
-<script src="javascripts/vendor/decorator.js" />
-<script>
-    window.addEventListener('resize', function(){
-        if(document.querySelector('body').getAttribute('data-pinned-items-mode') === '0') {
-            var els = document.querySelectorAll('.sem-pinned-item > article, .sem-selected-item > article');
-            var newWidth = window.innerWidth - 140 - 140 - 60;
-            Array.prototype.slice.call(els, 0).map(function(el) {
-                newWidth = newWidth >= 100 ? newWidth : 100;
-                el.style.width = newWidth+'px';
-            });
-        } else if (document.querySelector('body').getAttribute('data-pinned-items-mode') === '1') {
-            var newWidth = 140;
-            var numberOfItemsOfInterest = 3;
-            if((140 + 140 + (140*numberOfItemsOfInterest)) < window.innerWidth) {
-                newWidth = (window.innerWidth - 140 - 140)/numberOfItemsOfInterest;
-            }
-
-            var els = document.querySelectorAll('.sem-pinned-item, .sem-selected-item');
-            console.log('window.innerWidth %s', window.innerWidth);
-            console.log('newWidth %s', newWidth);
-
-            Array.prototype.slice.call(els, 0).map(function(el) {
-                console.log('setting width %s for: %s ', newWidth, el);
-                newWidth = newWidth >= 140 ? newWidth : 140;
-                console.log('FOO: %s', el.querySelector('div'));
-                el.style.width = newWidth+'px';
-                el.querySelector('article').style.width = (newWidth - 40) + 'px';
-            });
-        }
-    });
-
-    function ItemsOfInterestModel {
-        if(!(this instanceof ItemsOfInterestModel)) {
-            return new ItemsOfInterestModel();
-        }
-
-        this.updateEventUri = 'update://ItemsOfInterestModel/';
-
-        this.getArePinnedItemsExpanded = function() {
-
-        };
-
-        this.setArePinnedItemsExpanded = function(value) {
-            _arePinnedItemsExpanded = value;
-
-            $.publish(that.updateEventUri);
-        };
-    }
-
-</script>
+</article>
+<script src="javascripts/vendor/zepto.min.js"></script>
+<script src="javascripts/vendor/underscore.js"></script>
+<script src="javascripts/vendor/moment.min.js"></script>
+<script src="javascripts/vendor/tiny-pub-sub.js"></script>
+<script src="javascripts/vendor/decorator.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/invertebrate.js"></script>
+<script src="javascripts/vendor/invertebrate.js/app.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/config.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/env.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/model.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/router.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/syncSvc.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/TemplateUriHelper.js" ></script>
+<script src="javascripts/vendor/invertebrate.js/view.js" ></script>
+<script src="javascripts/application/wizerati.js" ></script>
+<script src="javascripts/application/core/decorators/decorator-trace.js" ></script>
+<script src="javascripts/application/core/layout/layout-calculator.js" ></script>
+<script src="javascripts/application/core/layout/layout-coordinator.js" ></script>
+<script src="javascripts/application/core/models/items-of-interest-model.js" ></script>
+<script src="javascripts/application/core/models/result-list-model.js" ></script>
+<script src="javascripts/application/core/models/search-panel-model.js" ></script>
+<script src="javascripts/application/core/views/items-of-interest-view.js" ></script>
+<script src="javascripts/application/core/views/result-list-view.js" ></script>
+<script src="javascripts/application/core/views/search-panel-view.js" ></script>
+<script src="javascripts/application/core/config.js" ></script>
+<script src="javascripts/application/module-registry.js" ></script>
+<script src="javascripts/application/core/route-registry.js" ></script>
+<script src="javascripts/application/core/app.js" ></script>
+<script src="javascripts/application/env.js" ></script>
+<script src="javascripts/application/appStart.js"></script>
 </body>
 </html>
 
