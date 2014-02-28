@@ -17,14 +17,16 @@
       var newWidth = _defaultWidthItemOfInterest;
       var mode = itemsOfInterestView.Model.getMode();
       var widthTakenBySearchAndResults = _searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth;
-      var viewPortWidth = window.innerWidth;
-
+      var viewPortWidth = $(window).width();//.innerWidth;
+//      console.
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = viewPortWidth - widthTakenBySearchAndResults - 20;
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var numberOfItemsOfInterest = 3;
 
-        if ((_searchPanelView.$el[0].clientWidth - _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
+        var searchPanelWidth = _searchPanelView.$el[0].clientWidth;
+
+        if ((searchPanelWidth - _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResults) / numberOfItemsOfInterest;
         }
 

@@ -1,11 +1,7 @@
 
-body {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
 
-.flex {
+
+.flex, .display-flex {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -14,7 +10,7 @@ body {
     align-items: flex-start;
 }
 
-.absolute {
+.absolute, .position-absolute {
     position: absolute;
 }
 
@@ -76,6 +72,14 @@ body {
     padding: 0;
 }
 
+.top-0 {
+    top: 0;
+}
+
+.left-0 {
+    left: 0;
+}
+
 .margin-0 {
     margin: 0;
 }
@@ -86,6 +90,10 @@ body {
 
 .width-10 {
     width: 10px;
+}
+
+.width-100 {
+    width: 100%;
 }
 
 .width-100px {
@@ -112,7 +120,7 @@ body {
     overflow: visible;
 }
 
-.overflow-scroll-x {
+.overflow-scroll-x, .overflow-x-scroll {
     overflow-x: scroll;
 }
 
@@ -120,7 +128,7 @@ body {
     overflow-y: scroll;
 }
 
-.fixed {
+.fixed, .position-fixed {
     position: fixed;
 }
 

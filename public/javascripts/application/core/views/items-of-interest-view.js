@@ -125,7 +125,7 @@
 
 //      $prevEl.addClass('buffer');
 //      that.$currentEl.removeClass('buffer');
-      debugger;
+//      debugger;
       $('body').append(that.$currentEl);
       setTimeout(function () {
 //        $prevEl.empty();

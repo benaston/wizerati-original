@@ -1,13 +1,19 @@
+/*webkit prefixes are required for ios*/
 body {
     height:100%;
-    overflow-x: scroll;
-    display: flex;
-    display: -webkit-flex;
-    -webkit-flex-direction: row;
-    -webkit-flex-wrap: nowrap;
-    -webkit-justify-content: flex-start;
-    -webkit-align-content: stretch;
-    -webkit-align-items: flex-start;
+    width: 100%;
+    /*overflow-x: scroll;*/
+    /*display: flex;*/
+    /*display: -webkit-flex;*/
+    /*-webkit-flex-direction: row;*/
+    /*-webkit-flex-wrap: nowrap;*/
+    /*-webkit-justify-content: flex-start;*/
+    /*-webkit-align-content: stretch;*/
+    /*-webkit-align-items: flex-start;*/
+}
+
+body[data-items-of-interest-mode='1'] > .container {
+    position: absolute;
 }
 
 .search-panel {

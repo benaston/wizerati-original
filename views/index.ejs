@@ -3,32 +3,37 @@
 <head>
     <link rel="stylesheet" type="text/css" href="stylesheets/wizerati.css"  />
 </head>
-<body data-ui-mode="1" data-items-of-interest-mode="0">
-<div class="search-panel">
-    <div class="padding-horizontal-20">
-        <p>search</p>
-    </div>
-</div><article class="result-list">
-    <div class="width-493 background-linear-pink height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <ol>
-            <li>r1</li>
-            <li>r2</li>
-            <li>r3</li>
-        </ol>
-    </div>
-</article><article class="selected-item">
-    <div class="width-100px background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <li>s item</li>
-    </div>
-</article><article class="pinned-item">
-    <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <li>p1</li>
-    </div> <!--could conceivably insert a blur item here via js -->
-</article><article class="pinned-item">
-    <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
-        <li>p2</li>
-    </div>
-</article>
+<body class="modal-container" data-ui-mode="-1" data-items-of-interest-mode="0">
+<div class="container height-100 orange display-flex overflow-x-scroll position-absolutes">
+    <div class="search-panel">
+        <div class="padding-horizontal-20">
+            <p>search</p>
+        </div>
+    </div><article class="result-list">
+        <div class="width-493 background-linear-pink height-100 absolute overflow-scroll-y padding-horizontal-20">
+            <ol>
+                <li>r1</li>
+                <li>r2</li>
+                <li>r3</li>
+            </ol>
+        </div>
+    </article><article class="selected-item">
+        <div class="width-100px background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20">
+            <li>s item</li>
+        </div>
+    </article><article class="pinned-item">
+        <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
+            <li>p1</li>
+        </div> <!--could conceivably insert a blur item here via js -->
+    </article><article class="pinned-item">
+        <div class="width-100px background-linear-blue height-100 absolute overflow-scroll-y padding-horizontal-20">
+            <li>p2</li>
+        </div>
+    </article>
+</div>
+<!--<div class="position-fixed width-100 height-100 blur top-0 left-0 yellow z-index-9999">foo</div>-->
+
 <script src="javascripts/wizerati.js"></script>
 </body>
+
 </html>
