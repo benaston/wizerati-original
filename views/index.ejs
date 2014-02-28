@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="stylesheets/wizerati.css"  />
 </head>
+<!-- position absolute is required on the body for iOS -->
 <body class="modal-container position-absolute" data-ui-mode="-1" data-items-of-interest-mode="0">
 <div class="container height-100 orange display-flex overflow-x-scroll position-absolutes">
     <div class="search-panel">
@@ -18,7 +19,7 @@
             </ol>
         </div>
     </article><article class="selected-item">
-        <div class="width-100px background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20">
+        <div class="width-100px background-white-translucent height-100 absolute overflow-scroll-y padding-horizontal-20 transition-width">
             <li>s item</li>
         </div>
     </article><article class="pinned-item">
