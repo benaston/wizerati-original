@@ -29,9 +29,8 @@
       var defaultOptions = {
         done: function (metadata) {
         },
-        fail: function (jqxhr, settings, exception) {
-          console.log(exception);
-          throw exception;
+        fail: function (jqxhr) {
+          throw 'fetchTemplate failed. Ensure the TemplateUrlHelper in your application has been instantiated correctly. ' + jqxhr.status;
         }
       };
 
@@ -62,9 +61,7 @@
             _templates[uri] = t;
             options.done(t);
           })
-          .fail(function ajaxFail(jqxhr, settings, exception) {
-            console.log(jqxhr.status);
-          });
+          .fail(options.fail);
 
     };
 

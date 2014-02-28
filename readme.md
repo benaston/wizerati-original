@@ -5,6 +5,8 @@ Wizerati is an ongoing project to test out user interface ideas and hone my skil
 
 You can find a version of it online here (please note it has not been made cross-browser compatible yet, please use Chrome or Safari):
 
+http://limitless-refuge-4707.herokuapp.com
+
 http://intense-dusk-2508.herokuapp.com/
 
 ##Aims

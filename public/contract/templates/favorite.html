@@ -1,0 +1,16 @@
+<% try { %>
+<a href="/selecteditem/update?id=<%=model.id%>&source=favorites" class="<%=model.isHidden ? 'hidden' : '' %>">
+    <h3><%= model.title %></h3>
+    <p class="rate"><%= model.rateLower %> GBP/day</p>
+    <p class="location-and-posted"><%= model.location %></p>
+    <% if(model.isActioned) { %>
+    <i class="ti p actioned" title="Applied"></i>
+    <% } %>
+    <% if(model.isItemOfInterest) { %>
+    <i class="ti p pinned ti-pinned" title="Pinned"></i>
+    <% } %>
+</a>
+<%
+} catch(e) {
+throw "template exception: favorite. " + e;
+}%>

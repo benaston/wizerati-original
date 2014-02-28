@@ -3,7 +3,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
-
       dist: {
         options: {
           separator: ';'
@@ -22,6 +21,7 @@ module.exports = function (grunt) {
           'public/javascripts/application/wizerati.js',
           'public/javascripts/application/core/services/**/*.js',
           'public/javascripts/application/core/clients/**/*.js',
+          'public/javascripts/application/core/connectors/**/*.js',
           'public/javascripts/application/core/config.js',
           'public/javascripts/application/core/models/**/*.js',
           'public/javascripts/application/core/views/**/*.js',
@@ -32,8 +32,8 @@ module.exports = function (grunt) {
           'public/javascripts/application/core/repositories/**/*.js',
           'public/javascripts/application/core/layout/**/*.js',
           'public/javascripts/application/core/decorators/**/*.js',
+          'public/javascripts/application/core/route-registry.js',
           'public/javascripts/application/module-registry.js',
-          'public/javascripts/application/wizerati.core/route-registry.js',
           'public/javascripts/application/env.js',
           'public/javascripts/application/core/app.js',
           'public/javascripts/application/appStart.js'
@@ -42,19 +42,21 @@ module.exports = function (grunt) {
       },
       css: {
         src: [
-          'public/stylesheets/style-reset.css',
-          'public/stylesheets/style-reset-wizerati.css',
-          'public/stylesheets/style-typography.css',
-          'public/stylesheets/style-layout.css',
-          'public/stylesheets/style-form-element.css',
-          'public/stylesheets/style-table.css',
-          'public/stylesheets/style-special.css',
-          'public/stylesheets/style-cube.css',
-          'public/stylesheets/style-wizerati.css',
-          'public/stylesheets/lucid-style-buttons.css',
-          'public/stylesheets/lucid-style-form-elements.css',
-          'public/stylesheets/lucid-style-dialogs.css',
-          'public/stylesheets/lucid-style-table.css'
+          'public/stylesheets/application/style-reset.css',
+          'public/stylesheets/vendor/lucid-style-reset.css',
+          'public/stylesheets/application/style-reset-wizerati.css',
+          'public/stylesheets/application/style-typography.css',
+          'public/stylesheets/application/style-layout.css',
+          'public/stylesheets/application/style-form-element.css',
+          'public/stylesheets/application/style-table.css',
+          'public/stylesheets/application/style-special.css',
+          'public/stylesheets/application/style-cube.css',
+          'public/stylesheets/application/style-wizerati.css',
+          'public/stylesheets/vendor/lucid-style-buttons.css',
+          'public/stylesheets/vendor/lucid-style-form-elements.css',
+          'public/stylesheets/vendor/lucid-style-dialogs.css',
+          'public/stylesheets/vendor/lucid-style-table.css',
+          'public/stylesheets/vendor/lucid-style-declarative.css'
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
       }
@@ -105,8 +107,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-css');
 
   grunt.registerTask('test', ['jshint', 'qunit']);
-
-//  grunt.registerTask('default', ['concat:dist','concat:css', 'uglify', 'concat:addunderscore', 'cssmin']);
   grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
-
 };

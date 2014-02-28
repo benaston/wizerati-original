@@ -1,3 +1,14 @@
+body {
+    height:100%;
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+}
+
 .search-panel {
     display: inline-block;
     height: 100%;
