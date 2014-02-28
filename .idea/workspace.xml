@@ -2,124 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d38b060-622a-4081-9756-d855458ec3d3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-120-1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-120-2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-120-3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-120-4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-120-5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-120.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-152-1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-152-2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-152-3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-152-4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-152-5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/apple-touch-icon-152.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/favicon.ico" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/glyph.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/helvetica-1.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/helvetica2.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/helvetica3.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/museo-sans-500.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/museo-sans-900.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/proxima-nova-100.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/proxima-nova-200.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/proxima-nova-300.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/proxima-nova-400.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/fonts/proxima-nova-500.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/AccountActivationController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/AccountActivationPanelController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/AccountActivationView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/entities/AccountEntity.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/ActionedItemsController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/AdvertisersController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ContractFavoriteView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ContractItemOfInterestView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ContractResultView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ContractorFavoriteView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ContractorItemOfInterestView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ContractorResultView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/DeleteFavoriteGroupConfirmationDialogController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/DeleteFavoriteGroupConfirmationDialogView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/FavoriteGroupController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/FavoritesController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/FavoritesCubeModeController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/FavoritesCubeView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/HiddenItemsController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/HomeController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/repositories/Item-repository.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/ItemsController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/ItemsOfInterestController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ItemsOfInterestView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/LoginController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/LoginPanelView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/PurchasePanelAccountsController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/PurchasePanelController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/PurchasePanelView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/ResultListModeController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/ResultListView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SearchController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/SearchFormView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SearchPanelModeController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/SearchPanelView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedCubeFaceController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedItemController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SessionController.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/UIRootView.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/services/account-service.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/actioned-items-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/advertisers-panel-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/services/authentication-service.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/services/cookie-service.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/services/cronicl-service.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/delete-favorite-group-confirmation-dialog-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/factories/favorite-view-factory.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/templates/favorite.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/favorites-cube-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/factories/guid-factory.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/hidden-items-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/caches/item-cache.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/factories/item-of-interest-view-factory.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/templates/item-of-interest.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/metadata" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contractor/metadata" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/purchase-panel-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/factories/result-view-factory.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/templates/result.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contractor/templates/result.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/search-form-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/templates/search-form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contractor/templates/search-form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/template-post-render-scripts/search-form.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/services/search-service.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contract/search" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/contractor/search" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/selected-cube-face-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/selected-item-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/sign-in-panel-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/services/sign-in-service.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/single-item-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/ui-root-model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/connectors/wizerati-connector.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/clients/wizerati-http-client.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/application/core/factories/wizerati-request-factory.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gruntfile.js" afterPath="$PROJECT_DIR$/Gruntfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/app.js" afterPath="$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/appStart.js" afterPath="$PROJECT_DIR$/public/javascripts/application/appStart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.ejs" afterPath="$PROJECT_DIR$/views/index.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/models/items-of-interest-model.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/items-of-interest-model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/module-registry.js" afterPath="$PROJECT_DIR$/public/javascripts/application/module-registry.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/readme.md" afterPath="$PROJECT_DIR$/readme.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/route-registry.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/route-registry.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css" afterPath="$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/wizerati.css" afterPath="$PROJECT_DIR$/public/stylesheets/wizerati.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/wizerati.js" afterPath="$PROJECT_DIR$/public/javascripts/wizerati.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/wizerati.min.css" afterPath="$PROJECT_DIR$/public/stylesheets/wizerati.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/wizerati.min.js" afterPath="$PROJECT_DIR$/public/javascripts/wizerati.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="items-of-interest-prototype.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -160,19 +43,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="style-wizerati.css" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="style-wizerati.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="37" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="wizerati.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/stylesheets/wizerati.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="336" selection-end="336" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="4500">
+            <state line="45" column="0" selection-start="966" selection-end="966" vertical-scroll-proportion="0.80744547" vertical-offset="46" max-vertical-offset="825">
               <folding />
             </state>
           </provider>
@@ -187,13 +61,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="readme.md" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="readme.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/readme.md">
           <provider editor-type-id="MarkdownPreviewEditor">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="42" selection-start="339" selection-end="339" vertical-scroll-proportion="0.1420839" vertical-offset="0" max-vertical-offset="1845">
+            <state line="7" column="42" selection-start="339" selection-end="339" vertical-scroll-proportion="-3.8888888" vertical-offset="0" max-vertical-offset="1845">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="lucid-style-declarative.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="38" column="11" selection-start="629" selection-end="629" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2955">
               <folding />
             </state>
           </provider>
@@ -293,12 +176,12 @@
         <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css" />
         <option value="$PROJECT_DIR$/Gruntfile.js" />
         <option value="$PROJECT_DIR$/views/index.ejs" />
-        <option value="$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/views/ItemsOfInterestView.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/module-registry.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/models/items-of-interest-model.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" />
         <option value="$PROJECT_DIR$/readme.md" />
+        <option value="$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css" />
       </list>
     </option>
   </component>
@@ -1322,13 +1205,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="26" selection-start="1013" selection-end="1013" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="2955">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/wizerati.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="0" selection-start="336" selection-end="336" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="4500">
@@ -1339,13 +1215,6 @@
     <entry file="file://$PROJECT_DIR$/Gruntfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="58" column="36" selection-start="2986" selection-end="2986" vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="1755">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="37" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
           <folding />
         </state>
       </provider>
@@ -1397,7 +1266,21 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="42" selection-start="339" selection-end="339" vertical-scroll-proportion="0.1420839" vertical-offset="0" max-vertical-offset="1845">
+        <state line="7" column="42" selection-start="339" selection-end="339" vertical-scroll-proportion="-3.8888888" vertical-offset="0" max-vertical-offset="1845">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="11" selection-start="629" selection-end="629" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2955">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="0" selection-start="966" selection-end="966" vertical-scroll-proportion="0.80744547" vertical-offset="46" max-vertical-offset="825">
           <folding />
         </state>
       </provider>
