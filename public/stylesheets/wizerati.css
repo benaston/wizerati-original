@@ -118,6 +118,12 @@ body[data-items-of-interest-mode='1'] > .container {
     justify-content: flex-start;
     align-content: stretch;
     align-items: flex-start;
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -webkit-justify-content: flex-start;
+    -webkit-align-content: stretch;
+    -webkit-align-items: flex-start;
 }
 
 .absolute, .position-absolute {
