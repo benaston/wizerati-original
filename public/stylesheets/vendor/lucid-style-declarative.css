@@ -169,6 +169,10 @@
     position: fixed;
 }
 
+.vertical-align-top {
+    vertical-align: top;
+}
+
 .left-100px {
     left: 100px;
 }
