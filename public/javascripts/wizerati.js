@@ -3131,7 +3131,8 @@ window.wizerati = {
 
     this.eventType = {
       Default: '0',
-      WidthChange: '1'
+      WidthChange: '1',
+      ModeChange: '2'
     };
 
     this.getMode = function() {
@@ -3141,7 +3142,7 @@ window.wizerati = {
     this.setMode = function(value) {
       _mode = value;
 
-      $.publish(that.updateEventUri);
+      $.publish(that.updateEventUri, { eventType: that.eventType.ModeChange });
     };
 
     this.getItemWidth = function() {
@@ -5146,6 +5147,10 @@ window.wizerati = {
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
+    function setMode(){
+      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
+    }
+
     function addPinnedItems(items, done) {
       done = done || function () {
       };
@@ -5228,6 +5233,7 @@ window.wizerati = {
       _actionedItemsModel = actionedItemsModel;
 
       _renderOptimizations[that.Model.eventType.WidthChange] = setWidths;
+      _renderOptimizations[that.Model.eventType.ModeChange] = setMode;
 
       $.subscribe(that.Model.updateEventUri, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
@@ -6949,6 +6955,7 @@ window.wizerati = {
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = viewPortWidth - widthTakenBySearchAndResults - 20;
+        console.log('newWidth (%s) = viewPortWidth (%s) - widthTakenBySearchAndResults (%s) - 20;', newWidth, viewPortWidth, widthTakenBySearchAndResults);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var numberOfItemsOfInterest = 3;
 
@@ -6962,11 +6969,12 @@ window.wizerati = {
       }
 
       newWidth = Math.floor(newWidth);
-      console.log('LayoutCalculator::calculate: %s', newWidth);
+      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+      console.log('LayoutCalculator::calculate::newWidth: %s', newWidth);
 
       return {
-        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest,
-        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? newWidth-_itemOfInterestContentWidthDelta : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
+        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+//        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? newWidth-_itemOfInterestContentWidthDelta : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
       };
     };
 

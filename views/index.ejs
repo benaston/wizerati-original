@@ -5,7 +5,7 @@
 </head>
 <!-- position absolute is required on the body for iOS -->
 <body class="modal-container position-absolute" data-ui-mode="-1" data-items-of-interest-mode="0">
-<div class="container height-100 orange display-flex overflow-x-scroll position-absolutes">
+<div class="container height-100 orange display-flex overflow-x-scroll position-relative">
     <div class="search-panel">
         <div class="padding-horizontal-20">
             <p>search</p>
@@ -41,3 +41,13 @@
 </body>
 
 </html>
+
+
+<!--<div class="position-fixed top-100px left-100px">-->
+<!--<button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('1'); window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());">-->
+<!--expand-->
+<!--</button>-->
+<!--<button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('0'); window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());">-->
+<!--collapse-->
+<!--</button>-->
+<!--</div>-->

@@ -148,6 +148,10 @@
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
+    function setMode(){
+      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
+    }
+
     function addPinnedItems(items, done) {
       done = done || function () {
       };
@@ -230,6 +234,7 @@
       _actionedItemsModel = actionedItemsModel;
 
       _renderOptimizations[that.Model.eventType.WidthChange] = setWidths;
+      _renderOptimizations[that.Model.eventType.ModeChange] = setMode;
 
       $.subscribe(that.Model.updateEventUri, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);

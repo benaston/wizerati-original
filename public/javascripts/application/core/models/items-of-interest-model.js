@@ -17,7 +17,8 @@
 
     this.eventType = {
       Default: '0',
-      WidthChange: '1'
+      WidthChange: '1',
+      ModeChange: '2'
     };
 
     this.getMode = function() {
@@ -27,7 +28,7 @@
     this.setMode = function(value) {
       _mode = value;
 
-      $.publish(that.updateEventUri);
+      $.publish(that.updateEventUri, { eventType: that.eventType.ModeChange });
     };
 
     this.getItemWidth = function() {

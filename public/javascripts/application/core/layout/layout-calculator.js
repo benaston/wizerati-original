@@ -21,6 +21,7 @@
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = viewPortWidth - widthTakenBySearchAndResults - 20;
+        console.log('newWidth (%s) = viewPortWidth (%s) - widthTakenBySearchAndResults (%s) - 20;', newWidth, viewPortWidth, widthTakenBySearchAndResults);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var numberOfItemsOfInterest = 3;
 
@@ -34,11 +35,12 @@
       }
 
       newWidth = Math.floor(newWidth);
-      console.log('LayoutCalculator::calculate: %s', newWidth);
+      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+      console.log('LayoutCalculator::calculate::newWidth: %s', newWidth);
 
       return {
-        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest,
-        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? newWidth-_itemOfInterestContentWidthDelta : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
+        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+//        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? newWidth-_itemOfInterestContentWidthDelta : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
       };
     };
 
