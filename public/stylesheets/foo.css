@@ -3,3 +3,32 @@ html, body {
     height: 100%; overflow: hidden; margin: 0;
     -webkit-overflow-scrolling: touch;
 }
+
+
+.red {
+    box-shadow: 0 0 0 4px red inset;
+}
+
+.yellow {
+    box-shadow: 0 0 0 4px yellow inset;
+}
+
+.green {
+    box-shadow: 0 0 0 4px green inset;
+}
+
+.blue {
+    box-shadow: 0 0 0 4px blue inset;
+}
+
+.orange {
+    box-shadow: 0 0 0 4px orange inset;
+}
+
+.pink {
+    box-shadow: 0 0 0 4px pink inset;
+}
+
+.slate {
+    box-shadow: 0 0 0 2px slategray inset;
+}
