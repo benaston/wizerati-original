@@ -23,6 +23,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/index2', routes.index2);
+app.get('/index3', routes.index3);
 app.get('/search', routes.index);
 app.get('/advertisers', routes.index);
 app.get('/accountactivationpanel', routes.index);
