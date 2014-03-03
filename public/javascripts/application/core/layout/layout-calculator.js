@@ -38,55 +38,32 @@
 
       newWidth = Math.floor(newWidth);
       newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
-      console.log('LayoutCalculator::calculate::newWidth: %s', newWidth);
 
-      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
+      var leftP1 = 0;
+      var leftP2 = 0;
+      var leftP3 = 0;
+      var leftP4 = 0;
+      var leftP5 = 0;
+      var leftP6 = 0;
 
-      var spMode = _searchPanelView.Model.getMode();
-      var rlMode = _resultListView.Model.getMode();
-      var searchPanelLeft =  spMode === _searchPanelModeEnum.Default ? 0 : -340;
-      var resultListLeft = spMode  === _searchPanelModeEnum.Default ? 340 : 0;
-      var selectedItemLeft = 0;
-
-      if(spMode === _searchPanelModeEnum.Default){
-        if(rlMode === _resultListModeEnum.Default) {
-          selectedItemLeft = 873;
-        } else {
-          selectedItemLeft = 340;
-        }
-      } else {
-        if(rlMode === _resultListModeEnum.Default) {
-          selectedItemLeft = 533;
-        } else {
-          selectedItemLeft =  0;
-        }
+      if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
+        leftP1 = newWidth;
+        leftP2 = newWidth * 2;
+        leftP3 = newWidth * 3;
+        leftP4 = newWidth * 4;
+        leftP5 = newWidth * 5;
+        leftP6 = newWidth * 6;
       }
 
-      var pinnedItemsOffset = 0;
-      if(_itemsOfInterestView.Model.getItemsOfInterest().selectedItem) {
-        pinnedItemsOffset = 340;
-      }
-      var p1Left = selectedItemLeft+pinnedItemsOffset;
-      var p2Left = selectedItemLeft+pinnedItemsOffset+340;
-      var p3Left = selectedItemLeft+pinnedItemsOffset+340+340;
-      var p4Left = selectedItemLeft+pinnedItemsOffset+340+340+340;
-      var p5Left = selectedItemLeft+pinnedItemsOffset+340+340+340+340;
-      var p6Left = selectedItemLeft+pinnedItemsOffset+340+340+340+340;
 
-      console.log('widthBody = (newWidth (%s) *numberOfItemsOfInterest (%s)) + widthTakenBySearchAndResults (%s) + (_widthOfStackingIndicator (%s) * numberOfItemsOfInterest (%s))', newWidth, numberOfItemsOfInterest, widthTakenBySearchAndResults, _stackedItemOffset, numberOfItemsOfInterest);
       return {
-        searchPanelLeft: searchPanelLeft,
-        resultListLeft: resultListLeft,
-        selectedItemLeft: selectedItemLeft,
-        pinnedItem1Left: p1Left,
-        pinnedItem2Left: p2Left,
-        pinnedItem3Left: p3Left,
-        pinnedItem4Left: p4Left,
-        pinnedItem5Left: p5Left,
-        pinnedItem6Left: p6Left,
         widthItemOfInterest: newWidth,
-        widthBody: (newWidth*numberOfItemsOfInterest) + widthTakenBySearchAndResults + (_stackedItemOffset*numberOfItemsOfInterest)
-//        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? newWidth-_itemOfInterestContentWidthDelta : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
+        leftPinnedItem1: leftP1,
+        leftPinnedItem2: leftP2,
+        leftPinnedItem3: leftP3,
+        leftPinnedItem4: leftP4,
+        leftPinnedItem5: leftP5,
+        leftPinnedItem6: leftP6
       };
     };
 

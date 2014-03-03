@@ -16,10 +16,7 @@
         throw "layout not supplied";
       }
 
-      _uiRootModel.setBodyWidth(layout.widthBody);
-//      _searchPanelModel.setLeft(layout.searchPanelLeft);
-//      _resultListModel.setLeft(layout.resultListLeft);
-//      _itemsOfInterestModel.setLayout(layout);
+      _itemsOfInterestModel.setLayout(layout);
     };
 
     function init() {

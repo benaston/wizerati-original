@@ -64,7 +64,7 @@
     this.render = function (e, args) {
 
       if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, event.args);
+        _renderOptimizations[e.type].apply(this, args);
         return;
       }
 
@@ -76,7 +76,7 @@
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
-      setWidths();
+      setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
 
@@ -138,30 +138,21 @@
       }, 300);
     }
 
-    function setWidths(){
-      var mode = that.Model.getMode();
+    function setLayout() {
+      var layout = that.Model.getLayout();
 
-      if (mode === _modeEnum.Default) {
-//        that.$elSelectedItem.width(that.Model.getItemWidth());
-//        that.$elPinnedItems.width(that.Model.getItemWidth());
-        var leftP1 = (10*1);
-        var leftP2 = (10*2);
-        var leftP3 = (10*3);
-        var leftP4 = (10*4);
-//        that.$elPinnedItems.css({left: left});
-//        $(_elPinnedItem1).css({left: leftP1});
-//        $(_elPinnedItem2).css({left: leftP2});
-//        $(_elPinnedItem3).css({left: leftP3});
-//        $(_elPinnedItem4).css({left: leftP4});
-      } else if (mode === _modeEnum.PinnedItemsExpanded) {
-//        that.$el.width(that.Model.getItemWidth());
-//        that.$elPinnedItems.css({left:0});
-      }
+      $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
+      $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
+      $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
+      $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
+
+      that.$elSelectedItem.children().width(layout.widthItemOfInterest);
+      that.$elPinnedItems.children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
-    function setMode(){
+    function setMode() {
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
@@ -246,13 +237,15 @@
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
 
-      _renderOptimizations[that.Model.eventUris.widthChange] = setWidths;
+      _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
+      _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.itemRemoval, that.render);
       $.subscribe(that.Model.eventUris.widthChange, that.render);
       $.subscribe(that.Model.eventUris.modeChange, that.render);
+      $.subscribe(that.Model.eventUris.layoutChange, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_selectedItemModel.updateEventUri, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);

@@ -127,36 +127,9 @@ body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interes
     z-index: 5;
 }
 
-body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(3) {
-    left: 10px;
-}
-
-body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(4) {
-    left: 20px;
-}
-
-body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(5) {
-    left: 30px;
-}
 
 body[data-items-of-interest-mode='0'] .pinned-item {
     -webkit-filter: blur(20px);
-}
-
-body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(3) {
-    left: 340px;
-}
-
-body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(4) {
-    left: 680px;
-}
-
-body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(5) {
-    left: 1020px;
-}
-
-body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(6) {
-    left: 1360px;
 }
 
 .result-list[data-mode='1'] {

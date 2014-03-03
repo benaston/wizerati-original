@@ -11,11 +11,21 @@
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _itemWidth = 0,
         _mode = _modeEnum.Default,
+        _layout = {
+          widthItemOfInterest: 340,
+          leftPinnedItem1: 0,
+          leftPinnedItem2: 0,
+          leftPinnedItem3: 0,
+          leftPinnedItem4: 0,
+          leftPinnedItem5: 0,
+          leftPinnedItem6: 0
+        },
         _itemsOfInterest = { selectedItem: '1', pinnedItems: [] }; //1 is temp
 
     this.eventUris = {default: 'update://ItemsOfInterestModel/',
                       widthChange: 'update://itemsofinterestmodel/widthchange',
                       modeChange: 'update://itemsofinterestmodel/modechange' ,
+                      layoutChange: 'update://itemsofinterestmodel/layoutchange',
                       itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
     this.getCount = function() {
@@ -32,15 +42,14 @@
       $.publish(that.eventUris.modeChange);
     };
 
-    this.getItemWidth = function() {
-      return _itemWidth;
+    this.getLayout = function() {
+      return _layout;
     };
 
+    this.setLayout = function(value) {
+      _layout = value;
 
-    this.setItemWidth = function(value) {
-      _itemWidth = value;
-
-      $.publish(that.eventUris.widthChange);
+      $.publish(that.eventUris.layoutChange);
     };
 
     this.isItemOfInterest = function (id) {
