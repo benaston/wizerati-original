@@ -36,11 +36,11 @@ body {
     display: inline-block;
     height: 100%;
     vertical-align: top;
-    transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
+    transition: left .5s ease-in-out .3s, -webkit-filter .3s linear;
 }
 
 body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
-    transition: left .5s ease-in-out .3s, -webkit-filter .3s linear;
+    transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
 }
 
 .selected-item-content, .pinned-item-content {
