@@ -39,6 +39,10 @@ body {
     transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
 }
 
+body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
+    transition: left .5s ease-in-out .3s, -webkit-filter .3s linear;
+}
+
 .selected-item-content, .pinned-item-content {
     width: 340px;
     overflow-y: scroll;
