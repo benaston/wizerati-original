@@ -12,66 +12,68 @@ body[data-items-of-interest-mode='1'] > .container {
 
 .search-panel {
     overflow: hidden;
-    width:340px;
+    width: 340px;
     position: fixed;
-    top:0;
-    left:0 ;
-    height:100%;
-    vertical-align:top;
+    top: 0;
+    left: 0;
+    height: 100%;
+    vertical-align: top;
 }
 
 .result-list {
-    position:relative;
-    left:0;
-    top:0 ;
-    width:533px;
-    display:inline-block;
-    height:100%;
-    margin-left:340px;
-    vertical-align:top;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 533px;
+    display: inline-block;
+    height: 100%;
+    margin-left: 340px;
+    vertical-align: top;
 }
 
 .selected-item {
-    position:relative;
-    left:0;
-    top:0;
-    width:0px;
-    display:inline-block;
-    height:100%;
-    vertical-align:top;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 0px;
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
     z-index: 6;
-}
-
-.selected-item > .content {
-    width:340px;
 }
 
 .pinned-item:nth-last-child(1) {
     z-index: 0;
 }
+
 .pinned-item:nth-last-child(2) {
     z-index: 1;
 }
+
 .pinned-item:nth-last-child(3) {
     z-index: 2;
 }
+
 .pinned-item:nth-last-child(4) {
     z-index: 3;
 }
+
 .pinned-item:nth-last-child(5) {
     z-index: 4;
 }
+
 .pinned-item:nth-last-child(6) {
     z-index: 5;
 }
 
-
 body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(3) {
     left: 10px;
 }
+
 body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(4) {
     left: 20px;
 }
+
 body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(5) {
     left: 30px;
 }
@@ -79,12 +81,15 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-of-type(5) {
 body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(3) {
     left: 340px;
 }
+
 body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(4) {
     left: 680px;
 }
+
 body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(5) {
     left: 1020px;
 }
+
 body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(6) {
     left: 1360px;
 }
@@ -93,18 +98,20 @@ body[data-items-of-interest-mode='0'] .pinned-item {
     -webkit-filter: blur(20px);
 }
 
-.pinned-item > .content {
-    width:340px;
+.selected-item-content, .pinned-item-content {
+    width: 340px;
+    overflow-y: scroll;
+    height: 100%;
 }
 
 .pinned-item {
-    position:relative;
-    left:0;
-    top:0;
-    width:0;
-    display:inline-block;
-    height:100%;
-    vertical-align:top;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 0;
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
     transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
 }
 
