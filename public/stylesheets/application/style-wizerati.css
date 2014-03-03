@@ -105,4 +105,30 @@ body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(6) {
     left: 1360px;
 }
 
+.result-list[data-mode='1'] {
+    opacity: 0;
+    pointer-events: none;
+}
 
+.handle-result-list {
+    color: #333;
+    text-decoration: none;
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    opacity: 0;
+    cursor: pointer;
+    width: 50px;
+}
+
+.result-list[data-mode='0'] ~ .handle-result-list {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s linear 0;
+}
+
+.result-list[data-mode='1'] ~ .handle-result-list {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .2s linear .2s;
+}

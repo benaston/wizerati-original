@@ -15,7 +15,7 @@
     }
 
     var that = this,
-        _elContainer = '.result-list-container',
+        _el = '.result-list',
         _el1 = '#result-list-panel-1',
         _el2 = '#result-list-panel-2',
         _resultViewFactory = null,
@@ -104,7 +104,7 @@
     this.onDomReady = function () {
       that.$el = $(_el1);
       that.$el2 = $(_el2);
-      that.$elContainer = $(_elContainer);
+      that.$elContainer = $(_el);
     };
 
     function init() {
