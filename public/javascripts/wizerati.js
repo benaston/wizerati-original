@@ -3123,16 +3123,17 @@ window.wizerati = {
     var that = this,
         _selectedItemModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _itemWidth = 10,
+        _itemWidth = 0,
         _mode = _modeEnum.Default,
-        _itemsOfInterest = { selectedItem: '', pinnedItems: [] };
+        _itemsOfInterest = { selectedItem: '1', pinnedItems: [] }; //1 is temp
 
-    this.updateEventUri = 'update://ItemsOfInterestModel/';
+    this.eventUris = {default: 'update://ItemsOfInterestModel/',
+                      widthChange: 'update://itemsofinterestmodel/widthchange',
+                      modeChange: 'update://itemsofinterestmodel/modechange' ,
+                      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
-    this.eventType = {
-      Default: '0',
-      WidthChange: '1',
-      ModeChange: '2'
+    this.getCount = function() {
+      return 2;//_itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
     };
 
     this.getMode = function() {
@@ -3142,7 +3143,7 @@ window.wizerati = {
     this.setMode = function(value) {
       _mode = value;
 
-      $.publish(that.updateEventUri, { eventType: that.eventType.ModeChange });
+      $.publish(that.eventUris.modeChange);
     };
 
     this.getItemWidth = function() {
@@ -3153,7 +3154,7 @@ window.wizerati = {
     this.setItemWidth = function(value) {
       _itemWidth = value;
 
-      $.publish(that.updateEventUri, { eventType: that.eventType.WidthChange });
+      $.publish(that.eventUris.widthChange);
     };
 
     this.isItemOfInterest = function (id) {
@@ -3182,7 +3183,7 @@ window.wizerati = {
 
       _itemsOfInterest.pinnedItems.push(id);
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     this.removeItemOfInterest = function (id) {
@@ -3195,6 +3196,7 @@ window.wizerati = {
       });
 
       $.publish(that.updateEventUri, { action: 'removal', removedItemId: id});
+      $.publish(that.eventUris.itemRemoval, id);
     };
 
     this.isPinned = function (id) {
@@ -3699,9 +3701,24 @@ window.wizerati = {
     var that = this,
         _uiMode = '0',
         _modal = null,
+        _bodyWidth = null,
         _uiModeEnum = app.mod('enum').UIMode;
 
-    this.updateEventUri = 'update://UIRootModel/';
+    this.eventUris = { default: 'update://uirootmodel/', bodyWidthChange: 'update://uirootmodel/bodywidth'};
+
+    this.getBodyWidth = function () {
+      return _bodyWidth;
+    };
+
+    this.setBodyWidth = function (value, options) {
+      options = options || {silent: false};
+
+      _bodyWidth = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.bodyWidthChange);
+      }
+    };
 
     this.getUIMode = function () {
       return _uiMode || '';
@@ -4936,70 +4953,6 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function UIRootView(model) {
-
-    if (!(this instanceof app.UIRootView)) {
-      return new app.UIRootView(model);
-    }
-
-    var that = this,
-        _el = 'body';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e, options) {
-      options = options || { done: that.postRender };
-
-      //two step DOM manipulation to enable visibility of CSS transition
-      //first set display property
-      var modal = that.Model.getModal();
-      that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
-      that.$el.attr('data-ui-mode', that.Model.getUIMode());
-      that.$el.attr('data-modal', modal);
-
-      if (modal) {
-        setTimeout(function () {
-          that.$el.addClass('modal-visible');
-        }, 0);  //re-adding of this class will trigger CSS transition
-      }
-
-    };
-
-    this.postRender = function () {
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'model not supplied';
-      }
-
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      that.bindEvents();
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.UIRootView = UIRootView;
-  invertebrate.View.isExtendedBy(app.UIRootView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
   function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
@@ -5012,6 +4965,12 @@ window.wizerati = {
 //        _el2 = '#items-of-interest-panel-2',
         _elSelectedItem = '.selected-item',
         _elPinnedItems = '.pinned-item',
+        _elPinnedItem1 = '.pinned-item:nth-child(4)',
+        _elPinnedItem2 = '.pinned-item:nth-child(5)',
+        _elPinnedItem3 = '.pinned-item:nth-child(6)',
+        _elPinnedItem4 = '.pinned-item:nth-child(7)',
+        _elPinnedItem5 = '.pinned-item:nth-child(5)',
+        _elPinnedItem6 = '.pinned-item:nth-child(6)',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _renderOptimizations = {},
         _itemOfInterestViewFactory = null,
@@ -5055,10 +5014,9 @@ window.wizerati = {
 //      return;
 //    }
     this.render = function (e, args) {
-      var event = _.extend({ eventType: that.Model.eventType.Default, args: [] }, args);
 
-      if (_renderOptimizations[event.eventType]) {
-        _renderOptimizations[event.eventType].apply(this, event.args);
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, event.args);
         return;
       }
 
@@ -5136,12 +5094,20 @@ window.wizerati = {
       var mode = that.Model.getMode();
 
       if (mode === _modeEnum.Default) {
-        that.$elSelectedItem.children().width(that.Model.getItemWidth() - 40);
-        that.$elPinnedItems.children().width(that.Model.getItemWidth() - 40);
-        that.$el.width(10);
+//        that.$elSelectedItem.width(that.Model.getItemWidth());
+//        that.$elPinnedItems.width(that.Model.getItemWidth());
+        var leftP1 = (10*1);
+        var leftP2 = (10*2);
+        var leftP3 = (10*3);
+        var leftP4 = (10*4);
+//        that.$elPinnedItems.css({left: left});
+//        $(_elPinnedItem1).css({left: leftP1});
+//        $(_elPinnedItem2).css({left: leftP2});
+//        $(_elPinnedItem3).css({left: leftP3});
+//        $(_elPinnedItem4).css({left: leftP4});
       } else if (mode === _modeEnum.PinnedItemsExpanded) {
-        that.$el.children().width(that.Model.getItemWidth() - 40);
-        that.$el.width(that.Model.getItemWidth());
+//        that.$el.width(that.Model.getItemWidth());
+//        that.$elPinnedItems.css({left:0});
       }
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
@@ -5232,10 +5198,13 @@ window.wizerati = {
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
 
-      _renderOptimizations[that.Model.eventType.WidthChange] = setWidths;
-      _renderOptimizations[that.Model.eventType.ModeChange] = setMode;
+      _renderOptimizations[that.Model.eventUris.widthChange] = setWidths;
+      _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.itemRemoval, that.render);
+      $.subscribe(that.Model.eventUris.widthChange, that.render);
+      $.subscribe(that.Model.eventUris.modeChange, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_selectedItemModel.updateEventUri, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
@@ -5245,7 +5214,7 @@ window.wizerati = {
       that.Model = model;
 
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+//      $.subscribe(that.Model.updateEventUri, that.render);
 
       return that;
     }
@@ -5356,6 +5325,83 @@ window.wizerati = {
 
   app.SearchPanelView = SearchPanelView;
   invertebrate.View.isExtendedBy(app.SearchPanelView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function UIRootView(model) {
+
+    if (!(this instanceof app.UIRootView)) {
+      return new app.UIRootView(model);
+    }
+
+    var that = this,
+        _el = 'body',
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e, options) {
+      options = options || { done: that.postRender };
+
+      if (_renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, e.args);
+        return;
+      }
+
+      //two step DOM manipulation to enable visibility of CSS transition
+      //first set display property
+      var modal = that.Model.getModal();
+      that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
+      that.$el.attr('data-ui-mode', that.Model.getUIMode());
+      that.$el.attr('data-modal', modal);
+
+      if (modal) {
+        setTimeout(function () {
+          that.$el.addClass('modal-visible');
+        }, 0);  //re-adding of this class will trigger CSS transition
+      }
+
+    };
+
+    this.postRender = function () {
+    };
+
+    this.bindEvents = function () {
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function setBodyWidth(){
+      $('body').width(that.Model.getBodyWidth())
+    }
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
+
+      that.bindEvents();
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.UIRootView = UIRootView;
+  invertebrate.View.isExtendedBy(app.UIRootView);
 
 }(wizerati, $, invertebrate));
 ;(function (app) {
@@ -6940,40 +6986,86 @@ window.wizerati = {
       return new LayoutCalculator(searchPanelView, resultListView, itemsOfInterestView);
     }
 
-    var _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+    var _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
         _searchPanelView = null,
         _resultListView = null,
         _itemsOfInterestView = null,
-        _defaultWidthItemOfInterest = 140,
-        _itemOfInterestContentWidthDelta = 40;
+        _defaultWidthItemOfInterest = 340,
+        _itemOfInterestContentWidthDelta = 40,
+        _stackedItemOffset = 10;
 
     this.calculate = function () {
+      var numberOfItemsOfInterest = _itemsOfInterestView.Model.getCount();
       var newWidth = _defaultWidthItemOfInterest;
       var mode = itemsOfInterestView.Model.getMode();
       var widthTakenBySearchAndResults = _searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth;
       var viewPortWidth = window.innerWidth;
 
       if (mode === _itemsOfInterestModeEnum.Default) {
-        newWidth = viewPortWidth - widthTakenBySearchAndResults - 20;
-        console.log('newWidth (%s) = viewPortWidth (%s) - widthTakenBySearchAndResults (%s) - 20;', newWidth, viewPortWidth, widthTakenBySearchAndResults);
+        newWidth = (viewPortWidth - widthTakenBySearchAndResults);
+        console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResults (%s) - (_stackedItemOffset (%s) * _itemsOfInterestView.Model.getCount() (%s));', newWidth, viewPortWidth, widthTakenBySearchAndResults, _stackedItemOffset, _itemsOfInterestView.Model.getCount());
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        var numberOfItemsOfInterest = 3;
+
 
         if ((_searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResults) / numberOfItemsOfInterest;
         }
-
-
       } else {
         throw "invalid itemsOfInterestView mode.";
       }
 
       newWidth = Math.floor(newWidth);
-      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
       console.log('LayoutCalculator::calculate::newWidth: %s', newWidth);
 
+      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
+
+      var spMode = _searchPanelView.Model.getMode();
+      var rlMode = _resultListView.Model.getMode();
+      var searchPanelLeft =  spMode === _searchPanelModeEnum.Default ? 0 : -340;
+      var resultListLeft = spMode  === _searchPanelModeEnum.Default ? 340 : 0;
+      var selectedItemLeft = 0;
+
+      if(spMode === _searchPanelModeEnum.Default){
+        if(rlMode === _resultListModeEnum.Default) {
+          selectedItemLeft = 873;
+        } else {
+          selectedItemLeft = 340;
+        }
+      } else {
+        if(rlMode === _resultListModeEnum.Default) {
+          selectedItemLeft = 533;
+        } else {
+          selectedItemLeft =  0;
+        }
+      }
+
+      var pinnedItemsOffset = 0;
+      if(_itemsOfInterestView.Model.getItemsOfInterest().selectedItem) {
+        pinnedItemsOffset = 340;
+      }
+      var p1Left = selectedItemLeft+pinnedItemsOffset;
+      var p2Left = selectedItemLeft+pinnedItemsOffset+340;
+      var p3Left = selectedItemLeft+pinnedItemsOffset+340+340;
+      var p4Left = selectedItemLeft+pinnedItemsOffset+340+340+340;
+      var p5Left = selectedItemLeft+pinnedItemsOffset+340+340+340+340;
+      var p6Left = selectedItemLeft+pinnedItemsOffset+340+340+340+340;
+
+      console.log('widthBody = (newWidth (%s) *numberOfItemsOfInterest (%s)) + widthTakenBySearchAndResults (%s) + (_widthOfStackingIndicator (%s) * numberOfItemsOfInterest (%s))', newWidth, numberOfItemsOfInterest, widthTakenBySearchAndResults, _stackedItemOffset, numberOfItemsOfInterest);
       return {
-        widthItemOfInterest: newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest
+        searchPanelLeft: searchPanelLeft,
+        resultListLeft: resultListLeft,
+        selectedItemLeft: selectedItemLeft,
+        pinnedItem1Left: p1Left,
+        pinnedItem2Left: p2Left,
+        pinnedItem3Left: p3Left,
+        pinnedItem4Left: p4Left,
+        pinnedItem5Left: p5Left,
+        pinnedItem6Left: p6Left,
+        widthItemOfInterest: newWidth,
+        widthBody: (newWidth*numberOfItemsOfInterest) + widthTakenBySearchAndResults + (_stackedItemOffset*numberOfItemsOfInterest)
 //        widthItemOfInterestContent: newWidth >= _defaultWidthItemOfInterest ? newWidth-_itemOfInterestContentWidthDelta : _defaultWidthItemOfInterest-_itemOfInterestContentWidthDelta
       };
     };
@@ -7005,23 +7097,25 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function LayoutCoordinator(searchPanelModel, resultListModel, itemsOfInterestModel) {
+  function LayoutCoordinator(searchPanelModel, resultListModel, itemsOfInterestModel, uiRootModel) {
     if (!(this instanceof LayoutCoordinator)) {
-      return new LayoutCoordinator();
+      return new LayoutCoordinator(searchPanelModel, resultListModel, itemsOfInterestModel, uiRootModel);
     }
 
     var _searchPanelModel = null,
         _resultListModel = null,
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _uiRootModel = null;
 
     this.applyLayout = function (layout) {
       if(!layout) {
         throw "layout not supplied";
       }
 
-      _searchPanelModel.setMode(_searchPanelModel.getMode());
-      _resultListModel.setMode(resultListModel.getMode());
-      _itemsOfInterestModel.setItemWidth(layout.widthItemOfInterest);
+      _uiRootModel.setBodyWidth(layout.widthBody);
+//      _searchPanelModel.setLeft(layout.searchPanelLeft);
+//      _resultListModel.setLeft(layout.resultListLeft);
+//      _itemsOfInterestModel.setLayout(layout);
     };
 
     function init() {
@@ -7037,9 +7131,14 @@ window.wizerati = {
         throw 'itemsOfInterestModel not supplied.';
       }
 
+      if (!uiRootModel) {
+        throw 'uiRootModel not supplied.';
+      }
+
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _uiRootModel = uiRootModel;
     }
 
     init();
@@ -7431,7 +7530,7 @@ window.wizerati = {
 
   try {
     mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('views').searchPanelView, wizerati.mod('views').resultListView, wizerati.mod('views').itemsOfInterestView);
-    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').uiRootModel);
   }
   catch (e) {
     throw 'problem registering layout module. ' + e;

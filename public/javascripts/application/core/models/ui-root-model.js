@@ -10,9 +10,24 @@
     var that = this,
         _uiMode = '0',
         _modal = null,
+        _bodyWidth = null,
         _uiModeEnum = app.mod('enum').UIMode;
 
-    this.updateEventUri = 'update://UIRootModel/';
+    this.eventUris = { default: 'update://uirootmodel/', bodyWidthChange: 'update://uirootmodel/bodywidth'};
+
+    this.getBodyWidth = function () {
+      return _bodyWidth;
+    };
+
+    this.setBodyWidth = function (value, options) {
+      options = options || {silent: false};
+
+      _bodyWidth = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.bodyWidthChange);
+      }
+    };
 
     this.getUIMode = function () {
       return _uiMode || '';

@@ -13,6 +13,12 @@
 //        _el2 = '#items-of-interest-panel-2',
         _elSelectedItem = '.selected-item',
         _elPinnedItems = '.pinned-item',
+        _elPinnedItem1 = '.pinned-item:nth-child(4)',
+        _elPinnedItem2 = '.pinned-item:nth-child(5)',
+        _elPinnedItem3 = '.pinned-item:nth-child(6)',
+        _elPinnedItem4 = '.pinned-item:nth-child(7)',
+        _elPinnedItem5 = '.pinned-item:nth-child(5)',
+        _elPinnedItem6 = '.pinned-item:nth-child(6)',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _renderOptimizations = {},
         _itemOfInterestViewFactory = null,
@@ -56,10 +62,9 @@
 //      return;
 //    }
     this.render = function (e, args) {
-      var event = _.extend({ eventType: that.Model.eventType.Default, args: [] }, args);
 
-      if (_renderOptimizations[event.eventType]) {
-        _renderOptimizations[event.eventType].apply(this, event.args);
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, event.args);
         return;
       }
 
@@ -137,12 +142,20 @@
       var mode = that.Model.getMode();
 
       if (mode === _modeEnum.Default) {
-        that.$elSelectedItem.children().width(that.Model.getItemWidth() - 40);
-        that.$elPinnedItems.children().width(that.Model.getItemWidth() - 40);
-        that.$el.width(10);
+//        that.$elSelectedItem.width(that.Model.getItemWidth());
+//        that.$elPinnedItems.width(that.Model.getItemWidth());
+        var leftP1 = (10*1);
+        var leftP2 = (10*2);
+        var leftP3 = (10*3);
+        var leftP4 = (10*4);
+//        that.$elPinnedItems.css({left: left});
+//        $(_elPinnedItem1).css({left: leftP1});
+//        $(_elPinnedItem2).css({left: leftP2});
+//        $(_elPinnedItem3).css({left: leftP3});
+//        $(_elPinnedItem4).css({left: leftP4});
       } else if (mode === _modeEnum.PinnedItemsExpanded) {
-        that.$el.children().width(that.Model.getItemWidth() - 40);
-        that.$el.width(that.Model.getItemWidth());
+//        that.$el.width(that.Model.getItemWidth());
+//        that.$elPinnedItems.css({left:0});
       }
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
@@ -233,10 +246,13 @@
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
 
-      _renderOptimizations[that.Model.eventType.WidthChange] = setWidths;
-      _renderOptimizations[that.Model.eventType.ModeChange] = setMode;
+      _renderOptimizations[that.Model.eventUris.widthChange] = setWidths;
+      _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.itemRemoval, that.render);
+      $.subscribe(that.Model.eventUris.widthChange, that.render);
+      $.subscribe(that.Model.eventUris.modeChange, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_selectedItemModel.updateEventUri, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
@@ -246,7 +262,7 @@
       that.Model = model;
 
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+//      $.subscribe(that.Model.updateEventUri, that.render);
 
       return that;
     }

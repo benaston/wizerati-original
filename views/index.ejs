@@ -1,13 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="stylesheets/wizerati.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, width=device-height, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="stylesheets/foo.css"/>
 </head>
-<body>
-    <div style="background-color: blue"></div>
+<body style=""><div class="modal-container"><div class="search-panel red">
+        <div class="">
+            <p>search</p>
+        </div>
+    </div><article class="result-list green">
+        <div class="overflow-scroll-y">
+            <ul>
+                <li>foo</li>
+                <li>foo</li>
+                <li>foo</li>
+                <li>foo</li>
+                <li>foo</li>
+                <li>foo</li>
+                <li>foo</li>
+            </ul>
+        </div>
+    </article><article class="selected-item">
+        <div class="content overflow-scroll-y height-100 pink">
+            <p>si</p>
+        </div>
+    </article><article class="pinned-item">
+        <div class="content overflow-scroll-y height-100 pink-2">
+            <p>p1</p>
+        </div>
+    </article><article class="pinned-item">
+        <div class="content overflow-scroll-y pink-3 height-100 pink-3">
+            <p>p2</p>
+        </div>
+    </article></div>
+<div class="position-fixed top-100px left-100px">
+<button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('1'); window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());">
+expand
+</button>
+<button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('0'); window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());">
+collapse
+</button>
+</div>
+<script src="javascripts/wizerati.js"></script>
 </body>
 </html>

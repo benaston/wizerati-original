@@ -8,13 +8,19 @@
     }
 
     var that = this,
-        _el = 'body';
+        _el = 'body',
+        _renderOptimizations = {};
 
     this.$el = null;
     this.Model = null;
 
     this.render = function (e, options) {
       options = options || { done: that.postRender };
+
+      if (_renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, e.args);
+        return;
+      }
 
       //two step DOM manipulation to enable visibility of CSS transition
       //first set display property
@@ -41,6 +47,10 @@
       that.$el = $(_el);
     };
 
+    function setBodyWidth(){
+      $('body').width(that.Model.getBodyWidth())
+    }
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -48,7 +58,10 @@
 
       that.Model = model;
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+      _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
 
       that.bindEvents();
 

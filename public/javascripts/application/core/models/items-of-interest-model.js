@@ -9,16 +9,17 @@
     var that = this,
         _selectedItemModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _itemWidth = 10,
+        _itemWidth = 0,
         _mode = _modeEnum.Default,
-        _itemsOfInterest = { selectedItem: '', pinnedItems: [] };
+        _itemsOfInterest = { selectedItem: '1', pinnedItems: [] }; //1 is temp
 
-    this.updateEventUri = 'update://ItemsOfInterestModel/';
+    this.eventUris = {default: 'update://ItemsOfInterestModel/',
+                      widthChange: 'update://itemsofinterestmodel/widthchange',
+                      modeChange: 'update://itemsofinterestmodel/modechange' ,
+                      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
-    this.eventType = {
-      Default: '0',
-      WidthChange: '1',
-      ModeChange: '2'
+    this.getCount = function() {
+      return 2;//_itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
     };
 
     this.getMode = function() {
@@ -28,7 +29,7 @@
     this.setMode = function(value) {
       _mode = value;
 
-      $.publish(that.updateEventUri, { eventType: that.eventType.ModeChange });
+      $.publish(that.eventUris.modeChange);
     };
 
     this.getItemWidth = function() {
@@ -39,7 +40,7 @@
     this.setItemWidth = function(value) {
       _itemWidth = value;
 
-      $.publish(that.updateEventUri, { eventType: that.eventType.WidthChange });
+      $.publish(that.eventUris.widthChange);
     };
 
     this.isItemOfInterest = function (id) {
@@ -68,7 +69,7 @@
 
       _itemsOfInterest.pinnedItems.push(id);
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     this.removeItemOfInterest = function (id) {
@@ -81,6 +82,7 @@
       });
 
       $.publish(that.updateEventUri, { action: 'removal', removedItemId: id});
+      $.publish(that.eventUris.itemRemoval, id);
     };
 
     this.isPinned = function (id) {

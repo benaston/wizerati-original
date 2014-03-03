@@ -212,7 +212,7 @@
 
   try {
     mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('views').searchPanelView, wizerati.mod('views').resultListView, wizerati.mod('views').itemsOfInterestView);
-    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').uiRootModel);
   }
   catch (e) {
     throw 'problem registering layout module. ' + e;
