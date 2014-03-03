@@ -132,3 +132,16 @@ body[data-items-of-interest-mode='1'] .pinned-item:nth-of-type(6) {
     pointer-events: auto;
     transition: opacity .2s linear .2s;
 }
+
+#no-script {
+    display: none;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    background-color: white;
+    text-align: left;
+    padding: 25px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
