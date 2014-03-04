@@ -2103,9 +2103,9 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     -webkit-animation-timing-function: linear;
 }
 
-.is-favorite {
+.t .is-favorite {
     color: rgba(255, 211, 0, .4) !important;
-    /*font-size: 1.5rem;*/
+    font-size: 1.5rem;
 }
 
 .menu .is-favorite {

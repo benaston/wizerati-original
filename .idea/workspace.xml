@@ -46,7 +46,7 @@
       <file leaf-file-name="wizerati-style-layout.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="537" column="1" selection-start="10247" selection-end="10247" vertical-scroll-proportion="0.80443287" vertical-offset="7438" max-vertical-offset="8205">
+            <state line="534" column="3" selection-start="10162" selection-end="10162" vertical-scroll-proportion="0.7457627" vertical-offset="7438" max-vertical-offset="8205">
               <folding />
             </state>
           </provider>
@@ -950,7 +950,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="537" column="1" selection-start="10247" selection-end="10247" vertical-scroll-proportion="0.80443287" vertical-offset="7438" max-vertical-offset="8205">
+        <state line="534" column="3" selection-start="10162" selection-end="10162" vertical-scroll-proportion="0.7457627" vertical-offset="7438" max-vertical-offset="8205">
           <folding />
         </state>
       </provider>
