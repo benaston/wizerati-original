@@ -1951,6 +1951,14 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 .ios-scroll-enable {
     -webkit-overflow-scrolling: touch;
 }
+
+*[data-is-waiting='success'] .btn-success, *[data-is-waiting='primary'] .btn-primary {
+    border-left: 0;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
 .thumbnail, .t {
     box-sizing: border-box;
     position: relative;
