@@ -25,8 +25,12 @@
         _favoritesCubeModel = null,
         _roleEnum = app.mod('enum').UserRole;
 
-    this.create = function (id, currentCubeFace, isSelectedItem, animateSelectedItem, done) {
+    this.create = function (id, width, currentCubeFace, isSelectedItem, animateSelectedItem, done) {
       if (!id) {
+        throw 'id not supplied.';
+      }
+
+      if (!width) {
         throw 'id not supplied.';
       }
 
@@ -68,6 +72,7 @@
             item.isHidden = _hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id));
             item.isActioned = _actionedItemsModel.isActioned(item.id);
+            item.width = width;
             var $e = new app.ContractorItemOfInterestView(item).render().$el;
             done($e);
           });
@@ -88,6 +93,7 @@
             item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_actionedItemsModel.isActioned(item.id);
             item.isActioned = _actionedItemsModel.isActioned(item.id);
             item.isActionable = !_hiddenItemsModel.isHidden(item.id);
+            item.width = width;
             done(new app.ContractItemOfInterestView(item).render().$el);
           });
           break;

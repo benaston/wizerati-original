@@ -1,5 +1,5 @@
 <% try { %>
-<div class="item-of-interest-width-maintainer">
+<div class="<%= model.isSelected ? 'selected-item-content' : 'pinned-item-content' %> pink" style="width: <%=model.width%>px;">
     <div id="top1" class="in-page-anchor-target"></div>
     <section class="menu"><ul class="pips reset">
             <li><a>Pinned Item 1</a></li>

@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '<article class="item-of-interest overflow-y-scroll overflow-x-hidden lucid-column"></article>',
+        _el = '<article class=""></article>',
         _templateName = 'item-of-interest.html';
 
     this.$el = $(_el);
@@ -18,8 +18,12 @@
       that.$el.attr('data-id', that.Model.id);
 
       if (that.Model.isSelected) {
-        that.$el.addClass('selected');
+        that.$el.addClass('selected-item');
+      } else {
+        that.$el.addClass('pinned-item');
       }
+
+//      that.$el.css({width: model.width});
 
       if (that.Model.shouldAnimateIn) {
         that.$el.addClass('collapsed');

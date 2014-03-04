@@ -82,42 +82,44 @@
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
+      that.$el.empty();
       setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
 
+//      $elSelectedItem
 //      var $prevEl = that.$currentEl || that.$el2;
       //perform double buffering in memory - we cannot wrap the items of interest in a container in a convenient manner unfort
 //      var _$el = $('<div></div>'); //$prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
 //      that.$currentEl.empty();
 //      that.$currentEl.children().not('.handle-pinned-items').remove();
 
-//      var items = that.Model.getItemsOfInterest();
-//      items.selectedItem = _selectedItemModel.getSelectedItemId();
-//
-//      if (items.selectedItem) {
-//        _itemOfInterestViewFactory.create(items.selectedItem,
-//            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-//            true,
-//            options.animateSelectedItem,
-//            function ($v) {
-//              function addSelectedItem() {
-//                that.$el.prepend($v);
-//                $v.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-//                setTimeout(function () {
-//                  $v.removeClass('collapsed');
-//                }, 300);
-//
-//                $('body').scrollLeft(_scrollLeft);
-//              }
-//
-//              addPinnedItems(items.pinnedItems, addSelectedItem);
-//            });
-//      } else {
-//        addPinnedItems(items.pinnedItems, function () {
-//          $('body').scrollLeft(_scrollLeft);
-//        });
-//      }
+      var items = that.Model.getItemsOfInterest();
+      items.selectedItem = _selectedItemModel.getSelectedItemId(); //todo consider refactoring wrt items of interest model
+      if (items.selectedItem) {
+        _itemOfInterestViewFactory.create(items.selectedItem,
+            that.Model.getLayout().widthItemOfInterest,
+            _selectedCubeFaceModel.getSelectedCubeFaceId(),
+            true,
+            options.animateSelectedItem,
+            function done($view) {
+              addPinnedItems(items.pinnedItems, addSelectedItem);
+
+              function addSelectedItem() {
+                that.$el.prepend($view);
+                $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+                setTimeout(function () {
+                  $view.removeClass('collapsed');
+                }, 300);
+
+                $('body').scrollLeft(_scrollLeft);
+              }
+            });
+      } else {
+        addPinnedItems(items.pinnedItems, function () {
+          $('body').scrollLeft(_scrollLeft);
+        });
+      }
 //
 //      if (options.removedItemId) {
 //        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
@@ -151,8 +153,8 @@
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
       $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
 
-      that.$elSelectedItem.children().width(layout.widthItemOfInterest);
-      that.$elPinnedItems.children().width(layout.widthItemOfInterest);
+      $(_elSelectedItem).children().width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }

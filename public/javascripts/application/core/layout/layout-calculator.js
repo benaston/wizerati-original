@@ -12,7 +12,7 @@
         _searchPanelView = null,
         _resultListView = null,
         _itemsOfInterestView = null,
-        _defaultWidthItemOfInterest = 340,
+        _defaultWidthItemOfInterest = 436,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthSearchPanelMinimized = 60,
         _stackedItemOffset = 10;

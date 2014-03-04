@@ -34,7 +34,6 @@
           throw "invalid source.";
         }
 
-//        window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
         _selectedItemModel.setSelectedItemId(dto.id);
       } catch (err) {
         console.log('SelectedItemController::update exception: ' + err);

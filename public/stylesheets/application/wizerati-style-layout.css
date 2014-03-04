@@ -457,6 +457,64 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 /* Items of interest panel */
 .items-of-interest-panel {
-    position:relative;
+    position: relative;
     display: inline-block;
+    height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
+}
+
+.items-of-interest-panel .menu {
+    text-align: right;
+    margin-top: 7px;
+}
+
+.selected-item:nth-child(odd) table, .pinned-item:nth-child(odd) table {
+    float: right;
+}
+
+.selected-item .table-bordered, .pinned-item .table-bordered {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border: 0;
+    width: 100%;
+    max-width: 400px;
+}
+
+.selected-item table td:nth-of-type(1):nth-last-of-type(2),
+.pinned-item table td:nth-of-type(1):nth-last-of-type(2) {
+    width: 50%;
+}
+
+.selected-item .table-bordered td,
+.pinned-item .table-bordered td {
+    padding: 6px;
+    text-align: center;
+}
+
+.selected-item table td:nth-of-type(2):nth-last-of-type(1),
+.pinned-item table td:nth-of-type(2):nth-last-of-type(1) {
+    width: 50%;
+    box-shadow: -1px 0 0 0 #eee;
+}
+
+.item-of-interest table {
+    width: 100%;
+    max-width: 400px;
+}
+
+.menu {
+    margin-right: 30px;
+}
+
+.menu .centered-text {
+    vertical-align: top;
+}
+
+.width-62 {
+    width: 62px;
+}
+
+.item-of-interest-content {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
 }

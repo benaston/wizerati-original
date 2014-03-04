@@ -35,6 +35,7 @@
       _layoutCalculator = layoutCalculator;
 
       $.subscribe(searchPanelModel.eventUris.default, that.layOut);
+      $.subscribe(searchPanelModel.eventUris.default, that.layOut);
     }
 
     init();

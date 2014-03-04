@@ -3144,7 +3144,7 @@ window.wizerati = {
           leftPinnedItem5: 0,
           leftPinnedItem6: 0
         },
-        _itemsOfInterest = { selectedItem: '1', pinnedItems: [] }; //1 is temp
+        _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
 
     this.eventUris = {default: 'update://ItemsOfInterestModel/',
                       widthChange: 'update://itemsofinterestmodel/widthchange',
@@ -3569,7 +3569,7 @@ window.wizerati = {
         _selectedResultId = null,
         _previouslySelectedResultId = null;
 
-    this.eventUris = { default:'update://SelectedItemModel/' };
+    this.eventUris = { default:'update://selecteditemmodel/' };
 
     this.getSelectedItemId = function () {
       return _selectedResultId;
@@ -3879,7 +3879,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '<article class="item-of-interest overflow-y-scroll overflow-x-hidden lucid-column"></article>',
+        _el = '<article class=""></article>',
         _templateName = 'item-of-interest.html';
 
     this.$el = $(_el);
@@ -3889,8 +3889,12 @@ window.wizerati = {
       that.$el.attr('data-id', that.Model.id);
 
       if (that.Model.isSelected) {
-        that.$el.addClass('selected');
+        that.$el.addClass('selected-item');
+      } else {
+        that.$el.addClass('pinned-item');
       }
+
+//      that.$el.css({width: model.width});
 
       if (that.Model.shouldAnimateIn) {
         that.$el.addClass('collapsed');
@@ -4819,42 +4823,44 @@ window.wizerati = {
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
+      that.$el.empty();
       setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
 
+//      $elSelectedItem
 //      var $prevEl = that.$currentEl || that.$el2;
       //perform double buffering in memory - we cannot wrap the items of interest in a container in a convenient manner unfort
 //      var _$el = $('<div></div>'); //$prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
 //      that.$currentEl.empty();
 //      that.$currentEl.children().not('.handle-pinned-items').remove();
 
-//      var items = that.Model.getItemsOfInterest();
-//      items.selectedItem = _selectedItemModel.getSelectedItemId();
-//
-//      if (items.selectedItem) {
-//        _itemOfInterestViewFactory.create(items.selectedItem,
-//            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-//            true,
-//            options.animateSelectedItem,
-//            function ($v) {
-//              function addSelectedItem() {
-//                that.$el.prepend($v);
-//                $v.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-//                setTimeout(function () {
-//                  $v.removeClass('collapsed');
-//                }, 300);
-//
-//                $('body').scrollLeft(_scrollLeft);
-//              }
-//
-//              addPinnedItems(items.pinnedItems, addSelectedItem);
-//            });
-//      } else {
-//        addPinnedItems(items.pinnedItems, function () {
-//          $('body').scrollLeft(_scrollLeft);
-//        });
-//      }
+      var items = that.Model.getItemsOfInterest();
+      items.selectedItem = _selectedItemModel.getSelectedItemId(); //todo consider refactoring wrt items of interest model
+      if (items.selectedItem) {
+        _itemOfInterestViewFactory.create(items.selectedItem,
+            that.Model.getLayout().widthItemOfInterest,
+            _selectedCubeFaceModel.getSelectedCubeFaceId(),
+            true,
+            options.animateSelectedItem,
+            function done($view) {
+              addPinnedItems(items.pinnedItems, addSelectedItem);
+
+              function addSelectedItem() {
+                that.$el.prepend($view);
+                $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+                setTimeout(function () {
+                  $view.removeClass('collapsed');
+                }, 300);
+
+                $('body').scrollLeft(_scrollLeft);
+              }
+            });
+      } else {
+        addPinnedItems(items.pinnedItems, function () {
+          $('body').scrollLeft(_scrollLeft);
+        });
+      }
 //
 //      if (options.removedItemId) {
 //        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
@@ -4888,8 +4894,8 @@ window.wizerati = {
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
       $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
 
-      that.$elSelectedItem.children().width(layout.widthItemOfInterest);
-      that.$elPinnedItems.children().width(layout.widthItemOfInterest);
+      $(_elSelectedItem).children().width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
@@ -6265,7 +6271,6 @@ window.wizerati = {
           throw "invalid source.";
         }
 
-//        window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
         _selectedItemModel.setSelectedItemId(dto.id);
       } catch (err) {
         console.log('SelectedItemController::update exception: ' + err);
@@ -6491,8 +6496,12 @@ window.wizerati = {
         _favoritesCubeModel = null,
         _roleEnum = app.mod('enum').UserRole;
 
-    this.create = function (id, currentCubeFace, isSelectedItem, animateSelectedItem, done) {
+    this.create = function (id, width, currentCubeFace, isSelectedItem, animateSelectedItem, done) {
       if (!id) {
+        throw 'id not supplied.';
+      }
+
+      if (!width) {
         throw 'id not supplied.';
       }
 
@@ -6534,6 +6543,7 @@ window.wizerati = {
             item.isHidden = _hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id));
             item.isActioned = _actionedItemsModel.isActioned(item.id);
+            item.width = width;
             var $e = new app.ContractorItemOfInterestView(item).render().$el;
             done($e);
           });
@@ -6554,6 +6564,7 @@ window.wizerati = {
             item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_actionedItemsModel.isActioned(item.id);
             item.isActioned = _actionedItemsModel.isActioned(item.id);
             item.isActionable = !_hiddenItemsModel.isHidden(item.id);
+            item.width = width;
             done(new app.ContractItemOfInterestView(item).render().$el);
           });
           break;
@@ -6899,7 +6910,7 @@ window.wizerati = {
         _searchPanelView = null,
         _resultListView = null,
         _itemsOfInterestView = null,
-        _defaultWidthItemOfInterest = 340,
+        _defaultWidthItemOfInterest = 436,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthSearchPanelMinimized = 60,
         _stackedItemOffset = 10;
@@ -7021,6 +7032,7 @@ window.wizerati = {
       _itemsOfInterestModel = itemsOfInterestModel;
       _layoutCalculator = layoutCalculator;
 
+      $.subscribe(searchPanelModel.eventUris.default, that.layOut);
       $.subscribe(searchPanelModel.eventUris.default, that.layOut);
     }
 

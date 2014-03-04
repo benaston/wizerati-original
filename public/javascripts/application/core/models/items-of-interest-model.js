@@ -20,7 +20,7 @@
           leftPinnedItem5: 0,
           leftPinnedItem6: 0
         },
-        _itemsOfInterest = { selectedItem: '1', pinnedItems: [] }; //1 is temp
+        _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
 
     this.eventUris = {default: 'update://ItemsOfInterestModel/',
                       widthChange: 'update://itemsofinterestmodel/widthchange',
