@@ -65,7 +65,7 @@
         throw 'id not supplied';
       }
 
-      if (_.find(that.getItemsOfInterest().pinnedItems, function (idOfPinnedItem) {
+      if (that.getItemsOfInterest().pinnedItems.find(function (idOfPinnedItem) {
         return idOfPinnedItem === id;
       })) {
         return;
@@ -90,7 +90,6 @@
         return idOfPinnedItem === id;
       });
 
-      $.publish(that.updateEventUri, { action: 'removal', removedItemId: id});
       $.publish(that.eventUris.itemRemoval, id);
     };
 

@@ -3189,7 +3189,7 @@ window.wizerati = {
         throw 'id not supplied';
       }
 
-      if (_.find(that.getItemsOfInterest().pinnedItems, function (idOfPinnedItem) {
+      if (that.getItemsOfInterest().pinnedItems.find(function (idOfPinnedItem) {
         return idOfPinnedItem === id;
       })) {
         return;
@@ -3214,7 +3214,7 @@ window.wizerati = {
         return idOfPinnedItem === id;
       });
 
-      $.publish(that.updateEventUri, { action: 'removal', removedItemId: id});
+//      $.publish(that.updateEventUri, { action: 'removal', removedItemId: id});
       $.publish(that.eventUris.itemRemoval, id);
     };
 
@@ -4680,12 +4680,13 @@ window.wizerati = {
           return;
         }
         _itemOfInterestViewFactory.create(id,
+            that.Model.getLayout().widthItemOfInterest,
             _selectedCubeFaceModel.getSelectedCubeFaceId(),
             false,
             false,
-            function ($v) {
-              that.$el.prepend($v)
-              $v.scrollTop(_scrollTopValues[id]);
+            function ($view) {
+              that.$el.prepend($view)
+              $view.scrollTop(_scrollTopValues[id]);
             });
       });
 
@@ -7121,14 +7122,14 @@ window.wizerati = {
 //        instance.router.registerRoute('/selectedcubeface/update', function (dto) {
 //          app.mod('controllers').selectedCubeFaceController.update(dto);
 //        }, { silent: true });
-//
-//        instance.router.registerRoute('/itemsofinterest/create', function (dto) {
-//          app.mod('controllers').itemsOfInterestController.create(dto);
-//        }, { silent: true });
-//
-//        instance.router.registerRoute('/itemsofinterest/destroy', function (dto) {
-//          app.mod('controllers').itemsOfInterestController.destroy(dto);
-//        }, { silent: true });
+
+        instance.router.registerRoute('/itemsofinterest/create', function (dto) {
+          app.mod('controllers').itemsOfInterestController.create(dto);
+        }, { silent: true });
+
+        instance.router.registerRoute('/itemsofinterest/destroy', function (dto) {
+          app.mod('controllers').itemsOfInterestController.destroy(dto);
+        }, { silent: true });
 
         instance.router.registerRoute('/hiddenitems/create', function (dto) {
           app.mod('controllers').hiddenItemsController.create(dto);
@@ -7138,14 +7139,14 @@ window.wizerati = {
           app.mod('controllers').hiddenItemsController.destroy(dto);
         }, { silent: true });
 
-//        instance.router.registerRoute('/actioneditems/create', function (dto) {
-//          app.mod('controllers').actionedItemsController.create(dto);
-//        }, { silent: true });
-//
-//        instance.router.registerRoute('/actioneditems/destroy', function (dto) {
-//          app.mod('controllers').actionedItemsController.destroy(dto);
-//        }, { silent: true });
-//
+        instance.router.registerRoute('/actioneditems/create', function (dto) {
+          app.mod('controllers').actionedItemsController.create(dto);
+        }, { silent: true });
+
+        instance.router.registerRoute('/actioneditems/destroy', function (dto) {
+          app.mod('controllers').actionedItemsController.destroy(dto);
+        }, { silent: true });
+
 //        instance.router.registerRoute('/purchasepanel', function (dto) {
 //          app.mod('controllers').purchasePanelController.index(dto);
 //        });
@@ -7444,9 +7445,11 @@ window.wizerati = {
   'use strict';
 
   try {
+    mod.actionedItemsController = new wizerati.ActionedItemsController(wizerati.mod('models').actionedItemsModel);
     mod.favoritesController = new wizerati.FavoritesController(wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').selectedCubeFaceModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(wizerati.mod('models').hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
+    mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(wizerati.mod('models').itemsOfInterestModel);
     mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel);

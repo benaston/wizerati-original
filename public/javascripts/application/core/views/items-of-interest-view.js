@@ -171,12 +171,13 @@
           return;
         }
         _itemOfInterestViewFactory.create(id,
+            that.Model.getLayout().widthItemOfInterest,
             _selectedCubeFaceModel.getSelectedCubeFaceId(),
             false,
             false,
-            function ($v) {
-              that.$el.prepend($v)
-              $v.scrollTop(_scrollTopValues[id]);
+            function ($view) {
+              that.$el.prepend($view)
+              $view.scrollTop(_scrollTopValues[id]);
             });
       });
 
