@@ -4507,142 +4507,6 @@ window.wizerati = {
 //  invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
 //
 //}(wizerati, $, invertebrate, _));
-;(function (app, $, invertebrate, document) {
-  'use strict';
-
-  function LoginPanelView(model) {
-
-    if (!(this instanceof app.LoginPanelView)) {
-      return new app.LoginPanelView(model);
-    }
-
-    var that = this,
-        _el = '#log-in-panel',
-        _cancelButtonEl = '.btn-cancel',
-        _successButtonEl = '.log-in .btn-success',
-        _usernameEl = '.username',
-        _passwordEl = '.password',
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null,
-        this.$cancelButton = null,
-        this.$successButton = null,
-        this.$username = null,
-        this.$password = null,
-        this.Model = null;
-
-    this.render = function () {
-      if (that.Model.getIsVisible()) {
-        that.$el.removeClass('hide');
-      }
-
-      if (that.Model.getIsLoginFailedMessageVisible()) {
-        that.$el.addClass('login-error');
-      }
-    };
-
-    this.bindEvents = function () {
-      that.$username.on('change', function () {
-        that.Model.setUsername(that.$username.val());
-      });
-
-      that.$password.on('change', function () {
-        that.Model.setPassword(that.$password.val());
-      });
-
-      that.$cancelButton.on('click', function () {
-        cancel();
-      });
-
-      that.$successButton.on('click', function () {
-        app.instance.router.route('/session/create', { $parentDomNode: that.$el });
-      });
-
-      $(document).keyup(function (e) {
-        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getUIMode() === _uiModeEnum.LogIn) {
-          cancel();
-        }
-      });
-    };
-
-    function cancel() {
-      app.instance.router.route('/');
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$cancelButton = that.$el.find(_cancelButtonEl);
-      that.$password = that.$el.find(_passwordEl);
-      that.$username = that.$el.find(_usernameEl);
-      that.$successButton = that.$el.find(_successButtonEl);
-      that.bindEvents();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'model not supplied';
-      }
-
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.LoginPanelView = LoginPanelView;
-  invertebrate.View.isExtendedBy(app.LoginPanelView);
-
-}(wizerati, $, invertebrate, document));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function PurchasePanelView(model) {
-
-    if (!(this instanceof app.PurchasePanelView)) {
-      return new app.PurchasePanelView(model);
-    }
-
-    var that = this,
-        _el = '#purchase-panel';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-state', that.Model.getActiveTab());
-      that.$el.attr('data-is-waiting', that.Model.getIsWaiting());
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'model not supplied';
-      }
-
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.PurchasePanelView = PurchasePanelView;
-  invertebrate.View.isExtendedBy(app.PurchasePanelView);
-
-}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4917,6 +4781,142 @@ window.wizerati = {
 
   app.ItemsOfInterestView = ItemsOfInterestView;
   invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, document) {
+  'use strict';
+
+  function LoginPanelView(model) {
+
+    if (!(this instanceof app.LoginPanelView)) {
+      return new app.LoginPanelView(model);
+    }
+
+    var that = this,
+        _el = '#log-in-panel',
+        _cancelButtonEl = '.btn-cancel',
+        _successButtonEl = '.log-in .btn-success',
+        _usernameEl = '.username',
+        _passwordEl = '.password',
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null,
+        this.$cancelButton = null,
+        this.$successButton = null,
+        this.$username = null,
+        this.$password = null,
+        this.Model = null;
+
+    this.render = function () {
+      if (that.Model.getIsVisible()) {
+        that.$el.removeClass('hide');
+      }
+
+      if (that.Model.getIsLoginFailedMessageVisible()) {
+        that.$el.addClass('login-error');
+      }
+    };
+
+    this.bindEvents = function () {
+      that.$username.on('change', function () {
+        that.Model.setUsername(that.$username.val());
+      });
+
+      that.$password.on('change', function () {
+        that.Model.setPassword(that.$password.val());
+      });
+
+      that.$cancelButton.on('click', function () {
+        cancel();
+      });
+
+      that.$successButton.on('click', function () {
+        app.instance.router.route('/session/create', { $parentDomNode: that.$el });
+      });
+
+      $(document).keyup(function (e) {
+        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getUIMode() === _uiModeEnum.LogIn) {
+          cancel();
+        }
+      });
+    };
+
+    function cancel() {
+      app.instance.router.route('/');
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$cancelButton = that.$el.find(_cancelButtonEl);
+      that.$password = that.$el.find(_passwordEl);
+      that.$username = that.$el.find(_usernameEl);
+      that.$successButton = that.$el.find(_successButtonEl);
+      that.bindEvents();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      that.Model = model;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.LoginPanelView = LoginPanelView;
+  invertebrate.View.isExtendedBy(app.LoginPanelView);
+
+}(wizerati, $, invertebrate, document));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function PurchasePanelView(model) {
+
+    if (!(this instanceof app.PurchasePanelView)) {
+      return new app.PurchasePanelView(model);
+    }
+
+    var that = this,
+        _el = '#purchase-panel';
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.attr('data-state', that.Model.getActiveTab());
+      that.$el.attr('data-is-waiting', that.Model.getIsWaiting());
+    };
+
+    this.bindEvents = function () {
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      that.Model = model;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.PurchasePanelView = PurchasePanelView;
+  invertebrate.View.isExtendedBy(app.PurchasePanelView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate, _) {
@@ -7101,7 +7101,7 @@ window.wizerati = {
 //        instance.router.registerRoute('/advertisers', function () {
 //          app.mod('controllers').advertisersController.index();
 //        });
-//
+
         instance.router.registerRoute('/search', function (dto) {
           app.mod('controllers').searchController.show(dto);
         }, { title: 'Wizerati Search', uriTransform: app.mod('controllers').searchController.urlTransforms['/search'] });
@@ -7109,15 +7109,15 @@ window.wizerati = {
         instance.router.registerRoute('/selecteditem/update', function (dto) {
           app.mod('controllers').selectedItemController.update(dto);
         }, { silent: true });
-//
-//        instance.router.registerRoute('/favorites/create', function (dto) {
-//          app.mod('controllers').favoritesController.create(dto);
-//        }, { silent: true });
-//
-//        instance.router.registerRoute('/favorites/destroy', function (dto) {
-//          app.mod('controllers').favoritesController.destroy(dto);
-//        }, { silent: true });
-//
+
+        instance.router.registerRoute('/favorites/create', function (dto) {
+          app.mod('controllers').favoritesController.create(dto);
+        }, { silent: true });
+
+        instance.router.registerRoute('/favorites/destroy', function (dto) {
+          app.mod('controllers').favoritesController.destroy(dto);
+        }, { silent: true });
+
 //        instance.router.registerRoute('/selectedcubeface/update', function (dto) {
 //          app.mod('controllers').selectedCubeFaceController.update(dto);
 //        }, { silent: true });
@@ -7444,6 +7444,7 @@ window.wizerati = {
   'use strict';
 
   try {
+    mod.favoritesController = new wizerati.FavoritesController(wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').selectedCubeFaceModel);
     mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
     mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);

@@ -26,7 +26,7 @@
 //        instance.router.registerRoute('/advertisers', function () {
 //          app.mod('controllers').advertisersController.index();
 //        });
-//
+
         instance.router.registerRoute('/search', function (dto) {
           app.mod('controllers').searchController.show(dto);
         }, { title: 'Wizerati Search', uriTransform: app.mod('controllers').searchController.urlTransforms['/search'] });
@@ -34,15 +34,15 @@
         instance.router.registerRoute('/selecteditem/update', function (dto) {
           app.mod('controllers').selectedItemController.update(dto);
         }, { silent: true });
-//
-//        instance.router.registerRoute('/favorites/create', function (dto) {
-//          app.mod('controllers').favoritesController.create(dto);
-//        }, { silent: true });
-//
-//        instance.router.registerRoute('/favorites/destroy', function (dto) {
-//          app.mod('controllers').favoritesController.destroy(dto);
-//        }, { silent: true });
-//
+
+        instance.router.registerRoute('/favorites/create', function (dto) {
+          app.mod('controllers').favoritesController.create(dto);
+        }, { silent: true });
+
+        instance.router.registerRoute('/favorites/destroy', function (dto) {
+          app.mod('controllers').favoritesController.destroy(dto);
+        }, { silent: true });
+
 //        instance.router.registerRoute('/selectedcubeface/update', function (dto) {
 //          app.mod('controllers').selectedCubeFaceController.update(dto);
 //        }, { silent: true });
