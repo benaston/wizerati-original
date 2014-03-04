@@ -22,7 +22,10 @@
     <style>
     </style>
 </head>
-<body data-ui-mode="-1"><div class="modal-container"><div class="search-panel red">
+<body data-ui-mode="-1"><div class="modal-container"><div class="search-panel red" data-mode="0">
+        <div class="centered-text handle handle-search-panel btn-container">
+            <a href="/searchpanelmode/update?mode=0" class="btn btn-primary btn-50">&#xe800;</a><div class="label">show search & favorites</div>
+        </div>
         <div id="search-form">
         </div>
         <section id="favorites-cube" class="cube-container hide" data-mode="0">
@@ -102,18 +105,9 @@
             <a class="btn-my-account" href="/user/show?id=userid">sign in</a> &nbsp;|&nbsp; <a href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a> <span class="legal">wizerati &copy; 2014</span>
             <!--<a class="btn-my-account" href="/user/show?id=userid">my account</a> | <a class="btn-log-out" href="/session/destroy">log out</a> | <a href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a>-->
         </div>
-    </div><article class="result-list green">
-        <div class="overflow-scroll-y">
-            <ul>
-                <li>foo</li>
-                <li>foo</li>
-                <li>foo</li>
-                <li>foo</li>
-                <li>foo</li>
-                <li>foo</li>
-                <li>foo</li>
-            </ul>
-        </div>
+    </div><article class="result-list-panel green">
+        <ul class="result-list overflow-scroll-y height-100">
+        </ul>
     </article><article class="selected-item">
         <div class="selected-item-content pink">
             <p>si</p>
@@ -126,9 +120,9 @@
         <div class="pinned-item-content pink-3">
             <p>p2</p>
         </div>
-    </article><h1 class="logo">wizerati</h1>
-    <h2 class="tag-line">UK IT contract jobs search</h2></div>
-<div class="position-fixed top-100px left-100px">
+    </article></div><h1 class="logo">wizerati</h1>
+    <h2 class="tag-line">UK IT contract jobs search</h2>
+<div class="position-fixed top-100px left-100px z-index-9999">
 <button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('1');  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate()); ">
 expand
 </button>

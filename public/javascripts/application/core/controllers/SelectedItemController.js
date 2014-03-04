@@ -12,7 +12,8 @@
         _searchPanelModel = null,
         _resultListModel = null,
         _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode;
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _itemSelectionSourceEnum = app.mod('enum').ItemSelectionSource;
 
     this.update = function (dto) {
       try {
@@ -25,15 +26,18 @@
           return;
         }
 
-        if (dto.source === 'results') {
+        if (dto.source === _itemSelectionSourceEnum.Results) {
           _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-        } else if (dto.source === 'favorites') {
+        } else if (dto.source === _itemSelectionSourceEnum.Favorites) {
           _resultListModel.setMode(_resultListModeEnum.Minimized, {silent: true});
+        } else {
+          throw "invalid source.";
         }
 
+//        window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
         _selectedItemModel.setSelectedItemId(dto.id);
       } catch (err) {
-        console.log('error: SelectedItemController.update. ' + err);
+        console.log('SelectedItemController::update exception: ' + err);
       }
     };
 

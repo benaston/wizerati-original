@@ -2,29 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d38b060-622a-4081-9756-d855458ec3d3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-animation.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-dialogs.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-faces.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-form-elements.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-table.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-typography.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-cube.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-reset.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-table.css" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/fonts/glyph.woff" afterPath="$PROJECT_DIR$/public/fonts/fontello.woff" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css" afterPath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-special.css" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/javascripts/application/core/views/SearchPanelView.js" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/javascripts/application/core/views/ResultListView.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/result-list-view.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gruntfile.js" afterPath="$PROJECT_DIR$/Gruntfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/controllers/HomeController.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/HomeController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/appStart.js" afterPath="$PROJECT_DIR$/public/javascripts/application/appStart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/ben.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/ben.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SearchController.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SearchController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedItemController.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedItemController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/contract/templates/favorite.html" afterPath="$PROJECT_DIR$/public/contract/templates/favorite.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.ejs" afterPath="$PROJECT_DIR$/views/index.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css" afterPath="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/module-registry.js" afterPath="$PROJECT_DIR$/public/javascripts/application/module-registry.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/contract/templates/result.html" afterPath="$PROJECT_DIR$/public/contract/templates/result.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/route-registry.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/route-registry.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/router.js" afterPath="$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/router.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/vendor/tiny-pub-sub.js" afterPath="$PROJECT_DIR$/public/javascripts/vendor/tiny-pub-sub.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/models/ui-root-model.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/ui-root-model.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/models/search-panel-model.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/search-panel-model.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/views/search-panel-view.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/views/search-panel-view.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application/core/models/selected-item-model.js" afterPath="$PROJECT_DIR$/public/javascripts/application/core/models/selected-item-model.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css" afterPath="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/wizerati.css" afterPath="$PROJECT_DIR$/public/stylesheets/wizerati.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/wizerati.js" afterPath="$PROJECT_DIR$/public/javascripts/wizerati.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/wizerati.min.css" afterPath="$PROJECT_DIR$/public/stylesheets/wizerati.min.css" />
@@ -52,19 +49,73 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="wizerati-style-layout.css" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
+      <file leaf-file-name="module-registry.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/module-registry.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="119" column="21" selection-start="2142" selection-end="2142" vertical-scroll-proportion="0.42712295" vertical-offset="1448" max-vertical-offset="3675">
+            <state line="38" column="6" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="4080">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/index.ejs">
+      <file leaf-file-name="items-of-interest-view.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="129" column="56" selection-start="7775" selection-end="7775" vertical-scroll-proportion="-8.48" vertical-offset="1511" max-vertical-offset="2265">
+            <state line="3" column="166" selection-start="54" selection-end="218" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4200">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="selected-item-model.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/selected-item-model.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="40" selection-start="800" selection-end="800" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="layout-calculator.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="41" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1590">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SelectedItemController.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedItemController.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="31" selection-start="962" selection-end="962" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1125">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="layout-coordinator.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="65" selection-start="994" selection-end="994" vertical-scroll-proportion="0.6931964" vertical-offset="0" max-vertical-offset="779">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ItemsOfInterestView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/ItemsOfInterestView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="155" column="25" selection-start="5194" selection-end="5194" vertical-scroll-proportion="0.0" vertical-offset="2310" max-vertical-offset="3150">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="search-panel-model.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/search-panel-model.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="9" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
               <folding />
             </state>
           </provider>
@@ -83,16 +134,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/clients/http-client-wizerati.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/connectors/wizerati-connector.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/clients/wizerati-http-client.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/factories/wizerati-request-factory.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/services/account-service.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/factories/favorite-view-factory.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/factories/item-of-interest-view-factory.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/factories/result-view-factory.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/controllers/AccountActivationPanelController.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/services/cronicl-service.js" />
         <option value="$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/app.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/views/ItemsOfInterestView.js" />
         <option value="$PROJECT_DIR$/readme.md" />
@@ -109,11 +150,7 @@
         <option value="$PROJECT_DIR$/views/index2.ejs" />
         <option value="$PROJECT_DIR$/public/javascripts/wizerati.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/views/UIRootView.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/views/ResultListView.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/models/items-of-interest-model.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js" />
         <option value="$PROJECT_DIR$/public/stylesheets/application/style-wizerati.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-form-animation.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-table.css" />
@@ -121,19 +158,33 @@
         <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-declarative.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/application/style-wizerati-table.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-cube.css" />
-        <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-form-elements.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-typography.css" />
-        <option value="$PROJECT_DIR$/Gruntfile.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/core/route-registry.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/appStart.js" />
         <option value="$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/router.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application/module-registry.js" />
         <option value="$PROJECT_DIR$/public/javascripts/vendor/tiny-pub-sub.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/controllers/HomeController.js" />
         <option value="$PROJECT_DIR$/public/javascripts/application/core/models/ui-root-model.js" />
-        <option value="$PROJECT_DIR$/views/index.ejs" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/controllers/SearchController.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js" />
+        <option value="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-special.css" />
+        <option value="$PROJECT_DIR$/Gruntfile.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/views/ResultListView.js" />
+        <option value="$PROJECT_DIR$/public/contract/templates/result.html" />
+        <option value="$PROJECT_DIR$/public/contract/templates/favorite.html" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/views/search-panel-view.js" />
+        <option value="$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/models/search-panel-model.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/route-registry.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/views/result-list-view.js" />
         <option value="$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css" />
+        <option value="$PROJECT_DIR$/views/index.ejs" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/models/selected-item-model.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedItemController.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/module-registry.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js" />
       </list>
     </option>
   </component>
@@ -476,6 +527,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="items-of-interest-prototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="items-of-interest-prototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javascripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -509,6 +590,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="contract" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="items-of-interest-prototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="items-of-interest-prototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="contract" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -670,63 +773,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/services/sign-in-service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="4" selection-start="1112" selection-end="1112" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="1500">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/SearchFormView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="2" selection-start="54" selection-end="86" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="37" selection-start="667" selection-end="667" vertical-scroll-proportion="0.0" vertical-offset="46" max-vertical-offset="825">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/services/cronicl-service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="21" selection-start="301" selection-end="301" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/wizerati.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="12642" selection-start="76795" selection-end="76795" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
-          <folding>
-            <marker date="1393932271000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932271000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932271000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932271000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/vendor/invertebrate.js/TemplateUriHelper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1065">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/readme.md">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="42" selection-start="339" selection-end="339" vertical-scroll-proportion="-3.8888888" vertical-offset="0" max-vertical-offset="1845">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/AccountActivationView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="779">
@@ -737,13 +783,6 @@
     <entry file="file://$PROJECT_DIR$/public/javascripts/application/wizerati.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="779">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/ItemsOfInterestView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="151" column="8" selection-start="5104" selection-end="6556" vertical-scroll-proportion="0.0" vertical-offset="2099" max-vertical-offset="3150">
           <folding />
         </state>
       </provider>
@@ -776,156 +815,114 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/search-panel-view.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/wizerati.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="7129" column="0" selection-start="250925" selection-end="250925" vertical-scroll-proportion="0.0" vertical-offset="106813" max-vertical-offset="114405">
           <folding>
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{&quot;Default&quot;: '0'...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1393932270000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{&quot;Default&quot;: '0'...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1393948225000" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/ResultListView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="11" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="2625">
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/grunt-css/node_modules/csslint/lib/csslint-node.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4529" column="12" selection-start="167959" selection-end="167959" vertical-scroll-proportion="0.0" vertical-offset="67387" max-vertical-offset="137805">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="32" selection-start="573" selection-end="573" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="840">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="239" column="6" selection-start="7970" selection-end="7970" vertical-scroll-proportion="0.0" vertical-offset="3253" max-vertical-offset="4125">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="7" selection-start="2447" selection-end="2447" vertical-scroll-proportion="0.0" vertical-offset="330" max-vertical-offset="1485">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/items-of-interest-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="6" selection-start="1472" selection-end="1472" vertical-scroll-proportion="0.0" vertical-offset="1058" max-vertical-offset="1860">
           <folding />
         </state>
       </provider>
@@ -986,13 +983,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-reset.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="779">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-table.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="0" selection-start="99" selection-end="99" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
@@ -1003,13 +993,6 @@
     <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-animation.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="1" selection-start="191" selection-end="191" vertical-scroll-proportion="0.20573565" vertical-offset="0" max-vertical-offset="802">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="197" column="0" selection-start="4437" selection-end="4437" vertical-scroll-proportion="0.0" vertical-offset="2196" max-vertical-offset="3045">
           <folding />
         </state>
       </provider>
@@ -1028,23 +1011,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="51" selection-start="2910" selection-end="2910" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="1755">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/ui-root-view.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4" column="0" selection-start="83" selection-end="83" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="1245">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/route-registry.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="9" selection-start="188" selection-end="188" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2160">
           <folding />
         </state>
       </provider>
@@ -1077,29 +1046,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/search-panel-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="9" selection-start="368" selection-end="368" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="1320">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/vendor/tiny-pub-sub.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="0" selection-start="654" selection-end="654" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/controllers/HomeController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="26" selection-start="912" selection-end="912" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="915">
@@ -1114,23 +1060,170 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/application/module-registry.js">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/controllers/SearchController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="230" column="13" selection-start="7727" selection-end="7727" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3975">
+        <state line="76" column="0" selection-start="2376" selection-end="2376" vertical-scroll-proportion="0.0" vertical-offset="606" max-vertical-offset="1410">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.ejs">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/items-of-interest-model.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="129" column="56" selection-start="7775" selection-end="7775" vertical-scroll-proportion="-8.48" vertical-offset="1511" max-vertical-offset="2265">
+        <state line="24" column="64" selection-start="717" selection-end="777" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1860">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/vendor/tiny-pub-sub.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="0" selection-start="654" selection-end="654" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/contract/search">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9975">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/result-list-model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="69" column="38" selection-start="1551" selection-end="1551" vertical-scroll-proportion="0.0" vertical-offset="8" max-vertical-offset="1335">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-special.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="201" column="0" selection-start="4213" selection-end="4213" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3105">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/contract/templates/result.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="55" selection-start="280" selection-end="280" vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="375">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/contract/templates/favorite.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="55" selection-start="67" selection-end="67" vertical-scroll-proportion="-0.625" vertical-offset="0" max-vertical-offset="315">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-reset.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="779">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="64" selection-start="2993" selection-end="2993" vertical-scroll-proportion="0.0" vertical-offset="196" max-vertical-offset="1770">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-buttons.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="26" selection-start="411" selection-end="411" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3060">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/route-registry.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="0" selection-start="1073" selection-end="1073" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="2160">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/search-panel-view.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="41" selection-start="1062" selection-end="1062" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/result-list-view.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="149" column="54" selection-start="5019" selection-end="5019" vertical-scroll-proportion="0.0" vertical-offset="1799" max-vertical-offset="2565">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="119" column="21" selection-start="2142" selection-end="2142" vertical-scroll-proportion="0.42712295" vertical-offset="1448" max-vertical-offset="3675">
+        <state line="21" column="52" selection-start="458" selection-end="472" vertical-scroll-proportion="-9.461538" vertical-offset="69" max-vertical-offset="7005">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="21" selection-start="7438" selection-end="7438" vertical-scroll-proportion="-13.75" vertical-offset="270" max-vertical-offset="1095">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/selected-item-model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="40" selection-start="800" selection-end="800" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/models/search-panel-model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="9" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/controllers/SelectedItemController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="31" selection-start="962" selection-end="962" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1125">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/ItemsOfInterestView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="155" column="25" selection-start="5194" selection-end="5194" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3150">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/module-registry.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="6" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="4080">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="41" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1590">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/views/items-of-interest-view.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="166" selection-start="54" selection-end="218" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4200">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-coordinator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="65" selection-start="994" selection-end="994" vertical-scroll-proportion="0.6931964" vertical-offset="0" max-vertical-offset="779">
           <folding />
         </state>
       </provider>

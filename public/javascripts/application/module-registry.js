@@ -54,6 +54,11 @@
       WindowResize: '1'
     };
 
+    mod.ItemSelectionSource = {
+      Results: '0',
+      Favorites: '1'
+    };
+
   } catch (e) {
     throw 'problem registering enum module. ' + e;
   }
@@ -198,7 +203,8 @@
   try {
     mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
-    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel);
+    //model, resultViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel
+    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
     mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
     mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
   }
@@ -213,7 +219,7 @@
 
   try {
     mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('views').searchPanelView, wizerati.mod('views').resultListView, wizerati.mod('views').itemsOfInterestView);
-    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').uiRootModel);
+    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').itemsOfInterestModel, mod.layoutCalculator, wizerati.mod('models').searchPanelModel);
   }
   catch (e) {
     throw 'problem registering layout module. ' + e;
@@ -227,6 +233,7 @@
   try {
     mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
     mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory);
+    mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

@@ -27,13 +27,13 @@
 //          app.mod('controllers').advertisersController.index();
 //        });
 //
-//        instance.router.registerRoute('/search', function (dto) {
-//          app.mod('controllers').searchController.show(dto);
-//        }, { title: 'Wizerati Search', uriTransform: app.mod('controllers').searchController.uriTransformShow });
-//
-//        instance.router.registerRoute('/selecteditem/update', function (dto) {
-//          app.mod('controllers').selectedItemController.update(dto);
-//        }, { silent: true });
+        instance.router.registerRoute('/search', function (dto) {
+          app.mod('controllers').searchController.show(dto);
+        }, { title: 'Wizerati Search', uriTransform: app.mod('controllers').searchController.urlTransforms['/search'] });
+
+        instance.router.registerRoute('/selecteditem/update', function (dto) {
+          app.mod('controllers').selectedItemController.update(dto);
+        }, { silent: true });
 //
 //        instance.router.registerRoute('/favorites/create', function (dto) {
 //          app.mod('controllers').favoritesController.create(dto);

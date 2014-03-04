@@ -13,14 +13,21 @@
         _resultListView = null,
         _itemsOfInterestView = null,
         _defaultWidthItemOfInterest = 340,
-        _itemOfInterestContentWidthDelta = 40,
+        _effectiveWidthSearchPanelDefault = 340,
+        _effectiveWidthSearchPanelMinimized = 60,
         _stackedItemOffset = 10;
 
     this.calculate = function () {
       var numberOfItemsOfInterest = _itemsOfInterestView.Model.getCount();
       var newWidth = _defaultWidthItemOfInterest;
       var mode = itemsOfInterestView.Model.getMode();
-      var widthTakenBySearchAndResults = _searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth;
+
+      var effectiveWidthSearchPanel = _effectiveWidthSearchPanelDefault;
+      if(_searchPanelView.Model.getMode() === _searchPanelModeEnum.Minimized) {
+        effectiveWidthSearchPanel = _effectiveWidthSearchPanelMinimized;
+      }
+
+      var widthTakenBySearchAndResults = effectiveWidthSearchPanel + _resultListView.$el[0].clientWidth;
       var viewPortWidth = window.innerWidth;
 
       if (mode === _itemsOfInterestModeEnum.Default) {

@@ -38,7 +38,7 @@
       }
 
       that.Model = model;
-      $.subscribe(that.Model.updateEventUri, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
       that.bindEvents();
       return that;
     }

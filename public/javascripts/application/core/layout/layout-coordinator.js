@@ -1,15 +1,18 @@
 (function (app) {
   'use strict';
 
-  function LayoutCoordinator(searchPanelModel, resultListModel, itemsOfInterestModel, uiRootModel) {
+  function LayoutCoordinator(itemsOfInterestModel, layoutCalculator, searchPanelModel) {
     if (!(this instanceof LayoutCoordinator)) {
-      return new LayoutCoordinator(searchPanelModel, resultListModel, itemsOfInterestModel, uiRootModel);
+      return new LayoutCoordinator(itemsOfInterestModel, layoutCalculator, searchPanelModel);
     }
 
-    var _searchPanelModel = null,
-        _resultListModel = null,
+    var that = this,
         _itemsOfInterestModel = null,
-        _uiRootModel = null;
+        _layoutCalculator = null;
+
+    this.layOut = function () {
+      that.applyLayout(_layoutCalculator.calculate());
+    };
 
     this.applyLayout = function (layout) {
       if(!layout) {
@@ -20,26 +23,18 @@
     };
 
     function init() {
-      if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
-      }
-
       if (!itemsOfInterestModel) {
         throw 'itemsOfInterestModel not supplied.';
       }
 
-      if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+      if (!layoutCalculator) {
+        throw 'layoutCalculator not supplied.';
       }
 
-      _searchPanelModel = searchPanelModel;
-      _resultListModel = resultListModel;
       _itemsOfInterestModel = itemsOfInterestModel;
-      _uiRootModel = uiRootModel;
+      _layoutCalculator = layoutCalculator;
+
+      $.subscribe(searchPanelModel.eventUris.default, that.layOut);
     }
 
     init();

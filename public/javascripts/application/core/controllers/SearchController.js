@@ -18,6 +18,8 @@
         _resultListModel = null,
         _guidFactory = null;
 
+    this.urlTransforms = {};
+
     this.show = function (dto) {
       try {
         if (dto.__isInvertebrateExternal__) {
@@ -38,13 +40,13 @@
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
             });
       } catch (err) {
-        console.log('error: SearchController.show. ' + err);
+        console.log('SearchController::show exception: ' + err);
       }
     };
 
-    this.uriTransformShow = function (uri, dto) {
+    function uriTransformShow (uri, dto) {
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&location=' + encodeURIComponent(dto.location) + '&r=' + encodeURIComponent(dto.r);
-    };
+    }
 
     function init() {
       if (!uiRootModel) {
@@ -72,6 +74,8 @@
       _searchService = searchService;
       _resultListModel = resultListModel;
       _guidFactory = guidFactory;
+
+      that.urlTransforms['/search'] = uriTransformShow;
 
       return that;
     }

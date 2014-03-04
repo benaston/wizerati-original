@@ -8,7 +8,7 @@
 <% if(model.isPinned) { %>
 <i class="ti p ti-pinned is-pinned"></i>
 <% } %>
-<a href="/selecteditem/update?id=<%=model.id%>&source=results" class="<%=model.isHidden ? 'hidden' : '' %>">
+<a href="/selecteditem/update?id=<%=model.id%>&source=0" class="<%=model.isHidden ? 'hidden' : '' %>">
 <h3><%= model.title %></h3>
 <p class="tld"><%= model.tld %></p>
 <p class="rate"><%= model.rateLower %> GBP/day</p>

@@ -11,7 +11,7 @@
         _selectedResultId = null,
         _previouslySelectedResultId = null;
 
-    this.updateEventUri = 'update://SelectedItemModel/';
+    this.eventUris = { default:'update://SelectedItemModel/' };
 
     this.getSelectedItemId = function () {
       return _selectedResultId;
@@ -28,7 +28,7 @@
       _selectedResultId = value;
 
       if (!options.silent) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 

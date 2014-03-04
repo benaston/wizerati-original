@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '.selected-item, .pinned-item',
+        _el = '.items-of-interest-panel',
 //        _el1 = '#items-of-interest-panel-1',
 //        _el2 = '#items-of-interest-panel-2',
         _elSelectedItem = '.selected-item',
@@ -61,6 +61,11 @@
 //      _renderOptimizations[e.eventType].apply(this, e.args);
 //      return;
 //    }
+
+    this.renderWithSelectedItemAnimation = function () {
+      renderPrivate();
+    };
+
     this.render = function (e, args) {
 
       if (e && _renderOptimizations[e.type]) {
@@ -68,9 +73,10 @@
         return;
       }
 
-      var args = Array.prototype.slice.call(arguments);
-      var options = args.length > 1 ? args[1] : {};
-      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
+//      var args = Array.prototype.slice.call(arguments);
+//      var options = args.length > 1 ? args[1] : {};
+//      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
+      renderPrivate({ animateSelectedItem: false, removedItemId: null });
     };
 
     function renderPrivate(options) {
@@ -82,60 +88,59 @@
 
 //      var $prevEl = that.$currentEl || that.$el2;
       //perform double buffering in memory - we cannot wrap the items of interest in a container in a convenient manner unfort
-      that.$currentEl = $('<div></div>'); //$prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
+//      var _$el = $('<div></div>'); //$prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
 //      that.$currentEl.empty();
 //      that.$currentEl.children().not('.handle-pinned-items').remove();
 
-      var items = that.Model.getItemsOfInterest();
-      items.selectedItem = _selectedItemModel.getSelectedItemId();
-
-      if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
-            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-            true,
-            options.animateSelectedItem,
-            function ($v) {
-
-              function addSelectedItem() {
-                that.$currentEl.prepend($v);
-                $v.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                setTimeout(function () {
-                  $v.removeClass('collapsed');
-                }, 300);
-
-                $('body').scrollLeft(_scrollLeft);
-              }
-
-              addPinnedItems(items.pinnedItems, addSelectedItem);
-            });
-      } else {
-        addPinnedItems(items.pinnedItems, function () {
-          $('body').scrollLeft(_scrollLeft);
-        });
-      }
-
-      if (options.removedItemId) {
-        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
-        setTimeout(function () {
-          $prevEl.addClass('buffer');
-          that.$currentEl.removeClass('buffer');
-          setTimeout(function () {
-//            $prevEl.empty();
-            $prevEl.children().not('.handle-pinned-items').remove();
-          }, 300);
-        }, 200); //wait for removal animation to complete
-
-        return;
-      }
+//      var items = that.Model.getItemsOfInterest();
+//      items.selectedItem = _selectedItemModel.getSelectedItemId();
+//
+//      if (items.selectedItem) {
+//        _itemOfInterestViewFactory.create(items.selectedItem,
+//            _selectedCubeFaceModel.getSelectedCubeFaceId(),
+//            true,
+//            options.animateSelectedItem,
+//            function ($v) {
+//              function addSelectedItem() {
+//                that.$el.prepend($v);
+//                $v.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+//                setTimeout(function () {
+//                  $v.removeClass('collapsed');
+//                }, 300);
+//
+//                $('body').scrollLeft(_scrollLeft);
+//              }
+//
+//              addPinnedItems(items.pinnedItems, addSelectedItem);
+//            });
+//      } else {
+//        addPinnedItems(items.pinnedItems, function () {
+//          $('body').scrollLeft(_scrollLeft);
+//        });
+//      }
+//
+//      if (options.removedItemId) {
+//        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
+//        setTimeout(function () {
+//          $prevEl.addClass('buffer');
+//          that.$currentEl.removeClass('buffer');
+//          setTimeout(function () {
+////            $prevEl.empty();
+//            $prevEl.children().not('.handle-pinned-items').remove();
+//          }, 300);
+//        }, 200); //wait for removal animation to complete
+//
+//        return;
+//      }
 
 //      $prevEl.addClass('buffer');
 //      that.$currentEl.removeClass('buffer');
 //      debugger;
-      $('body').append(that.$currentEl);
-      setTimeout(function () {
+//      that.$el.html(that.$currentEl);
+//      setTimeout(function () {
 //        $prevEl.empty();
 //        $prevEl.children().not('.handle-pinned-items').remove();
-      }, 300);
+//      }, 300);
     }
 
     function setLayout() {
@@ -157,10 +162,9 @@
     }
 
     function addPinnedItems(items, done) {
-      done = done || function () {
-      };
+      done = done || function () {};
 
-      _.each(items, function (id) {
+      items.forEach(function (id) {
         if (id === null) {
           return;
         }
@@ -169,10 +173,11 @@
             false,
             false,
             function ($v) {
-              that.$currentEl.prepend($v)
+              that.$el.prepend($v)
               $v.scrollTop(_scrollTopValues[id]);
             });
       });
+
       done();
     }
 
@@ -247,7 +252,7 @@
       $.subscribe(that.Model.eventUris.modeChange, that.render);
       $.subscribe(that.Model.eventUris.layoutChange, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_selectedItemModel.updateEventUri, that.renderWithSelectedItemAnimation);
+      $.subscribe(_selectedItemModel.eventUris.default, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);

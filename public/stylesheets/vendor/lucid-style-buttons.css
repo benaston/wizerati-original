@@ -10,6 +10,7 @@
     text-align: center;
     box-sizing: border-box;
     border: 2px solid;
+    display: inline-block;
     transition: border-color 0.1s linear, box-shadow 0.1s linear;
 }
 

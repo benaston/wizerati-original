@@ -12,7 +12,7 @@
         _mode = _modeEnum.Default,
         _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
 
-    this.updateEventUri = 'update://ResultListModel/';
+    this.eventUris = { default: 'update://resultlistmodel/' };
 
     this.getSearchId = function () {
       return _searchId;
@@ -25,8 +25,9 @@
     this.setResults = function (value, searchId) {
       _results = value;
       _searchId = searchId;
-      _mode = _searchPanelModeEnum.Default;
-      $.publish(that.updateEventUri);
+      _mode = _modeEnum.Default;
+
+      $.publish(that.eventUris.default);
     };
 
     this.getMode = function () {
@@ -39,7 +40,7 @@
       _mode = value;
 
       if (!options.silent) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -66,7 +67,7 @@
         }
       });
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     function init() {
