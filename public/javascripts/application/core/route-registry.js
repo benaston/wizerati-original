@@ -95,9 +95,9 @@
 //          app.mod('controllers').purchasePanelAccountsController.create(dto);
 //        });
 //
-//        instance.router.registerRoute('/searchpanelmode/update', function (dto) {
-//          app.mod('controllers').searchPanelModeController.update(dto);
-//        }, { silent: true });
+        instance.router.registerRoute('/searchpanelmode/update', function (dto) {
+          app.mod('controllers').searchPanelModeController.update(dto);
+        }, { silent: true });
 //
 //        instance.router.registerRoute('/resultlistmode/update', function (dto) {
 //          app.mod('controllers').resultListModeController.update(dto);
