@@ -19,16 +19,6 @@
       return _bodyWidth;
     };
 
-    this.setBodyWidth = function (value, options) {
-      options = options || {silent: false};
-
-      _bodyWidth = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.bodyWidthChange);
-      }
-    };
-
     this.getUIMode = function () {
       return _uiMode || '';
     };
@@ -39,7 +29,7 @@
       _uiMode = value;
 
       if (!options.silent) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -49,12 +39,8 @@
 
     this.setModal = function (value) {
       _modal = value;
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
-
-//    this.getPreviousUIMode = function () {
-//      return _previousUIMode;
-//    };
 
     function init() {
       _uiMode = _uiModeEnum.GreenfieldSearch;

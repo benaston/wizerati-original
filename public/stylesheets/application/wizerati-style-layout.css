@@ -1,0 +1,240 @@
+body {
+    position: absolute;
+    width: 100%; /*width and height of 100% required to ensure modal blur covers viewport*/
+    height: 100%;
+}
+
+.modal-container {
+    height: 100%;
+}
+
+.result-list {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 533px;
+    margin-left: 340px;
+    vertical-align: top;
+}
+
+.selected-item, .pinned-item {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    vertical-align: top;
+    transition: left .5s ease-in-out .3s, -webkit-filter .3s linear;
+}
+
+body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
+    transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
+}
+
+.selected-item-content, .pinned-item-content {
+    width: 340px;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.pinned-item:nth-of-type(3) {
+    z-index: 0;
+}
+
+.pinned-item:nth-of-type(4) {
+    z-index: 1;
+}
+
+.pinned-item:nth-of-type(5) {
+    z-index: 2;
+}
+
+.pinned-item:nth-of-type(6) {
+    z-index: 3;
+}
+
+.pinned-item:nth-of-type(7) {
+    z-index: 4;
+}
+
+.pinned-item:nth-of-type(8) {
+    z-index: 5;
+}
+
+body[data-items-of-interest-mode='0'] .pinned-item {
+    -webkit-filter: blur(20px);
+}
+
+.result-list[data-mode='1'] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.handle-result-list {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    color: #333;
+    text-decoration: none;
+    opacity: 0;
+    cursor: pointer;
+    width: 50px;
+}
+
+.result-list[data-mode='0'] ~ .handle-result-list {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s linear 0;
+}
+
+.result-list[data-mode='1'] ~ .handle-result-list {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .2s linear .2s;
+}
+
+#no-script {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    background-color: white;
+    text-align: left;
+    padding: 25px;
+}
+
+/* Search Panel */
+
+.search-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 340px;
+    overflow: hidden;
+    vertical-align: top;
+    transition: width .5s ease-in-out,left .2s ease-in-out;
+    background: -webkit-gradient(linear,left top,right top,color-stop(86%,rgba(255,255,255,.95)),color-stop(93%,rgba(255,255,255,.95)),color-stop(100%,rgba(255,255,255,0)));
+    z-index: 1; /*ensure remains in-front of everything else*/
+}
+
+body[data-ui-mode='0'] .search-panel {
+    width: 100%;
+    pointer-events: auto;
+    transition: width 0s linear 0s, opacity .1s linear;
+}
+
+/* Search Form */
+#search-form {
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 0 0 455px;
+    width: 308px;
+    height: 269px;
+    position: relative;
+    text-align: left;
+    transition: top .5s ease-in-out;
+    margin: auto;
+    top: 0;
+}
+
+body[data-ui-mode='1'] #search-form, body[data-ui-mode='0'] #search-form {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body[data-ui-mode='0'] #search-form {
+    top: 140px;
+    transition: top 0s linear 0s;
+}
+
+.menu .label, .search-button-container .label {
+    margin-top: 4px;
+    font-size: .8rem;
+}
+
+.search-button-container .label {
+    margin-left: 1px; /*this is because the font rendering makes it look off center*/
+}
+
+.search-button-container {
+    position: absolute;
+    left: 244px;
+    top: 49px;
+}
+
+/* End Search Form */
+
+/* Search Filters */
+
+.search-filters {
+    margin: 27px 20px 20px;
+}
+
+.search-filters {
+    display: inline-block;
+    position: relative;
+}
+
+/* End Search Filters */
+
+/* Navbar */
+
+body[data-ui-mode='0'] .navbar, body[data-ui-mode='1'] .navbar {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.navbar {
+    left: 30px;
+    bottom: 18px;
+    position: absolute;
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s linear;
+}
+
+/* End Navbar */
+
+/* Logo */
+
+body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
+    opacity: 1;
+}
+
+.logo {
+    font-size: 4em;
+    font-family: proxima-nova-500;
+    margin-top: 40px;
+}
+
+.logo, .tag-line {
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s linear;
+    color: rgba(0, 109, 204, .95);
+    z-index: 1;
+    text-align: center;
+}
+
+.logo {
+    top:39px;
+}
+
+.tag-line {
+    font-size: .8rem;
+    font-family: proxima-nova-500;
+    top: 76px;
+}
+
+/* End Logo */

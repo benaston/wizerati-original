@@ -57,15 +57,6 @@
       route.action(extractQueryString(queryStringArguments, options.isExternal));
     };
 
-    this.start = function() {
-      window.addEventListener('popstate', function (e) {
-        that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
-      });
-
-      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);
-      $(document).on('submit', 'form', routeFormSubmission);
-    };
-
     function routeHyperlink(evt) {
       var href = $(this).attr('href');
       var protocol = 'http//';
@@ -131,6 +122,13 @@
       }
 
       _defaultPageTitle = defaultPageTitle;
+
+      window.addEventListener('popstate', function (e) {
+        that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+      });
+
+      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);
+      $(document).on('submit', 'form', routeFormSubmission);
     }
 
     init();

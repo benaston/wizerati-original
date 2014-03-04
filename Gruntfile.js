@@ -42,21 +42,21 @@ module.exports = function (grunt) {
       },
       css: {
         src: [
-          'public/stylesheets/application/style-reset.css',
           'public/stylesheets/vendor/lucid-style-reset.css',
-          'public/stylesheets/application/style-reset-wizerati.css',
-          'public/stylesheets/application/style-typography.css',
-          'public/stylesheets/application/style-layout.css',
-          'public/stylesheets/application/style-form-element.css',
-          'public/stylesheets/application/style-table.css',
-          'public/stylesheets/application/style-special.css',
-          'public/stylesheets/application/style-cube.css',
-          'public/stylesheets/application/style-wizerati.css',
+          'public/stylesheets/application/wizerati-style-reset.css',
+
+//          'public/stylesheets/vendor/lucid-style-animation.css',
           'public/stylesheets/vendor/lucid-style-buttons.css',
+          'public/stylesheets/vendor/lucid-style-declarative.css',
+//          'public/stylesheets/vendor/lucid-style-dialogs.css',
+          'public/stylesheets/vendor/lucid-style-faces.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
-          'public/stylesheets/vendor/lucid-style-dialogs.css',
-          'public/stylesheets/vendor/lucid-style-table.css',
-          'public/stylesheets/vendor/lucid-style-declarative.css'
+//          'public/stylesheets/vendor/lucid-style-table.css',
+          'public/stylesheets/vendor/lucid-style-typography.css',
+
+//          'public/stylesheets/application/wizerati-style-table.css',
+          'public/stylesheets/application/wizerati-style-cube.css',
+          'public/stylesheets/application/wizerati-style-layout.css',
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
       }

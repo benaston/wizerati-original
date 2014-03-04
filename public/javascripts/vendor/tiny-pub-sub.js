@@ -2,20 +2,32 @@
  * http://benalman.com/
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT, GPL */
 
-(function ($) {
+(function tinyPubSub($) {
 
   var o = $({});
 
   $.subscribe = function () {
-    o.on.apply(o, arguments);
+    try {
+      o.on.apply(o, arguments);
+    } catch (e) {
+      throw 'tinyPubSub::subscribe exception: ' + e;
+    }
   };
 
   $.unsubscribe = function () {
-    o.off.apply(o, arguments);
+    try {
+      o.off.apply(o, arguments);
+    } catch (e) {
+      throw 'tinyPubSub::unsubscribe exception: ' + e;
+    }
   };
 
   $.publish = function () {
-    o.trigger.apply(o, arguments);
+    try {
+      o.trigger.apply(o, arguments);
+    } catch (e) {
+      throw 'tinyPubSub::publish exception: ' + e;
+    }
   };
 
 }($));

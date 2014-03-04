@@ -200,6 +200,7 @@
     mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
     mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel);
     mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
+    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
@@ -224,6 +225,7 @@
   'use strict';
 
   try {
+    mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
     mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory);
   }
   catch (e) {

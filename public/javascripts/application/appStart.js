@@ -1,4 +1,4 @@
-$(function () {
+$(function appStart() {
   'use strict';
 
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
@@ -10,5 +10,5 @@ $(function () {
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
   });
 
-//  wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance); //happens last to ensure init complete before routing start
+  wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance); //happens last to ensure init complete before routing start
 });

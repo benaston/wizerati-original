@@ -23,7 +23,7 @@
         _resultListModel.setMode(_resultListModeEnum.Default, {silent: false});
         _uiRootModel.setModal(null);
       } catch (err) {
-        console.log('error: HomeController.index. ' + err);
+        console.log('HomeController::index exception: ' + err);
       }
     };
 
