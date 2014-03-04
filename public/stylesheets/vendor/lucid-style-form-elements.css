@@ -1,36 +1,3 @@
-label:focus {
-    outline: 5px auto rgb(230, 240, 248);
-    outline-offset: 2px;
-}
-
-
-input[type="radio"]:checked + label {
-    background-color: rgba(0, 109, 204, 0.95);
-    color: white;
-    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px rgba(0, 109, 204, 1);
-    border: 2px solid white;
-}
-
-input[type="radio"]:checked:focus + label {
-    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;
-}
-
-.search-filters label {
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 40px;
-    border: 2px solid #eee;
-    text-align: center;
-    height: 40px;
-    width: 40px;
-    border-radius: 40px;
-    margin: 2px;
-}
-
-.search-filters input[type=radio]:not(:checked) + label:hover {
-    border-color: rgba(255, 200, 0, 0.3);
-}
-
 html select,
 html textarea,
 html input[type="text"],
@@ -51,7 +18,7 @@ html .uneditable-input {
     box-shadow: none;
     border-radius: 0;
     margin: 20px 20px 0px 20px;
-    background: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
     border: none;
     border-bottom: 1px solid rgb(206, 214, 218);
     display: inline-block;
@@ -62,41 +29,42 @@ html .uneditable-input {
     transition: border linear 0.2s;
 }
 
-
-input[type="radio"]:focus + label {
-    box-shadow: 0 0 1px 12px rgba(255, 255, 255, 1), 0 0 1px 14px #eee; /*note the fuzz of 1px here to avoid looking like a UI line*/
+.rotate {
+    -webkit-animation-name: rotate;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-    background-color: white;
+@-webkit-keyframes rotate {
+    0% {
+        -webkit-transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+
+
+input[type=radio]:not(:checked) + label:hover {
+    border-color: rgba(255, 200, 0, 0.3);
 }
 
 .field {
     height: 35px;
 }
 
-input[type="radio"] {
-    position: absolute;
-    opacity: 0; /*we avoid display none, because it suppresses the built-in required validation message*/
-    cursor: pointer;
-}
-
-input[type="radio"]:checked + label.radio {
-    border: 2px solid black;
-}
-
-input[type="radio"]:checked + label.radio-inverted {
+input[type="radio"]:checked + label {
+    background-color: rgba(0, 109, 204, 0.95);
+    color: white;
+    box-shadow: 0 0 0 2px rgba(0, 109, 204, 1);
     border: 2px solid white;
 }
 
 label.radio {
-    height: 80px;
-    width: 80px;
-    border-radius: 80px;
-    line-height: 77px;
-    border: 2px solid silver;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    line-height: 35px;
+    border: 2px solid #eee;
     text-align: center;
     display: block;
     box-sizing: border-box;
@@ -105,47 +73,73 @@ label.radio {
     -webkit-user-select: none;
 }
 
-label.radio:hover {
-    -webkit-transition: box-shadow .1s linear;
-}
-
-label.radio:active {
-    -webkit-transition: box-shadow .1s linear;
-    box-shadow: 0 0 19px 12px rgba(200, 200, 200, .3);
-}
-
-label.radio-inverted {
-    border: 2px solid black;
-    box-shadow: 0 0 9px 2px rgba(200, 200, 200, 0.2);
-    color: rgb(0, 175, 237);
-}
-
-label.radio-inverted:hover {
-    -webkit-transition: box-shadow .1s linear;
-    box-shadow: 0 0 9px 2px rgba(200, 200, 200, 0.3);
-}
-
-label.radio-inverted:active {
-    -webkit-transition: box-shadow .1s linear;
-    box-shadow: 0 0 19px 12px rgba(200, 200, 200, .3);
-}
-
 label {
     margin: 0;
-    /*   -webkit-user-select: none;*/
     cursor: pointer;
     display: block;
 }
 
+button.checked, a.checked {
+    background-color: rgba(0, 109, 204, 0.95);
+    color: white;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 1), 0 0 0 4px rgba(0, 109, 204, 1) !important;
+}
+
 .form-button-container {
+    list-style: none;
     float: right;
     padding-top: 40px;
 }
 
+.form-button-container-item {
+    display: inline-block;
+    padding-left: 15px;
+}
 .form-button-container:after {
     content: ".";
-    height: 0;
+    height: 0px;
     clear: both;
     line-height: 0px;
     visibility: hidden;
+}
+
+.rotating-button-container > .btn[data-is-waiting='false'] {
+    transition: border-left-width .2s ease-out;
+}
+.rotating-button-container > .btn[data-is-waiting='true'] {
+    border-left: 0;
+    transition: border-left-width .2s ease-out;
+    -webkit-animation-duration: 2.5s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-out-in;
+}
+
+.meta-info {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s linear 0s, visibility 0s linear .2s;
+    position: absolute;
+    width: 200px;
+    top: 24px;
+    left: 270px;
+    width: 200px;
+}
+
+input[type='text']:focus + .meta-info,
+input[type='email']:focus + .meta-info,
+input[type='password']:focus + .meta-info,
+textarea:focus + .meta-info {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .2s linear 0s, visibility 0s linear 0s;
+}
+
+input[type="radio"]:checked:focus + label {
+    /*box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;*/
+    box-shadow: 0 0 0 2px #eee;
+}
+
+input[type="radio"]:focus + label {
+    box-shadow: 0 0 1px 12px rgba(255, 255, 255, 1), 0 0 1px 14px #eee;
 }
