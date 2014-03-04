@@ -267,3 +267,29 @@ label {
     line-height: 0px;
     visibility: hidden;
 }
+input[type="radio"]:checked + label {
+    background-color: rgba(0, 109, 204, 0.95);
+    color: white;
+    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px rgba(0, 109, 204, 1);
+    border: 2px solid white;
+}
+
+input[type="radio"]:checked:focus + label {
+    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;
+}
+
+.search-filters input[type=radio]:not(:checked) + label:hover {
+    border-color: rgba(255, 200, 0, 0.3);
+}
+
+.search-filters label {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 40px;
+    border: 2px solid #eee;
+    text-align: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    margin: 2px;
+}

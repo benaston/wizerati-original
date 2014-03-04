@@ -28,7 +28,7 @@
       <file leaf-file-name="wizerati-style-layout.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="531" column="0" selection-start="10109" selection-end="10109" vertical-scroll-proportion="0.0" vertical-offset="7273" max-vertical-offset="8070">
+            <state line="532" column="1" selection-start="10157" selection-end="10157" vertical-scroll-proportion="-25.038462" vertical-offset="7329" max-vertical-offset="8070">
               <folding />
             </state>
           </provider>
@@ -37,7 +37,7 @@
       <file leaf-file-name="lucid-style-form-elements.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-form-elements.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="269" column="0" selection-start="5900" selection-end="5900" vertical-scroll-proportion="1.6036506" vertical-offset="2805" max-vertical-offset="4125">
+            <state line="294" column="1" selection-start="6562" selection-end="6562" vertical-scroll-proportion="0.9608866" vertical-offset="3673" max-vertical-offset="4500">
               <folding />
             </state>
           </provider>
@@ -919,13 +919,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="531" column="0" selection-start="10109" selection-end="10109" vertical-scroll-proportion="0.0" vertical-offset="7273" max-vertical-offset="8070">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Gruntfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="48" selection-start="2699" selection-end="2699" vertical-scroll-proportion="0.0" vertical-offset="196" max-vertical-offset="1770">
@@ -933,9 +926,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/application/wizerati-style-layout.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="532" column="1" selection-start="10157" selection-end="10157" vertical-scroll-proportion="-25.038462" vertical-offset="7329" max-vertical-offset="8070">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/vendor/lucid-style-form-elements.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="269" column="0" selection-start="5900" selection-end="5900" vertical-scroll-proportion="1.6036506" vertical-offset="2805" max-vertical-offset="4125">
+        <state line="294" column="1" selection-start="6562" selection-end="6562" vertical-scroll-proportion="0.9608866" vertical-offset="3673" max-vertical-offset="4500">
           <folding />
         </state>
       </provider>
