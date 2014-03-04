@@ -54,15 +54,15 @@
 //        instance.router.registerRoute('/itemsofinterest/destroy', function (dto) {
 //          app.mod('controllers').itemsOfInterestController.destroy(dto);
 //        }, { silent: true });
-//
-//        instance.router.registerRoute('/hiddenitems/create', function (dto) {
-//          app.mod('controllers').hiddenItemsController.create(dto);
-//        }, { silent: true });
-//
-//        instance.router.registerRoute('/hiddenitems/destroy', function (dto) {
-//          app.mod('controllers').hiddenItemsController.destroy(dto);
-//        }, { silent: true });
-//
+
+        instance.router.registerRoute('/hiddenitems/create', function (dto) {
+          app.mod('controllers').hiddenItemsController.create(dto);
+        }, { silent: true });
+
+        instance.router.registerRoute('/hiddenitems/destroy', function (dto) {
+          app.mod('controllers').hiddenItemsController.destroy(dto);
+        }, { silent: true });
+
 //        instance.router.registerRoute('/actioneditems/create', function (dto) {
 //          app.mod('controllers').actionedItemsController.create(dto);
 //        }, { silent: true });
