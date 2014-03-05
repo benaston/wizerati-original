@@ -108,11 +108,11 @@
     </div><article class="result-list-panel green">
         <ul class="result-list overflow-scroll-y height-100 ios-scroll-enable">
         </ul>
-    </article><div class="items-of-interest-panel"><article class="selected-item">
+    </article><div class="items-of-interest-panel"><div class="selected-item-container"><article class="selected-item">
         <div class="selected-item-content pink">
             <p>si</p>
         </div>
-    </article><article class="pinned-item">
+    </article></div><div class="pinned-items-container"><article class="pinned-item">
         <div class="pinned-item-content pink-2">
             <p>p1</p>
         </div>
@@ -120,9 +120,9 @@
         <div class="pinned-item-content pink-3">
             <p>p2</p>
         </div>
-    </article><div class="centered-text handle handle-pinned-items btn-container">
-            <a href="/itemsofinterestpanelmode/update?mode=0" class="btn btn-primary btn-50"></a><div class="label">show pinned items</div>
-        </div></div><h1 class="logo">wizerati</h1>
+    </article><div class="handle-pinned-items btn-container">
+                <a href="/itemsofinterestpanelmode/update?mode=0" class="btn btn-primary btn-50"></a><div class="label">show pinned items</div>
+            </div></div></div><h1 class="logo">wizerati</h1>
     <h2 class="tag-line">UK IT contract jobs search</h2>
 <div class="position-fixed top-100px left-100px z-index-9999">
 <button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('1');  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate()); ">
@@ -131,6 +131,7 @@ expand
 <button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('0');  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());">
 collapse
 </button>
+</div>
 </div>
 <!-- To inline all JavaScript here including underscore.js, you need to escape instances of angle-bracket - percent (by putting a backslash before the percent symbol) to avoid server-side templating causing an error -->
 <script src="javascripts/wizerati.js"></script>

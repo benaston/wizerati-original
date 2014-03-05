@@ -29,7 +29,11 @@
       itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
     this.getCount = function () {
-      return 2;//_itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
+      return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
+    };
+
+    this.getPinnedItemCount = function () {
+      return _itemsOfInterest.pinnedItems.length;
     };
 
     this.getMode = function () {
@@ -74,7 +78,7 @@
         _itemsOfInterest.selectedItem = null;
       }
 
-      _itemsOfInterest.pinnedItems.push(id);
+      _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
       $.publish(that.eventUris.default);
     };

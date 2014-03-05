@@ -3153,7 +3153,11 @@ window.wizerati = {
       itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
     this.getCount = function () {
-      return 2;//_itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
+      return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
+    };
+
+    this.getPinnedItemCount = function () {
+      return _itemsOfInterest.pinnedItems.length;
     };
 
     this.getMode = function () {
@@ -3198,7 +3202,7 @@ window.wizerati = {
         _itemsOfInterest.selectedItem = null;
       }
 
-      _itemsOfInterest.pinnedItems.push(id);
+      _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
       $.publish(that.eventUris.default);
     };
@@ -4519,14 +4523,17 @@ window.wizerati = {
         _el = '.items-of-interest-panel',
 //        _el1 = '#items-of-interest-panel-1',
 //        _el2 = '#items-of-interest-panel-2',
+        _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItem = '.selected-item',
+        _elSelectedItemContainer = '.selected-item-container',
+        _elPinnedItemsContainer = '.pinned-items-container',
         _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(4)',
-        _elPinnedItem2 = '.pinned-item:nth-child(5)',
-        _elPinnedItem3 = '.pinned-item:nth-child(6)',
-        _elPinnedItem4 = '.pinned-item:nth-child(7)',
-        _elPinnedItem5 = '.pinned-item:nth-child(5)',
-        _elPinnedItem6 = '.pinned-item:nth-child(6)',
+        _elPinnedItem1 = '.pinned-item:nth-child(2)',
+        _elPinnedItem2 = '.pinned-item:nth-child(3)',
+        _elPinnedItem3 = '.pinned-item:nth-child(4)',
+        _elPinnedItem4 = '.pinned-item:nth-child(5)',
+        _elPinnedItem5 = '.pinned-item:nth-child(6)',
+        _elPinnedItem6 = '.pinned-item:nth-child(7)',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _renderOptimizations = {},
         _itemOfInterestViewFactory = null,
@@ -4535,6 +4542,7 @@ window.wizerati = {
         _favoritesCubeModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
+        _itemsOfInterestModel = null,
         _scrollTopValues = {},
         _scrollLeft = 0;
 
@@ -4590,7 +4598,11 @@ window.wizerati = {
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
-      that.$el.children().not('.handle-pinned-items').remove();
+//      that.$el.children().not('.handle-pinned-items').remove();
+//      that.$el.empty('.selected-item, .pinned-item');
+      that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
+      that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
+      that.$el.find('.selected-item, .pinned-item').remove();
       setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
@@ -4613,7 +4625,7 @@ window.wizerati = {
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
               function addSelectedItem() {
-                that.$el.prepend($view);
+                $(_elSelectedItemContainer).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
                 setTimeout(function () {
 //                  $view.removeClass('collapsed');
@@ -4656,6 +4668,7 @@ window.wizerati = {
     function setLayout() {
       var layout = that.Model.getLayout();
 
+      $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
       $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
       $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
@@ -4684,7 +4697,7 @@ window.wizerati = {
             false,
             false,
             function ($view) {
-              that.$el.prepend($view)
+              $(_elPinnedItemsContainer).append($view)
               $view.scrollTop(_scrollTopValues[id]);
             });
       });
@@ -6910,7 +6923,7 @@ window.wizerati = {
         _searchPanelView = null,
         _resultListView = null,
         _itemsOfInterestView = null,
-        _defaultWidthItemOfInterest = 436,
+        _defaultWidthItemOfInterest = 430,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthSearchPanelMinimized = 60,
         _stackedItemOffset = 10;
@@ -6951,6 +6964,8 @@ window.wizerati = {
       var leftP5 = 10 * 4;
       var leftP6 = 10 * 5;
 
+      var leftHandlePinnedItems = newWidth - 61;
+
       if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         leftP1 = newWidth;
         leftP2 = newWidth * 2;
@@ -6958,11 +6973,16 @@ window.wizerati = {
         leftP4 = newWidth * 4;
         leftP5 = newWidth * 5;
         leftP6 = newWidth * 6;
+        leftHandlePinnedItems = (newWidth * numberOfItemsOfInterest) - 71;
       }
 
+      if(_itemsOfInterestView.Model.getPinnedItemCount() === 0) {
+        leftHandlePinnedItems = 0; /*avoid pushing out the scrollable area to the right if we have no pinned items*/
+      }
 
       return {
         widthItemOfInterest: newWidth,
+        leftHandlePinnedItems: leftHandlePinnedItems,
         leftPinnedItem1: leftP1,
         leftPinnedItem2: leftP2,
         leftPinnedItem3: leftP3,

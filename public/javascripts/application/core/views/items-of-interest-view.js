@@ -11,14 +11,17 @@
         _el = '.items-of-interest-panel',
 //        _el1 = '#items-of-interest-panel-1',
 //        _el2 = '#items-of-interest-panel-2',
+        _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItem = '.selected-item',
+        _elSelectedItemContainer = '.selected-item-container',
+        _elPinnedItemsContainer = '.pinned-items-container',
         _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(4)',
-        _elPinnedItem2 = '.pinned-item:nth-child(5)',
-        _elPinnedItem3 = '.pinned-item:nth-child(6)',
-        _elPinnedItem4 = '.pinned-item:nth-child(7)',
-        _elPinnedItem5 = '.pinned-item:nth-child(5)',
-        _elPinnedItem6 = '.pinned-item:nth-child(6)',
+        _elPinnedItem1 = '.pinned-item:nth-child(2)',
+        _elPinnedItem2 = '.pinned-item:nth-child(3)',
+        _elPinnedItem3 = '.pinned-item:nth-child(4)',
+        _elPinnedItem4 = '.pinned-item:nth-child(5)',
+        _elPinnedItem5 = '.pinned-item:nth-child(6)',
+        _elPinnedItem6 = '.pinned-item:nth-child(7)',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _renderOptimizations = {},
         _itemOfInterestViewFactory = null,
@@ -27,6 +30,7 @@
         _favoritesCubeModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
+        _itemsOfInterestModel = null,
         _scrollTopValues = {},
         _scrollLeft = 0;
 
@@ -82,7 +86,11 @@
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
-      that.$el.children().not('.handle-pinned-items').remove();
+//      that.$el.children().not('.handle-pinned-items').remove();
+//      that.$el.empty('.selected-item, .pinned-item');
+      that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
+      that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
+      that.$el.find('.selected-item, .pinned-item').remove();
       setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
@@ -105,7 +113,7 @@
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
               function addSelectedItem() {
-                that.$el.prepend($view);
+                $(_elSelectedItemContainer).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
                 setTimeout(function () {
 //                  $view.removeClass('collapsed');
@@ -148,6 +156,7 @@
     function setLayout() {
       var layout = that.Model.getLayout();
 
+      $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
       $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
       $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
@@ -176,7 +185,7 @@
             false,
             false,
             function ($view) {
-              that.$el.prepend($view)
+              $(_elPinnedItemsContainer).append($view)
               $view.scrollTop(_scrollTopValues[id]);
             });
       });

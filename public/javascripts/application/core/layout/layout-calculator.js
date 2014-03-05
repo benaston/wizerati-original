@@ -12,7 +12,7 @@
         _searchPanelView = null,
         _resultListView = null,
         _itemsOfInterestView = null,
-        _defaultWidthItemOfInterest = 436,
+        _defaultWidthItemOfInterest = 430,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthSearchPanelMinimized = 60,
         _stackedItemOffset = 10;
@@ -53,6 +53,8 @@
       var leftP5 = 10 * 4;
       var leftP6 = 10 * 5;
 
+      var leftHandlePinnedItems = newWidth - 61;
+
       if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         leftP1 = newWidth;
         leftP2 = newWidth * 2;
@@ -60,11 +62,16 @@
         leftP4 = newWidth * 4;
         leftP5 = newWidth * 5;
         leftP6 = newWidth * 6;
+        leftHandlePinnedItems = (newWidth * numberOfItemsOfInterest) - 71;
       }
 
+      if(_itemsOfInterestView.Model.getPinnedItemCount() === 0) {
+        leftHandlePinnedItems = 0; /*avoid pushing out the scrollable area to the right if we have no pinned items*/
+      }
 
       return {
         widthItemOfInterest: newWidth,
+        leftHandlePinnedItems: leftHandlePinnedItems,
         leftPinnedItem1: leftP1,
         leftPinnedItem2: leftP2,
         leftPinnedItem3: leftP3,
