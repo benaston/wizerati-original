@@ -46,7 +46,7 @@
       <file leaf-file-name="layout-calculator.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="41" selection-start="603" selection-end="603" vertical-scroll-proportion="0.29126215" vertical-offset="0" max-vertical-offset="1785">
+            <state line="14" column="40" selection-start="602" selection-end="602" vertical-scroll-proportion="0.29126215" vertical-offset="0" max-vertical-offset="1785">
               <folding />
             </state>
           </provider>
@@ -882,7 +882,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/application/core/layout/layout-calculator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="41" selection-start="603" selection-end="603" vertical-scroll-proportion="0.29126215" vertical-offset="0" max-vertical-offset="1785">
+        <state line="14" column="40" selection-start="602" selection-end="602" vertical-scroll-proportion="0.29126215" vertical-offset="0" max-vertical-offset="1785">
           <folding />
         </state>
       </provider>
