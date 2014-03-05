@@ -47,11 +47,11 @@
       newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
 
       var leftP1 = 0;
-      var leftP2 = 0;
-      var leftP3 = 0;
-      var leftP4 = 0;
-      var leftP5 = 0;
-      var leftP6 = 0;
+      var leftP2 = 10 * 1;
+      var leftP3 = 10 * 2;
+      var leftP4 = 10 * 3;
+      var leftP5 = 10 * 4;
+      var leftP6 = 10 * 5;
 
       if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         leftP1 = newWidth;

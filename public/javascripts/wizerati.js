@@ -3147,30 +3147,30 @@ window.wizerati = {
         _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
 
     this.eventUris = {default: 'update://ItemsOfInterestModel/',
-                      widthChange: 'update://itemsofinterestmodel/widthchange',
-                      modeChange: 'update://itemsofinterestmodel/modechange' ,
-                      layoutChange: 'update://itemsofinterestmodel/layoutchange',
-                      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
+      widthChange: 'update://itemsofinterestmodel/widthchange',
+      modeChange: 'update://itemsofinterestmodel/modechange',
+      layoutChange: 'update://itemsofinterestmodel/layoutchange',
+      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
-    this.getCount = function() {
+    this.getCount = function () {
       return 2;//_itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
     };
 
-    this.getMode = function() {
+    this.getMode = function () {
       return _mode;
     };
 
-    this.setMode = function(value) {
+    this.setMode = function (value) {
       _mode = value;
 
       $.publish(that.eventUris.modeChange);
     };
 
-    this.getLayout = function() {
+    this.getLayout = function () {
       return _layout;
     };
 
-    this.setLayout = function(value) {
+    this.setLayout = function (value) {
       _layout = value;
 
       $.publish(that.eventUris.layoutChange);
@@ -3189,14 +3189,12 @@ window.wizerati = {
         throw 'id not supplied';
       }
 
-      if (that.getItemsOfInterest().pinnedItems.find(function (idOfPinnedItem) {
-        return idOfPinnedItem === id;
-      })) {
+      if (that.getItemsOfInterest().pinnedItems.indexOf(id) >= 0) {
         return;
       }
 
       if (_selectedItemModel.getSelectedItemId() === id) {
-        _selectedItemModel.setSelectedItemId(null, {silent: true});
+        _selectedItemModel.setSelectedItemId(null, { silent: true });
         _itemsOfInterest.selectedItem = null;
       }
 
@@ -3214,7 +3212,6 @@ window.wizerati = {
         return idOfPinnedItem === id;
       });
 
-//      $.publish(that.updateEventUri, { action: 'removal', removedItemId: id});
       $.publish(that.eventUris.itemRemoval, id);
     };
 
@@ -3897,7 +3894,8 @@ window.wizerati = {
 //      that.$el.css({width: model.width});
 
       if (that.Model.shouldAnimateIn) {
-        that.$el.addClass('collapsed');
+//        that.$el.addClass('collapsed');
+        that.$el.css({ left: model.width*-1});
       }
 
       app.instance.renderTemplate(that.$el,
@@ -4037,7 +4035,8 @@ window.wizerati = {
       }
 
       if (that.Model.shouldAnimateIn) {
-        that.$el.addClass('collapsed');
+//        that.$el.addClass('collapsed');
+        that.$el.css({ left: '-' + model.width});
       }
 
       app.instance.renderTemplate(that.$el,
@@ -4591,7 +4590,7 @@ window.wizerati = {
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
-      that.$el.empty();
+      that.$el.children().not('.handle-pinned-items').remove();
       setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
@@ -4613,12 +4612,12 @@ window.wizerati = {
             options.animateSelectedItem,
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
-
               function addSelectedItem() {
                 that.$el.prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
                 setTimeout(function () {
-                  $view.removeClass('collapsed');
+//                  $view.removeClass('collapsed');
+                  $view.css({left: '0'});
                 }, 300);
 
                 $('body').scrollLeft(_scrollLeft);
@@ -6946,11 +6945,11 @@ window.wizerati = {
       newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
 
       var leftP1 = 0;
-      var leftP2 = 0;
-      var leftP3 = 0;
-      var leftP4 = 0;
-      var leftP5 = 0;
-      var leftP6 = 0;
+      var leftP2 = 10 * 1;
+      var leftP3 = 10 * 2;
+      var leftP4 = 10 * 3;
+      var leftP5 = 10 * 4;
+      var leftP6 = 10 * 5;
 
       if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         leftP1 = newWidth;

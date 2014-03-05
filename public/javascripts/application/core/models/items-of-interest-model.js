@@ -23,30 +23,30 @@
         _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
 
     this.eventUris = {default: 'update://ItemsOfInterestModel/',
-                      widthChange: 'update://itemsofinterestmodel/widthchange',
-                      modeChange: 'update://itemsofinterestmodel/modechange' ,
-                      layoutChange: 'update://itemsofinterestmodel/layoutchange',
-                      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
+      widthChange: 'update://itemsofinterestmodel/widthchange',
+      modeChange: 'update://itemsofinterestmodel/modechange',
+      layoutChange: 'update://itemsofinterestmodel/layoutchange',
+      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
 
-    this.getCount = function() {
+    this.getCount = function () {
       return 2;//_itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
     };
 
-    this.getMode = function() {
+    this.getMode = function () {
       return _mode;
     };
 
-    this.setMode = function(value) {
+    this.setMode = function (value) {
       _mode = value;
 
       $.publish(that.eventUris.modeChange);
     };
 
-    this.getLayout = function() {
+    this.getLayout = function () {
       return _layout;
     };
 
-    this.setLayout = function(value) {
+    this.setLayout = function (value) {
       _layout = value;
 
       $.publish(that.eventUris.layoutChange);
@@ -65,14 +65,12 @@
         throw 'id not supplied';
       }
 
-      if (that.getItemsOfInterest().pinnedItems.find(function (idOfPinnedItem) {
-        return idOfPinnedItem === id;
-      })) {
+      if (that.getItemsOfInterest().pinnedItems.indexOf(id) >= 0) {
         return;
       }
 
       if (_selectedItemModel.getSelectedItemId() === id) {
-        _selectedItemModel.setSelectedItemId(null, {silent: true});
+        _selectedItemModel.setSelectedItemId(null, { silent: true });
         _itemsOfInterest.selectedItem = null;
       }
 

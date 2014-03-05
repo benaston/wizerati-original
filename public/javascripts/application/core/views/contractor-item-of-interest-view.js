@@ -22,7 +22,8 @@
       }
 
       if (that.Model.shouldAnimateIn) {
-        that.$el.addClass('collapsed');
+//        that.$el.addClass('collapsed');
+        that.$el.css({ left: '-' + model.width});
       }
 
       app.instance.renderTemplate(that.$el,

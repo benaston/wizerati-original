@@ -82,7 +82,7 @@
     function renderPrivate(options) {
       options = options || {animateSelectedItem: true};
 
-      that.$el.empty();
+      that.$el.children().not('.handle-pinned-items').remove();
       setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
@@ -104,12 +104,12 @@
             options.animateSelectedItem,
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
-
               function addSelectedItem() {
                 that.$el.prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
                 setTimeout(function () {
-                  $view.removeClass('collapsed');
+//                  $view.removeClass('collapsed');
+                  $view.css({left: '0'});
                 }, 300);
 
                 $('body').scrollLeft(_scrollLeft);

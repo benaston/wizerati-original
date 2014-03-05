@@ -28,6 +28,7 @@ body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interes
     overflow-y: scroll;
     height: 100%;
     -webkit-overflow-scrolling: touch;
+    transition: width .3s ease-in-out; /* for the 'slide-in' effect when selecting a new item over a pinned item */
 }
 
 .pinned-item:nth-of-type(3) {
@@ -36,26 +37,32 @@ body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interes
 
 .pinned-item:nth-of-type(4) {
     z-index: 1;
+    box-shadow: 0 1px 0 2px #eee;
 }
 
 .pinned-item:nth-of-type(5) {
     z-index: 2;
+    box-shadow: 0 1px 0 2px #eee;
 }
 
 .pinned-item:nth-of-type(6) {
     z-index: 3;
+    box-shadow: 0 1px 0 2px #eee;
 }
 
 .pinned-item:nth-of-type(7) {
     z-index: 4;
+    box-shadow: 0 1px 0 2px #eee;
 }
 
 .pinned-item:nth-of-type(8) {
     z-index: 5;
+    box-shadow: 0 1px 0 2px #eee;
 }
 
-body[data-items-of-interest-mode='0'] .pinned-item {
-    -webkit-filter: blur(20px);
+/*attempt to only blur out when a selected item is present*/
+body[data-items-of-interest-mode='0'] .selected-item ~ .pinned-item {
+    -webkit-filter: blur(30px);
 }
 
 #no-script {
@@ -448,7 +455,8 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 /* Handles End */
 
-.item-of-interest.collapsed, .collapsed {
+/*.item-of-interest.collapsed, .collapsed, .collapsed > .selected-item-content {*/
+.collapsed > .selected-item-content {
     width: 0;
     opacity: 0;
     padding: 0;
@@ -561,4 +569,10 @@ button.checked, a.checked {
     background-color: rgba(0,109,204,.95);
     color: #fff;
     box-shadow: 0 0 0 2px rgba(255,255,255,1),0 0 0 4px rgba(0,109,204,1)!important;
+}
+
+.handle-pinned-items {
+    display: inline-block;
+    left: 776px;
+    padding-right: 10px;
 }
