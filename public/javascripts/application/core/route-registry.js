@@ -55,6 +55,10 @@
           app.mod('controllers').itemsOfInterestController.destroy(dto);
         }, { silent: true });
 
+        instance.router.registerRoute('/itemsofinterestpanelmode/update', function (dto) {
+          app.mod('controllers').itemsOfInterestPanelModeController.update(dto);
+        }, { silent: true });
+
         instance.router.registerRoute('/hiddenitems/create', function (dto) {
           app.mod('controllers').hiddenItemsController.create(dto);
         }, { silent: true });

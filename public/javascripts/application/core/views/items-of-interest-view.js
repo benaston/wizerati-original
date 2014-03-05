@@ -88,6 +88,16 @@
 
 //      that.$el.children().not('.handle-pinned-items').remove();
 //      that.$el.empty('.selected-item, .pinned-item');
+      var otherMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
+      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
+
+      if(that.Model.getMode() === _modeEnum.Default) {
+        $(_elHandlePinnedItems).find('.label').text('show pinned items')
+      } else {
+        $(_elHandlePinnedItems).find('.label').text('hide pinned items')
+      }
+
+
       that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
       that.$el.find('.selected-item, .pinned-item').remove();
@@ -169,6 +179,17 @@
     }
 
     function setMode() {
+      var otherMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
+      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
+
+
+      if(that.Model.getMode() === _modeEnum.Default) {
+        $(_elHandlePinnedItems).find('.label').text('show pinned items')
+      } else {
+        $(_elHandlePinnedItems).find('.label').text('hide pinned items')
+      }
+
+
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
@@ -185,7 +206,7 @@
             false,
             false,
             function ($view) {
-              $(_elPinnedItemsContainer).append($view)
+              $(_elPinnedItemsContainer).append($view);
               $view.scrollTop(_scrollTopValues[id]);
             });
       });

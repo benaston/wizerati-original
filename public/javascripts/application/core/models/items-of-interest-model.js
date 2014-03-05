@@ -32,6 +32,10 @@
       return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
     };
 
+    this.getSelectedItemCount = function () {
+      return _itemsOfInterest.selectedItem ? 1 : 0;
+    };
+
     this.getPinnedItemCount = function () {
       return _itemsOfInterest.pinnedItems.length;
     };

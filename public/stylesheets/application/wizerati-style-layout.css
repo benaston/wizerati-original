@@ -21,8 +21,8 @@ body {
 }
 
 body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
-    /*transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;*/
-    transition: left .5s ease-in-out;
+    transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
+    /*transition: left .5s ease-in-out;*/
 }
 
 .selected-item-content, .pinned-item-content {
@@ -30,6 +30,7 @@ body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interes
     overflow-y: scroll;
     height: 100%;
     -webkit-overflow-scrolling: touch;
+    transition: width .2s ease-in-out;
 }
 
 .selected-item {
@@ -73,29 +74,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(5),
 body[data-items-of-interest-mode='0'] .pinned-item:nth-child(6),
 body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     -webkit-filter: blur(30px);
-}
-
-/*.handle-pinned-items:not(:only-child) ~ .selected-item-container:not(:empty) .selected-item .menu, *//*there should be pinned items too - nth-last-child(2) because of handle and pinned item container*/
-/* last pinned item if not the only*/
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='2'] .pinned-item:nth-child(2) .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='3'] .pinned-item:nth-child(2) .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='4'] .pinned-item:nth-child(2) .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='5'] .pinned-item:nth-child(2) .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='6'] .pinned-item:nth-child(2) .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .selected-item .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='2'] .selected-item .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='3'] .selected-item .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='4'] .selected-item .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='5'] .selected-item .menu,
-body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='6'] .selected-item .menu,
-body[data-items-of-interest-mode='1'] .items-of-interest-panel[data-pinned-item-count='1'] .pinned-item:nth-child(2) .menu,
-body[data-items-of-interest-mode='1'] .items-of-interest-panel[data-pinned-item-count='2'] .pinned-item:nth-child(3) .menu,
-body[data-items-of-interest-mode='1'] .items-of-interest-panel[data-pinned-item-count='3'] .pinned-item:nth-child(4) .menu,
-body[data-items-of-interest-mode='1'] .items-of-interest-panel[data-pinned-item-count='4'] .pinned-item:nth-child(5) .menu,
-body[data-items-of-interest-mode='1'] .items-of-interest-panel[data-pinned-item-count='5'] .pinned-item:nth-child(6) .menu,
-body[data-items-of-interest-mode='1'] .items-of-interest-panel[data-pinned-item-count='6'] .pinned-item:nth-child(7) .menu {
-    /*not for the first of only one pinned item (when no selected item)*/
-    margin-right: 77px;
 }
 
 #no-script {
@@ -628,25 +606,12 @@ button.checked, a.checked {
     z-index: 99999; /*ensure infront of all pinned items*/
 }
 
-/* Only visible if there is a pinned item. */
-/*.selected-item + .pinned-item + .handle-pinned-items,*/
-/*.pinned-item:nth-child(2) + .handle-pinned-items,*/
-/*.pinned-item:nth-child(3) + .handle-pinned-items,*/
-/*.pinned-item:nth-child(4) + .handle-pinned-items,*/
-/*.pinned-item:nth-child(5) + .handle-pinned-items {*/
-    /*opacity: 1;*/
-/*}*/
-
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='2'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='3'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='4'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='5'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='6'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='2'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='3'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='4'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='5'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='0'][data-pinned-item-count='6'] .handle-pinned-items {
+.items-of-interest-panel[data-pinned-item-count='2'] .handle-pinned-items,
+.items-of-interest-panel[data-pinned-item-count='3'] .handle-pinned-items,
+.items-of-interest-panel[data-pinned-item-count='4'] .handle-pinned-items,
+.items-of-interest-panel[data-pinned-item-count='5'] .handle-pinned-items,
+.items-of-interest-panel[data-pinned-item-count='6'] .handle-pinned-items,
+.items-of-interest-panel[data-pinned-item-count='7'] .handle-pinned-items,
+.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .handle-pinned-items {
     opacity: 1;
 }
