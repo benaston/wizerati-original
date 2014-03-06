@@ -78,7 +78,7 @@
 }
 
 .thumbnail.selected:before, .t.selected:before {
-    box-shadow: 1px 5px 0px 0px rgba(0, 109, 204, 1);
+    /*box-shadow: 1px 5px 0px 0px rgba(0, 109, 204, 1);*/
     /*box-shadow: 1px 5px 0px 0px rgba(12, 96, 254, 1);*/
 }
 
@@ -102,8 +102,14 @@
     /*box-shadow: -1px -3px 0px 0px rgba(255, 200, 0, 0.3);*/
 }
 
+.t.selected {
+    background: rgba(0,0,0,.1);
+    box-shadow: 6px 0 0 14px rgba(0,0,0,.1);
+    border-radius: 0;
+}
+
 .thumbnail.selected:after, .t.selected:after {
-    box-shadow: -1px -5px 0px 0px rgba(0, 109, 204, 1);
+    /*box-shadow: -1px -5px 0px 0px rgba(0, 109, 204, 1);*/
     /*box-shadow: -1px -5px 0px 0px rgba(12, 96, 254, 1);*/
 }
 
