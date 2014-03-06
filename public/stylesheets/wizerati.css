@@ -95,12 +95,14 @@ ol li {
 .btn-50 ~ .label {
     margin-top: 4px;
     font-size: .8rem;
+    color: rgba(0, 74, 255, 1);
 }
 
 .btn-80 ~ .label,
 .btn-100 ~ .label {
     margin-top: 4px;
     font-size: 1rem;
+    color: rgba(0, 74, 255, 1);
 }
 
 .btn-40 {
@@ -186,6 +188,7 @@ label:focus {
     font-family: 'glyph';
     position: relative;
     pointer-events: none;
+    color: rgba(12, 96, 254, 1);
 }
 
 .btn.btn-80 ~ .button-icon:after {
@@ -224,7 +227,8 @@ label:focus {
 }
 
 .btn-primary {
-    border-color: rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) !important;
+    /*border-color: rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) !important;*/
+    border-color: rgba(12, 96, 254, 1) !important;
 }
 
 .btn-primary:enabled:hover,
@@ -1508,7 +1512,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     transition: margin-left .3s ease-in-out;
     z-index: 1;
     box-shadow: 1px 0 1px -1px rgb(42,39,53);
-}
+}/*0,60,255*/
 
 .result-list-panel[data-mode='1'] {
     opacity: 0;
@@ -2237,7 +2241,8 @@ figure {
 }
 
 .btn {
-    color: rgba(0, 109, 204, 0.95);
+    /*color: rgba(0, 60, 255, 1);*/
+    color: rgba(12, 96, 254, 1);
 }
 
 .thumbnail, .t {
@@ -2312,7 +2317,8 @@ figure {
 }
 
 .thumbnail.selected:before, .t.selected:before {
-    box-shadow: 1px 5px 0px 0px rgba(0, 109, 204, 1);
+    /*box-shadow: 1px 5px 0px 0px rgba(0, 109, 204, 1);*/
+    box-shadow: 1px 5px 0px 0px rgba(12, 96, 254, 1);
 }
 
 .thumbnail:after, .t:after {
@@ -2336,7 +2342,8 @@ figure {
 }
 
 .thumbnail.selected:after, .t.selected:after {
-    box-shadow: -1px -5px 0px 0px rgba(0, 109, 204, 1);
+    /*box-shadow: -1px -5px 0px 0px rgba(0, 109, 204, 1);*/
+    box-shadow: -1px -5px 0px 0px rgba(12, 96, 254, 1);
 }
 
 .thumbnail.edit:before, .t.edit:before {
