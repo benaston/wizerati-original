@@ -26,6 +26,12 @@
     </div>
     </section>
     <article class="item-of-interest-content <%=model.isHidden ? 'hidden' : '' %>">
+        <section class="itemPrelim" style="float:left; min-width: 200px;">
+            <h1><%= model.title %></h1>
+        </section>
+        <section class="itemSummary" style=" clear:both;">
+            <p><blockquote><%= model.tld %></blockquote></p>
+        </section>
         <section class="itemMetadata" style="float:right;">
             <div class="table-container"><table class="table-bordered table-title-rate">
                 <tr>
@@ -50,12 +56,6 @@
             </table></div><div class="contact">Contact <%= model.contact %> (<%= model.telephoneNumber %>)</div>
             <div class="skills"><%= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') %></div>
             <div class="id"> Job ID: <%= model.id %></div>
-        </section>
-        <section class="itemPrelim" style="float:left; min-width: 200px;">
-            <h1><%= model.title %></h1>
-        </section>
-        <section class="itemSummary" style=" clear:both;">
-            <p><blockquote><%= model.tld %></blockquote></p>
         </section>
         <section style="padding:0;margin:0;">
             <h2>Job Description</h2>
