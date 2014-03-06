@@ -1,3 +1,7 @@
+.btn {
+    color: rgba(0, 109, 204, 0.95);
+}
+
 .thumbnail, .t {
     box-sizing: border-box;
     position: relative;

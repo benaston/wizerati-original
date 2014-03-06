@@ -1507,7 +1507,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     vertical-align: top;
     transition: margin-left .3s ease-in-out;
     z-index: 1;
-    box-shadow: 1px 0 1px -1px rgb(104,103,110);
+    box-shadow: 1px 0 1px -1px rgb(42,39,53);
 }
 
 .result-list-panel[data-mode='1'] {
@@ -2234,6 +2234,10 @@ figure {
     background-color: white;
     text-align: left;
     padding: 25px;
+}
+
+.btn {
+    color: rgba(0, 109, 204, 0.95);
 }
 
 .thumbnail, .t {
