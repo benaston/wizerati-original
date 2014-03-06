@@ -111,7 +111,6 @@ label:focus {
     font-family: 'glyph';
     position: relative;
     pointer-events: none;
-    color: rgba(12, 96, 254, 1);
 }
 
 .btn.btn-80 ~ .button-icon:after {
@@ -150,8 +149,8 @@ label:focus {
 }
 
 .btn-primary {
-    /*border-color: rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) !important;*/
-    border-color: rgba(12, 96, 254, 1) !important;
+    border-color: rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) !important;
+    /*border-color: rgba(12, 96, 254, 1) !important;*/
 }
 
 .btn-primary:enabled:hover,
