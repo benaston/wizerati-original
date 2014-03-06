@@ -106,11 +106,12 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 .table-container {
     min-width: 358px;
     text-align: right;
+    /*margin: 5px 0 0 0;*/
 }
 
 .selected-item .table-bordered, .pinned-item .table-bordered {
     margin-top: 0;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
     border: 0;
     /*width: 100%;*/
     /*margin: auto;*/
@@ -130,9 +131,13 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     padding-right: 31px;
 }
 
+.itemMetadata {
+    margin: 5px 0 8px 0;
+}
+
 .selected-item .table-bordered td,
 .pinned-item .table-bordered td {
-    padding: 6px;
+    padding: 3px;
     text-align: right;
 }
 
