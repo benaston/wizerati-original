@@ -1,0 +1,40 @@
+
+.debug .red {
+    box-shadow: 0 0 0 4px red inset;
+}
+
+.debug .yellow {
+    box-shadow: 0 0 0 4px yellow inset;
+}
+
+.debug .green {
+    box-shadow: 0 0 0 4px green inset;
+}
+
+.debug .blue {
+    box-shadow: 0 0 0 4px blue inset;
+}
+
+.debug .orange {
+    box-shadow: 0 0 0 4px orange inset;
+}
+
+.debug .pink {
+    box-shadow: 0 0 0 4px lightpink inset;
+}
+
+.debug .pink-1 {
+    box-shadow: 0 0 0 4px pink inset;
+}
+
+.debug .pink-2 {
+    box-shadow: 0 0 0 4px hotpink inset;
+}
+
+.debug .pink-3 {
+    box-shadow: 0 0 0 4px deeppink inset;
+}
+
+.debug .slate {
+    box-shadow: 0 0 0 2px slategray inset;
+}

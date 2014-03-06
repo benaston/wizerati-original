@@ -47,46 +47,6 @@
     align-self: auto;
 }
 
-.red {
-    box-shadow: 0 0 0 4px red inset;
-}
-
-.yellow {
-    box-shadow: 0 0 0 4px yellow inset;
-}
-
-.green {
-    box-shadow: 0 0 0 4px green inset;
-}
-
-.blue {
-    box-shadow: 0 0 0 4px blue inset;
-}
-
-.orange {
-    box-shadow: 0 0 0 4px orange inset;
-}
-
-.pink {
-    box-shadow: 0 0 0 4px lightpink inset;
-}
-
-.pink-1 {
-    box-shadow: 0 0 0 4px pink inset;
-}
-
-.pink-2 {
-    box-shadow: 0 0 0 4px hotpink inset;
-}
-
-.pink-3 {
-    box-shadow: 0 0 0 4px deeppink inset;
-}
-
-.slate {
-    box-shadow: 0 0 0 2px slategray inset;
-}
-
 .inline-block {
     display: inline-block;
 }

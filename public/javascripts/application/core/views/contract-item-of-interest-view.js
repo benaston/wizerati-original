@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '<article class=""></article>',
+        _el = '<article></article>',
         _templateName = 'item-of-interest.html';
 
     this.$el = $(_el);
@@ -23,11 +23,9 @@
         that.$el.addClass('pinned-item');
       }
 
-//      that.$el.css({width: model.width});
-
       if (that.Model.shouldAnimateIn) {
-//        that.$el.addClass('collapsed');
         that.$el.css({ left: model.width*-1});
+        that.$el.addClass('blur');
       }
 
       app.instance.renderTemplate(that.$el,

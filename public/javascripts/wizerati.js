@@ -2737,25 +2737,25 @@ window.wizerati = {
 
     var that = this,
         devConfig = {
-      wizeratiUri: '/',
-      templateServerUris: {
-        '1': './contract/',
-        '2': './contractor/',
-        '3': './contract/',
-        '4': './contractor/'
-      },
-      'enableTrace': 'false'
-    },
-    prodConfig = {
-      wizeratiUri: 'https://www.wizerati.com/',
-      templateServerUris: { Contractor: 'https://contract.croni.cl/',
-        Employer: 'https://contractor.croni.cl/' }
-    },
-    sharedConfig = {
-      templatesUriPart: 'templates/',
-      templatePostRenderScriptsUriPart: 'template-post-render-scripts/',
-      metadataUriPart: 'metadata'
-    };
+          wizeratiUri: '/',
+          templateServerUris: {
+            '1': './template-server/contract/',
+            '2': './template-server/contractor/',
+            '3': './template-server/contract/',
+            '4': './template-server/contractor/'
+          },
+          'enableTrace': 'false'
+        },
+        prodConfig = {
+          wizeratiUri: 'https://www.wizerati.com/',
+          templateServerUris: { Contractor: 'https://contract.croni.cl/',
+            Employer: 'https://contractor.croni.cl/' }
+        },
+        sharedConfig = {
+          templatesUriPart: 'templates/',
+          templatePostRenderScriptsUriPart: 'template-post-render-scripts/',
+          metadataUriPart: 'metadata'
+        };
 
     function init() {
       if (!env) {
@@ -3884,7 +3884,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '<article class=""></article>',
+        _el = '<article></article>',
         _templateName = 'item-of-interest.html';
 
     this.$el = $(_el);
@@ -3899,11 +3899,9 @@ window.wizerati = {
         that.$el.addClass('pinned-item');
       }
 
-//      that.$el.css({width: model.width});
-
       if (that.Model.shouldAnimateIn) {
-//        that.$el.addClass('collapsed');
         that.$el.css({ left: model.width*-1});
+        that.$el.addClass('blur');
       }
 
       app.instance.renderTemplate(that.$el,
@@ -4641,10 +4639,11 @@ window.wizerati = {
               function addSelectedItem() {
                 $(_elSelectedItemContainer).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+                $view.css({left: '0'});
+
                 setTimeout(function () {
-//                  $view.removeClass('collapsed');
-                  $view.css({left: '0'});
-                }, 300);
+                  $view.removeClass('blur');
+                }, 300); //unblur when slide from left is complete
 
                 $('body').scrollLeft(_scrollLeft);
               }
@@ -6154,13 +6153,13 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, selectedItemModel) {
 
     if (!(this instanceof app.SearchController)) {
       return new app.SearchController(uiRootModel,
           searchFormModel,
           searchService,
-          resultListModel, guidFactory);
+          resultListModel, guidFactory, selectedItemModel);
     }
 
     var that = this,
@@ -6169,7 +6168,8 @@ window.wizerati = {
         _searchFormModel = null,
         _searchService = null,
         _resultListModel = null,
-        _guidFactory = null;
+        _guidFactory = null,
+        _selectedItemModel = null;
 
     this.urlTransforms = {};
 
@@ -6187,10 +6187,15 @@ window.wizerati = {
             dto.location,
             dto.r,
             function done(results) {
+
               _resultListModel.setResults(_.map(results, function (r) {
                 return r.id;
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+              if(!_selectedItemModel.getSelectedItemId()) {
+                _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
+              }
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
@@ -6222,11 +6227,16 @@ window.wizerati = {
         throw 'guidFactory not supplied.';
       }
 
+      if (!selectedItemModel) {
+        throw 'selectedItemModel not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
       _resultListModel = resultListModel;
       _guidFactory = guidFactory;
+      _selectedItemModel = selectedItemModel;
 
       that.urlTransforms['/search'] = uriTransformShow;
 
@@ -7016,9 +7026,13 @@ window.wizerati = {
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
+        console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s));', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        if ((_searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
+        if ((effectiveWidthSearchPanel + _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle) / numberOfItemsOfInterest;
+          console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s)) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle, numberOfItemsOfInterest);
+        } else {
+          console.log('no resize required.')
         }
       } else {
         throw "invalid itemsOfInterestView mode.";
@@ -7545,7 +7559,7 @@ window.wizerati = {
     mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(wizerati.mod('models').itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(wizerati.mod('models').itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory);
+    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel);
   }

@@ -36,7 +36,7 @@ module.exports = function (grunt) {
           'public/javascripts/application/module-registry.js',
           'public/javascripts/application/env.js',
           'public/javascripts/application/core/app.js',
-          'public/javascripts/application/appStart.js'
+          'public/javascripts/application/app-start.js'
         ],
         dest: 'public/javascripts/<%= pkg.name %>.js'
       },
@@ -53,8 +53,15 @@ module.exports = function (grunt) {
           'public/stylesheets/vendor/lucid-style-form-elements.css',
           'public/stylesheets/vendor/lucid-style-table.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
+          'public/stylesheets/vendor/lucid-style-declarative.css',
+          'public/stylesheets/vendor/lucid-style-colors.css',
 
-//          'public/stylesheets/application/wizerati-style-table.css',
+          'public/stylesheets/application/wizerati-style-dialogs.css',
+          'public/stylesheets/application/wizerati-style-items-of-interest.css',
+          'public/stylesheets/application/wizerati-style-search-panel.css',
+          'public/stylesheets/application/wizerati-style-navbar-and-logo.css',
+          'public/stylesheets/application/wizerati-style-result-list-panel.css',
+          'public/stylesheets/application/wizerati-style-handles.css',
           'public/stylesheets/application/wizerati-style-cube.css',
           'public/stylesheets/application/wizerati-style-layout.css',
           'public/stylesheets/application/wizerati-style-special.css'

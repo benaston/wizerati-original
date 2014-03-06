@@ -1,13 +1,13 @@
 (function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, selectedItemModel) {
 
     if (!(this instanceof app.SearchController)) {
       return new app.SearchController(uiRootModel,
           searchFormModel,
           searchService,
-          resultListModel, guidFactory);
+          resultListModel, guidFactory, selectedItemModel);
     }
 
     var that = this,
@@ -16,7 +16,8 @@
         _searchFormModel = null,
         _searchService = null,
         _resultListModel = null,
-        _guidFactory = null;
+        _guidFactory = null,
+        _selectedItemModel = null;
 
     this.urlTransforms = {};
 
@@ -34,10 +35,15 @@
             dto.location,
             dto.r,
             function done(results) {
+
               _resultListModel.setResults(_.map(results, function (r) {
                 return r.id;
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+              if(!_selectedItemModel.getSelectedItemId()) {
+                _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
+              }
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
@@ -69,11 +75,16 @@
         throw 'guidFactory not supplied.';
       }
 
+      if (!selectedItemModel) {
+        throw 'selectedItemModel not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
       _resultListModel = resultListModel;
       _guidFactory = guidFactory;
+      _selectedItemModel = selectedItemModel;
 
       that.urlTransforms['/search'] = uriTransformShow;
 

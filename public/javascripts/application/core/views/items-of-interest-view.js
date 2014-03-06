@@ -125,10 +125,11 @@
               function addSelectedItem() {
                 $(_elSelectedItemContainer).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+                $view.css({left: '0'});
+
                 setTimeout(function () {
-//                  $view.removeClass('collapsed');
-                  $view.css({left: '0'});
-                }, 300);
+                  $view.removeClass('blur');
+                }, 300); //unblur when slide from left is complete
 
                 $('body').scrollLeft(_scrollLeft);
               }

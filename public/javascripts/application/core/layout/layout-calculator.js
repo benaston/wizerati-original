@@ -40,9 +40,13 @@
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
+        console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s));', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        if ((_searchPanelView.$el[0].clientWidth + _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
+        if ((effectiveWidthSearchPanel + _resultListView.$el[0].clientWidth + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle) / numberOfItemsOfInterest;
+          console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s)) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle, numberOfItemsOfInterest);
+        } else {
+          console.log('no resize required.')
         }
       } else {
         throw "invalid itemsOfInterestView mode.";

@@ -1,0 +1,82 @@
+/* Search Panel */
+
+.search-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 340px;
+    vertical-align: top;
+    background: -webkit-gradient(linear, left top, right top, color-stop(86%, rgba(255, 255, 255, .95)), color-stop(93%, rgba(255, 255, 255, .95)), color-stop(100%, rgba(255, 255, 255, 0)));
+    z-index: 1; /*ensure remains in-front of everything else*/
+    transition: width .5s ease-in-out, left .3s ease-in-out;
+}
+
+body[data-ui-mode='0'] .search-panel {
+    width: 100%;
+    pointer-events: auto;
+    transition: width 0s linear 0s, opacity .1s linear;
+}
+
+.search-panel[data-mode='1'] {
+    left: -320px;
+}
+
+.search-panel[data-mode='1'] {
+    opacity: 1;
+}
+
+/* Search Form */
+#search-form {
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 0 0 455px;
+    width: 308px;
+    height: 269px;
+    position: relative;
+    text-align: left;
+    transition: top .5s ease-in-out;
+    margin: auto;
+    top: 0;
+}
+
+body[data-ui-mode='1'] #search-form, body[data-ui-mode='0'] #search-form {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body[data-ui-mode='0'] #search-form {
+    top: 140px;
+    transition: top 0s linear 0s;
+}
+
+.menu .label, .search-button-container .label {
+    margin-top: 4px;
+    font-size: .8rem;
+}
+
+.search-button-container .label {
+    margin-left: 1px; /*this is because the font rendering makes it look off center*/
+}
+
+.search-button-container {
+    position: absolute;
+    left: 244px;
+    top: 49px;
+}
+
+/* End Search Form */
+
+/* Search Filters */
+
+.search-filters {
+    margin: 27px 20px 20px;
+}
+
+.search-filters {
+    display: inline-block;
+    position: relative;
+}
+
+/* End Search Filters */
+

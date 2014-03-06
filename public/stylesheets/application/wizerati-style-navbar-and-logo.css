@@ -1,0 +1,54 @@
+/* Navbar */
+
+body[data-ui-mode='0'] .navbar, body[data-ui-mode='1'] .navbar {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.navbar {
+    left: 30px;
+    bottom: 18px;
+    position: absolute;
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s linear;
+}
+
+/* End Navbar */
+
+/* Logo */
+
+body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
+    opacity: 1;
+}
+
+.logo {
+    font-size: 4em;
+    font-family: proxima-nova-500;
+    margin-top: 40px;
+}
+
+.logo, .tag-line {
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s linear;
+    color: rgba(0, 109, 204, .95);
+    z-index: 1;
+    text-align: center;
+}
+
+.logo {
+    top: 39px;
+}
+
+.tag-line {
+    font-size: .8rem;
+    font-family: proxima-nova-500;
+    top: 76px;
+}
+
+/* End Logo */

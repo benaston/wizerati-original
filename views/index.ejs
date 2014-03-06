@@ -18,11 +18,8 @@
     <link rel="apple-touch-icon" sizes="152x152" href="./images/apple-touch-icon-152.png">
 
     <title>Wizerati</title>
-
-    <style>
-    </style>
 </head>
-<body data-ui-mode="-1"><div class="modal-container"><div class="search-panel red" data-mode="0">
+<body data-ui-mode="-1"><div class="modal-container"><div class="search-panel" data-mode="0">
         <div class="centered-text handle handle-search-panel btn-container">
             <a href="/searchpanelmode/update?mode=0" class="btn btn-primary btn-50">&#xe800;</a><div class="label">show search & favorites</div>
         </div>
@@ -103,7 +100,6 @@
         </section>
         <div class="navbar">
             <a class="btn-my-account" href="/user/show?id=userid">sign in</a> &nbsp;|&nbsp; <a href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a> <span class="legal">wizerati &copy; 2014</span>
-            <!--<a class="btn-my-account" href="/user/show?id=userid">my account</a> | <a class="btn-log-out" href="/session/destroy">log out</a> | <a href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a>-->
         </div>
     </div><article class="result-list-panel green">
         <ul class="result-list overflow-scroll-y height-100 ios-scroll-enable">
@@ -124,14 +120,6 @@
                 <a href="/itemsofinterestpanelmode/update?mode=1" class="btn btn-primary btn-50"></a><div class="label">show pinned items</div>
             </div></div></div><h1 class="logo">wizerati</h1>
     <h2 class="tag-line">UK IT contract jobs search</h2>
-<div class="position-fixed top-100px left-100px z-index-9999">
-<button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('1');  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate()); ">
-expand
-</button>
-<button onclick="javascript:window.wizerati.mod('models').itemsOfInterestModel.setMode('0');  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());">
-collapse
-</button>
-</div>
 </div>
 <!-- To inline all JavaScript here including underscore.js, you need to escape instances of angle-bracket - percent (by putting a backslash before the percent symbol) to avoid server-side templating causing an error -->
 <script src="javascripts/wizerati.js"></script>

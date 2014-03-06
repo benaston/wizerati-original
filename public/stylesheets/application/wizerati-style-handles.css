@@ -1,0 +1,74 @@
+/* Handles */
+
+.handle, .handle-search-panel {
+    color: #333;
+    text-decoration: none;
+    /*transition: opacity .2s linear;*/
+    /*position: fixed;*/
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+    z-index: 2;
+    width: 50px;
+}
+
+.handle-search-panel {
+    position: fixed;
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 81%, rgba(255, 255, 255, 0) 100%);
+}
+
+.search-panel[data-mode='0'] .handle-search-panel {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s linear 0;
+}
+
+.search-panel[data-mode='1'] .handle-search-panel {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .2s linear .2s;
+}
+
+.handle-result-list {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    color: #333;
+    text-decoration: none;
+    opacity: 0;
+    cursor: pointer;
+    width: 50px;
+}
+
+.result-list-panel[data-mode='0'] ~ .handle-result-list {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s linear 0;
+}
+
+.result-list-panel[data-mode='1'] ~ .handle-result-list {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .2s linear .2s;
+}
+
+/* Handles End */
+
+.handle-pinned-items {
+    position: absolute;
+    display: inline-block;
+    top: 8px;
+    left: 0;
+    width: 50px;
+    padding-right: 10px;
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+    opacity: 0;
+    cursor: pointer;
+    overflow: visible;
+    z-index: 99999; /*ensure infront of all pinned items*/
+}
