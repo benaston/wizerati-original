@@ -89,7 +89,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 
 .items-of-interest-panel .menu {
     text-align: right;
-    margin-top: 7px;
+    /*margin-top: 7px;*/
 }
 
 .table-location-industry {
