@@ -95,14 +95,14 @@ ol li {
 .btn-50 ~ .label {
     margin-top: 4px;
     font-size: .8rem;
-    color: rgba(0, 74, 255, 1);
+    /*color: rgba(0, 74, 255, 1);*/
 }
 
 .btn-80 ~ .label,
 .btn-100 ~ .label {
     margin-top: 4px;
     font-size: 1rem;
-    color: rgba(0, 74, 255, 1);
+    /*color: rgba(0, 74, 255, 1);*/
 }
 
 .btn-40 {
