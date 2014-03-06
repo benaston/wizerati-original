@@ -39,7 +39,7 @@
     "rateUpper": "800",
     "postedDatetime": "2013-01-01T00:00:00Z",
     "updatedDateTime": "2014-02-16T15:00:00Z",
-    "skills": "C#, .NET 4.0, ASP.Net MVC 3, WCF services, Microsoft Entity Framework, SQL Server 2012, JavaScript, JQuery, Knockout",
+    "skills": "C#, .NET 4.0, ASP.Net MVC 3, WCF services",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ]
     },
     {
