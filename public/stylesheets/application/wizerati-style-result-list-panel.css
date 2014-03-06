@@ -119,7 +119,7 @@
 
 .thumbnail h3, .t h3 {
     color: black;
-    height: 3em;
+    /*height: 3em;*/
     overflow: hidden;
 }
 
@@ -139,7 +139,7 @@
 }
 
 .thumbnail .tld, .t .tld {
-    margin-bottom: 5px;
+    margin-bottom: 9px;
 }
 
 .thumbnail a, .t a {

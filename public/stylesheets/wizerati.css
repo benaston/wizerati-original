@@ -1577,7 +1577,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 .thumbnail h3, .t h3 {
     color: black;
-    height: 3em;
+    /*height: 3em;*/
     overflow: hidden;
 }
 
@@ -1597,7 +1597,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .thumbnail .tld, .t .tld {
-    margin-bottom: 5px;
+    margin-bottom: 9px;
 }
 
 .thumbnail a, .t a {
