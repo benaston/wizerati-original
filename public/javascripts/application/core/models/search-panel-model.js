@@ -18,6 +18,10 @@
     };
 
     this.setMode = function (value) {
+      if(_mode === value) {
+        return;
+      }
+
       _mode = value;
 
       $.publish(that.eventUris.default);

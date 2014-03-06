@@ -101,7 +101,7 @@
       that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
       that.$el.find('.selected-item, .pinned-item').remove();
-      setLayout();
+//      setLayout();
       storeScrollTopValues();
       storeScrollLeftValue();
 
@@ -209,6 +209,7 @@
             function ($view) {
               $(_elPinnedItemsContainer).append($view);
               $view.scrollTop(_scrollTopValues[id]);
+              setLayout();
             });
       });
 
