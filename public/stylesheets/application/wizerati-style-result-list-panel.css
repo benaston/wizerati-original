@@ -11,6 +11,7 @@
     vertical-align: top;
     transition: margin-left .3s ease-in-out;
     z-index: 1;
+    box-shadow: 1px 0px 0 0px rgb(104,103,110);
 }
 
 .result-list-panel[data-mode='1'] {
@@ -154,7 +155,8 @@
 
 .location-and-posted,
 .rate {
-    color: #08c;
+    /*color: #08c;*/
+    color: #999;
 }
 
 .cube .thumbnail p {

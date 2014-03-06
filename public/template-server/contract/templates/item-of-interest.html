@@ -47,16 +47,12 @@
                 <tr>
                     <td><div class="cell-content-container">Updated <%= moment(model.updatedDateTime).fromNow() %></div></td>
                 </tr>
-            </table></div><div class="skills"><%= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') %></div>
-
-
+            </table></div><div class="contact">Contact <%= model.contact %> (<%= model.telephoneNumber %>)</div>
+            <div class="skills"><%= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') %></div>
+            <div class="id"> Job ID: <%= model.id %></div>
         </section>
         <section class="itemPrelim" style="float:left; min-width: 200px;">
             <h1><%= model.title %></h1>
-            <h3>Contact <%= model.contact %></h3>
-            <h3><%= model.telephoneNumber %></h3>
-            <!--<h3 class="updatedDateTime"></h3>-->
-            <h3 class="id">Job ID: <%= model.id %></h3>
         </section>
         <section class="itemSummary" style=" clear:both;">
             <p><blockquote><%= model.tld %></blockquote></p>
