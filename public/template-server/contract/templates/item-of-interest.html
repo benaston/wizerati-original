@@ -27,23 +27,28 @@
     </section>
     <article class="item-of-interest-content <%=model.isHidden ? 'hidden' : '' %>">
         <section class="itemMetadata">
-            <table class="table-bordered">
+            <div class="table-container"><table class="table-bordered table-title-rate">
                 <tr>
-                        <td><div class="cell-content-container"><%= model.jobTitle %></div></td>
-                        <td><div class="cell-content-container"><%= model.location %>, <%= model.country %></div></td>
+                    <td><div class="cell-content-container"><%= model.jobTitle %></div></td>
                 </tr>
                 <tr>
                     <td><div class="cell-content-container"><%= model.rateLower %> - <%= model.rateUpper %> GBP/day</div></td>
-                    <td><div class="cell-content-container"><%= model.industry %></div></td>
                 </tr>
                 <tr>
                     <td><div class="cell-content-container"><%= model.organization %></div></td>
-                    <td><div class="cell-content-container">Updated <%= moment(model.updatedDateTime).fromNow() %></div></td>
+                </tr>
+            </table><table class="table-bordered table-location-industry">
+                <tr>
+                        <td><div class="cell-content-container"><%= model.location %>, <%= model.country %></div></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><div class="cell-content-container"><%= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') %></div></td>
+                    <td><div class="cell-content-container"><%= model.industry %></div></td>
                 </tr>
-            </table>
+                <tr>
+                    <td><div class="cell-content-container">Updated <%= moment(model.updatedDateTime).fromNow() %></div></td>
+                </tr>
+            </table></div><div class="skills"><%= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') %></div>
+
             <h1><%= model.title %></h1>
         </section>
         <section class="itemPrelim">
