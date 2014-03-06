@@ -8,7 +8,7 @@
     width: 340px;
     vertical-align: top;
     background: -webkit-gradient(linear, left top, right top, color-stop(86%, rgba(255, 255, 255, .95)), color-stop(93%, rgba(255, 255, 255, .95)), color-stop(100%, rgba(255, 255, 255, 0)));
-    z-index: 1; /*ensure remains in-front of everything else*/
+    z-index: 2; /*ensure remains in-front of everything else*/
     transition: width .5s ease-in-out, left .3s ease-in-out;
 }
 
