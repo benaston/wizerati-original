@@ -1464,7 +1464,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     top: 0;
     left: 0;
     height: 100%;
-    width: 533px;
+    width: 480px;
     margin-left: 340px;
     vertical-align: top;
     transition: margin-left .3s ease-in-out;
