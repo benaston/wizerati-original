@@ -1422,6 +1422,8 @@ body[data-ui-mode='0'] .search-panel {
     margin: auto;
     top: 0;
     background-color: white;
+    padding-bottom: 12px;
+    box-shadow: 0px 1px 0px 0px rgba(12, 9, 23,.3); /*color chosen to match other borders given I cannot apply a blur to this border without affecting the right hand side appearance*/
 }
 
 form[name='search-form'] {
@@ -1449,13 +1451,18 @@ body[data-ui-mode='0'] #search-form {
 
 .search-button-container {
     position: absolute;
-    left: 260px;
+    left: 273px;
     top: 49px;
 }
 
 /* End Search Form */
 
 /* Search Filters */
+
+.search-filters > :first-child {
+    display: inline-block;
+    margin-bottom: 10px;
+}
 
 .search-filters {
     margin: 27px 20px 20px;
