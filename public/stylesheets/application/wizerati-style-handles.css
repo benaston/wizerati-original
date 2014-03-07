@@ -7,7 +7,7 @@
     /*position: fixed;*/
     position: absolute;
     top: 8px;
-    left: 10px;
+    left: 6px;
     opacity: 0;
     z-index: 1;
     cursor: pointer;
@@ -17,7 +17,7 @@
 
 .handle-search-panel {
     position: fixed;
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 81%, rgba(255, 255, 255, 0) 100%);
+    /*background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 81%, rgba(255, 255, 255, 0) 100%);*/
 }
 
 .search-panel[data-mode='0'] .handle-search-panel {
