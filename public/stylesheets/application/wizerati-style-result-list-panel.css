@@ -9,14 +9,22 @@
     width: 480px;
     margin-left: 340px;
     vertical-align: top;
-    transition: margin-left .3s ease-in-out;
+    transition: margin-left .3s ease-in-out, width .3s ease-in-out;
     z-index: 1;
     box-shadow: 1px 0 1px -1px rgb(12,9,23);
-}/*0,60,255*/
+    overflow: hidden;
+}
 
 .result-list-panel[data-mode='1'] {
-    opacity: 0;
+    /*opacity: 0;*/
     pointer-events: none;
+    width: 60px;
+}
+
+.result-list-panel[data-mode='1'] .result-list {
+    /*opacity: 0;*/
+    pointer-events: none;
+    left: -420px;
 }
 
 .search-panel[data-mode='1'] ~ .result-list-panel {
@@ -26,7 +34,11 @@
 /* Results */
 
 .result-list {
+    width: 480px; /*defining the width on the result list enables the outer container to close over the contents*/
     padding: 0;
+    position: relative;
+    left:0; /*required for transition*/
+    transition: left .3s ease-in-out;
 }
 
 .t a {
@@ -59,23 +71,41 @@
     display: inline-block;
 }
 
+.thumbnail-info.thumbnail-info-h3.is-unread:after, .ti.is-unread:after {
+    display: inline-block;
+    width:14px;
+    height:14px;
+    background-color: rgba(0, 109, 204, .95);
+    border-radius: 14px;
+    content: '';
+}
+.thumbnail-info.thumbnail-info-h3.is-unread, .ti.is-unread {
+    display: inline-block;
+}
+
 .thumbnail-info.thumbnail-info-h3.is-pinned, .ti.ti-pinned.is-pinned {
     display: inline-block;
 }
 
-.thumbnail-info:first-child, .ti:first-child {
+.thumbnail-info:nth-child(1), .ti:nth-child(1) {
     left: -15px;
-    top: 20px;
-}
-
-.thumbnail-info:first-child:after, .ti:first-child:after {
-    content: '\e801';
+    top: 18px;
 }
 
 .thumbnail-info:nth-child(2), .ti:nth-child(2) {
     left: -15px;
     top: 45px;
 }
+
+.thumbnail-info:nth-child(3), .ti:nth-child(3) {
+    left: -15px;
+    top: 82px;
+}
+
+.thumbnail-info.is-favorite:after, .ti.is-favorite:after {
+    content: '\e801';
+}
+
 
 .thumbnail-info.actioned:after, .ti.actioned:after {
     content: '\e803';
@@ -100,10 +130,6 @@
 .thumbnail-108 .thumbnail-info.item-of-interest, .thumbnail-108 .ti.item-of-interest, .thumbnail-108 .ti.ti-pinned {
     left: 5px;
     top: 57px;
-}
-
-.thumbnail-info:nth-child(3), .ti:nth-child(3) {
-    right: 60px;
 }
 
 .thumbnail-info.thumbnail-info-pinned:after, .ti.ti-pinned:after {
@@ -160,16 +186,6 @@
 .rate {
     /*color: #08c;*/
     color: #999;
-}
-
-.cube .thumbnail p {
-    line-height: .9rem;
-}
-
-.cube .thumbnail {
-    text-align: left;
-    display: inline-block;
-    margin: 10px 6px 10px 6px;
 }
 
 .selected {

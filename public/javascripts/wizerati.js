@@ -3125,14 +3125,16 @@ window.wizerati = {
 ;(function (app, $) {
   'use strict';
 
-  function ItemsOfInterestModel(selectedItemModel) {
+  function ItemsOfInterestModel(selectedItemModel, resultListModel) {
     if (!(this instanceof app.ItemsOfInterestModel)) {
-      return new app.ItemsOfInterestModel(selectedItemModel);
+      return new app.ItemsOfInterestModel(selectedItemModel, resultListModel);
     }
 
     var that = this,
         _selectedItemModel = null,
+        _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemWidth = 0,
         _mode = _modeEnum.Default,
         _layout = {
@@ -3170,6 +3172,12 @@ window.wizerati = {
 
     this.setMode = function (value) {
       _mode = value;
+
+      if (_mode === _modeEnum.PinnedItemsExpanded) {
+        _resultListModel.setMode(_resultListModeEnum.Minimized)
+      } else if (_mode === _modeEnum.PinnedItemsExpanded) {
+        _resultListModel.setMode(_resultListModeEnum.Default)
+      }
 
       $.publish(that.eventUris.modeChange);
     };
@@ -3234,7 +3242,12 @@ window.wizerati = {
         throw 'selectedItemModel not supplied.';
       }
 
+      if (!resultListModel) {
+        throw 'resultListModel not supplied.';
+      }
+
       _selectedItemModel = selectedItemModel;
+      _resultListModel = resultListModel;
 
       return that;
     }
@@ -7005,8 +7018,9 @@ window.wizerati = {
         _itemsOfInterestView = null,
         _defaultWidthItemOfInterest = 400,
         _effectiveWidthSearchPanelDefault = 340,
+        _effectiveWidthResultListPanelDefault = 480,
         _effectiveWidthSearchPanelMinimized = 60,
-        _stackedItemOffset = 10;
+        _effectiveWidthResultListPanelMinimized = 60;
 
     this.calculate = function () {
       var numberOfItemsOfInterest = _itemsOfInterestView.Model.getCount();
@@ -7018,6 +7032,11 @@ window.wizerati = {
         effectiveWidthSearchPanel = _effectiveWidthSearchPanelMinimized;
       }
 
+      var effectiveWidthResultListPanel = _effectiveWidthResultListPanelDefault;
+      if(_resultListView.Model.getMode() === _resultListModeEnum.Minimized) {
+        effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
+      }
+
       var effectiveWidthPinnedItemsHandle = 0;
 
       if(_itemsOfInterestView.Model.getPinnedItemCount() > 1
@@ -7026,7 +7045,7 @@ window.wizerati = {
         effectiveWidthPinnedItemsHandle = 60;
       }
 
-      var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + _resultListView.$el[0].clientWidth + effectiveWidthPinnedItemsHandle;
+      var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
       var viewPortWidth = window.innerWidth;
 
       if (mode === _itemsOfInterestModeEnum.Default) {
@@ -7489,7 +7508,7 @@ window.wizerati = {
     mod.uiRootModel = new wizerati.UIRootModel();
 
     mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel);
-    mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.selectedItemModel);
+    mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.selectedItemModel, mod.resultListModel);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;

@@ -161,7 +161,7 @@
     mod.uiRootModel = new wizerati.UIRootModel();
 
     mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel);
-    mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.selectedItemModel);
+    mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.selectedItemModel, mod.resultListModel);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;

@@ -1,14 +1,16 @@
 (function (app, $) {
   'use strict';
 
-  function ItemsOfInterestModel(selectedItemModel) {
+  function ItemsOfInterestModel(selectedItemModel, resultListModel) {
     if (!(this instanceof app.ItemsOfInterestModel)) {
-      return new app.ItemsOfInterestModel(selectedItemModel);
+      return new app.ItemsOfInterestModel(selectedItemModel, resultListModel);
     }
 
     var that = this,
         _selectedItemModel = null,
+        _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemWidth = 0,
         _mode = _modeEnum.Default,
         _layout = {
@@ -46,6 +48,12 @@
 
     this.setMode = function (value) {
       _mode = value;
+
+      if (_mode === _modeEnum.PinnedItemsExpanded) {
+        _resultListModel.setMode(_resultListModeEnum.Minimized)
+      } else if (_mode === _modeEnum.PinnedItemsExpanded) {
+        _resultListModel.setMode(_resultListModeEnum.Default)
+      }
 
       $.publish(that.eventUris.modeChange);
     };
@@ -110,7 +118,12 @@
         throw 'selectedItemModel not supplied.';
       }
 
+      if (!resultListModel) {
+        throw 'resultListModel not supplied.';
+      }
+
       _selectedItemModel = selectedItemModel;
+      _resultListModel = resultListModel;
 
       return that;
     }

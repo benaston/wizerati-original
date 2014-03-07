@@ -138,11 +138,13 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 .contact {
     font-size: .95rem;
     text-align: right;
-    margin-bottom:7px;
+    margin-bottom: 7px;
 }
+
 .id {
     text-align: right;
 }
+
 .itemMetadata {
     margin: 5px 0 8px 0;
 }
@@ -168,13 +170,12 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 
 .menu {
     /*margin-right: 17px;*/
-    margin-right:0;
-    margin-top:0;
+    margin-right: 0;
+    margin-top: 0;
     padding-top: 7px;
-    padding-right: 17px;
-    /*background: rgb(247,247,247);*/
-    /*box-shadow: 0px 0 1px 0px rgb(12,9,23);*/
+    /*padding-right: 17px;*/
 }
+
 .description {
     float: left;
 }

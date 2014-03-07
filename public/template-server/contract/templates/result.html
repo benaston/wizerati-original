@@ -1,10 +1,7 @@
 <% try { %>
-<% if(model.isFavorite) { %>
-<i class="ti p is-favorite"></i>
-<% } %>
-<% if(model.isActioned) { %>
-<i class="ti p actioned"></i>
-<% } %>
+<% if(model.isActioned) { %><i class="ti p actioned"></i><% } %>
+<% if(!model.isRead) { %><i class="ti p is-unread"></i><% } %>
+<% if(model.isFavorite) { %><i class="ti p is-favorite"></i><% } %>
 <% if(model.isPinned) { %><i class="ti p ti-pinned is-pinned" style="position:absolute;"></i> <% } %>
 <a href="/selecteditem/update?id=<%=model.id%>&source=0" class="<%=model.isHidden ? 'hidden' : '' %>" style="position:relative; left:11px;">
 <h3><%= model.title %></h3>

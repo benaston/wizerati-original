@@ -14,8 +14,9 @@
         _itemsOfInterestView = null,
         _defaultWidthItemOfInterest = 400,
         _effectiveWidthSearchPanelDefault = 340,
+        _effectiveWidthResultListPanelDefault = 480,
         _effectiveWidthSearchPanelMinimized = 60,
-        _stackedItemOffset = 10;
+        _effectiveWidthResultListPanelMinimized = 60;
 
     this.calculate = function () {
       var numberOfItemsOfInterest = _itemsOfInterestView.Model.getCount();
@@ -27,6 +28,11 @@
         effectiveWidthSearchPanel = _effectiveWidthSearchPanelMinimized;
       }
 
+      var effectiveWidthResultListPanel = _effectiveWidthResultListPanelDefault;
+      if(_resultListView.Model.getMode() === _resultListModeEnum.Minimized) {
+        effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
+      }
+
       var effectiveWidthPinnedItemsHandle = 0;
 
       if(_itemsOfInterestView.Model.getPinnedItemCount() > 1
@@ -35,7 +41,7 @@
         effectiveWidthPinnedItemsHandle = 60;
       }
 
-      var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + _resultListView.$el[0].clientWidth + effectiveWidthPinnedItemsHandle;
+      var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
       var viewPortWidth = window.innerWidth;
 
       if (mode === _itemsOfInterestModeEnum.Default) {

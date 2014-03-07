@@ -476,3 +476,13 @@ figure {
 .cube-container {
     top: 42px;
 }
+
+.cube .thumbnail p {
+    line-height: .9rem;
+}
+
+.cube .thumbnail {
+    text-align: left;
+    display: inline-block;
+    margin: 10px 6px 10px 6px;
+}
