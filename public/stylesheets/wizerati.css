@@ -499,6 +499,34 @@ a.btn-primary:not(.disabled):hover {
 }
 
 @font-face {
+    font-family: helvetica-pro-light;
+    src: url('../../fonts/helvetica-pro-light.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: helvetica-bold;
+    src: url('../../fonts/helvetica-bold.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: helvetica2;
+    src: url('../../fonts/helvetica2.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: helvetica3;
+    src: url('../../fonts/helvetica3.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: museo-sans-500;
     src: url('../../fonts/museo-sans-500.woff');
     font-weight: normal;
@@ -879,9 +907,10 @@ table {
 }
 
 body {
-    font-family: "proxima-nova-400", Arial, sans-serif;
+    /*font-family: "proxima-nova-400", Arial, sans-serif;*/
+    font-family: "helvetica-pro-light", Arial, sans-serif;
     font-size: 100%;
-    line-height: 120%;
+    line-height: 134%;
     color: #333333;
     -webkit-font-smoothing: antialiased;
 }
@@ -889,7 +918,8 @@ body {
 h1, h2, h3, h4, h5, h6 {
     clear: both;
     -webkit-user-select: auto;
-    text-rendering: optimizelegibility;
+    /*text-rendering: optimizelegibility;*/
+    font-family: "helvetica-bold", Arial, sans-serif;
 }
 
 .centered-text {
@@ -901,7 +931,7 @@ h1 {
     /*margin: 0 0 10px 0;*/
     line-height: 2.1rem;
     font-size: 1.7em;
-    font-family: "proxima-nova-100";
+    /*font-family: "proxima-nova-100";*/
 }
 
 h2 {
@@ -909,7 +939,7 @@ h2 {
     line-height: 40px;
     /*font-size: 1.1em;*/
     font-size: .95em;
-    font-family: proxima-nova-300;
+    /*font-family: proxima-nova-300;*/
     /*clear: both; *//*needed*/
     -webkit-user-select: auto;
 }
@@ -927,15 +957,17 @@ h3 {
     line-height: 21px;
     font-size: 1em;
     /*color: #999;*/
-    font-family: "proxima-nova-400";
-    font-weight: bold;
+    /*font-family: "proxima-nova-400";*/
+    /*font-family: "helvetica2";*/
+    /*font-weight: bold;*/
 }
 
 h4, h5, h6 {
     margin: 15px 0 0 0;
     line-height: 3rem;
-    font-family: "proxima-nova-400";
-    font-size: 1.1rem;
+    /*font-family: "proxima-nova-400";*/
+    /*font-family: "helvetica2";*/
+    font-size: .96rem;
 }
 
 hr {
@@ -1625,17 +1657,22 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 .thumbnail-info:nth-child(1), .ti:nth-child(1) {
     left: -15px;
-    top: 18px;
+    top: 13px;
 }
 
 .thumbnail-info:nth-child(2), .ti:nth-child(2) {
     left: -15px;
-    top: 45px;
+    top: 40px;
 }
 
 .thumbnail-info:nth-child(3), .ti:nth-child(3) {
     left: -15px;
-    top: 82px;
+    top: 77px;
+}
+
+.thumbnail-info:nth-child(4), .ti:nth-child(4) {
+    left: -15px;
+    top: 114px;
 }
 
 .thumbnail-info.is-favorite:after, .ti.is-favorite:after {

@@ -37,37 +37,16 @@
             <!--<div class="id"> Job ID: <%= model.id %></div>-->
         </section>
         </section>
-        <!--<section class="itemPrelim" style="float:left; min-width: 200px;">-->
-            <h3 style="clear:none; min-width: 250px; display: inline-block; "><%= model.title %></h3>
-            <!--<h1 style="clear:none; min-width: 250px; display: inline-block; font-size: 1rem; font-weight:bold; margin-top:4px;"><%= model.title %></h1>-->
-        <!--</section>-->
-        <!--<section class="itemSummary" style=" clear:both;">-->
-            <!--<p>-->
+            <h3 style="clear:none; min-width: 250px; display: inline-block;"><%= model.title %></h3>
         <p class="tld" style="font-style: italic;"><%= model.tld %></p>
-        <!--</p>-->
-        <!--</section>-->
-
-        <!--<section style="padding:0;margin:0;">-->
-
-
-            <!--<div class="description" style="float:left">-->
             <h4 style="clear:none;">Job Description</h4>
             <%= model.summary %>
-            <!--</div>-->
-        <!--</section>-->
-        <!--<section style="padding:0;margin:0;">-->
-
             <h4 style="clear:none;">Skills</h4>
             <p><%= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') %></p>
-        <!--</section>-->
-        <!--<section style="padding:0;margin:0;">-->
             <h4 style="clear:none;">About</h4>
             <%= model.aboutOrganization %>
-        <!--</section>-->
-        <!--<section>-->
             <hr>
             <a href="#top1" data-bypass-router="true" class="back-to-top">Back to top</a>
-        <!--</section>-->
     </article>
 </div>
 <%

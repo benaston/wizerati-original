@@ -6,6 +6,34 @@
 }
 
 @font-face {
+    font-family: helvetica-pro-light;
+    src: url('../../fonts/helvetica-pro-light.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: helvetica-bold;
+    src: url('../../fonts/helvetica-bold.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: helvetica2;
+    src: url('../../fonts/helvetica2.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: helvetica3;
+    src: url('../../fonts/helvetica3.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: museo-sans-500;
     src: url('../../fonts/museo-sans-500.woff');
     font-weight: normal;

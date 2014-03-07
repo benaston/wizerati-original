@@ -89,17 +89,22 @@
 
 .thumbnail-info:nth-child(1), .ti:nth-child(1) {
     left: -15px;
-    top: 18px;
+    top: 13px;
 }
 
 .thumbnail-info:nth-child(2), .ti:nth-child(2) {
     left: -15px;
-    top: 45px;
+    top: 40px;
 }
 
 .thumbnail-info:nth-child(3), .ti:nth-child(3) {
     left: -15px;
-    top: 82px;
+    top: 77px;
+}
+
+.thumbnail-info:nth-child(4), .ti:nth-child(4) {
+    left: -15px;
+    top: 114px;
 }
 
 .thumbnail-info.is-favorite:after, .ti.is-favorite:after {
