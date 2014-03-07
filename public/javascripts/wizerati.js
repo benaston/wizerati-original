@@ -3175,7 +3175,7 @@ window.wizerati = {
 
       if (_mode === _modeEnum.PinnedItemsExpanded) {
         _resultListModel.setMode(_resultListModeEnum.Minimized)
-      } else if (_mode === _modeEnum.PinnedItemsExpanded) {
+      } else if (_mode === _modeEnum.Default) {
         _resultListModel.setMode(_resultListModeEnum.Default)
       }
 
