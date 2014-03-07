@@ -69,7 +69,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(5),
 body[data-items-of-interest-mode='0'] .pinned-item:nth-child(6),
 body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     /*-webkit-filter: blur(40px);*/
-    opacity: .1;
+    opacity: 0;
 }
 
 /*.item-of-interest.collapsed, .collapsed, .collapsed > .selected-item-content {*/
