@@ -104,7 +104,7 @@ body {
 input[type='text'],
 input[type='email'],
 input[type='password'] {
-    font-family: "proxima-nova-400", Arial;
+    font-family: "helvetica-pro-light", Arial, sans-serif;
 }
 
 .hovering-text {
@@ -130,7 +130,7 @@ a:hover {
 
 .heading-aside {
     font-size: 1rem;
-    font-family: "proxima-nova-400", Arial, sans-serif;
+    font-family: "helvetica-pro-light", Arial, sans-serif;
 }
 
 .field {
