@@ -1333,6 +1333,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     margin-left: 25px;
     margin-right: 25px;
     margin-bottom: 30px;
+    margin-top: 5px;
 }
 
 .ios-scroll-enable {
