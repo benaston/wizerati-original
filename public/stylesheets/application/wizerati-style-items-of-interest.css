@@ -206,12 +206,15 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .t .is-favorite {
-    color: rgba(255, 211, 0, .4) !important;
+    /*color: rgba(255, 211, 0, .4) !important;*/
+    /*color: rgba(0, 109, 204, 0.95);*/
+    color: silver;
     font-size: 1.5rem;
 }
 
 .menu .is-favorite {
-    color: rgba(255, 211, 0, 1) !important;
+    /*color: rgba(255, 211, 0, 1) !important;*/
+    color: white;
 }
 
 .hidden {

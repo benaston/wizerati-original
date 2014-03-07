@@ -907,9 +907,10 @@ h1 {
 h2 {
     margin: 10px 0;
     line-height: 40px;
-    font-size: 1.1em;
+    /*font-size: 1.1em;*/
+    font-size: .95em;
     font-family: proxima-nova-300;
-    clear: both; /*needed*/
+    /*clear: both; *//*needed*/
     -webkit-user-select: auto;
 }
 
@@ -1311,12 +1312,15 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .t .is-favorite {
-    color: rgba(255, 211, 0, .4) !important;
+    /*color: rgba(255, 211, 0, .4) !important;*/
+    /*color: rgba(0, 109, 204, 0.95);*/
+    color: silver;
     font-size: 1.5rem;
 }
 
 .menu .is-favorite {
-    color: rgba(255, 211, 0, 1) !important;
+    /*color: rgba(255, 211, 0, 1) !important;*/
+    color: white;
 }
 
 .hidden {
@@ -1560,21 +1564,22 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .thumbnail-info, .ti {
-    width: 14px;
-    height: 14px;
-    line-height: 15px;
-    text-align: center;
+    /*setting width and height enables correct vertical centering of font glyphs*/
+    width: 22px;
+    /*height: 14px;*/
     position: absolute;
-    top: -2px; /*keep away from text of result*/
     font-family: 'glyph';
+    text-align: center;
+    display: inline-block;
 }
 
-.thumbnail-info.thumbnail-info-pinned.is-pinned, .ti.ti-pinned.is-pinned {
+.thumbnail-info.thumbnail-info-h3.is-pinned, .ti.ti-pinned.is-pinned {
     display: inline-block;
 }
 
 .thumbnail-info:first-child, .ti:first-child {
-    right: 0px;
+    left: -15px;
+    top: 20px;
 }
 
 .thumbnail-info:first-child:after, .ti:first-child:after {
@@ -1582,7 +1587,8 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .thumbnail-info:nth-child(2), .ti:nth-child(2) {
-    right: 30px;
+    left: -15px;
+    top: 45px;
 }
 
 .thumbnail-info.actioned:after, .ti.actioned:after {
@@ -1625,13 +1631,14 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 .ti.ti-pinned {
     font-size: 1.5rem;
-    color: rgba(0, 109, 204, 0.95);
+    /*color: rgba(0, 109, 204, 0.95);*/
+    color: silver;
 }
 
 .thumbnail h3, .t h3 {
     color: black;
     /*height: 3em;*/
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .location-and-posted {
