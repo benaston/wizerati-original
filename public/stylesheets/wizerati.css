@@ -926,15 +926,16 @@ h3 {
     margin: 10px 0;
     line-height: 21px;
     font-size: 1em;
-    color: #999;
-    font-family: "proxima-nova-300";
+    /*color: #999;*/
+    font-family: "proxima-nova-400";
     font-weight: bold;
 }
 
 h4, h5, h6 {
-    margin: 10px 0;
-    line-height: 20px;
+    margin: 15px 0 0 0;
+    line-height: 3rem;
     font-family: "proxima-nova-400";
+    font-size: 1.1rem;
 }
 
 hr {
@@ -1176,6 +1177,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(6),
 body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     /*-webkit-filter: blur(40px);*/
     opacity: 0;
+    transition: opacity .3s ease-in-out;
 }
 
 /*.item-of-interest.collapsed, .collapsed, .collapsed > .selected-item-content {*/

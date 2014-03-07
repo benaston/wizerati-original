@@ -70,6 +70,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(6),
 body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     /*-webkit-filter: blur(40px);*/
     opacity: 0;
+    transition: opacity .3s ease-in-out;
 }
 
 /*.item-of-interest.collapsed, .collapsed, .collapsed > .selected-item-content {*/
