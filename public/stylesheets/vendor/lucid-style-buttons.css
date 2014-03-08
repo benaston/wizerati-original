@@ -9,7 +9,7 @@
     -webkit-user-select: none;
     text-align: center;
     box-sizing: border-box;
-    border: 2px solid;
+    border: 1px solid;
     display: inline-block;
     transition: border-color 0.1s linear, box-shadow 0.1s linear;
 }
@@ -17,23 +17,32 @@
 .btn-40 ~ .label,
 .btn-50 ~ .label {
     margin-top: 4px;
-    font-size: .8rem;
+    /*font-size: .8rem;*/
+    font-size: 1rem;
+    color: rgba(0, 109, 204, 0.95);
     /*color: rgba(0, 74, 255, 1);*/
 }
 
 .btn-80 ~ .label,
 .btn-100 ~ .label {
     margin-top: 4px;
-    font-size: 1rem;
+    font-size: 2rem;
+    color: rgba(0, 109, 204, 0.95);
     /*color: rgba(0, 74, 255, 1);*/
 }
 
 .btn-40 {
-    width: 40px;
-    border-radius: 40px !important;
-    line-height: 37px !important;
-    height: 40px !important;
-    font-size: 1em;
+    width: 55px;
+    border-radius: 55px !important;
+    line-height: 55px !important;
+    height: 55px !important;
+    /*font-size: 2em;*/
+    /*-webkit-transform: scale(.5);*/
+    /*color: rgba(0, 109, 204, 0.05);*/
+    font-size: 1.4em;
+    /* -webkit-transform: scale(.5); */
+    color: white;
+    text-shadow: 0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95);
 }
 
 .btn-50 {
@@ -51,15 +60,16 @@
     height: 80px !important;
     font-size: 1.9em;
     border: 3px solid;
+    -webkit-transform: scale(.5);
 }
 
 .btn-100 {
-    width: 100px;
+    width: 110px;
     border-radius: 100px !important;
     line-height: 97px !important;
-    height: 100px !important;
+    height: 110px !important;
     font-size: 2.1em;
-    border: 3px solid;
+    border: 2px solid;
 }
 
 .btn:disabled,
@@ -104,6 +114,7 @@ label:focus {
 .rotating-button-container {
     display: inline-block;
     position: relative;
+    -webkit-transform: scale(.5);
 }
 
 .btn ~ .button-icon {
@@ -116,7 +127,7 @@ label:focus {
 .btn.btn-80 ~ .button-icon:after {
     display: block;
     font-size: 1.9em;
-    content: '\e809';
+    /*content: '\e809';*/
     position: absolute;
     left: -52px;
     top: -43px;
@@ -126,7 +137,7 @@ label:focus {
 .btn.btn-50 ~ .button-icon:after {
     display: block;
     font-size: 1.3em;
-    content: '\e809';
+    /*content: '\e809';*/
     position: absolute;
     left: -35px;
     top: -32px;
@@ -156,6 +167,7 @@ label:focus {
 .btn-primary:enabled:hover,
 a.btn-primary:not(.disabled):hover {
     border-color: #0059b8 #0059b8 #0059b8 !important;
+    color:white;
 }
 
 .btn-success {

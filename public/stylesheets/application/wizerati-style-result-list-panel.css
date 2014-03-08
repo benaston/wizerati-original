@@ -57,8 +57,9 @@
 }
 
 .thumbnail-219, .t-219 {
-    padding: 1px 12px 1px 12px;
-    margin: 15px 20px 25px 20px;
+    /*padding: 1px 12px 1px 12px;*/
+    padding: 15px 20px 25px 20px;
+    margin: 0;
 }
 
 .thumbnail-info, .ti {
