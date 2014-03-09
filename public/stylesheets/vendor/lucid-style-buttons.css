@@ -2,14 +2,14 @@
     padding: 0 !important;
     cursor: pointer;
     color: #333;
-    border-color: rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) !important;
+    /*border-color: rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) !important;*/
     margin: 0; /*important to avoid unexpected layout*/
     font-family: 'ionicons';
     background-color: transparent;
     -webkit-user-select: none;
     text-align: center;
     box-sizing: border-box;
-    border: 1px solid;
+    border: 1px solid rgba(2, 86, 244, .1);
     display: inline-block;
     transition: border-color 0.1s linear, box-shadow 0.1s linear;
 }
@@ -59,7 +59,7 @@
     line-height: 77px !important;
     height: 80px !important;
     font-size: 1.9em;
-    border: 1px solid;
+    /*border: 1px solid;*/
     /*-webkit-transform: scale(.5);*/
 }
 
@@ -69,7 +69,7 @@
     line-height: 97px !important;
     height: 110px !important;
     font-size: 2.1em;
-    border: 1px solid;
+    /*border: 1px solid;*/
 }
 
 .btn:disabled,
@@ -84,7 +84,7 @@ a.btn:hover {
 /*a.btn:not(.disabled):hover*/
 .btn:enabled:hover {
     text-decoration: none;
-    border-color: rgba(0, 0, 0, 0.85) rgba(0, 0, 0, 0.85) rgba(0, 0, 0, 0.85) !important;
+    /*border-color: rgba(0, 0, 0, 0.85) rgba(0, 0, 0, 0.85) rgba(0, 0, 0, 0.85) !important;*/
 }
 
 .btn:enabled:focus {
@@ -159,19 +159,21 @@ label:focus {
 /*}*/
 
 .btn:enabled:active, a.btn:not(.disabled):active {
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    /*box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05) !important;*/
+    box-shadow: 0 2px 0px 2px rgba(0, 0, 0, 0.05) inset;
     -webkit-transition: box-shadow 0.1s linear;
 }
 
 .btn-primary {
-    border-color: rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) !important;
+    /*border-color: rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) rgba(0, 109, 204, 0.95) !important;*/
     /*border-color: rgba(12, 96, 254, 1) !important;*/
 }
 
 .btn-primary:enabled:hover,
 a.btn-primary:not(.disabled):hover {
-    border-color: #0059b8 #0059b8 #0059b8 !important;
-    color: white;
+    /*border-color: #0059b8 #0059b8 #0059b8 !important;*/
+    /*color: white;*/
+    color: rgba(0, 109, 204, 1);
 }
 
 .btn-success {

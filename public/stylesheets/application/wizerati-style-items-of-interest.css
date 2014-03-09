@@ -98,6 +98,10 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     /*padding-right: 17px;*/
 }
 
+.menu a {
+    /*font-weight:bold;*/
+}
+
 .menu .centered-text {
     vertical-align: top;
 }

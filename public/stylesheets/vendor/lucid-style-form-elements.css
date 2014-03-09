@@ -171,7 +171,7 @@ html .uneditable-input {
     margin: 20px 20px 0px 20px;
     background: rgba(0, 0, 0, 0);
     border: none;
-    border-bottom: 1px solid rgb(206, 214, 218);
+    border-bottom: 1px solid rgba(2, 86, 244, .1);
     display: inline-block;
     vertical-align: middle;
     outline: none;
