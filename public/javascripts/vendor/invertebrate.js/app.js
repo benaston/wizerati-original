@@ -42,9 +42,9 @@
           if (_templates[uri]) {
             return options.done(_templates[uri]);
           } else {
-            setTimeout(checkCacheForTemplate, 30);
+            setTimeout(checkCacheForTemplate, 20);
           }
-        }, 30); /*impact on framerate is currently unknown*/
+        }, 20); /*impact on framerate is currently unknown*/
 
         return; /*critical*/
       }
