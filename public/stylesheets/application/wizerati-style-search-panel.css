@@ -66,8 +66,8 @@ body[data-ui-mode='0'] #search-form {
 }
 
 .search-button-container .label {
-    margin-top: 14px;
-    font-size: 2rem;
+    /*margin-top: 14px;*/
+    /*font-size: 1rem;*/
 }
 
 .search-button-container .label {
@@ -78,8 +78,8 @@ body[data-ui-mode='0'] #search-form {
     position: absolute;
     /*left: 273px;*/
     /*top: 49px;*/
-    left: 247px;
-    top: 16px;
+    left: 271px;
+    top: 24px;
 }
 
 /* End Search Form */

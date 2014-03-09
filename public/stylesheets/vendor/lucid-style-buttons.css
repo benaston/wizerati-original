@@ -4,7 +4,7 @@
     color: #333;
     border-color: rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) !important;
     margin: 0; /*important to avoid unexpected layout*/
-    font-family: 'glyph';
+    font-family: 'ionicons';
     background-color: transparent;
     -webkit-user-select: none;
     text-align: center;
@@ -16,9 +16,9 @@
 
 .btn-40 ~ .label,
 .btn-50 ~ .label {
-    margin-top: 4px;
-    /*font-size: .8rem;*/
-    font-size: 1rem;
+    margin-top: 7px;
+    font-size: .8rem;
+    /*font-size: .95rem;*/
     color: rgba(0, 109, 204, 0.95);
     /*color: rgba(0, 74, 255, 1);*/
 }
@@ -39,10 +39,10 @@
     /*font-size: 2em;*/
     /*-webkit-transform: scale(.5);*/
     /*color: rgba(0, 109, 204, 0.05);*/
-    font-size: 1.4em;
+    font-size: 2em;
     /* -webkit-transform: scale(.5); */
-    color: white;
-    text-shadow: 0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95),0px 0px 1px rgba(0, 109, 204, 0.95);
+    color: rgba(0, 109, 204, 0.95);
+    /*text-shadow: 0px 0px 1px rgba(0, 109, 204, 0.95), 0px 0px 1px rgba(0, 109, 204, 0.95), 0px 0px 1px rgba(0, 109, 204, 0.95), 0px 0px 1px rgba(0, 109, 204, 0.95), 0px 0px 1px rgba(0, 109, 204, 0.95);*/
 }
 
 .btn-50 {
@@ -59,8 +59,8 @@
     line-height: 77px !important;
     height: 80px !important;
     font-size: 1.9em;
-    border: 3px solid;
-    -webkit-transform: scale(.5);
+    border: 1px solid;
+    /*-webkit-transform: scale(.5);*/
 }
 
 .btn-100 {
@@ -69,7 +69,7 @@
     line-height: 97px !important;
     height: 110px !important;
     font-size: 2.1em;
-    border: 2px solid;
+    border: 1px solid;
 }
 
 .btn:disabled,
@@ -114,45 +114,49 @@ label:focus {
 .rotating-button-container {
     display: inline-block;
     position: relative;
-    -webkit-transform: scale(.5);
+    /*-webkit-transform: scale(.5);*/
 }
 
 .btn ~ .button-icon {
     display: inline-block;
-    font-family: 'glyph';
+    font-family: 'ionicons';
     position: relative;
     pointer-events: none;
+
 }
 
-.btn.btn-80 ~ .button-icon:after {
+.btn.btn-40 ~ .button-icon:after {
     display: block;
-    font-size: 1.9em;
-    /*content: '\e809';*/
+    font-size: 2rem;
+    content: '\f1da';
     position: absolute;
-    left: -52px;
-    top: -43px;
+    left: -39px;
+    top: -35px;
     pointer-events: none;
+    color: rgba(0, 109, 204, 0.95);
 }
 
 .btn.btn-50 ~ .button-icon:after {
     display: block;
     font-size: 1.3em;
     /*content: '\e809';*/
+    /*content: '\f30c';*/
     position: absolute;
     left: -35px;
     top: -32px;
     pointer-events: none;
 }
 
-.btn.btn-40 ~ .button-icon:after {
-    display: block;
-    font-size: 1em;
-    content: '\e809';
-    position: absolute;
-    left: -27px;
-    top: -26px;
-    pointer-events: none;
-}
+/*.btn.btn-40 ~ .button-icon:after {*/
+/*display: block;*/
+/*font-size: 1em;*/
+/*content: '\e809';*/
+/*content: '\f30c';*/
+/*position: absolute;*/
+/*left: -27px;*/
+/*top: -26px;*/
+/*pointer-events: none;*/
+/*}*/
 
 .btn:enabled:active, a.btn:not(.disabled):active {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
@@ -167,7 +171,7 @@ label:focus {
 .btn-primary:enabled:hover,
 a.btn-primary:not(.disabled):hover {
     border-color: #0059b8 #0059b8 #0059b8 !important;
-    color:white;
+    color: white;
 }
 
 .btn-success {
