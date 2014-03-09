@@ -110,7 +110,7 @@ ol li {
 
 .btn-40 {
     width: 55px;
-    border-radius: 55px !important;
+    border-radius: 85px !important;
     line-height: 55px !important;
     height: 55px !important;
     /*font-size: 2em;*/
@@ -1712,6 +1712,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     font-family: 'glyph';
     text-align: center;
     display: inline-block;
+    color: silver;
 }
 
 .thumbnail-info.thumbnail-info-h3.is-unread:after, .ti.is-unread:after {
@@ -1730,41 +1731,49 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     display: inline-block;
 }
 
-.thumbnail-info:nth-child(1), .ti:nth-child(1) {
+.ti:nth-child(1) {
     left: 6px;
     top: 24px;
 }
 
-.thumbnail-info:nth-child(2), .ti:nth-child(2) {
-    left: 0px;
-    top: 51px;
+.ti:nth-child(2) {
+    left: 6px;
+    top: 48px;
 }
 
-.thumbnail-info:nth-child(3), .ti:nth-child(3) {
-    left: 0px;
-    top: 88px;
+.ti:nth-child(3) {
+    left: 6px;
+    top: 75px; /*empirical*/
 }
 
-.thumbnail-info:nth-child(4), .ti:nth-child(4) {
-    left: 0px;
-    top: 125px;
+.ti:nth-child(4) {
+    left: 6px;
+    top: 105px; /*empirical*/
 }
 
 .thumbnail-info.is-favorite:after, .ti.is-favorite:after {
-    content: '\e801';
+    font-family: ionicons;
+    content: '\f1e0';
 }
 
 
 .thumbnail-info.actioned:after, .ti.actioned:after {
-    content: '\e803';
+    font-family: ionicons;
+    content: '\f16e';
+    font-size: 1.1rem;
 }
 
-.thumbnail-info.actioned, .ti.actioned {
-    font-size: 7rem;
-    color: rgba(0, 109, 204, 0.2);
-    top: 64px;
-    left: 57px;
+.thumbnail-info.thumbnail-info-pinned:after, .ti.ti-pinned:after {
+    font-family: ionicons;
+    content: '\f1a6';
 }
+
+/*.thumbnail-info.actioned, .ti.actioned {*/
+    /*font-size: 7rem;*/
+    /*color: rgba(0, 109, 204, 0.2);*/
+    /*top: 64px;*/
+    /*left: 57px;*/
+/*}*/
 
 .thumbnail-108 .thumbnail-info.actioned, .thumbnail-108 .ti.actioned {
     /*left: 25px;*/
@@ -1780,9 +1789,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     top: 57px;
 }
 
-.thumbnail-info.thumbnail-info-pinned:after, .ti.ti-pinned:after {
-    content: '\e804';
-}
+
 
 .thumbnail-info.thumbnail-info-pinned, .ti.ti-pinned {
     border-radius: 29px;
