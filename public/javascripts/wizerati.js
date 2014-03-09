@@ -6215,7 +6215,10 @@ window.wizerati = {
                 _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
               }
 
-              _uiRootModel.setUIMode(_uiModeEnum.Search);
+              setTimeout(function() {
+                _uiRootModel.setUIMode(_uiModeEnum.Search);
+              }, 100);
+
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
