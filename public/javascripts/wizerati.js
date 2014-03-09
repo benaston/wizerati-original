@@ -6221,7 +6221,7 @@ window.wizerati = {
     };
 
     function uriTransformShow (uri, dto) {
-      return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&location=' + encodeURIComponent(dto.location) + '&r=' + encodeURIComponent(dto.r);
+      return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
     function init() {
