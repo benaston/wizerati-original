@@ -534,13 +534,6 @@ a.btn-primary:not(.disabled):hover {
 }
 
 @font-face {
-    font-family: glyph;
-    src: url('../../fonts/fontello.woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
     font-family: ionicons;
     src: url('../../fonts/ionicons.woff');
     font-weight: normal;
