@@ -1690,6 +1690,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .t a {
+    padding: 15px 20px 25px 30px;
     -webkit-transition: height .3s ease-in-out;
 }
 
@@ -1706,7 +1707,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 .thumbnail-219, .t-219 {
     /*padding: 1px 12px 1px 12px;*/
-    padding: 15px 20px 25px 20px;
+    /*padding: 15px 20px 25px 20px;*/
     margin: 0;
 }
 
@@ -2547,7 +2548,7 @@ figure {
 
 .t.selected {
     background: rgba(0,0,0,.1);
-    box-shadow: 0px 0 0 20px rgba(0,0,0,.1);
+    /*box-shadow: 0px 0 0 20px rgba(0,0,0,.1);*/
     border-radius: 0;
 }
 
