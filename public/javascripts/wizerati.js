@@ -1839,9 +1839,9 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
           if (_templates[uri]) {
             return options.done(_templates[uri]);
           } else {
-            setTimeout(checkCacheForTemplate, 1000);
+            setTimeout(checkCacheForTemplate, 30);
           }
-        }, 1000); /*impact on framerate is currently unknown*/
+        }, 30); /*impact on framerate is currently unknown*/
 
         return; /*critical*/
       }

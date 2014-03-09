@@ -1517,7 +1517,7 @@ body[data-ui-mode='0'] .search-panel {
 
 body[data-ui-mode='1'] .search-panel {
     box-shadow: 0px 1px 1px 0px rgba(12, 9, 23, 1);
-    transition: width .5s ease-out 2s, left .5s ease-out, box-shadow .3s ease-in-out .6s;
+    transition: width .5s ease-out 2s, left .5s ease-out, box-shadow .3s ease-in-out 6s;
 }
 
 .search-panel[data-mode='1'] {
