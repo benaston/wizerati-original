@@ -42,9 +42,9 @@
           if (_templates[uri]) {
             return options.done(_templates[uri]);
           } else {
-            setTimeout(checkCacheForTemplate, 10);
+            setTimeout(checkCacheForTemplate, 1000);
           }
-        }, 10);
+        }, 1000); /*time should be longer than the transition from greenfield to maintain framerate*/
 
         return; /*critical*/
       }

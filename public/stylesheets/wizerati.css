@@ -1509,8 +1509,10 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     height: 100%;
     width: 340px;
     vertical-align: top;
-    background: -webkit-gradient(linear, left top, right top, color-stop(86%, rgba(255, 255, 255, .95)), color-stop(93%, rgba(255, 255, 255, .95)), color-stop(100%, rgba(255, 255, 255, 0)));
+    /*background: -webkit-gradient(linear, left top, right top, color-stop(86%, rgba(255, 255, 255, .95)), color-stop(93%, rgba(255, 255, 255, .95)), color-stop(100%, rgba(255, 255, 255, 0)));*/
+    background-color: white;
     z-index: 2; /*ensure remains in-front of everything else*/
+    /*-webkit-transform: translate3d(0,0,0);*/
 }
 
 body[data-ui-mode='0'] .search-panel {
@@ -1550,10 +1552,19 @@ body[data-ui-mode='1'] .search-panel {
     position: relative;
     text-align: left;
     margin: auto;
-    top: 0;
-    background-color: white;
+    /*background-color: white;*/
     padding-bottom: 12px;
     /*box-shadow: 0px 1px 0px 0px rgba(12, 9, 23, .3); *//*color chosen to match other borders given I cannot apply a blur to this border without affecting the right hand side appearance*/
+    /*transition: top .5s ease-out;*/
+}
+
+body[data-ui-mode='0'] #search-form {
+    top: 196px;
+    /*transition: top 0s linear 0s;*/
+}
+
+body[data-ui-mode='1'] #search-form {
+    top: 0;
     transition: top .5s ease-out;
 }
 
@@ -1579,10 +1590,7 @@ body[data-ui-mode='1'] #search-form, body[data-ui-mode='0'] #search-form {
     pointer-events: auto;
 }
 
-body[data-ui-mode='0'] #search-form {
-    top: 196px;
-    transition: top 0s linear 0s;
-}
+
 
 .search-button-container .label {
     /*margin-top: 14px;*/
@@ -1767,7 +1775,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 body[data-ui-mode='1'] .result-list-panel {
     opacity: 1;
-    transition: opacity .3s ease-out 2s, margin-left .5s ease-out;
+    transition: opacity .3s ease-out .6s, margin-left .5s ease-out;
 }
 
 .result-list-panel[data-mode='1'] {

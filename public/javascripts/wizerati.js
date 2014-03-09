@@ -1839,9 +1839,9 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
           if (_templates[uri]) {
             return options.done(_templates[uri]);
           } else {
-            setTimeout(checkCacheForTemplate, 10);
+            setTimeout(checkCacheForTemplate, 1000);
           }
-        }, 10);
+        }, 1000); /*time should be longer than the transition from greenfield to maintain framerate*/
 
         return; /*critical*/
       }
@@ -6215,9 +6215,9 @@ window.wizerati = {
                 _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
               }
 
-//              setTimeout(function() {
+              setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-//              }, 1000);
+              }, 0);
 
             });
       } catch (err) {
