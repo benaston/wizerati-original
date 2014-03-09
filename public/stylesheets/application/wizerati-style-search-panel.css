@@ -83,8 +83,13 @@ body[data-ui-mode='0'] #search-form {
     position: absolute;
     /*left: 273px;*/
     /*top: 49px;*/
-    left: 271px;
-    top: 24px;
+    /*left: 271px;*/
+    /*top: 24px;*/
+    /*left: 271px;*/
+    /*top: 66px;*/
+    left: 260px;
+    top: 10px;
+
 }
 
 /* End Search Form */
@@ -93,11 +98,11 @@ body[data-ui-mode='0'] #search-form {
 
 .search-filters > :first-child {
     display: inline-block;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 
 .search-filters {
-    margin: 27px 20px 20px;
+    margin: 19px 20px 20px;
 }
 
 .search-filters {

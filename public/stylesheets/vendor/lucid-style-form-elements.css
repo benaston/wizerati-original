@@ -15,17 +15,19 @@ html input[type="search"],
 html input[type="tel"],
 html input[type="color"],
 html .uneditable-input {
-    box-shadow: 0 1px 1px -2px black;
+    /*box-shadow: 0 1px 1px -2px black;*/
     border-radius: 0;
     margin: 20px 20px 0px 20px;
     background-color: rgba(0, 0, 0, 0);
     border: none;
+
     /*border-bottom: 1px solid rgb(206, 214, 218);*/
+    border-bottom: 1px solid rgba(2, 86, 244, .1);
     display: inline-block;
     vertical-align: middle;
     outline: none;
     padding: 0;
-    width: 226px;
+    width: 221px;
     transition: border linear 0.2s;
 }
 
@@ -52,11 +54,15 @@ input[type=radio]:not(:checked) + label:hover {
     height: 35px;
 }
 
+label {
+    position: relative; /*enables absolute positioning of the focus indicator on :after*/
+}
+
 input[type="radio"]:checked + label {
     background-color: rgba(0, 109, 204, 0.95);
-    color: white;
+    /*color: white;*/
     box-shadow: 0 0 0 2px rgba(0, 109, 204, 1);
-    border: 2px solid white;
+    /*border: 2px solid white;*/
 }
 
 label.radio {
@@ -136,12 +142,13 @@ textarea:focus + .meta-info {
 }
 
 input[type="radio"]:checked:focus + label {
-    /*box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;*/
-    box-shadow: 0 0 0 2px #eee;
+    /*outline: none;*/
+    /*outline-offset: 2px;*/
+    /*box-shadow: 0 0 0 4px #eee;*/
 }
 
-input[type="radio"]:focus + label {
-    box-shadow: 0 0 1px 12px rgba(255, 255, 255, 1), 0 0 1px 14px #eee;
+input[type="radio"]:focus + .focus-indicator {
+    display: block;
 }
 
 label:focus {
@@ -149,41 +156,43 @@ label:focus {
     outline-offset: 2px;
 }
 
-html select,
-html textarea,
-html input[type="text"],
-html input[type="password"],
-html input[type="datetime"],
-html input[type="datetime-local"],
-html input[type="date"],
-html input[type="month"],
-html input[type="time"],
-html input[type="week"],
-html input[type="number"],
-html input[type="email"],
-html input[type="url"],
-html input[type="search"],
-html input[type="tel"],
-html input[type="color"],
-html .uneditable-input {
-    box-shadow: none;
-    border-radius: 0;
-    margin: 20px 20px 0px 20px;
-    background: rgba(0, 0, 0, 0);
-    border: none;
-    border-bottom: 1px solid rgba(2, 86, 244, .1);
-    display: inline-block;
-    vertical-align: middle;
-    outline: none;
-    padding: 0;
-    width: 226px;
-    transition: border linear 0.2s;
-}
+/*html select,*/
+/*html textarea,*/
+/*html input[type="text"],*/
+/*html input[type="password"],*/
+/*html input[type="datetime"],*/
+/*html input[type="datetime-local"],*/
+/*html input[type="date"],*/
+/*html input[type="month"],*/
+/*html input[type="time"],*/
+/*html input[type="week"],*/
+/*html input[type="number"],*/
+/*html input[type="email"],*/
+/*html input[type="url"],*/
+/*html input[type="search"],*/
+/*html input[type="tel"],*/
+/*html input[type="color"],*/
+/*html .uneditable-input {*/
+    /*box-shadow: none;*/
+    /*border-radius: 0;*/
+    /*margin: 20px 20px 0px 20px;*/
+    /*background: rgba(0, 0, 0, 0);*/
+    /*border: none;*/
+    /*border-bottom: 1px solid rgba(2, 86, 244, .1);*/
+    /*display: inline-block;*/
+    /*vertical-align: middle;*/
+    /*outline: none;*/
+    /*padding: 0;*/
+    /*width: 277px;*/
+    /*transition: border linear 0.2s;*/
+/*}*/
 
 
-input[type="radio"]:focus + label {
-    box-shadow: 0 0 1px 12px rgba(255, 255, 255, 1), 0 0 1px 14px #eee; /*note the fuzz of 1px here to avoid looking like a UI line*/
-}
+/*input[type="radio"]:focus + label {*/
+    /*outline: none;*/
+    /*outline-offset: 2px;*/
+    /*box-shadow: 0 0 0 4px #eee;*/
+/*}*/
 
 input[type="text"]:focus,
 input[type="email"]:focus,
@@ -202,11 +211,11 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked + label.radio {
-    border: 2px solid black;
+    /*border: 2px solid black;*/
 }
 
 input[type="radio"]:checked + label.radio-inverted {
-    border: 2px solid white;
+    /*border: 2px solid white;*/
 }
 
 label.radio {
@@ -214,7 +223,7 @@ label.radio {
     width: 80px;
     border-radius: 80px;
     line-height: 77px;
-    border: 2px solid silver;
+    /*border: 1px solid rgba(2, 86, 244, .1);*/
     text-align: center;
     display: block;
     box-sizing: border-box;
@@ -269,27 +278,49 @@ label {
 }
 input[type="radio"]:checked + label {
     background-color: rgba(0, 109, 204, 0.95);
-    color: white;
-    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px rgba(0, 109, 204, 1);
-    border: 2px solid white;
+    background-color: transparent;
+    /*color: white;*/
+    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0, 109, 204, 1);
+    /*border: 2px solid white;*/
 }
 
 input[type="radio"]:checked:focus + label {
-    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;
+    /*box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;*/
 }
 
 .search-filters input[type=radio]:not(:checked) + label:hover {
     border-color: rgba(255, 200, 0, 0.3);
 }
 
+.search-filters label:active {
+    box-shadow: 0 2px 0px 2px rgba(0, 0, 0, 0.05) inset;
+}
+
 .search-filters label {
+    /*font-size: 14px;*/
+    /*font-weight: normal;*/
+    /*line-height: 40px;*/
+    /*border: 1px solid rgba(2, 86, 244, .1);*/
+    /*border: 2px solid #eee;*/
+    /*border: 0;*/
+    /*text-align: center;*/
+    /*height: 40px;*/
+    /*width: 40px;*/
+    /*border-radius: 40px;*/
+    /*border-radius: 10px;*/
+    /*margin: 8px 21px 8px 0;*/
+
+
+    /*box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);*/
     font-size: 14px;
     font-weight: normal;
-    line-height: 40px;
-    border: 2px solid #eee;
+    line-height: 45px;
+    border: 1px solid rgba(2, 86, 244, .1);
+    border: 0;
     text-align: center;
-    height: 40px;
-    width: 40px;
-    border-radius: 40px;
-    margin: 2px;
+    height: 45px;
+    width: 45px;
+    border-radius: 5px;
+    margin: 8px 15px 8px 0;
+    color:rgba(0, 109, 204, 0.95);
 }

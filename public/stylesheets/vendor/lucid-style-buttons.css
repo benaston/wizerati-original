@@ -14,6 +14,12 @@
     transition: border-color 0.1s linear, box-shadow 0.1s linear;
 }
 
+.btn:focus {
+    outline: none;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px #eee;
+}
+
 .btn-40 ~ .label,
 .btn-50 ~ .label {
     margin-top: 7px;
@@ -95,15 +101,29 @@ a.btn:hover {
     display: inline-block;
 }
 
+/*.btn:not(.btn-rotating):enabled:focus:after,*/
+/*.btn.btn-rotating:enabled:focus + .focus-indicator:after {*/
+    /*content: ' ';*/
+    /*display: block;*/
+    /*background-color: gold;*/
+    /*width: 5px;*/
+    /*height: 5px;*/
+    /*border-radius: 5px;*/
+    /*position: absolute;*/
+/*}*/
+
 .btn:not(.btn-rotating):enabled:focus:after,
-.btn.btn-rotating:enabled:focus + .focus-indicator:after {
+.btn.btn-rotating:enabled:focus + .focus-indicator:after,
+input[type='radio']:enabled:focus + label:after {
     content: ' ';
     display: block;
-    background-color: gold;
+    background-color: rgba(2, 86, 244, .1);
     width: 5px;
     height: 5px;
     border-radius: 5px;
     position: absolute;
+    right:-5px;
+    bottom:-5px;
 }
 
 label:focus {
