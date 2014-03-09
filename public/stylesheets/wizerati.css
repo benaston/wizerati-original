@@ -1561,8 +1561,8 @@ body[data-ui-mode='0'] #search-form {
 }
 
 body[data-ui-mode='1'] #search-form {
-    top: 0;
-    transition: top .5s ease-out 3s;
+    /*top: 0;*/
+    /*transition: top .5s ease-out 3s;*/
 }
 
 form[name='search-form'] {
