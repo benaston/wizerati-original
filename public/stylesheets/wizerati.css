@@ -216,22 +216,26 @@ label:focus {
 
 .btn ~ .button-icon {
     display: inline-block;
-    font-family: 'ionicons';
+    font-family: 'helvetica-pro-light';
     position: relative;
     pointer-events: none;
-
-}
-
-.btn.btn-40 ~ .button-icon:after {
-    display: block;
-    font-size: 2rem;
-    content: '\f1da';
-    position: absolute;
-    left: -39px;
-    top: -35px;
-    pointer-events: none;
+    left: 26px;
+    top: 41px;
     color: rgba(0, 109, 204, 0.95);
+    position: absolute;
+
 }
+
+/*.btn.btn-40 ~ .button-icon:after {*/
+    /*display: block;*/
+    /*font-size: 2rem;*/
+    /*content: '\f1da';*/
+    /*position: absolute;*/
+    /*left: -39px;*/
+    /*top: -35px;*/
+    /*pointer-events: none;*/
+    /*color: rgba(0, 109, 204, 0.95);*/
+/*}*/
 
 .btn.btn-50 ~ .button-icon:after {
     display: block;
@@ -642,7 +646,7 @@ html .uneditable-input {
     vertical-align: middle;
     outline: none;
     padding: 0;
-    width: 221px;
+    width: 277px;
     transition: border linear 0.2s;
 }
 
@@ -674,9 +678,10 @@ label {
 }
 
 input[type="radio"]:checked + label {
-    background-color: rgba(0, 109, 204, 0.95);
+    /*background-color: rgba(0, 109, 204, 0.95);*/
     /*color: white;*/
-    box-shadow: 0 0 0 2px rgba(0, 109, 204, 1);
+    /*box-shadow: 0 0 0 2px rgba(0, 109, 204, 1);*/
+    text-decoration: underline;
     /*border: 2px solid white;*/
 }
 
@@ -891,13 +896,11 @@ label {
     line-height: 0px;
     visibility: hidden;
 }
-input[type="radio"]:checked + label {
-    background-color: rgba(0, 109, 204, 0.95);
-    background-color: transparent;
+/*input[type="radio"]:checked + label {*/
     /*color: white;*/
-    box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0, 109, 204, 1);
+    /*box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0, 109, 204, 1);*/
     /*border: 2px solid white;*/
-}
+/*}*/
 
 input[type="radio"]:checked:focus + label {
     /*box-shadow: 0 0 0 0px rgba(255, 255, 255, 1), 0 0 0 2px #eee;*/
@@ -912,21 +915,6 @@ input[type="radio"]:checked:focus + label {
 }
 
 .search-filters label {
-    /*font-size: 14px;*/
-    /*font-weight: normal;*/
-    /*line-height: 40px;*/
-    /*border: 1px solid rgba(2, 86, 244, .1);*/
-    /*border: 2px solid #eee;*/
-    /*border: 0;*/
-    /*text-align: center;*/
-    /*height: 40px;*/
-    /*width: 40px;*/
-    /*border-radius: 40px;*/
-    /*border-radius: 10px;*/
-    /*margin: 8px 21px 8px 0;*/
-
-
-    /*box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);*/
     font-size: 14px;
     font-weight: normal;
     line-height: 45px;
@@ -936,7 +924,7 @@ input[type="radio"]:checked:focus + label {
     height: 45px;
     width: 45px;
     border-radius: 5px;
-    margin: 8px 15px 8px 0;
+    margin: 8px 13px 8px 0;
     color:rgba(0, 109, 204, 0.95);
 }
 table {
@@ -1548,7 +1536,7 @@ body[data-ui-mode='0'] .search-panel {
     /*border-radius: 0 0 455px;*/
     /*width: 308px;*/
     width: 100%;
-    height: 269px;
+    height: 312px;
     position: relative;
     text-align: left;
     transition: top .5s ease-in-out;
@@ -1561,6 +1549,15 @@ body[data-ui-mode='0'] .search-panel {
 
 form[name='search-form'] {
     margin-left: 9px;
+}
+
+#btn-search {
+    width: 100px;
+    height: 100px !important;
+    font-size: 1.5rem;
+    font-weight: normal;
+    font-family: helvetica-pro-light;
+    line-height: 100px !important;
 }
 
 body[data-ui-mode='1'] #search-form, body[data-ui-mode='0'] #search-form {
@@ -1595,8 +1592,8 @@ body[data-ui-mode='0'] #search-form {
     /*top: 24px;*/
     /*left: 271px;*/
     /*top: 66px;*/
-    left: 260px;
-    top: 10px;
+    left: 117px;
+    top: 210px;
 
 }
 

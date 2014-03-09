@@ -139,22 +139,26 @@ label:focus {
 
 .btn ~ .button-icon {
     display: inline-block;
-    font-family: 'ionicons';
+    font-family: 'helvetica-pro-light';
     position: relative;
     pointer-events: none;
-
-}
-
-.btn.btn-40 ~ .button-icon:after {
-    display: block;
-    font-size: 2rem;
-    content: '\f1da';
-    position: absolute;
-    left: -39px;
-    top: -35px;
-    pointer-events: none;
+    left: 26px;
+    top: 41px;
     color: rgba(0, 109, 204, 0.95);
+    position: absolute;
+
 }
+
+/*.btn.btn-40 ~ .button-icon:after {*/
+    /*display: block;*/
+    /*font-size: 2rem;*/
+    /*content: '\f1da';*/
+    /*position: absolute;*/
+    /*left: -39px;*/
+    /*top: -35px;*/
+    /*pointer-events: none;*/
+    /*color: rgba(0, 109, 204, 0.95);*/
+/*}*/
 
 .btn.btn-50 ~ .button-icon:after {
     display: block;
