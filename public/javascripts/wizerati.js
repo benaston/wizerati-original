@@ -6215,9 +6215,9 @@ window.wizerati = {
                 _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
               }
 
-              setTimeout(function() {
+//              setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-              }, 1000);
+//              }, 1000);
 
             });
       } catch (err) {
