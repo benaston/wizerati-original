@@ -44,7 +44,7 @@
           } else {
             setTimeout(checkCacheForTemplate, 1000);
           }
-        }, 1000); /*time should be longer than the transition from greenfield to maintain framerate*/
+        }, 1000); /*impact on framerate is currently unknown*/
 
         return; /*critical*/
       }

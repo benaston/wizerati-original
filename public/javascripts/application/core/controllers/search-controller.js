@@ -47,7 +47,7 @@
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-              }, 0);
+              }, 1000);
 
             });
       } catch (err) {

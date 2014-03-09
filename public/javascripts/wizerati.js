@@ -1841,7 +1841,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
           } else {
             setTimeout(checkCacheForTemplate, 1000);
           }
-        }, 1000); /*time should be longer than the transition from greenfield to maintain framerate*/
+        }, 1000); /*impact on framerate is currently unknown*/
 
         return; /*critical*/
       }
@@ -6217,7 +6217,7 @@ window.wizerati = {
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-              }, 0);
+              }, 1000);
 
             });
       } catch (err) {
