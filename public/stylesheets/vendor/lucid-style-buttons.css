@@ -14,11 +14,11 @@
     transition: border-color 0.1s linear, box-shadow 0.1s linear;
 }
 
-.btn:focus {
-    outline: none;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px #eee;
-}
+/*.btn:focus {*/
+    /*outline: none;*/
+    /*outline-offset: 2px;*/
+    /*box-shadow: 0 0 0 4px #eee;*/
+/*}*/
 
 .btn-40 ~ .label,
 .btn-50 ~ .label {

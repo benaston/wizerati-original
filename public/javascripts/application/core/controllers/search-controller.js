@@ -29,7 +29,7 @@
           _searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        _uiRootModel.setUIMode(_uiModeEnum.Search);
+
         _searchFormModel.setIsWaiting('true');
         _searchService.runSearch(dto.keywords,
             dto.location,
@@ -44,6 +44,8 @@
               if(!_selectedItemModel.getSelectedItemId()) {
                 _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
               }
+
+              _uiRootModel.setUIMode(_uiModeEnum.Search);
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);

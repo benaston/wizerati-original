@@ -13,6 +13,12 @@
     z-index: 1;
     box-shadow: 1px 0 1px -1px rgb(12,9,23);
     overflow: hidden;
+    opacity: 0;
+}
+
+body[data-ui-mode='1'] .result-list-panel {
+    opacity: 1;
+    transition: opacity .3s ease-in-out .6s;
 }
 
 .result-list-panel[data-mode='1'] {
