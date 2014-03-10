@@ -39,9 +39,9 @@
 
 .btn-40 {
     width: 55px;
-    border-radius: 85px !important;
-    line-height: 55px !important;
-    height: 55px !important;
+    border-radius: 85px;
+    line-height: 55px;
+    height: 55px;
     /*font-size: 2em;*/
     /*-webkit-transform: scale(.5);*/
     /*color: rgba(0, 109, 204, 0.05);*/
@@ -193,10 +193,8 @@ label:focus {
     /*border-color: rgba(12, 96, 254, 1) !important;*/
 }
 
-.btn-primary:enabled:hover,
-a.btn-primary:not(.disabled):hover {
-    /*border-color: #0059b8 #0059b8 #0059b8 !important;*/
-    /*color: white;*/
+.btn-primary:enabled:not(.checked):hover,
+a.btn-primary:not(.disabled):not(.checked):hover {
     color: rgba(0, 109, 204, 1);
 }
 

@@ -100,10 +100,12 @@
 
       that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
-      that.$el.find('.selected-item, .pinned-item').remove();
-//      setLayout();
+
+      //these values should be stored before the modification of the DOM (hence before the removal below)
       storeScrollTopValues();
       storeScrollLeftValue();
+
+      that.$el.find('.selected-item, .pinned-item').remove();
 
 //      $elSelectedItem
 //      var $prevEl = that.$currentEl || that.$el2;
@@ -179,6 +181,14 @@
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
+    function setSelectedItemId(previouslySelectedItemId) {
+      if(previouslySelectedItemId) {
+        renderPrivate({animateSelectedItem:false});
+      } else {
+        renderPrivate({animateSelectedItem:true});
+      }
+    }
+
     function setMode() {
       var otherMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
@@ -213,7 +223,10 @@
             });
       });
 
-      done();
+//      setTimeout(function(){ //temp
+        done();
+//      }, 2000);
+
     }
 
     function storeScrollTopValues() {
@@ -280,12 +293,14 @@
       _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
+      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = setSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.itemRemoval, that.render);
       $.subscribe(that.Model.eventUris.widthChange, that.render);
       $.subscribe(that.Model.eventUris.modeChange, that.render);
       $.subscribe(that.Model.eventUris.layoutChange, that.render);
+      $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_selectedItemModel.eventUris.default, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);

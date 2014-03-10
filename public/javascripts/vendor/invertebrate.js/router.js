@@ -86,7 +86,7 @@
 
     function createDtoFromForm($form) {
       var dto = {};
-      var $textfields = $form.find('input[type=text],input[type=password]');
+      var $textfields = $form.find('input[type=text],input[type=password],input[type=hidden]');
       _.each($textfields, function ($t) {
         dto[$t.name] = $t.value;
       });

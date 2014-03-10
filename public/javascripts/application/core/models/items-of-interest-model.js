@@ -11,6 +11,7 @@
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
+        _previouslySelectedItemId = null,
         _itemWidth = 0,
         _mode = _modeEnum.Default,
         _layout = {
@@ -28,7 +29,23 @@
       widthChange: 'update://itemsofinterestmodel/widthchange',
       modeChange: 'update://itemsofinterestmodel/modechange',
       layoutChange: 'update://itemsofinterestmodel/layoutchange',
-      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
+      itemRemoval: 'update://itemsofinterestmodel/itemremoval',
+      setSelectedItemId: 'update://itemsofinterestmodel/selecteditem' };
+
+    this.getSelectedItemId = function () {
+      return _itemsOfInterest.selectedItem;
+    };
+
+    this.setSelectedItemId = function (value, options) {
+      options = options || { silent:false };
+
+      _previouslySelectedItemId = _itemsOfInterest.selectedItem;
+      _itemsOfInterest.selectedItem = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.setSelectedItemId, _previouslySelectedItemId);
+      }
+    };
 
     this.getCount = function () {
       return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);

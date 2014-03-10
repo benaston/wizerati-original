@@ -17,7 +17,9 @@
 
 body[data-ui-mode='1'] .result-list-panel {
     opacity: 1;
-    transition: opacity .1s ease-out 0s, margin-left .5s ease-out;
+    -webkit-transform: translate(0,0);
+    transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;
+    /*transition: opacity .1s ease-out 0s, margin-left .5s ease-out;*/
 }
 
 .result-list-panel[data-mode='1'] {
@@ -29,11 +31,15 @@ body[data-ui-mode='1'] .result-list-panel {
 .result-list-panel[data-mode='1'] .result-list {
     opacity: 0.2;
     pointer-events: none;
-    left: -420px;
+    /*left: -420px;*/
+
+    -webkit-transform: translate(-420px,0); /*valid - todo!!!*/
+    transition: -webkit-transform .2s ease-out;
 }
 
 .search-panel[data-mode='1'] ~ .result-list-panel {
-    margin-left: 60px;
+    -webkit-transform: translate(-278px,0);
+    transition: -webkit-transform .2s ease-out;
 }
 
 /* Results */

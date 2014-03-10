@@ -68,7 +68,8 @@
       var leftP5 = 0;//10 * 5;
       var leftP6 = 0;//10 * 6;
 
-      var leftHandlePinnedItems = newWidth-7;
+//      var leftHandlePinnedItems = newWidth-7;
+      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  _itemsOfInterestView.Model.getSelectedItemCount();
@@ -78,8 +79,9 @@
         leftP4 = newWidth * (3 + selectedItemIncrement);
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
-        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-7;
-        console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s))-7;', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
+//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-7;
+        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
+        console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 
       if(_itemsOfInterestView.Model.getPinnedItemCount() === 0) {

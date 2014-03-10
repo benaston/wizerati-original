@@ -1,6 +1,6 @@
 /* Handles */
 
-.handle, .handle-search-panel {
+.handle {
     color: #333;
     text-decoration: none;
     /*transition: opacity .2s linear;*/
@@ -13,23 +13,6 @@
     cursor: pointer;
     z-index: 2;
     width: 50px;
-}
-
-.handle-search-panel {
-    position: fixed;
-    /*background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 81%, rgba(255, 255, 255, 0) 100%);*/
-}
-
-.search-panel[data-mode='0'] .handle-search-panel {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .1s linear 0;
-}
-
-.search-panel[data-mode='1'] .handle-search-panel {
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity .2s linear .2s;
 }
 
 .handle-result-list {
@@ -56,6 +39,10 @@
 }
 
 /* Handles End */
+
+.handle-pinned-items .btn {
+    color: rgba(0, 109, 204, 0.95);
+}
 
 .handle-pinned-items {
     position: absolute;

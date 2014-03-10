@@ -240,7 +240,9 @@
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(wizerati.mod('models').itemsOfInterestModel);
     mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
-    mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel);
+//    selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel
+    mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel,
+        wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

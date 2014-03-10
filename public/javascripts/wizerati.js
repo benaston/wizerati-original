@@ -2104,7 +2104,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     function createDtoFromForm($form) {
       var dto = {};
-      var $textfields = $form.find('input[type=text],input[type=password]');
+      var $textfields = $form.find('input[type=text],input[type=password],input[type=hidden]');
       _.each($textfields, function ($t) {
         dto[$t.name] = $t.value;
       });
@@ -3135,6 +3135,7 @@ window.wizerati = {
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
+        _previouslySelectedItemId = null,
         _itemWidth = 0,
         _mode = _modeEnum.Default,
         _layout = {
@@ -3152,7 +3153,23 @@ window.wizerati = {
       widthChange: 'update://itemsofinterestmodel/widthchange',
       modeChange: 'update://itemsofinterestmodel/modechange',
       layoutChange: 'update://itemsofinterestmodel/layoutchange',
-      itemRemoval: 'update://itemsofinterestmodel/itemremoval' };
+      itemRemoval: 'update://itemsofinterestmodel/itemremoval',
+      setSelectedItemId: 'update://itemsofinterestmodel/selecteditem' };
+
+    this.getSelectedItemId = function () {
+      return _itemsOfInterest.selectedItem;
+    };
+
+    this.setSelectedItemId = function (value, options) {
+      options = options || { silent:false };
+
+      _previouslySelectedItemId = _itemsOfInterest.selectedItem;
+      _itemsOfInterest.selectedItem = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.setSelectedItemId, _previouslySelectedItemId);
+      }
+    };
 
     this.getCount = function () {
       return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
@@ -4660,10 +4677,12 @@ window.wizerati = {
 
       that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
-      that.$el.find('.selected-item, .pinned-item').remove();
-//      setLayout();
+
+      //these values should be stored before the modification of the DOM (hence before the removal below)
       storeScrollTopValues();
       storeScrollLeftValue();
+
+      that.$el.find('.selected-item, .pinned-item').remove();
 
 //      $elSelectedItem
 //      var $prevEl = that.$currentEl || that.$el2;
@@ -4739,6 +4758,14 @@ window.wizerati = {
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
+    function setSelectedItemId(previouslySelectedItemId) {
+      if(previouslySelectedItemId) {
+        renderPrivate({animateSelectedItem:false});
+      } else {
+        renderPrivate({animateSelectedItem:true});
+      }
+    }
+
     function setMode() {
       var otherMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
@@ -4773,7 +4800,10 @@ window.wizerati = {
             });
       });
 
-      done();
+//      setTimeout(function(){ //temp
+        done();
+//      }, 2000);
+
     }
 
     function storeScrollTopValues() {
@@ -4840,12 +4870,14 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
+      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = setSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.itemRemoval, that.render);
       $.subscribe(that.Model.eventUris.widthChange, that.render);
       $.subscribe(that.Model.eventUris.modeChange, that.render);
       $.subscribe(that.Model.eventUris.layoutChange, that.render);
+      $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_selectedItemModel.eventUris.default, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
@@ -6421,16 +6453,17 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SelectedItemController(selectedItemModel, searchPanelModel, resultListModel) {
+  function SelectedItemController(selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.SelectedItemController)) {
-      return new app.SelectedItemController(selectedItemModel, searchPanelModel, resultListModel);
+      return new app.SelectedItemController(selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel);
     }
 
     var that = this,
         _selectedItemModel = null,
         _searchPanelModel = null,
         _resultListModel = null,
+        _itemsOfInterestModel = null,
         _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemSelectionSourceEnum = app.mod('enum').ItemSelectionSource;
@@ -6446,6 +6479,9 @@ window.wizerati = {
           return;
         }
 
+        //this has to be set before the mode change to ensure correct layout calculation
+        _itemsOfInterestModel.setSelectedItemId(dto.id, {silent:true}); //do not want to trigger repaint the items of interest here
+
         if (dto.source === _itemSelectionSourceEnum.Results) {
           _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
         } else if (dto.source === _itemSelectionSourceEnum.Favorites) {
@@ -6453,6 +6489,7 @@ window.wizerati = {
         } else {
           throw "invalid source.";
         }
+
 
         _selectedItemModel.setSelectedItemId(dto.id);
       } catch (err) {
@@ -6473,9 +6510,14 @@ window.wizerati = {
         throw 'resultListModel not supplied.';
       }
 
+      if (!itemsOfInterestModel) {
+        throw 'itemsOfInterestModel not supplied.';
+      }
+
       _selectedItemModel = selectedItemModel;
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
 
       return that;
     }
@@ -7149,7 +7191,8 @@ window.wizerati = {
       var leftP5 = 0;//10 * 5;
       var leftP6 = 0;//10 * 6;
 
-      var leftHandlePinnedItems = newWidth-7;
+//      var leftHandlePinnedItems = newWidth-7;
+      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  _itemsOfInterestView.Model.getSelectedItemCount();
@@ -7159,8 +7202,9 @@ window.wizerati = {
         leftP4 = newWidth * (3 + selectedItemIncrement);
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
-        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-7;
-        console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s))-7;', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
+//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-7;
+        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
+        console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 
       if(_itemsOfInterestView.Model.getPinnedItemCount() === 0) {
@@ -7664,7 +7708,9 @@ window.wizerati = {
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(wizerati.mod('models').itemsOfInterestModel);
     mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
-    mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel);
+//    selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel
+    mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel,
+        wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

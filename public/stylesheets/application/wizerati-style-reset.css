@@ -20,3 +20,7 @@ ol li {
     list-style: decimal inside;
     line-height: 2rem;
 }
+
+form {
+    display: inline-block;
+}
