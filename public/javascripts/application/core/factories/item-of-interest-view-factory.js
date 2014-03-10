@@ -83,7 +83,7 @@
             item.isFavoritable = _favoritesCubeModel.getFavorites()[currentCubeFace].length < 6 && !_hiddenItemsModel.isHidden(item.id);
             item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
             item.isSelected = isSelectedItem;
-            item.isPinned = !!(_itemsOfInterestModel.getItemsOfInterest().pinnedItems.find(function (i) {
+            item.isPinned = !!(_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             }));
             item.pinnedItemCount = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
