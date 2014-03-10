@@ -3,21 +3,13 @@ body[data-ui-mode='0'] .modal-container {
 }
 
 body {
-    transition: opacity .1s linear;
+    transition: opacity .1s ease-out;
 }
 
 body.hidden {
     opacity: 0;
     pointer-events: none;
-    transition: opacity .1s linear;
-}
-
-.btn {
-    /*color: rgba(0, 60, 255, 1);*/
-    /*color: rgba(12, 96, 254, 1);*/
-    /*color :white;*/
-    /*border: 1px solid rgba(2, 86, 244, 1);*/
-    /*border: 1px solid rgba(12, 96, 254, 1);*/
+    transition: opacity .1s ease-out;
 }
 
 .thumbnail, .t {

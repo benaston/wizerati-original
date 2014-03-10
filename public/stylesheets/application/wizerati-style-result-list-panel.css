@@ -9,17 +9,15 @@
     width: 480px;
     margin-left: 340px;
     vertical-align: top;
-    /*transition: margin-left .3s ease-in-out, width .3s ease-in-out;*/
     z-index: 1;
-    box-shadow: 1px 0 1px -1px rgb(12,9,23);
+    box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
     overflow: hidden;
     opacity: 0;
 }
 
 body[data-ui-mode='1'] .result-list-panel {
     opacity: 1;
-    transition: opacity .3s ease-out 6s, margin-left .5s ease-out;
-    /*transition: opacity .3s ease-out 6s;*/
+    transition: opacity .1s ease-out 0s, margin-left .5s ease-out;
 }
 
 .result-list-panel[data-mode='1'] {
@@ -44,7 +42,7 @@ body[data-ui-mode='1'] .result-list-panel {
     width: 480px; /*defining the width on the result list enables the outer container to close over the contents*/
     padding: 0;
     position: relative;
-    left:0; /*required for transition*/
+    left: 0; /*required for transition*/
     transition: left .3s ease-in-out;
 }
 
@@ -83,12 +81,13 @@ body[data-ui-mode='1'] .result-list-panel {
 
 .thumbnail-info.thumbnail-info-h3.is-unread:after, .ti.is-unread:after {
     display: inline-block;
-    width:14px;
-    height:14px;
+    width: 14px;
+    height: 14px;
     background-color: rgba(0, 109, 204, .95);
     border-radius: 14px;
     content: '';
 }
+
 .thumbnail-info.thumbnail-info-h3.is-unread, .ti.is-unread {
     display: inline-block;
 }
@@ -122,7 +121,6 @@ body[data-ui-mode='1'] .result-list-panel {
     content: '\f1e0';
 }
 
-
 .thumbnail-info.actioned:after, .ti.actioned:after {
     font-family: ionicons;
     content: '\f16e';
@@ -133,13 +131,6 @@ body[data-ui-mode='1'] .result-list-panel {
     font-family: ionicons;
     content: '\f1a6';
 }
-
-/*.thumbnail-info.actioned, .ti.actioned {*/
-    /*font-size: 7rem;*/
-    /*color: rgba(0, 109, 204, 0.2);*/
-    /*top: 64px;*/
-    /*left: 57px;*/
-/*}*/
 
 .thumbnail-108 .thumbnail-info.actioned, .thumbnail-108 .ti.actioned {
     /*left: 25px;*/
@@ -155,8 +146,6 @@ body[data-ui-mode='1'] .result-list-panel {
     top: 57px;
 }
 
-
-
 .thumbnail-info.thumbnail-info-pinned, .ti.ti-pinned {
     border-radius: 29px;
     color: rgba(51, 51, 51, .5);
@@ -164,14 +153,11 @@ body[data-ui-mode='1'] .result-list-panel {
 
 .ti.ti-pinned {
     font-size: 1.5rem;
-    /*color: rgba(0, 109, 204, 0.95);*/
     color: silver;
 }
 
 .thumbnail h3, .t h3 {
     color: black;
-    /*height: 3em;*/
-    /*overflow: hidden;*/
 }
 
 .location-and-posted {

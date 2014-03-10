@@ -10,7 +10,6 @@ body[data-ui-mode='0'] .logo-image {
     z-index: 2;
 }
 
-
 .logo-image {
     opacity: 0;
     pointer-events: none;
@@ -24,18 +23,6 @@ body[data-ui-mode='0'] .logo-image {
     text-align: center;
     width: 100%;
 }
-
-/*.logo-image:after {*/
-    /*position: absolute;*/
-    /*content: '\f30c';*/
-    /*font-family: ionicons;*/
-    /*font-size: 10rem;*/
-    /*display: inline-block;*/
-    /*top: 55px;*/
-    /*left: 10px;*/
-    /*color: rgba(0, 109, 204, .95);*/
-
-/*}*/
 
 .navbar {
     left: 30px;
