@@ -11,13 +11,19 @@
         _el = '#search-form',
         _templateName = 'search-form.html',
 //        _postRenderScriptName = 'search-form.js',
+        _renderOptimizations = {},
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
 
     this.$el = null;
     this.Model = null;
 
-    this.render = function () {
+    this.render = function (e, args) {
       var options = { done: that.bindEvents, postRenderScriptName: null };
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, args);
+        return;
+      }
 
       return app.instance.renderTemplate(that.$el,
           _templateName, that.Model, options);
@@ -46,6 +52,17 @@
 
     this.postRender = function () {
     };
+
+    function setIsVisible() {
+      if (that.Model.getIsVisible() === 'true') {
+        that.$el.removeClass('hidden');
+      } else if (that.Model.getIsVisible() === 'false') {
+        that.$el.addClass('hidden');
+      }
+      else {
+        throw 'invalid visibility state.'
+      }
+    }
 
     //We take control here in the view of changes to the view when the wait state changes (i.e. we do not leave this to the usual template rendering process).
     //We do this because we want to control the precise timings of the checks to correspond to individual revolutions of the wait animation.
@@ -82,7 +99,10 @@
 
       that.Model = model;
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
 
       return that;
     }

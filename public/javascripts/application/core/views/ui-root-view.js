@@ -51,6 +51,17 @@
       $('body').width(that.Model.getBodyWidth())
     }
 
+    function setIsVisible() {
+      if (that.Model.getIsVisible() === 'true') {
+        that.$el.removeClass('hidden');
+      } else if (that.Model.getIsVisible() === 'false') {
+        that.$el.addClass('hidden');
+      }
+      else {
+        throw 'invalid visibility state.'
+      }
+    }
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -59,9 +70,11 @@
       that.Model = model;
 
       _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
+      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
+      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
 
       that.bindEvents();
 

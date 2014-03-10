@@ -11,8 +11,9 @@
     background-color: white;
     z-index: 2; /*ensure remains in-front of everything else*/
     /*-webkit-transform: translate3d(0,0,0);*/
-    transform: translate3d(0,0,0);
-    -webkit-transform: translate3d(0,0,0);
+    /*transform: translate3d(0,0,0);*/
+    /*-webkit-transform: translate3d(0,0,0);*/
+    pointer-events: auto;
 }
 
 body[data-ui-mode='0'] .search-panel {
@@ -24,7 +25,7 @@ body[data-ui-mode='0'] .search-panel {
 
 body[data-ui-mode='1'] .search-panel {
     box-shadow: 0px 1px 1px 0px rgba(12, 9, 23, 1);
-    transition: width .5s ease-out 3s, left .5s ease-out, box-shadow .3s ease-in-out 6s;
+    transition: left .5s ease-out, box-shadow .3s ease-in-out 6s, opacity .1s linear 6s;
 }
 
 .search-panel[data-mode='1'] {
@@ -56,8 +57,21 @@ body[data-ui-mode='1'] .search-panel {
     padding-bottom: 12px;
     /*box-shadow: 0px 1px 0px 0px rgba(12, 9, 23, .3); *//*color chosen to match other borders given I cannot apply a blur to this border without affecting the right hand side appearance*/
     /*transition: top .5s ease-out;*/
-    transform: translate3d(0,0,0);
-    -webkit-transform: translate3d(0,0,0);
+    /*transform: translate3d(0, 0, 0);*/
+    /*-webkit-transform: translate3d(0, 0, 0);*/
+}
+
+body[data-ui-mode='1'] #search-form:not(.hidden),
+body[data-ui-mode='0'] #search-form:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .1s linear;
+}
+
+#search-form.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s linear;
 }
 
 body[data-ui-mode='0'] #search-form {
@@ -86,13 +100,6 @@ form[name='search-form'] {
 body[data-ui-mode='0'] #search-form {
     box-shadow: none;
 }
-
-body[data-ui-mode='1'] #search-form, body[data-ui-mode='0'] #search-form {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-
 
 .search-button-container .label {
     /*margin-top: 14px;*/

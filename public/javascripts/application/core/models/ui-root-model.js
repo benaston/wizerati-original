@@ -11,9 +11,25 @@
         _uiMode = '0',
         _modal = null,
         _bodyWidth = null,
-        _uiModeEnum = app.mod('enum').UIMode;
+        _uiModeEnum = app.mod('enum').UIMode,
+        _isVisible = 'true';
 
-    this.eventUris = { default: 'update://uirootmodel/', bodyWidthChange: 'update://uirootmodel/bodywidth'};
+    this.eventUris = { default: 'update://uirootmodel/',
+      bodyWidthChange: 'update://uirootmodel/bodywidth',
+      isVisibleChange: 'update://uirootmodel/isvisible'
+    };
+
+    this.getIsVisible = function () {
+      return _isVisible;
+    };
+
+    //useful to temporarily hiding the entire UI
+    //to mask major activity in the UI.
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+
+      $.publish(that.eventUris.isVisibleChange);
+    };
 
     this.getBodyWidth = function () {
       return _bodyWidth;

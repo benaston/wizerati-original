@@ -11,9 +11,22 @@
         _keywords = null,
         _location = null,
         _isWaiting = 'false',
-        _rate = null;
+        _rate = null,
+        _isVisible = 'true';
 
-    this.updateEventUri = 'update://SearchFormModel/';
+//    this.updateEventUri = 'update://SearchFormModel/';
+    this.eventUris = { default: 'update://searchformmodel/',
+      isVisibleChange: 'update://searchformmodel/isvisiblechange' };
+
+    this.getIsVisible = function () {
+      return _isVisible;
+    };
+
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+
+      $.publish(that.eventUris.isVisibleChange);
+    };
 
     this.getKeywords = function () {
       return _keywords;
@@ -25,7 +38,7 @@
       _keywords = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -38,7 +51,7 @@
       _location = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -51,7 +64,7 @@
       _rate = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -74,7 +87,7 @@
       _isWaiting = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 

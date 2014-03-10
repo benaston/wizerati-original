@@ -36,7 +36,8 @@
 
     mod.SearchPanelMode = {
       Default: '0',
-      Minimized: '1'
+      Minimized: '1',
+      Hidden: '2'
     };
 
     mod.ResultListMode = {

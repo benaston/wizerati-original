@@ -78,25 +78,13 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     text-shadow: 0 0 82px white;
 }
 
-/*.legal:after {*/
-/*font-family: ionicons;*/
-/*color: rgba(0, 0, 0,1);*/
-/*font-size: 4rem;*/
-/*position: relative;*/
-/*top: -14px;*/
-/*left: -79px;*/
-/*content: '\f30c';*/
-/*display: inline-block;*/
-/*z-index: -1;*/
-/*}*/
-
 .logo, .tag-line {
     position: fixed;
     width: 100%;
     margin: 0;
     opacity: 0;
     pointer-events: none;
-    transition: opacity .1s linear;
+    /*transition: opacity .1s linear;*/
     color: rgba(0, 109, 204, .95);
     z-index: 1;
     text-align: center;

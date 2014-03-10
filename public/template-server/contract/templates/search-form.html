@@ -13,6 +13,10 @@ var location = model.getLocation();
       <table>
         <tbody><tr>
           <td>
+            <input id="r250" name="r" type="radio" value="250" tabindex="1" <%= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" %>>
+              <label for="r250">250</label>
+          </td>
+            <td>
             <input id="r350" name="r" type="radio" value="350" tabindex="1" <%= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" %>>
               <!--<span class="focus-indicator"></span>-->
               <label for="r350">350</label>
@@ -34,20 +38,14 @@ var location = model.getLocation();
             <input id="r650" name="r" type="radio" value="650" tabindex="1" <%= rate ? rate === "650" ? "checked='checked'" : ""  : "" %>>
               <!--<span class="focus-indicator"></span>-->
               <label for="r650">650</label>
-
-          </td>
-          <td>
-            <input id="r750+" name="r" type="radio" value="750" tabindex="1" <%= rate ? rate === "750" ? "checked='checked'" : ""  : "" %>>
-            <!--<span class="focus-indicator"></span>-->
-            <label for="r750+">750+</label>
-
-          </td>
-          <td>
-
           </td>
         </tr>
         <tr>
           <td>
+            <input id="r300" name="r" type="radio" value="300" tabindex="1" <%= rate ? rate === "300" ? "checked='checked'" : ""  : "" %>>
+            <label for="r300">300</label>
+          </td>
+            <td>
             <input id="r400" name="r" type="radio" value="400" tabindex="1" <%= rate ? rate === "400" ? "checked='checked'" : ""  : "" %>>
             <label for="r400">400</label>
           </td>
@@ -62,9 +60,6 @@ var location = model.getLocation();
           <td>
             <input id="r700" name="r" type="radio" value="700" tabindex="1" required="required" <%= rate ? rate === "700" ? "checked='checked'" : ""  : "" %>>
             <label for="r700">700</label>
-          </td>
-          <td>
-
           </td>
         </tr>
       </tbody>

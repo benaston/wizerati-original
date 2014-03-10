@@ -3425,9 +3425,22 @@ window.wizerati = {
         _keywords = null,
         _location = null,
         _isWaiting = 'false',
-        _rate = null;
+        _rate = null,
+        _isVisible = 'true';
 
-    this.updateEventUri = 'update://SearchFormModel/';
+//    this.updateEventUri = 'update://SearchFormModel/';
+    this.eventUris = { default: 'update://searchformmodel/',
+      isVisibleChange: 'update://searchformmodel/isvisiblechange' };
+
+    this.getIsVisible = function () {
+      return _isVisible;
+    };
+
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+
+      $.publish(that.eventUris.isVisibleChange);
+    };
 
     this.getKeywords = function () {
       return _keywords;
@@ -3439,7 +3452,7 @@ window.wizerati = {
       _keywords = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -3452,7 +3465,7 @@ window.wizerati = {
       _location = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -3465,7 +3478,7 @@ window.wizerati = {
       _rate = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -3488,7 +3501,7 @@ window.wizerati = {
       _isWaiting = value;
 
       if (options.silent === false) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.default);
       }
     };
 
@@ -3744,9 +3757,25 @@ window.wizerati = {
         _uiMode = '0',
         _modal = null,
         _bodyWidth = null,
-        _uiModeEnum = app.mod('enum').UIMode;
+        _uiModeEnum = app.mod('enum').UIMode,
+        _isVisible = 'true';
 
-    this.eventUris = { default: 'update://uirootmodel/', bodyWidthChange: 'update://uirootmodel/bodywidth'};
+    this.eventUris = { default: 'update://uirootmodel/',
+      bodyWidthChange: 'update://uirootmodel/bodywidth',
+      isVisibleChange: 'update://uirootmodel/isvisible'
+    };
+
+    this.getIsVisible = function () {
+      return _isVisible;
+    };
+
+    //useful to temporarily hiding the entire UI
+    //to mask major activity in the UI.
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+
+      $.publish(that.eventUris.isVisibleChange);
+    };
 
     this.getBodyWidth = function () {
       return _bodyWidth;
@@ -5152,13 +5181,19 @@ window.wizerati = {
         _el = '#search-form',
         _templateName = 'search-form.html',
 //        _postRenderScriptName = 'search-form.js',
+        _renderOptimizations = {},
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
 
     this.$el = null;
     this.Model = null;
 
-    this.render = function () {
+    this.render = function (e, args) {
       var options = { done: that.bindEvents, postRenderScriptName: null };
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, args);
+        return;
+      }
 
       return app.instance.renderTemplate(that.$el,
           _templateName, that.Model, options);
@@ -5187,6 +5222,17 @@ window.wizerati = {
 
     this.postRender = function () {
     };
+
+    function setIsVisible() {
+      if (that.Model.getIsVisible() === 'true') {
+        that.$el.removeClass('hidden');
+      } else if (that.Model.getIsVisible() === 'false') {
+        that.$el.addClass('hidden');
+      }
+      else {
+        throw 'invalid visibility state.'
+      }
+    }
 
     //We take control here in the view of changes to the view when the wait state changes (i.e. we do not leave this to the usual template rendering process).
     //We do this because we want to control the precise timings of the checks to correspond to individual revolutions of the wait animation.
@@ -5223,7 +5269,10 @@ window.wizerati = {
 
       that.Model = model;
 
-      $.subscribe(that.Model.updateEventUri, that.render);
+      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
 
       return that;
     }
@@ -5340,6 +5389,17 @@ window.wizerati = {
       $('body').width(that.Model.getBodyWidth())
     }
 
+    function setIsVisible() {
+      if (that.Model.getIsVisible() === 'true') {
+        that.$el.removeClass('hidden');
+      } else if (that.Model.getIsVisible() === 'false') {
+        that.$el.addClass('hidden');
+      }
+      else {
+        throw 'invalid visibility state.'
+      }
+    }
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -5348,9 +5408,11 @@ window.wizerati = {
       that.Model = model;
 
       _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
+      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
+      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
 
       that.bindEvents();
 
@@ -6211,14 +6273,24 @@ window.wizerati = {
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
+
               if(!_selectedItemModel.getSelectedItemId()) {
                 _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
               }
 
+              if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
+//                _searchFormModel.setIsVisible('false'); //we hide the transition to the left
+                _uiRootModel.setIsVisible('false'); //we hide the transition to the left
+              }
+
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-              }, 1000);
+                _uiRootModel.setIsVisible('true');
+              }, 100); //wait for the hide animation to complete before yanking the search panel to the left
 
+//              setTimeout(function() {
+//              _searchFormModel.setIsVisible('true'); //show the search panel, now on the top left of the screen
+//              }, 1000);
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
@@ -7388,7 +7460,8 @@ window.wizerati = {
 
     mod.SearchPanelMode = {
       Default: '0',
-      Minimized: '1'
+      Minimized: '1',
+      Hidden: '2'
     };
 
     mod.ResultListMode = {

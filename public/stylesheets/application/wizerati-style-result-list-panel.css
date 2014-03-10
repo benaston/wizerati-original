@@ -19,6 +19,7 @@
 body[data-ui-mode='1'] .result-list-panel {
     opacity: 1;
     transition: opacity .3s ease-out 6s, margin-left .5s ease-out;
+    /*transition: opacity .3s ease-out 6s;*/
 }
 
 .result-list-panel[data-mode='1'] {
