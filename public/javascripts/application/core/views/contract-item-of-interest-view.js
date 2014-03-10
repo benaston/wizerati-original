@@ -24,8 +24,12 @@
       }
 
       if (that.Model.shouldAnimateIn) {
-        that.$el.css({ left: model.width*-1});
-        that.$el.addClass('blur');
+        that.$el.css({
+//          left: model.width*-1,
+          transition: '-webkit-transform .2s ease-out',
+          '-webkit-transform': 'translate(' + model.width*-1 + ',0)'
+        });
+//        that.$el.addClass('blur');
       }
 
       app.instance.renderTemplate(that.$el,

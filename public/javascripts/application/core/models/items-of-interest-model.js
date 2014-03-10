@@ -102,10 +102,10 @@
         return;
       }
 
-      if (_selectedItemModel.getSelectedItemId() === id) {
-        _selectedItemModel.setSelectedItemId(null, { silent: true });
-        _itemsOfInterest.selectedItem = null;
-      }
+//      if (_selectedItemModel.getSelectedItemId() === id) {
+//        _selectedItemModel.setSelectedItemId(null, { silent: true });
+//        _itemsOfInterest.selectedItem = null;
+//      }
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 

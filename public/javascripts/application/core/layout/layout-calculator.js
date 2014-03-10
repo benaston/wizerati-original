@@ -1,17 +1,17 @@
 (function (app) {
   'use strict';
 
-  function LayoutCalculator(searchPanelView, resultListView, itemsOfInterestView) {
+  function LayoutCalculator(searchPanelModel, resultListModel, itemsOfInterestModel) {
     if (!(this instanceof LayoutCalculator)) {
-      return new LayoutCalculator(searchPanelView, resultListView, itemsOfInterestView);
+      return new LayoutCalculator(searchPanelModel, resultListModel, itemsOfInterestModel);
     }
 
     var _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
-        _searchPanelView = null,
-        _resultListView = null,
-        _itemsOfInterestView = null,
+        _searchPanelModel = null,
+        _resultListModel = null,
+        _itemsOfInterestModel = null,
         _defaultWidthItemOfInterest = 400,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanelDefault = 480,
@@ -19,25 +19,25 @@
         _effectiveWidthResultListPanelMinimized = 60;
 
     this.calculate = function () {
-      var numberOfItemsOfInterest = _itemsOfInterestView.Model.getCount();
+      var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
       var newWidth = _defaultWidthItemOfInterest;
-      var mode = itemsOfInterestView.Model.getMode();
+      var mode = itemsOfInterestModel.getMode();
 
       var effectiveWidthSearchPanel = _effectiveWidthSearchPanelDefault;
-      if(_searchPanelView.Model.getMode() === _searchPanelModeEnum.Minimized) {
+      if(_searchPanelModel.getMode() === _searchPanelModeEnum.Minimized) {
         effectiveWidthSearchPanel = _effectiveWidthSearchPanelMinimized;
       }
 
       var effectiveWidthResultListPanel = _effectiveWidthResultListPanelDefault;
-      if(_resultListView.Model.getMode() === _resultListModeEnum.Minimized) {
+      if(_resultListModel.getMode() === _resultListModeEnum.Minimized) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
       var effectiveWidthPinnedItemsHandle = 0;
 
-      if(_itemsOfInterestView.Model.getPinnedItemCount() > 1
-          || (_itemsOfInterestView.Model.getSelectedItemCount() > 0
-                && _itemsOfInterestView.Model.getPinnedItemCount() === 1)) {
+      if(_itemsOfInterestModel.getPinnedItemCount() > 1
+          || (_itemsOfInterestModel.getSelectedItemCount() > 0
+                && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
         effectiveWidthPinnedItemsHandle = 60;
       }
 
@@ -55,7 +55,7 @@
           console.log('no resize required.')
         }
       } else {
-        throw "invalid itemsOfInterestView mode.";
+        throw "invalid itemsOfInterestModel mode.";
       }
 
       newWidth = Math.floor(newWidth);
@@ -71,8 +71,8 @@
 //      var leftHandlePinnedItems = newWidth-7;
       var leftHandlePinnedItems = newWidth;
 
-      if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        var selectedItemIncrement =  _itemsOfInterestView.Model.getSelectedItemCount();
+      if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
+        var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
         leftP1 = newWidth * (0 + selectedItemIncrement);
         leftP2 = newWidth * (1 + selectedItemIncrement);
         leftP3 = newWidth * (2 + selectedItemIncrement);
@@ -84,7 +84,7 @@
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 
-      if(_itemsOfInterestView.Model.getPinnedItemCount() === 0) {
+      if(_itemsOfInterestModel.getPinnedItemCount() === 0) {
         leftHandlePinnedItems = 0; /*avoid pushing out the scrollable area to the right if we have no pinned items*/
       }
 
@@ -101,21 +101,21 @@
     };
 
     function init() {
-      if (!searchPanelView) {
-        throw 'searchPanelView not supplied.';
+      if (!searchPanelModel) {
+        throw 'searchPanelModel not supplied.';
       }
 
-      if (!resultListView) {
-        throw 'resultListView not supplied.';
+      if (!resultListModel) {
+        throw 'resultListModel not supplied.';
       }
 
-      if (!itemsOfInterestView) {
-        throw 'itemsOfInterestView not supplied.';
+      if (!itemsOfInterestModel) {
+        throw 'itemsOfInterestModel not supplied.';
       }
 
-      _searchPanelView = searchPanelView;
-      _resultListView = resultListView;
-      _itemsOfInterestView = itemsOfInterestView;
+      _searchPanelModel = searchPanelModel;
+      _resultListModel = resultListModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
     }
 
     init();

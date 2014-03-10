@@ -3226,10 +3226,10 @@ window.wizerati = {
         return;
       }
 
-      if (_selectedItemModel.getSelectedItemId() === id) {
-        _selectedItemModel.setSelectedItemId(null, { silent: true });
-        _itemsOfInterest.selectedItem = null;
-      }
+//      if (_selectedItemModel.getSelectedItemId() === id) {
+//        _selectedItemModel.setSelectedItemId(null, { silent: true });
+//        _itemsOfInterest.selectedItem = null;
+//      }
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
@@ -3963,8 +3963,12 @@ window.wizerati = {
       }
 
       if (that.Model.shouldAnimateIn) {
-        that.$el.css({ left: model.width*-1});
-        that.$el.addClass('blur');
+        that.$el.css({
+//          left: model.width*-1,
+          transition: '-webkit-transform .2s ease-out',
+          '-webkit-transform': 'translate(' + model.width*-1 + ',0)'
+        });
+//        that.$el.addClass('blur');
       }
 
       app.instance.renderTemplate(that.$el,
@@ -4578,16 +4582,14 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator);
     }
 
     var that = this,
         _el = '.items-of-interest-panel',
-//        _el1 = '#items-of-interest-panel-1',
-//        _el2 = '#items-of-interest-panel-2',
         _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItem = '.selected-item',
         _elSelectedItemContainer = '.selected-item-container',
@@ -4608,6 +4610,7 @@ window.wizerati = {
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
+        _layoutCoordinator = null,
         _scrollTopValues = {},
         _scrollLeft = 0;
 
@@ -4669,9 +4672,9 @@ window.wizerati = {
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show pinned items')
+        $(_elHandlePinnedItems).find('.label').text('show comparison list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide pinned items')
+        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
       }
 
 
@@ -4704,18 +4707,23 @@ window.wizerati = {
               function addSelectedItem() {
                 $(_elSelectedItemContainer).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                $view.css({left: '0'});
+                $view.css({
+//                  left: '0',
+                  '-webkit-transform': 'translate(0,0)'
+                });
 
-                setTimeout(function () {
-                  $view.removeClass('blur');
-                }, 300); //unblur when slide from left is complete
+//                setTimeout(function () {
+//                  $view.removeClass('blur');
+//                }, 300); //unblur when slide from left is complete
 
                 $('body').scrollLeft(_scrollLeft);
+                _layoutCoordinator.layOut();
               }
             });
       } else {
         addPinnedItems(items.pinnedItems, function () {
           $('body').scrollLeft(_scrollLeft);
+          _layoutCoordinator.layOut();
         });
       }
 //
@@ -4772,9 +4780,9 @@ window.wizerati = {
 
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show pinned items')
+        $(_elHandlePinnedItems).find('.label').text('show comparison list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide pinned items')
+        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
       }
 
 
@@ -4859,6 +4867,10 @@ window.wizerati = {
         throw 'selectedItemModel not supplied';
       }
 
+      if (!layoutCoordinator) {
+        throw 'layoutCoordinator not supplied';
+      }
+
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -4866,6 +4878,7 @@ window.wizerati = {
       _favoritesCubeModel = favoritesCubeModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
+      _layoutCoordinator = layoutCoordinator;
 
       _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
@@ -6779,9 +6792,11 @@ window.wizerati = {
             item.isFavoritable = _favoritesCubeModel.getFavorites()[currentCubeFace].length < 6 && !_hiddenItemsModel.isHidden(item.id);
             item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
             item.isSelected = isSelectedItem;
-            item.isPinned = !isSelectedItem;
+            item.isPinned = !!(_itemsOfInterestModel.getItemsOfInterest().pinnedItems.find(function (i) {
+              return i === item.id;
+            }));
             item.pinnedItemCount = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.isPinnable = !_hiddenItemsModel.isHidden(item.id) && (_itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!isSelectedItem || !_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+            item.isPinnable = !_hiddenItemsModel.isHidden(item.id) && (_itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             })));
             item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_selectedItemModel.getPreviouslySelectedItemId();
@@ -7124,17 +7139,17 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function LayoutCalculator(searchPanelView, resultListView, itemsOfInterestView) {
+  function LayoutCalculator(searchPanelModel, resultListModel, itemsOfInterestModel) {
     if (!(this instanceof LayoutCalculator)) {
-      return new LayoutCalculator(searchPanelView, resultListView, itemsOfInterestView);
+      return new LayoutCalculator(searchPanelModel, resultListModel, itemsOfInterestModel);
     }
 
     var _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
-        _searchPanelView = null,
-        _resultListView = null,
-        _itemsOfInterestView = null,
+        _searchPanelModel = null,
+        _resultListModel = null,
+        _itemsOfInterestModel = null,
         _defaultWidthItemOfInterest = 400,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanelDefault = 480,
@@ -7142,25 +7157,25 @@ window.wizerati = {
         _effectiveWidthResultListPanelMinimized = 60;
 
     this.calculate = function () {
-      var numberOfItemsOfInterest = _itemsOfInterestView.Model.getCount();
+      var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
       var newWidth = _defaultWidthItemOfInterest;
-      var mode = itemsOfInterestView.Model.getMode();
+      var mode = itemsOfInterestModel.getMode();
 
       var effectiveWidthSearchPanel = _effectiveWidthSearchPanelDefault;
-      if(_searchPanelView.Model.getMode() === _searchPanelModeEnum.Minimized) {
+      if(_searchPanelModel.getMode() === _searchPanelModeEnum.Minimized) {
         effectiveWidthSearchPanel = _effectiveWidthSearchPanelMinimized;
       }
 
       var effectiveWidthResultListPanel = _effectiveWidthResultListPanelDefault;
-      if(_resultListView.Model.getMode() === _resultListModeEnum.Minimized) {
+      if(_resultListModel.getMode() === _resultListModeEnum.Minimized) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
       var effectiveWidthPinnedItemsHandle = 0;
 
-      if(_itemsOfInterestView.Model.getPinnedItemCount() > 1
-          || (_itemsOfInterestView.Model.getSelectedItemCount() > 0
-                && _itemsOfInterestView.Model.getPinnedItemCount() === 1)) {
+      if(_itemsOfInterestModel.getPinnedItemCount() > 1
+          || (_itemsOfInterestModel.getSelectedItemCount() > 0
+                && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
         effectiveWidthPinnedItemsHandle = 60;
       }
 
@@ -7178,7 +7193,7 @@ window.wizerati = {
           console.log('no resize required.')
         }
       } else {
-        throw "invalid itemsOfInterestView mode.";
+        throw "invalid itemsOfInterestModel mode.";
       }
 
       newWidth = Math.floor(newWidth);
@@ -7194,8 +7209,8 @@ window.wizerati = {
 //      var leftHandlePinnedItems = newWidth-7;
       var leftHandlePinnedItems = newWidth;
 
-      if (_itemsOfInterestView.Model.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        var selectedItemIncrement =  _itemsOfInterestView.Model.getSelectedItemCount();
+      if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
+        var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
         leftP1 = newWidth * (0 + selectedItemIncrement);
         leftP2 = newWidth * (1 + selectedItemIncrement);
         leftP3 = newWidth * (2 + selectedItemIncrement);
@@ -7207,7 +7222,7 @@ window.wizerati = {
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 
-      if(_itemsOfInterestView.Model.getPinnedItemCount() === 0) {
+      if(_itemsOfInterestModel.getPinnedItemCount() === 0) {
         leftHandlePinnedItems = 0; /*avoid pushing out the scrollable area to the right if we have no pinned items*/
       }
 
@@ -7224,21 +7239,21 @@ window.wizerati = {
     };
 
     function init() {
-      if (!searchPanelView) {
-        throw 'searchPanelView not supplied.';
+      if (!searchPanelModel) {
+        throw 'searchPanelModel not supplied.';
       }
 
-      if (!resultListView) {
-        throw 'resultListView not supplied.';
+      if (!resultListModel) {
+        throw 'resultListModel not supplied.';
       }
 
-      if (!itemsOfInterestView) {
-        throw 'itemsOfInterestView not supplied.';
+      if (!itemsOfInterestModel) {
+        throw 'itemsOfInterestModel not supplied.';
       }
 
-      _searchPanelView = searchPanelView;
-      _resultListView = resultListView;
-      _itemsOfInterestView = itemsOfInterestView;
+      _searchPanelModel = searchPanelModel;
+      _resultListModel = resultListModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
     }
 
     init();
@@ -7670,24 +7685,7 @@ window.wizerati = {
   'use strict';
 
   try {
-    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
-    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
-    //model, resultViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel
-    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
-    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
-  }
-  catch (e) {
-    throw 'problem registering views module. ' + e;
-  }
-
-}(wizerati.mod('views')));
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('views').searchPanelView, wizerati.mod('views').resultListView, wizerati.mod('views').itemsOfInterestView);
+    mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
     mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').itemsOfInterestModel, mod.layoutCalculator, wizerati.mod('models').searchPanelModel);
   }
   catch (e) {
@@ -7695,6 +7693,23 @@ window.wizerati = {
   }
 
 }(wizerati.mod('layout')));
+
+(function (mod) {
+  'use strict';
+
+  try {
+    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
+    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
+    //model, resultViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel
+    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
+  }
+  catch (e) {
+    throw 'problem registering views module. ' + e;
+  }
+
+}(wizerati.mod('views')));
 
 (function (mod) {
   'use strict';

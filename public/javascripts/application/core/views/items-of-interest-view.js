@@ -1,16 +1,14 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator);
     }
 
     var that = this,
         _el = '.items-of-interest-panel',
-//        _el1 = '#items-of-interest-panel-1',
-//        _el2 = '#items-of-interest-panel-2',
         _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItem = '.selected-item',
         _elSelectedItemContainer = '.selected-item-container',
@@ -31,6 +29,7 @@
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
+        _layoutCoordinator = null,
         _scrollTopValues = {},
         _scrollLeft = 0;
 
@@ -92,9 +91,9 @@
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show pinned items')
+        $(_elHandlePinnedItems).find('.label').text('show comparison list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide pinned items')
+        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
       }
 
 
@@ -127,18 +126,23 @@
               function addSelectedItem() {
                 $(_elSelectedItemContainer).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                $view.css({left: '0'});
+                $view.css({
+//                  left: '0',
+                  '-webkit-transform': 'translate(0,0)'
+                });
 
-                setTimeout(function () {
-                  $view.removeClass('blur');
-                }, 300); //unblur when slide from left is complete
+//                setTimeout(function () {
+//                  $view.removeClass('blur');
+//                }, 300); //unblur when slide from left is complete
 
                 $('body').scrollLeft(_scrollLeft);
+                _layoutCoordinator.layOut();
               }
             });
       } else {
         addPinnedItems(items.pinnedItems, function () {
           $('body').scrollLeft(_scrollLeft);
+          _layoutCoordinator.layOut();
         });
       }
 //
@@ -195,9 +199,9 @@
 
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show pinned items')
+        $(_elHandlePinnedItems).find('.label').text('show comparison list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide pinned items')
+        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
       }
 
 
@@ -282,6 +286,10 @@
         throw 'selectedItemModel not supplied';
       }
 
+      if (!layoutCoordinator) {
+        throw 'layoutCoordinator not supplied';
+      }
+
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -289,6 +297,7 @@
       _favoritesCubeModel = favoritesCubeModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
+      _layoutCoordinator = layoutCoordinator;
 
       _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;

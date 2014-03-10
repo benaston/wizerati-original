@@ -202,24 +202,7 @@
   'use strict';
 
   try {
-    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
-    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
-    //model, resultViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel
-    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
-    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
-  }
-  catch (e) {
-    throw 'problem registering views module. ' + e;
-  }
-
-}(wizerati.mod('views')));
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('views').searchPanelView, wizerati.mod('views').resultListView, wizerati.mod('views').itemsOfInterestView);
+    mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
     mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').itemsOfInterestModel, mod.layoutCalculator, wizerati.mod('models').searchPanelModel);
   }
   catch (e) {
@@ -227,6 +210,23 @@
   }
 
 }(wizerati.mod('layout')));
+
+(function (mod) {
+  'use strict';
+
+  try {
+    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
+    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
+    //model, resultViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel
+    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
+  }
+  catch (e) {
+    throw 'problem registering views module. ' + e;
+  }
+
+}(wizerati.mod('views')));
 
 (function (mod) {
   'use strict';
