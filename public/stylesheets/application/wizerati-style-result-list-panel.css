@@ -17,6 +17,15 @@
     opacity: 0;
 }
 
+/*iphone*/
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 568px) {
+    .result-list-panel {
+        width: 245px;
+    }
+}
+
 body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .result-list-panel {
     transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;
 }
@@ -65,7 +74,7 @@ body[data-ui-mode='1'] .result-list-panel {
 /* Results */
 
 .result-list {
-    width: 480px; /*defining the width on the result list enables the outer container to close over the contents*/
+    width: 100%;
     padding: 0;
     position: relative;
     left: 0; /*required for transition*/

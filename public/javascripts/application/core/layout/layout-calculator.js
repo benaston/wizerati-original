@@ -12,7 +12,7 @@
         _searchPanelModel = null,
         _resultListModel = null,
         _itemsOfInterestModel = null,
-        _defaultWidthItemOfInterest = 400,
+        _defaultWidthItemOfInterest = 340,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanelDefault = 480,
         _effectiveWidthSearchPanelMinimized = 74,
@@ -43,7 +43,8 @@
       }
 
       var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
-      var viewPortWidth = window.innerWidth;
+      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices typically don't have innerWidth*/
+      /*todo: if width less than certain value, assume phone and set a public property somewhere so that phone-like behavior can be used*/
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
