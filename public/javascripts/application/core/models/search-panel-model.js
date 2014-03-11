@@ -17,14 +17,18 @@
       return _mode || _searchPanelModeEnum.Default;
     };
 
-    this.setMode = function (value) {
+    this.setMode = function (value, options) {
       if(_mode === value) {
         return;
       }
 
+      options = options || {silent:false};
+
       _mode = value;
 
-      $.publish(that.eventUris.default);
+      if(!options.silent) {
+        $.publish(that.eventUris.default);
+      }
     };
 
     function init() {

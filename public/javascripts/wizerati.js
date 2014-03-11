@@ -3552,14 +3552,18 @@ window.wizerati = {
       return _mode || _searchPanelModeEnum.Default;
     };
 
-    this.setMode = function (value) {
+    this.setMode = function (value, options) {
       if(_mode === value) {
         return;
       }
 
+      options = options || {silent:false};
+
       _mode = value;
 
-      $.publish(that.eventUris.default);
+      if(!options.silent) {
+        $.publish(that.eventUris.default);
+      }
     };
 
     function init() {
@@ -6282,23 +6286,25 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, selectedItemModel) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, selectedItemModel, searchPanelModel) {
 
     if (!(this instanceof app.SearchController)) {
       return new app.SearchController(uiRootModel,
           searchFormModel,
           searchService,
-          resultListModel, guidFactory, selectedItemModel);
+          resultListModel, guidFactory, selectedItemModel, searchPanelModel);
     }
 
     var that = this,
         _uiModeEnum = wizerati.mod('enum').UIMode,
+        _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
         _uiRootModel = null,
         _searchFormModel = null,
         _searchService = null,
         _resultListModel = null,
         _guidFactory = null,
-        _selectedItemModel = null;
+        _selectedItemModel = null,
+        _searchPanelModel = null;
 
     this.urlTransforms = {};
 
@@ -6334,8 +6340,9 @@ window.wizerati = {
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
+                _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:false});
                 _uiRootModel.setIsVisible('true');
-              }, 100); //wait for the hide animation to complete before yanking the search panel to the left
+              }, 300); //wait for the hide animation to complete before yanking the search panel to the left
 
 //              setTimeout(function() {
 //              _searchFormModel.setIsVisible('true'); //show the search panel, now on the top left of the screen
@@ -6375,12 +6382,17 @@ window.wizerati = {
         throw 'selectedItemModel not supplied.';
       }
 
+      if (!searchPanelModel) {
+        throw 'searchPanelModel not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
       _resultListModel = resultListModel;
       _guidFactory = guidFactory;
       _selectedItemModel = selectedItemModel;
+      _searchPanelModel = searchPanelModel;
 
       that.urlTransforms['/search'] = uriTransformShow;
 
@@ -7726,7 +7738,7 @@ window.wizerati = {
     mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(wizerati.mod('models').itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(wizerati.mod('models').itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel);
+    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
 //    selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel
     mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel,

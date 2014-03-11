@@ -238,7 +238,7 @@
     mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(wizerati.mod('models').itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(wizerati.mod('models').itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel);
+    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
 //    selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel
     mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel,
