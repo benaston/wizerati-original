@@ -31,19 +31,20 @@ body[data-ui-mode='0'] .logo-image {
 .logo-image2 {
     opacity: 1;
     pointer-events: none;
-    margin: auto;
     font-family: ionicons;
     color: rgba(255,255,255,.2);
     text-align: center;
     width: 100%;
     text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+    padding: 0;
+    margin-left: -367px;
 }
 
 .logo-image2:after {
     display: inline-block;
     content: '\f30c';
-    font-size: 37rem;
-    line-height: 30rem;
+    font-size: 77rem;
+    line-height: 48rem;
     position: absolute;
 }
 
