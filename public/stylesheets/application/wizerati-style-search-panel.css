@@ -65,7 +65,7 @@ body[data-ui-mode='0'] #search-form:not(.hidden) {
 }
 
 body[data-ui-mode='0'] #search-form {
-    top: 156px;
+    top: 136px;
 }
 
 form[name='search-form'] {

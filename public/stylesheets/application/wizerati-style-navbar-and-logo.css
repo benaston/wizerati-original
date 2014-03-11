@@ -52,7 +52,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 .legal {
     position: relative;
-    left: 30px;
+    left: 20px;
     color: slategray;
     text-shadow: 0 0 82px white;
 }
@@ -79,12 +79,12 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .logo {
-    top: 50px;
+    top: 30px;
 }
 
 .tag-line {
     font-size: .8rem;
-    top: 89px;
+    top: 59px;
 }
 
 /* End Logo */
