@@ -44,8 +44,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .logo {
-    font-size: 4em;
-    font-family: proxima-nova-500;
+    font-size: 3.2em;
     margin-top: 40px;
     position: relative;
 }
