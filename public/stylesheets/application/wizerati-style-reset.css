@@ -24,3 +24,7 @@ ol li {
 form {
     display: inline-block;
 }
+
+#no-script {
+    display: none;
+}

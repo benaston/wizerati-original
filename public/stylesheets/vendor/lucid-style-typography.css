@@ -3,7 +3,6 @@
 }
 
 body {
-    /*font-family: "proxima-nova-400", Arial, sans-serif;*/
     font-family: "helvetica-pro-light", Arial, sans-serif;
     font-size: 100%;
     line-height: 134%;
@@ -14,7 +13,6 @@ body {
 h1, h2, h3, h4, h5, h6 {
     clear: both;
     -webkit-user-select: auto;
-    /*text-rendering: optimizelegibility;*/
     font-family: "helvetica-bold", Arial, sans-serif;
 }
 
@@ -24,19 +22,16 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     margin: 10px 0;
-    /*margin: 0 0 10px 0;*/
     line-height: 2.1rem;
     font-size: 1.7em;
-    /*font-family: "proxima-nova-100";*/
 }
 
 h2 {
-    margin: 10px 0;
-    line-height: 40px;
-    /*font-size: 1.1em;*/
-    font-size: .95em;
-    /*font-family: proxima-nova-300;*/
-    /*clear: both; *//*needed*/
+    color: #5F7883;
+    font-family: "helvetica-pro-light", Arial, sans-serif;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    margin: 38px 0 0 0;
     -webkit-user-select: auto;
 }
 
@@ -52,17 +47,11 @@ h3 {
     margin: 10px 0;
     line-height: 21px;
     font-size: 1em;
-    /*color: #999;*/
-    /*font-family: "proxima-nova-400";*/
-    /*font-family: "helvetica2";*/
-    /*font-weight: bold;*/
 }
 
 h4, h5, h6 {
     margin: 15px 0 0 0;
     line-height: 3rem;
-    /*font-family: "proxima-nova-400";*/
-    /*font-family: "helvetica2";*/
     font-size: .96rem;
 }
 

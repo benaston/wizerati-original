@@ -2,8 +2,8 @@
 var rate = model.getRate();
 var keywords = model.getKeywords();
 var location = model.getLocation();
-%>
-<form name="search-form" action="/search" method="GET">
+%><form name="search-form" action="/search" method="GET">
+    <h2>Search for IT contract jobs</h2>
     <div class="search-fields">
       <input id="keywords" name="keywords" <%= keywords ? "value='" + keywords + "'" : "''" %> class="field" required placeholder="your skills (e.g. ruby) and / or location" tabindex="1" autocorrect="off" autocapitalize="none" type="text" tabindex="1">
       <!--<input id="location" name="location" <%= location ? "value='" + location + "'" : "''" %> class="field" placeholder="location (e.g. london, w2)" autocorrect="off" autocapitalize="none" type="text" tabindex="1">-->

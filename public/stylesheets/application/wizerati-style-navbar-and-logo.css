@@ -11,17 +11,21 @@ body[data-ui-mode='0'] .logo-image {
 }
 
 .logo-image {
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
-    z-index: 0;
     margin: auto;
     font-family: ionicons;
-    font-size: 8.5rem;
-    color: rgba(0, 109, 204, .04);
-    position: fixed;
-    top: 457px;
+    font-size: 17rem;
+    line-height: 15rem;
+    color: rgba(255,255,255,1);
     text-align: center;
     width: 100%;
+    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+}
+
+.logo-image:after {
+    display: inline-block;
+    content: '\f30c';
 }
 
 .navbar {
