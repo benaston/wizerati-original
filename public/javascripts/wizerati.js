@@ -4672,9 +4672,9 @@ window.wizerati = {
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
       }
 
 
@@ -7153,8 +7153,9 @@ window.wizerati = {
         _defaultWidthItemOfInterest = 400,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanelDefault = 480,
-        _effectiveWidthSearchPanelMinimized = 60,
-        _effectiveWidthResultListPanelMinimized = 60;
+        _effectiveWidthSearchPanelMinimized = 74,
+        _effectiveWidthResultListPanelMinimized = 60,
+        _effectiveWidthPinnedItemsHandleDefault = 69;
 
     this.calculate = function () {
       var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
@@ -7176,7 +7177,7 @@ window.wizerati = {
       if(_itemsOfInterestModel.getPinnedItemCount() > 1
           || (_itemsOfInterestModel.getSelectedItemCount() > 0
                 && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
-        effectiveWidthPinnedItemsHandle = 60;
+        effectiveWidthPinnedItemsHandle = _effectiveWidthPinnedItemsHandleDefault;
       }
 
       var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
@@ -7206,8 +7207,8 @@ window.wizerati = {
       var leftP5 = 0;//10 * 5;
       var leftP6 = 0;//10 * 6;
 
-//      var leftHandlePinnedItems = newWidth-7;
-      var leftHandlePinnedItems = newWidth;
+      var leftHandlePinnedItems = newWidth-4; /*the 4 is to achieve even spacing for top and right (from the word "comparison")*/
+//      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
@@ -7217,8 +7218,8 @@ window.wizerati = {
         leftP4 = newWidth * (3 + selectedItemIncrement);
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
-//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-7;
-        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
+        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-4;
+//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 

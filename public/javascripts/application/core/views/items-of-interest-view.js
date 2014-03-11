@@ -91,9 +91,9 @@
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
       }
 
 

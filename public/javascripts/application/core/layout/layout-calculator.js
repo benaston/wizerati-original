@@ -15,8 +15,9 @@
         _defaultWidthItemOfInterest = 400,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanelDefault = 480,
-        _effectiveWidthSearchPanelMinimized = 60,
-        _effectiveWidthResultListPanelMinimized = 60;
+        _effectiveWidthSearchPanelMinimized = 74,
+        _effectiveWidthResultListPanelMinimized = 60,
+        _effectiveWidthPinnedItemsHandleDefault = 69;
 
     this.calculate = function () {
       var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
@@ -38,7 +39,7 @@
       if(_itemsOfInterestModel.getPinnedItemCount() > 1
           || (_itemsOfInterestModel.getSelectedItemCount() > 0
                 && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
-        effectiveWidthPinnedItemsHandle = 60;
+        effectiveWidthPinnedItemsHandle = _effectiveWidthPinnedItemsHandleDefault;
       }
 
       var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
@@ -68,8 +69,8 @@
       var leftP5 = 0;//10 * 5;
       var leftP6 = 0;//10 * 6;
 
-//      var leftHandlePinnedItems = newWidth-7;
-      var leftHandlePinnedItems = newWidth;
+      var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
+//      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
@@ -79,8 +80,8 @@
         leftP4 = newWidth * (3 + selectedItemIncrement);
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
-//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-7;
-        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
+        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-5;
+//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 
