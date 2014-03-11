@@ -4672,9 +4672,9 @@ window.wizerati = {
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show comparison list')
+        $(_elHandlePinnedItems).find('.label').text('show <span class="comparison">comparison</span> list')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
+        $(_elHandlePinnedItems).find('.label').text('hide <span class="comparison">comparison</span> list')
       }
 
 

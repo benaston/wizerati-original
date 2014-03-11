@@ -79,12 +79,12 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .logo {
-    top: 90px;
+    top: 50px;
 }
 
 .tag-line {
     font-size: .8rem;
-    top: 129px;
+    top: 89px;
 }
 
 /* End Logo */

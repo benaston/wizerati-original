@@ -40,22 +40,3 @@
 
 /* Handles End */
 
-.handle-pinned-items .btn {
-    color: rgba(0, 109, 204, 0.95);
-}
-
-.handle-pinned-items {
-    position: absolute;
-    display: inline-block;
-    top: 8px;
-    left: 0;
-    width: 50px;
-    /*padding-right: 10px;*/
-    text-align: center;
-    color: #333;
-    text-decoration: none;
-    opacity: 0;
-    cursor: pointer;
-    overflow: visible;
-    z-index: 99999; /*ensure infront of all pinned items*/
-}
