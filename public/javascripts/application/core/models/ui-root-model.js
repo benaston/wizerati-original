@@ -12,11 +12,13 @@
         _modal = null,
         _bodyWidth = null,
         _uiModeEnum = app.mod('enum').UIMode,
-        _isVisible = 'true';
+        _isVisible = 'true',
+        _areTransitionsEnabled = 'true';
 
     this.eventUris = { default: 'update://uirootmodel/',
       bodyWidthChange: 'update://uirootmodel/bodywidth',
-      isVisibleChange: 'update://uirootmodel/isvisible'
+      isVisibleChange: 'update://uirootmodel/isvisible',
+      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
     };
 
     this.getIsVisible = function () {
@@ -29,6 +31,16 @@
       _isVisible = value;
 
       $.publish(that.eventUris.isVisibleChange);
+    };
+
+    this.getAreTransitionsEnabled = function () {
+      return _areTransitionsEnabled;
+    };
+
+    this.setAreTransitionsEnabled = function (value) {
+      _areTransitionsEnabled = value;
+
+      $.publish(that.eventUris.setAreTransitionsEnabled);
     };
 
     this.getBodyWidth = function () {

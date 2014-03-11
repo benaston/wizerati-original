@@ -3779,11 +3779,13 @@ window.wizerati = {
         _modal = null,
         _bodyWidth = null,
         _uiModeEnum = app.mod('enum').UIMode,
-        _isVisible = 'true';
+        _isVisible = 'true',
+        _areTransitionsEnabled = 'true';
 
     this.eventUris = { default: 'update://uirootmodel/',
       bodyWidthChange: 'update://uirootmodel/bodywidth',
-      isVisibleChange: 'update://uirootmodel/isvisible'
+      isVisibleChange: 'update://uirootmodel/isvisible',
+      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
     };
 
     this.getIsVisible = function () {
@@ -3796,6 +3798,16 @@ window.wizerati = {
       _isVisible = value;
 
       $.publish(that.eventUris.isVisibleChange);
+    };
+
+    this.getAreTransitionsEnabled = function () {
+      return _areTransitionsEnabled;
+    };
+
+    this.setAreTransitionsEnabled = function (value) {
+      _areTransitionsEnabled = value;
+
+      $.publish(that.eventUris.setAreTransitionsEnabled);
     };
 
     this.getBodyWidth = function () {
@@ -5453,6 +5465,10 @@ window.wizerati = {
       }
     }
 
+    function setAreTransitionsEnabled() {
+        that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    }
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -5462,10 +5478,12 @@ window.wizerati = {
 
       _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
       _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = setAreTransitionsEnabled;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
       $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
+      $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
 
       that.bindEvents();
 
@@ -6336,13 +6354,17 @@ window.wizerati = {
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
 //                _searchFormModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
+                _uiRootModel.setAreTransitionsEnabled('false');
               }
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:false});
+
+                setTimeout(function() {
+                  _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
                 _uiRootModel.setIsVisible('true');
-              }, 300); //wait for the hide animation to complete before yanking the search panel to the left
+              }, 100); //wait for the hide animation to complete before yanking the search panel to the left
 
 //              setTimeout(function() {
 //              _searchFormModel.setIsVisible('true'); //show the search panel, now on the top left of the screen

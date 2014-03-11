@@ -51,13 +51,17 @@
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
 //                _searchFormModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
+                _uiRootModel.setAreTransitionsEnabled('false');
               }
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:false});
+
+                setTimeout(function() {
+                  _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
                 _uiRootModel.setIsVisible('true');
-              }, 300); //wait for the hide animation to complete before yanking the search panel to the left
+              }, 100); //wait for the hide animation to complete before yanking the search panel to the left
 
 //              setTimeout(function() {
 //              _searchFormModel.setIsVisible('true'); //show the search panel, now on the top left of the screen

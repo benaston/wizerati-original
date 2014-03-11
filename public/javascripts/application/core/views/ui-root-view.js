@@ -62,6 +62,10 @@
       }
     }
 
+    function setAreTransitionsEnabled() {
+        that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    }
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -71,10 +75,12 @@
 
       _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
       _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = setAreTransitionsEnabled;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
       $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
+      $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
 
       that.bindEvents();
 

@@ -1204,24 +1204,35 @@ body {
     opacity: 0;
 }
 
+body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .items-of-interest-panel {
+    transition: opacity .1s ease-out,  -webkit-transform .2s ease-out;
+}
+
 body[data-ui-mode='1'] .items-of-interest-panel {
     opacity: 1;
-    transition: opacity .1s ease-out;
+    /*transition: opacity .1s ease-out;*/
+    /*transition: opacity .1s ease-out,  -webkit-transform .2s ease-out;*/
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
     -webkit-transform: translate(-266px,0);
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
+}
+
+body:not(.suppress-transitions) .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
+    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
     -webkit-transform: translate(-420px,0); /*420 (result list effective width)*/
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
 }
+
+
 
 .search-panel[data-mode='1'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
     -webkit-transform: translate(-686px,0); /*420 (result list effective width) +274 (search panel effective width)*/
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 .selected-item, .pinned-item {
@@ -1233,11 +1244,19 @@ body[data-ui-mode='1'] .items-of-interest-panel {
     width: 0;
     vertical-align: top;
 
-    transition: left .5s ease-in-out .3s, -webkit-filter .2s linear;
+    /*transition: left .5s ease-in-out .3s, -webkit-filter .2s linear;*/
 }
 
-body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
-    transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;
+.selected-item, .pinned-item {
+    /*transition: left .5s ease-in-out .3s, -webkit-filter .2s linear;*/
+}
+
+body[data-items-of-interest-mode='1']:not(.suppress-transitions) .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
+    /*transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;*/
+}
+
+body:not([data-are-transitions-enabled='false']) .selected-item-content, .pinned-item-content {
+    transition: width .2s ease-out;
 }
 
 .selected-item-content, .pinned-item-content {
@@ -1245,9 +1264,7 @@ body[data-items-of-interest-mode='1'] .selected-item, body[data-items-of-interes
     overflow-y: scroll;
     height: 100%;
     background-color: white; /*should be removed if going with the blur approach*/
-
     -webkit-overflow-scrolling: touch;
-    transition: width .2s ease-in-out;
 }
 
 .selected-item {
@@ -1545,31 +1562,42 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     pointer-events: auto;
 }
 
+/*body[data-ui-mode='0']:not([data-are-transitions-enabled='false']) .search-panel {*/
+/*transition: width 0s linear 0s, opacity .1s linear;*/
+/*}*/
+
 body[data-ui-mode='0'] .search-panel {
     width: 100%;
     pointer-events: auto;
-    transition: width 0s linear 0s, opacity .1s linear;
     box-shadow: none;
+    /*transition: width 0s linear 0s, opacity .1s linear;*/
 }
 
 body[data-ui-mode='1'] .search-panel {
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
 }
 
+body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .search-panel {
+    transition: -webkit-transform .2s ease-out;
+}
+
 .search-panel[data-mode='0'] {
     opacity: 1;
     -webkit-transform: translate(0, 0);
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 .search-panel[data-mode='1'] {
     -webkit-transform: translate(-266px, 0);
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
+}
+
+body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='1'] :not(.handle-element) {
+    transition: opacity .1s ease-out .2s;
 }
 
 .search-panel[data-mode='1'] :not(.handle-element) {
     opacity: 0;
-    transition: opacity .1s ease-out .2s;
 }
 
 /* Search Form */
@@ -1634,8 +1662,10 @@ body[data-ui-mode='0'] #search-form {
 
 .search-button-container {
     position: absolute;
-    left: 118px;
-    top: 219px;
+    /*left: 118px;*/
+    top: 214px;
+    width: 100%;
+
 }
 
 /* End Search Form */
@@ -1687,13 +1717,21 @@ body[data-ui-mode='0'] #search-form {
 .search-panel[data-mode='0'] .handle-search-panel {
     opacity: 0;
     pointer-events: none;
-    transition: opacity .1s linear 0;
+    /*transition: opacity .1s linear 0;*/
+}
+
+body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='0'] .handle-search-panel {
+    transition: opacity .1s ease-out 0;
+}
+
+body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='1'] .handle-search-panel {
+    transition: opacity .2s ease-out .2s;
 }
 
 .search-panel[data-mode='1'] .handle-search-panel {
     opacity: 1;
     pointer-events: auto;
-    transition: opacity .2s linear .2s;
+    /*transition: opacity .2s linear .2s;*/
 }
 
 /* End Handle */
@@ -1806,10 +1844,14 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     opacity: 0;
 }
 
+body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .result-list-panel {
+    transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;
+}
+
 body[data-ui-mode='1'] .result-list-panel {
     opacity: 1;
     -webkit-transform: translate(0, 0);
-    transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;
+    /*transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;*/
 }
 
 .result-list-panel[data-mode='1'] .result-list {
@@ -1834,17 +1876,17 @@ body[data-ui-mode='1'] .result-list-panel {
 
 .search-panel[data-mode='1'] ~ .result-list-panel {
     -webkit-transform: translate(-266px, 0);
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] {
     -webkit-transform: translate(-420px, 0); /*420 (result list effective width)*/
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 .search-panel[data-mode='1'] ~ .result-list-panel[data-mode='1'] {
     -webkit-transform: translate(-686px, 0); /*420 (result list effective width) +274 (search panel effective width)*/
-    transition: -webkit-transform .2s ease-out;
+    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 /* Results */
