@@ -2,7 +2,6 @@
     padding: 0 !important;
     cursor: pointer;
     color: #333;
-    /*border-color: rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.45) !important;*/
     margin: 0; /*important to avoid unexpected layout*/
     font-family: 'ionicons';
     background-color: transparent;
@@ -12,6 +11,7 @@
     border: 1px solid rgba(2, 86, 244, .1);
     display: inline-block;
     transition: border-color 0.1s linear, box-shadow 0.1s linear;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /*removes dark active overlay when tapping buttons on ios*/
 }
 
 /*.btn:focus {*/
