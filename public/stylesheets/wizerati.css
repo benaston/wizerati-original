@@ -2082,7 +2082,7 @@ body[data-ui-mode='1'] .result-list-panel {
 @media only screen
 and (max-device-width: 568px) {
     .result-list-panel {
-        width: 245px;
+        width: 200px;
     }
 }
 /* Handles */
