@@ -1939,6 +1939,7 @@ body[data-ui-mode='1'] .result-list-panel {
 }
 
 .thumbnail-219, .t-219 {
+    width:100%;
     /*padding: 1px 12px 1px 12px;*/
     /*padding: 15px 20px 25px 20px;*/
     margin: 0;
