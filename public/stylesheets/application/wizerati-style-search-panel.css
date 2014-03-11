@@ -76,7 +76,7 @@ body[data-ui-mode='0'] #search-form:not(.hidden) {
 }
 
 body[data-ui-mode='0'] #search-form {
-    top: 116px;
+    top: 106px;
 }
 
 form[name='search-form'] {
