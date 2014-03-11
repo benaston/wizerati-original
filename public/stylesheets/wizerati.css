@@ -1541,12 +1541,8 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     height: 100%;
     width: 340px;
     vertical-align: top;
-    /*background: -webkit-gradient(linear, left top, right top, color-stop(86%, rgba(255, 255, 255, .95)), color-stop(93%, rgba(255, 255, 255, .95)), color-stop(100%, rgba(255, 255, 255, 0)));*/
     background-color: white;
     z-index: 2; /*ensure remains in-front of everything else*/
-    /*-webkit-transform: translate3d(0,0,0);*/
-    /*transform: translate3d(0,0,0);*/
-    /*-webkit-transform: translate3d(0,0,0);*/
     pointer-events: auto;
 }
 
@@ -1582,19 +1578,12 @@ body[data-ui-mode='1'] .search-panel {
 #search-form {
     opacity: 0;
     pointer-events: none;
-    /*border-radius: 0 0 455px;*/
     width: 340px; /* width explicitly spec'd to enable margin:auto centering on greenfield*/
-    /*width: 100%;*/
     height: 330px;
     position: relative;
     text-align: left;
     margin: auto;
-    /*background-color: white;*/
     padding-bottom: 12px;
-    /*box-shadow: 0px 1px 0px 0px rgba(12, 9, 23, .3); color chosen to match other borders given I cannot apply a blur to this border without affecting the right hand side appearance*/
-    /*transition: top .5s ease-out;*/
-    /*transform: translate3d(0, 0, 0);*/
-    /*-webkit-transform: translate3d(0, 0, 0);*/
 }
 
 body[data-ui-mode='1'] #search-form:not(.hidden),
@@ -1611,13 +1600,7 @@ body[data-ui-mode='0'] #search-form:not(.hidden) {
 }
 
 body[data-ui-mode='0'] #search-form {
-    top: 196px;
-    /*transition: top 0s linear 0s;*/
-}
-
-body[data-ui-mode='1'] #search-form {
-    /*top: 0;*/
-    /*transition: top .5s ease-out 3s;*/
+    top: 156px;
 }
 
 form[name='search-form'] {
@@ -1653,15 +1636,8 @@ body[data-ui-mode='0'] #search-form {
 
 .search-button-container {
     position: absolute;
-    /*left: 273px;*/
-    /*top: 49px;*/
-    /*left: 271px;*/
-    /*top: 24px;*/
-    /*left: 271px;*/
-    /*top: 66px;*/
     left: 118px;
     top: 219px;
-
 }
 
 /* End Search Form */
@@ -1684,6 +1660,8 @@ body[data-ui-mode='0'] #search-form {
 
 /* End Search Filters */
 
+/* Handle */
+
 .handle-search-panel {
     color: #333;
     text-decoration: none;
@@ -1704,11 +1682,6 @@ body[data-ui-mode='0'] #search-form {
     color: rgba(0, 109, 204, 0.95);
 }
 
-/*.handle-search-panel {*/
-    /*position: fixed;*/
-    /*background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 81%, rgba(255, 255, 255, 0) 100%);*/
-/*}*/
-
 .search-panel[data-mode='0'] .handle-search-panel {
     opacity: 0;
     pointer-events: none;
@@ -1720,6 +1693,8 @@ body[data-ui-mode='0'] #search-form {
     pointer-events: auto;
     transition: opacity .2s linear .2s;
 }
+
+/* End Handle */
 /* Navbar */
 
 body[data-ui-mode='0'] .navbar, body[data-ui-mode='1'] .navbar {
@@ -1801,12 +1776,12 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .logo {
-    top: 90px;
+    top: 50px;
 }
 
 .tag-line {
     font-size: .8rem;
-    top: 129px;
+    top: 89px;
 }
 
 /* End Logo */
