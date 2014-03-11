@@ -1751,6 +1751,14 @@ body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='1'] .h
 }
 
 /* End Handle */
+
+/*"narrow-screen" devices like iphone*/
+@media only screen
+and (max-device-width: 568px) {
+    .search-panel {
+        position: absolute;
+    }
+}
 /* Navbar */
 
 body[data-ui-mode='0'] .navbar, body[data-ui-mode='1'] .navbar {
