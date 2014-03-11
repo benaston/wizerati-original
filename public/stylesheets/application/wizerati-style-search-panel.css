@@ -80,6 +80,14 @@ body[data-ui-mode='0'] #search-form .search-filters {
     text-align: left;
 }
 
+h2.search-form-title {
+    display: none;
+}
+
+body[data-ui-mode='0'] .search-form-title {
+    display: block;
+}
+
 body[data-ui-mode='0'] #search-form {
     top: 106px;
     box-shadow: 0 0 100px 0px rgba(0, 0, 0, .3);
@@ -114,10 +122,13 @@ form[name='search-form'] {
 .search-button-container {
     position: absolute;
     left: 0; /*important to ensure correct placement*/
-    /*top: 224px;*/
-    top: 277px;
+    top: 224px;
     width: 100%;
 
+}
+
+body[data-ui-mode='0'] .search-button-container {
+    top: 277px;
 }
 
 /* End Search Form */
