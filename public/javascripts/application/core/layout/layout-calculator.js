@@ -13,7 +13,7 @@
         _resultListModel = null,
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 340,
-        _minWidthItemOfInterestSmallScreen = 244,
+        _minWidthItemOfInterestSmallScreen = 300,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
