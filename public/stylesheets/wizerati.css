@@ -2851,6 +2851,14 @@ body[data-ui-mode='1'] .tag-line {
     z-index: -1;
 }
 
+.modal-container {
+    white-space: nowrap;
+}
+
+*:not(.modal-container) {
+    white-space: normal;
+}
+
 
 
 

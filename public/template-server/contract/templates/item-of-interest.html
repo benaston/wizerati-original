@@ -1,5 +1,4 @@
-<% try {  %>
-<div class="<%= model.isSelected ? 'selected-item-content' : 'pinned-item-content' %> pink" style="width: <%=model.width%>px;">
+<% try {  %><div class="<%= model.isSelected ? 'selected-item-content' : 'pinned-item-content' %> pink" style="width: <%=model.width%>px;">
     <div id="top1" class="in-page-anchor-target"></div>
 
     <article class="item-of-interest-content <%=model.isHidden ? 'hidden' : '' %>">
@@ -49,8 +48,7 @@
             <hr>
             <a href="#top1" data-bypass-router="true" class="back-to-top">Back to top</a>
     </article>
-</div>
-<%
+</div><%
 } catch(e) {
 throw "template exception: item-of-interest. " + e;
 }%>

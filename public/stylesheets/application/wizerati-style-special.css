@@ -244,4 +244,14 @@ body[data-ui-mode='1'] .tag-line {
 }
 
 
+/*This prevents the inline-block layout elements from wrapping on narrow screens.*/
+.modal-container {
+    white-space: nowrap;
+}
+
+*:not(.modal-container) {
+    white-space: normal;
+}
+
+
 
