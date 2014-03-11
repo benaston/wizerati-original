@@ -12,16 +12,23 @@
         _searchPanelModel = null,
         _resultListModel = null,
         _itemsOfInterestModel = null,
-        _defaultWidthItemOfInterest = 340,
+        _minWidthItemOfInterest = 340,
+        _minWidthItemOfInterestSmallScreen = 244,
         _effectiveWidthSearchPanelDefault = 340,
-        _effectiveWidthResultListPanelDefault = 480,
+        _effectiveWidthResultListPanel = 480,
+        _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,
         _effectiveWidthResultListPanelMinimized = 60,
         _effectiveWidthPinnedItemsHandleDefault = 69;
 
     this.calculate = function () {
+      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices sometimes don't have innerWidth apparently*/
+      /*todo: if width less than certain value, assume phone and set a public property somewhere so that phone-like behavior can be used*/
+      var minWidthItemOfInterestForDevice = viewPortWidth <=568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
+      var effectiveWidthResultListPanelForDevice = viewPortWidth <=568 ? _effectiveWidthResultListPanelSmallScreen : _effectiveWidthResultListPanel;
+
       var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
-      var newWidth = _defaultWidthItemOfInterest;
+      var newWidth = minWidthItemOfInterestForDevice;
       var mode = itemsOfInterestModel.getMode();
 
       var effectiveWidthSearchPanel = _effectiveWidthSearchPanelDefault;
@@ -29,7 +36,7 @@
         effectiveWidthSearchPanel = _effectiveWidthSearchPanelMinimized;
       }
 
-      var effectiveWidthResultListPanel = _effectiveWidthResultListPanelDefault;
+      var effectiveWidthResultListPanel = effectiveWidthResultListPanelForDevice;
       if(_resultListModel.getMode() === _resultListModeEnum.Minimized) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
@@ -43,14 +50,13 @@
       }
 
       var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
-      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices typically don't have innerWidth*/
-      /*todo: if width less than certain value, assume phone and set a public property somewhere so that phone-like behavior can be used*/
+
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
         console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s));', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        if ((widthTakenBySearchAndResultsAndPinnedHandle + (_defaultWidthItemOfInterest * numberOfItemsOfInterest)) < viewPortWidth) {
+        if ((widthTakenBySearchAndResultsAndPinnedHandle + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle) / numberOfItemsOfInterest;
           console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s)) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle, numberOfItemsOfInterest);
         } else {
@@ -61,7 +67,7 @@
       }
 
       newWidth = Math.floor(newWidth);
-      newWidth = newWidth >= _defaultWidthItemOfInterest ? newWidth : _defaultWidthItemOfInterest;
+      newWidth = newWidth >= minWidthItemOfInterestForDevice ? newWidth : minWidthItemOfInterestForDevice;
 
       var leftP1 = 0;//10 * 1;
       var leftP2 = 0;//10 * 2;

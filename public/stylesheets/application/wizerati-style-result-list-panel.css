@@ -17,15 +17,6 @@
     opacity: 0;
 }
 
-/*iphone*/
-@media only screen
-and (min-device-width: 320px)
-and (max-device-width: 568px) {
-    .result-list-panel {
-        width: 245px;
-    }
-}
-
 body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .result-list-panel {
     transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;
 }
@@ -236,3 +227,11 @@ body[data-ui-mode='1'] .result-list-panel {
 }
 
 /* Results End*/
+
+/*"narrow-screen" devices like iphone*/
+@media only screen
+and (max-device-width: 568px) {
+    .result-list-panel {
+        width: 245px;
+    }
+}

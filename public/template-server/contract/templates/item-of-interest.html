@@ -2,7 +2,7 @@
     <div id="top1" class="in-page-anchor-target"></div>
 
     <article class="item-of-interest-content <%=model.isHidden ? 'hidden' : '' %>">
-        <section style="float:right; margin-left:15px; margin-bottom:10px;min-width:305px;">
+        <section class="menu-and-metadata-container" style="">
         <section class="menu" ><div class="inline-block centered-text width-76"><a
             <%=(model.isFavoritable || model.isFavorite) ? 'href' : 'disabled'%>="/favorites/<%=model.isFavorite ? 'destroy' : 'create' %>?id=<%=model.id%>"
             class="btn btn-40 btn-primary <% if(!model.isFavoritable && !model.isFavorite) {%>disabled<%}%> <%=model.isFavorite ? 'is-favorite checked' : '' %> btn-favorite"
