@@ -95,7 +95,7 @@ body[data-ui-mode='0'] #search-form {
     height: 382px;
     width: 400px;
     text-align: center;
-    background: rgba(255, 255, 255, .3);
+    background: rgba(255, 255, 255, .9);
 }
 
 form[name='search-form'] {
