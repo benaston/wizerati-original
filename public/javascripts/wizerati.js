@@ -4673,8 +4673,10 @@ window.wizerati = {
 
       if(that.Model.getMode() === _modeEnum.Default) {
         $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
         $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
       }
 
 
@@ -4780,9 +4782,11 @@ window.wizerati = {
 
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show comparison list')
+        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
+        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
       }
 
 
@@ -7207,7 +7211,7 @@ window.wizerati = {
       var leftP5 = 0;//10 * 5;
       var leftP6 = 0;//10 * 6;
 
-      var leftHandlePinnedItems = newWidth-4; /*the 4 is to achieve even spacing for top and right (from the word "comparison")*/
+      var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
 //      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
@@ -7218,7 +7222,7 @@ window.wizerati = {
         leftP4 = newWidth * (3 + selectedItemIncrement);
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
-        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-4;
+        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-5;
 //        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }

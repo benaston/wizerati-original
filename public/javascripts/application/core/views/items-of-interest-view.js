@@ -92,8 +92,10 @@
 
       if(that.Model.getMode() === _modeEnum.Default) {
         $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
         $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
       }
 
 
@@ -199,9 +201,11 @@
 
 
       if(that.Model.getMode() === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').text('show comparison list')
+        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
-        $(_elHandlePinnedItems).find('.label').text('hide comparison list')
+        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
       }
 
 
