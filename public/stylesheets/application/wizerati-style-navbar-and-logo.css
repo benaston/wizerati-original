@@ -28,6 +28,25 @@ body[data-ui-mode='0'] .logo-image {
     content: '\f30c';
 }
 
+.logo-image2 {
+    opacity: 1;
+    pointer-events: none;
+    margin: auto;
+    font-family: ionicons;
+    color: rgba(255,255,255,.2);
+    text-align: center;
+    width: 100%;
+    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+}
+
+.logo-image2:after {
+    display: inline-block;
+    content: '\f30c';
+    font-size: 37rem;
+    line-height: 30rem;
+    position: absolute;
+}
+
 .navbar {
     left: 30px;
     bottom: 18px;

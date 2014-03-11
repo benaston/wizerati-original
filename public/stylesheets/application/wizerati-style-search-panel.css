@@ -95,6 +95,7 @@ body[data-ui-mode='0'] #search-form {
     height: 382px;
     width: 400px;
     text-align: center;
+    background: rgba(255, 255, 255, .3);
 }
 
 form[name='search-form'] {
@@ -103,11 +104,12 @@ form[name='search-form'] {
 
 #btn-search {
     width: 100px;
-    height: 100px !important;
+    height: 100px;
     font-size: 1.5rem;
     font-weight: normal;
     font-family: helvetica-pro-light;
-    line-height: 100px !important;
+    line-height: 100px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .search-button-container .label {

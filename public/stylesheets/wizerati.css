@@ -759,7 +759,7 @@ label:focus {
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
-    background-color: white;
+    background-color: transparent;
 }
 
 .field {
@@ -1598,6 +1598,7 @@ body[data-ui-mode='0'] #search-form {
     height: 382px;
     width: 400px;
     text-align: center;
+    background: rgba(255, 255, 255, .3);
 }
 
 form[name='search-form'] {
@@ -1606,11 +1607,12 @@ form[name='search-form'] {
 
 #btn-search {
     width: 100px;
-    height: 100px !important;
+    height: 100px;
     font-size: 1.5rem;
     font-weight: normal;
     font-family: helvetica-pro-light;
-    line-height: 100px !important;
+    line-height: 100px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .search-button-container .label {
@@ -1737,6 +1739,25 @@ body[data-ui-mode='0'] .logo-image {
 .logo-image:after {
     display: inline-block;
     content: '\f30c';
+}
+
+.logo-image2 {
+    opacity: 1;
+    pointer-events: none;
+    margin: auto;
+    font-family: ionicons;
+    color: rgba(255,255,255,.2);
+    text-align: center;
+    width: 100%;
+    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+}
+
+.logo-image2:after {
+    display: inline-block;
+    content: '\f30c';
+    font-size: 37rem;
+    line-height: 30rem;
+    position: absolute;
 }
 
 .navbar {
