@@ -5,11 +5,13 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 340px;
+    width: 100%; /*prevent the flash of styling on the homepage*/
+    /*width: 340px;*/
     vertical-align: top;
-    background-color: whitesmoke;
+    /*background-color: whitesmoke;*/
     z-index: 2; /*ensure remains in-front of everything else*/
     pointer-events: auto;
+    opacity : 0;
 }
 
 /*body[data-ui-mode='0']:not([data-are-transitions-enabled='false']) .search-panel {*/
@@ -23,21 +25,27 @@ body[data-ui-mode='0'] .search-panel {
     /*transition: width 0s linear 0s, opacity .1s linear;*/
 }
 
+body[data-ui-mode='0'][data-are-transitions-enabled='true'] .search-panel {
+    transition: none;
+}
+
 body[data-ui-mode='1'] .search-panel {
+    width: 340px;
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
 }
 
-body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .search-panel {
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] .search-panel {
     transition: -webkit-transform .2s ease-out;
 }
 
-.search-panel[data-mode='0'] {
+body[data-ui-mode='0'] .search-panel[data-mode='0'] {
     opacity: 1;
     -webkit-transform: translate(0, 0);
     /*transition: -webkit-transform .2s ease-out;*/
 }
 
-.search-panel[data-mode='1'] {
+body[data-ui-mode='1'] .search-panel[data-mode='1'] {
+    opacity: 1;
     -webkit-transform: translate(-266px, 0);
     /*transition: -webkit-transform .2s ease-out;*/
 }
@@ -52,7 +60,7 @@ body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='1'] :n
 
 /* Search Form */
 #search-form {
-    opacity: 0;
+    /*opacity: 0;*/
     pointer-events: none;
     width: 340px; /* width explicitly spec'd to enable margin:auto centering on greenfield*/
     height: 330px;
@@ -65,7 +73,7 @@ body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='1'] :n
 
 body[data-ui-mode='1'] #search-form:not(.hidden),
 body[data-ui-mode='0'] #search-form:not(.hidden) {
-    opacity: 1;
+    /*opacity: 1;*/
     pointer-events: auto;
     transition: opacity .1s linear;
 }
@@ -95,7 +103,7 @@ body[data-ui-mode='0'] #search-form {
     height: 382px;
     width: 400px;
     text-align: center;
-    background: rgba(255, 255, 255, .9);
+    background: rgba(255, 255, 255, 1);
 }
 
 form[name='search-form'] {
@@ -158,8 +166,6 @@ body[data-ui-mode='0'] .search-button-container {
 .handle-search-panel {
     color: #333;
     text-decoration: none;
-    /*transition: opacity .2s linear;*/
-    /*position: fixed;*/
     position: fixed;
     top: 0;
     right: 0;
