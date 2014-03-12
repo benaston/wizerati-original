@@ -284,6 +284,8 @@ body[data-ui-mode='1'] .tag-line {
     text-align: center;
     position: absolute;
     top: 0;
+    box-shadow: 0 0 0 20px black inset;
+    overflow: hidden;
 }
 
 .loading {
