@@ -106,13 +106,13 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 .logo, .tag-line {
     position: fixed;
     width: 100%;
-    margin: 0;
+    margin: 0 0 0 20px;
     opacity: 0;
     pointer-events: none;
     /*transition: opacity .1s linear;*/
     color: rgba(0, 109, 204, .95);
     z-index: 1;
-    text-align: center;
+    /*text-align: center;*/
     font-family: helvetica-bold;
 }
 

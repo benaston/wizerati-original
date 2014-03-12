@@ -1538,8 +1538,8 @@ body[data-ui-mode='0'] .search-form-title {
 body[data-ui-mode='0'] #search-form {
     top: 106px;
     box-shadow: 0 0 100px 0px rgba(0, 0, 0, .3);
-    border-radius: 60px;
-    height: 382px;
+    border-radius: 80px;
+    height: 400px;
     width: 400px;
     text-align: center;
     background: rgba(255, 255, 255, 1);
@@ -1761,13 +1761,13 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 .logo, .tag-line {
     position: fixed;
     width: 100%;
-    margin: 0;
+    margin: 0 0 0 20px;
     opacity: 0;
     pointer-events: none;
     /*transition: opacity .1s linear;*/
     color: rgba(0, 109, 204, .95);
     z-index: 1;
-    text-align: center;
+    /*text-align: center;*/
     font-family: helvetica-bold;
 }
 
