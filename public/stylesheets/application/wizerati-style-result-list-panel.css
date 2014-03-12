@@ -75,6 +75,7 @@ body[data-ui-mode='1'] .result-list-panel {
 .t a {
     padding: 15px 20px 25px 32px;
     -webkit-transition: height .3s ease-in-out;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .t a.hidden h3 {
