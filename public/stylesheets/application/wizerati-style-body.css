@@ -1,0 +1,14 @@
+body {
+    position: absolute;
+    width: 100%; /*width and height of 100% required to ensure modal blur covers viewport*/
+    height: 100%;
+}
+
+body {
+    background-color: whitesmoke;
+}
+
+body[data-ui-mode='-1'],
+body[data-ui-mode='0'] {
+    overflow: hidden;
+}

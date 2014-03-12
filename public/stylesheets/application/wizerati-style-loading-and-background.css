@@ -1,0 +1,34 @@
+body:not([data-ui-mode='-1']) .loading-container {
+    opacity: 0;
+    transition: opacity .1s ease-out;
+}
+
+.background-container,
+.loading-container {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+}
+
+.loading {
+    position: absolute;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 2px solid silver;
+    border-left: none;
+    border-radius: 50px;
+    top: 50%;
+    margin-top: -25px;
+    -webkit-animation-duration: 2.5s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    margin-left: -25px;
+}
+
+

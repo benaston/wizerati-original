@@ -56,12 +56,15 @@ module.exports = function (grunt) {
           'public/stylesheets/vendor/lucid-style-declarative.css',
           'public/stylesheets/vendor/lucid-style-colors.css',
 
+          'public/stylesheets/application/wizerati-style-body.css',
           'public/stylesheets/application/wizerati-style-dialogs.css',
           'public/stylesheets/application/wizerati-style-items-of-interest.css',
+          'public/stylesheets/application/wizerati-style-loading-and-background.css',
+          'public/stylesheets/application/wizerati-style-main-container.css',
+          'public/stylesheets/application/wizerati-style-modal-container.css',
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-navbar-and-logo.css',
           'public/stylesheets/application/wizerati-style-result-list-panel.css',
-          'public/stylesheets/application/wizerati-style-handles.css',
           'public/stylesheets/application/wizerati-style-cube.css',
           'public/stylesheets/application/wizerati-style-special.css'
         ],

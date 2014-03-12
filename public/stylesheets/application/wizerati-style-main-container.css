@@ -1,0 +1,10 @@
+/*The main-container concept introduced deliberately to be "helpful".*/
+body[data-ui-mode='-1'] .main-container {
+    opacity: 0;
+    transition: none;
+}
+
+body:not([data-ui-mode='-1']) .main-container {
+    opacity: 1;
+    transition: opacity .1s ease-in;
+}

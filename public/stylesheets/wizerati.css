@@ -1065,9 +1065,18 @@ body {
     height: 100%;
 }
 
+body {
+    background-color: whitesmoke;
+}
+
+body[data-ui-mode='-1'],
+body[data-ui-mode='0'] {
+    overflow: hidden;
+}
 .modal-container {
     height: 100%;
 }
+
 
 .items-of-interest-panel {
     position: relative;
@@ -1437,6 +1446,66 @@ and (max-width: 568px) {
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
+body:not([data-ui-mode='-1']) .loading-container {
+    opacity: 0;
+    transition: opacity .1s ease-out;
+}
+
+.background-container,
+.loading-container {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+}
+
+.loading {
+    position: absolute;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 2px solid silver;
+    border-left: none;
+    border-radius: 50px;
+    top: 50%;
+    margin-top: -25px;
+    -webkit-animation-duration: 2.5s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    margin-left: -25px;
+}
+
+
+
+/*The main-container concept introduced deliberately to be "helpful".*/
+body[data-ui-mode='-1'] .main-container {
+    opacity: 0;
+    transition: none;
+}
+
+body:not([data-ui-mode='-1']) .main-container {
+    opacity: 1;
+    transition: opacity .1s ease-in;
+}
+
+body[data-ui-mode='0'] .modal-container {
+    overflow: hidden; /*prevents scrollbars from being shown on greenfield state*/
+}
+
+
+
+/*This prevents the inline-block layout elements from wrapping on narrow screens.*/
+.modal-container {
+    white-space: nowrap;
+}
+
+*:not(.modal-container) {
+    white-space: normal;
+}
 /* Search Panel */
 
 .search-panel {
@@ -1536,7 +1605,13 @@ body[data-ui-mode='0'] .search-form-title {
 }
 
 body[data-ui-mode='0'] #search-form {
-    top: 106px;
+    position: absolute;
+    left: 50%;
+    top: 44%;
+    margin-left: -200px;
+    margin-top: -200px;
+
+    /*top: 106px;*/
     box-shadow: 0 0 100px 0px rgba(0, 0, 0, .3);
     border-radius: 80px;
     height: 400px;
@@ -2012,14 +2087,8 @@ body[data-ui-mode='1'] .result-list-panel {
 
 /* Results End*/
 
-/*"narrow-screen" devices like iphone*/
-@media only screen
-and (max-device-width: 568px) {
-    .result-list-panel {
-        width: 200px;
-    }
-}
-/* Handles */
+
+/*Handle start*/
 
 .handle {
     color: #333;
@@ -2059,9 +2128,15 @@ and (max-device-width: 568px) {
     transition: opacity .2s linear .2s;
 }
 
-/* Handles End */
+/* Handle end */
 
-
+/*"narrow-screen" devices like iphone*/
+@media only screen
+and (max-device-width: 568px) {
+    .result-list-panel {
+        width: 200px;
+    }
+}
 #favorites-cube {
     visibility: hidden;
     opacity: 0;
@@ -2550,45 +2625,6 @@ figure {
     display: inline-block;
     margin: 10px 6px 10px 6px;
 }
-body {
-    background-color: whitesmoke;
-}
-
-body[data-ui-mode='-1'],
-body[data-ui-mode='0'] {
-    overflow: hidden;
-}
-
-body[data-ui-mode='0'] .modal-container {
-    overflow: hidden; /*prevents scrollbars from being shown on greenfield state*/
-}
-
-/*body {*/
-/*transition: opacity .1s ease-out;*/
-/*}*/
-
-/*body.hidden {*/
-/*opacity: 0;*/
-/*pointer-events: none;*/
-/*transition: opacity .1s ease-out;*/
-/*}*/
-
-/*The main-container concept introduced deliberately to be "helpful".*/
-body[data-ui-mode='-1'] .main-container {
-    opacity: 0;
-    transition: none;
-}
-
-body:not([data-ui-mode='-1']) .main-container {
-    opacity: 1;
-    transition: opacity .1s ease-out;
-}
-
-body:not([data-ui-mode='-1']) .loading-container {
-    opacity: 0;
-    transition: opacity .1s ease-out;
-}
-
 .thumbnail, .t {
     box-sizing: border-box;
     position: relative;
@@ -2596,7 +2632,6 @@ body:not([data-ui-mode='-1']) .loading-container {
     background-size: cover;
     background-repeat: no-repeat;
     cursor: pointer;
-    /*padding: 4px;*/
     display: inline-block;
     vertical-align: top;
 }
@@ -2611,10 +2646,6 @@ body:not([data-ui-mode='-1']) .loading-container {
 
 .thumbnail-219 a, .t-219 a {
     font-size: 1rem;
-}
-
-.thumbnail-219, .t-219 {
-    /*width: 219px;*/
 }
 
 .thumbnail-108, .t-108 {
@@ -2640,72 +2671,9 @@ body:not([data-ui-mode='-1']) .loading-container {
     border-radius: 0 0 7px 0;
 }
 
-/*.thumbnail:before, .t:before {*/
-/*content: '';*/
-/*display: block;*/
-/*width: 56px;*/
-/*height: 56px;*/
-/*border-bottom: 0;*/
-/*border-right: 0;*/
-/*border-radius: 0 0 11px 0;*/
-/*position: absolute;*/
-/*bottom: -13px;*/
-/*right: -4px;*/
-/*z-index: 999;*/
-/*box-shadow: 1px 3px 0px 0px #eee;*/
-/*pointer-events: none;*/
-/*}*/
-
-.thumbnail:hover:before, .t:hover:before {
-    /*box-shadow: 1px 3px 0px 0px rgba(255, 200, 0, 0.3);*/
-}
-
-.thumbnail.selected:before, .t.selected:before {
-    /*box-shadow: 1px 5px 0px 0px rgba(0, 109, 204, 1);*/
-    /*box-shadow: 1px 5px 0px 0px rgba(12, 96, 254, 1);*/
-}
-
-/*.thumbnail:after, .t:after {*/
-/*content: '';*/
-/*display: block;*/
-/*width: 56px;*/
-/*height: 56px;*/
-/*border-top: 0;*/
-/*border-left: 0;*/
-/*border-radius: 11px 0 0 0;*/
-/*position: absolute;*/
-/*top: -4px;*/
-/*left: -4px;*/
-/*z-index: 999;*/
-/*box-shadow: -1px -3px 0px 0px #eee;*/
-/*pointer-events: none;*/
-/*}*/
-
-/*.selected a:after {*/
-/*content: '';*/
-/*display: block;*/
-/*width: 34px;*/
-/*height: 34px;*/
-/*border-top: 0;*/
-/*border-left: 0;*/
-/*position: absolute;*/
-/*top: -9px;*/
-/*right: 22px;*/
-/*z-index: 0;*/
-/*box-shadow: 15px -15px 0px 0px rgba(0,0,0,0.1);*/
-/*pointer-events: none;*/
-/*-webkit-transform: rotate(45deg);*/
-/*}*/
-
 .t.selected {
     background: rgba(0, 0, 0, .1);
-    /*box-shadow: 0px 0 0 20px rgba(0,0,0,.1);*/
     border-radius: 0;
-}
-
-.thumbnail.selected:after, .t.selected:after {
-    /*box-shadow: -1px -5px 0px 0px rgba(0, 109, 204, 1);*/
-    /*box-shadow: -1px -5px 0px 0px rgba(12, 96, 254, 1);*/
 }
 
 .thumbnail.edit:before, .t.edit:before {
@@ -2819,44 +2787,3 @@ body[data-ui-mode='1'] .logo,
 body[data-ui-mode='1'] .tag-line {
     z-index: -1;
 }
-
-/*This prevents the inline-block layout elements from wrapping on narrow screens.*/
-.modal-container {
-    white-space: nowrap;
-}
-
-*:not(.modal-container) {
-    white-space: normal;
-}
-
-.background-container,
-.loading-container {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    position: absolute;
-    top: 0;
-    box-shadow: 0 0 0 20px black inset;
-    overflow: hidden;
-}
-
-.loading {
-    position: absolute;
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    /*border: 1px solid rgba(2, 86, 244, .1);*/
-    border: 2px solid silver;
-    border-left: none;
-    border-radius: 50px;
-    top: 50%;
-    margin-top: -25px;
-    -webkit-animation-duration: 2.5s;
-    -webkit-animation-name: rotate;
-    -webkit-animation-iteration-count: 1;
-    -webkit-animation-iteration-count: infinite !important;
-    -webkit-animation-timing-function: linear !important;
-    margin-left: -25px;
-}
-
-
