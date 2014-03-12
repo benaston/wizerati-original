@@ -590,19 +590,6 @@ html .uneditable-input {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.rotate {
-    -webkit-animation-name: rotate;
-}
-
-@-webkit-keyframes rotate {
-    0% {
-        -webkit-transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
 input[type=radio]:not(:checked) + label:hover {
     border-color: rgba(255, 200, 0, 0.3);
 }
@@ -1062,6 +1049,28 @@ a:hover {
 .debug .slate {
     box-shadow: 0 0 0 2px slategray inset;
 }
+.rotate {
+    -webkit-animation-name: rotate;
+    -moz-animation-name: rotate;
+}
+
+@-webkit-keyframes rotate {
+    0% {
+        -webkit-transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 body {
     position: absolute;
     width: 100%; /*width and height of 100% required to ensure modal blur covers viewport*/
@@ -1357,7 +1366,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     font-size: 1.5rem;
 }
 
-.hidden {
+a.hidden {
     opacity: .3;
 }
 
@@ -1449,9 +1458,15 @@ and (max-width: 568px) {
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
+body[data-ui-mode='-1'] .loading-container,
+body[data-ui-mode='-1'] .background-container,
+body[data-ui-mode='0'] .background-container {
+    -webkit-filter: opacity(100%);
+    -moz-filter: opacity(100%);
+}
+
 body:not([data-ui-mode='-1']) .loading-container {
-    opacity: 0;
-    transition: opacity .1s ease-out;
+    -webkit-filter: opacity(0%);
 }
 
 .background-container,
@@ -1462,16 +1477,28 @@ body:not([data-ui-mode='-1']) .loading-container {
     position: absolute;
     top: 0;
     overflow: hidden;
-    -webkit-transform: scale(1);
-    z-index: -1; /*attempt to circumvent transform z-index bug*/
+    -webkit-transform: scale(1); /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    z-index: -1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    transition: -webkit-filter .1s ease-out;
 }
 
-body:[data-ui-mode='-1'] .loading {
+.main-container[data-is-visible='false'] ~ .background-container,
+.main-container[data-is-visible='false'] ~ .loading-container {
+    -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
+}
+
+body[data-ui-mode='-1'] .loading {
     -webkit-animation-duration: 2.5s;
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: 1;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
+
+    -moz-animation-duration: 2.5s;
+    -moz-animation-name: rotate;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
 }
 
 .loading {
@@ -1487,43 +1514,22 @@ body:[data-ui-mode='-1'] .loading {
     margin-left: -25px;
 }
 
-
 body[data-ui-mode='-1'] .background-container .background-image,
 body[data-ui-mode='0'] .background-container .background-image {
-text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
-color: rgba(255,255,255,.2);
-font-family: ionicons;
-pointer-events: none;
-display: inline-block;
-content: '\f30c';
-font-size: 77rem;
-line-height: 48rem;
-position: absolute;
-top: 50%;
-left: 50%;
-margin-left: -370px;
-margin-top: -376px;
-    /*-webkit-transform: translate3d(0,0,0);*/
+    text-shadow: 0px 0px 159px rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, .2);
+    font-family: ionicons;
+    pointer-events: none;
+    display: inline-block;
+    content: '\f30c';
+    font-size: 77rem;
+    line-height: 48rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -370px;
+    margin-top: -376px;
 }
-
-
-/*body[data-ui-mode='-1'] .background-container:after,*/
-/*body[data-ui-mode='0'] .background-container:after {*/
-    /*text-shadow: 0px 0px 159px rgba(0,0,0,0.4);*/
-    /*color: rgba(255,255,255,.2);*/
-    /*font-family: ionicons;*/
-    /*pointer-events: none;*/
-    /*display: inline-block;*/
-    /*content: '\f30c';*/
-    /*font-size: 77rem;*/
-    /*line-height: 48rem;*/
-    /*position: absolute;*/
-    /*top: 50%;*/
-    /*left: 50%;*/
-    /*margin-left: -370px;*/
-    /*margin-top: -376px;*/
-/*}*/
-
 /*The main-container concept introduced deliberately to be "helpful".*/
 
 body[data-ui-mode='-1'] .main-container {
@@ -1531,9 +1537,14 @@ body[data-ui-mode='-1'] .main-container {
     transition: none;
 }
 
-body:not([data-ui-mode='-1']) .main-container {
-    -webkit-filter: opacity(100%);
-    transition: -webkit-filter .5s ease-out;
+.main-container[data-is-visible='false'] {
+    -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
+    transition: -webkit-filter .1s ease-out;
+}
+
+body:not([data-ui-mode='-1']) .main-container[data-is-visible='true'] {
+    -webkit-filter: opacity(100%); /*we use a filter because the normal opacity transition is janky*/
+    transition: -webkit-filter .1s ease-out;
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 

@@ -14,7 +14,7 @@
       NotReady: '-1',
       GreenfieldSearch: '0',
       Search: '1',
-      SingleItem: '2'
+      SingleItem: '2' /*note: hidden is not on this list because it is useful to have hiding separate from the mode of the ui*/
     };
 
     mod.Modal = {

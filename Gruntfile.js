@@ -56,6 +56,7 @@ module.exports = function (grunt) {
           'public/stylesheets/vendor/lucid-style-declarative.css',
           'public/stylesheets/vendor/lucid-style-colors.css',
 
+          'public/stylesheets/application/wizerati-style-animation.css',
           'public/stylesheets/application/wizerati-style-body.css',
           'public/stylesheets/application/wizerati-style-dialogs.css',
           'public/stylesheets/application/wizerati-style-items-of-interest.css',

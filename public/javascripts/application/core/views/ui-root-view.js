@@ -9,6 +9,7 @@
 
     var that = this,
         _el = 'body',
+        _mainContainer = '.main-container',
         _renderOptimizations = {};
 
     this.$el = null;
@@ -45,6 +46,7 @@
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.$mainContainer = $(_mainContainer);
     };
 
     function setBodyWidth(){
@@ -52,14 +54,7 @@
     }
 
     function setIsVisible() {
-      if (that.Model.getIsVisible() === 'true') {
-        that.$el.removeClass('hidden');
-      } else if (that.Model.getIsVisible() === 'false') {
-        that.$el.addClass('hidden');
-      }
-      else {
-        throw 'invalid visibility state.'
-      }
+      that.$mainContainer.attr('data-is-visible', that.Model.getIsVisible());
     }
 
     function setAreTransitionsEnabled() {

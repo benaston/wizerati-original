@@ -5412,6 +5412,7 @@ window.wizerati = {
 
     var that = this,
         _el = 'body',
+        _mainContainer = '.main-container',
         _renderOptimizations = {};
 
     this.$el = null;
@@ -5448,6 +5449,7 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.$mainContainer = $(_mainContainer);
     };
 
     function setBodyWidth(){
@@ -5455,14 +5457,7 @@ window.wizerati = {
     }
 
     function setIsVisible() {
-      if (that.Model.getIsVisible() === 'true') {
-        that.$el.removeClass('hidden');
-      } else if (that.Model.getIsVisible() === 'false') {
-        that.$el.addClass('hidden');
-      }
-      else {
-        throw 'invalid visibility state.'
-      }
+      that.$mainContainer.attr('data-is-visible', that.Model.getIsVisible());
     }
 
     function setAreTransitionsEnabled() {
@@ -6334,18 +6329,15 @@ window.wizerati = {
           _searchFormModel.setRate(dto.r, {silent: true});
         }
 
-
         _searchFormModel.setIsWaiting('true');
         _searchService.runSearch(dto.keywords,
             dto.location,
             dto.r,
             function done(results) {
-
               _resultListModel.setResults(_.map(results, function (r) {
                 return r.id;
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-
 
               if(!_selectedItemModel.getSelectedItemId()) {
                 _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
@@ -6364,11 +6356,7 @@ window.wizerati = {
                 setTimeout(function() {
                   _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
                 _uiRootModel.setIsVisible('true');
-              }, 100); //wait for the hide animation to complete before yanking the search panel to the left
-
-//              setTimeout(function() {
-//              _searchFormModel.setIsVisible('true'); //show the search panel, now on the top left of the screen
-//              }, 1000);
+              }, 150); //wait for the hide animation to complete before yanking the search panel to the left
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
@@ -7543,7 +7531,7 @@ window.wizerati = {
       NotReady: '-1',
       GreenfieldSearch: '0',
       Search: '1',
-      SingleItem: '2'
+      SingleItem: '2' /*note: hidden is not on this list because it is useful to have hiding separate from the mode of the ui*/
     };
 
     mod.Modal = {
