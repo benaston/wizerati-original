@@ -635,12 +635,14 @@ label.radio {
     cursor: pointer;
     margin: 10px;
     -webkit-user-select: none;
+
 }
 
 label {
     margin: 0;
     cursor: pointer;
     display: block;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 button.checked, a.btn.checked {
