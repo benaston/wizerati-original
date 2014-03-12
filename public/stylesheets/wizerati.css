@@ -1459,6 +1459,8 @@ body:not([data-ui-mode='-1']) .loading-container {
     position: absolute;
     top: 0;
     overflow: hidden;
+    -webkit-transform: scale(1);
+    z-index: -1; /*attempt to circumvent transform z-index bug*/
 }
 
 body:[data-ui-mode='-1'] .loading {
@@ -1482,32 +1484,62 @@ body:[data-ui-mode='-1'] .loading {
     margin-left: -25px;
 }
 
-body[data-ui-mode='-1'] .background-container:after,
-body[data-ui-mode='0'] .background-container:after {
-    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
-    color: rgba(255,255,255,.2);
-    font-family: ionicons;
-    pointer-events: none;
-    display: inline-block;
-    content: '\f30c';
-    font-size: 77rem;
-    line-height: 48rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -370px;
-    margin-top: -376px;
+
+body[data-ui-mode='-1'] .background-container .background-image,
+body[data-ui-mode='0'] .background-container .background-image {
+text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+color: rgba(255,255,255,.2);
+font-family: ionicons;
+pointer-events: none;
+display: inline-block;
+content: '\f30c';
+font-size: 77rem;
+line-height: 48rem;
+position: absolute;
+top: 50%;
+left: 50%;
+margin-left: -370px;
+margin-top: -376px;
+    /*-webkit-transform: translate3d(0,0,0);*/
 }
+
+
+/*body[data-ui-mode='-1'] .background-container:after,*/
+/*body[data-ui-mode='0'] .background-container:after {*/
+    /*text-shadow: 0px 0px 159px rgba(0,0,0,0.4);*/
+    /*color: rgba(255,255,255,.2);*/
+    /*font-family: ionicons;*/
+    /*pointer-events: none;*/
+    /*display: inline-block;*/
+    /*content: '\f30c';*/
+    /*font-size: 77rem;*/
+    /*line-height: 48rem;*/
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*margin-left: -370px;*/
+    /*margin-top: -376px;*/
+/*}*/
 
 /*The main-container concept introduced deliberately to be "helpful".*/
 
 body[data-ui-mode='-1'] .main-container {
-    opacity: 0;
+    /*opacity: 0;*/
+    /*-webkit-transform: translate(0, -100%);*/
+    /*-webkit-transform: rotateY(-90deg);*/
+    -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
+    /*-webkit-filter: blur(160px);*/
     transition: none;
 }
 
 body:not([data-ui-mode='-1']) .main-container {
-    opacity: 1;
+    /*opacity: 1;*/
+    /*-webkit-transform: translate(0, 0);*/
+    /*-webkit-transform: rotateY(0);*/
+    -webkit-filter: opacity(100%);
+    /*-webkit-filter: blur(0);*/
+    transition: -webkit-filter .5s ease-out;
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
     /*transition: opacity .05s linear;*/
 }
 

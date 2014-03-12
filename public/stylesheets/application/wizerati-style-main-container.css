@@ -1,11 +1,21 @@
 /*The main-container concept introduced deliberately to be "helpful".*/
 
 body[data-ui-mode='-1'] .main-container {
-    opacity: 0;
+    /*opacity: 0;*/
+    /*-webkit-transform: translate(0, -100%);*/
+    /*-webkit-transform: rotateY(-90deg);*/
+    -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
+    /*-webkit-filter: blur(160px);*/
     transition: none;
 }
 
 body:not([data-ui-mode='-1']) .main-container {
-    opacity: 1;
+    /*opacity: 1;*/
+    /*-webkit-transform: translate(0, 0);*/
+    /*-webkit-transform: rotateY(0);*/
+    -webkit-filter: opacity(100%);
+    /*-webkit-filter: blur(0);*/
+    transition: -webkit-filter .5s ease-out;
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
     /*transition: opacity .05s linear;*/
 }
