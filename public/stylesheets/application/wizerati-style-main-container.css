@@ -1,9 +1,5 @@
 /*The main-container concept introduced deliberately to be "helpful".*/
 
-.main-container {
-    -webkit-backface-visibility: hidden;
-}
-
 body[data-ui-mode='-1'] .main-container {
     opacity: 0;
     transition: none;
@@ -11,5 +7,5 @@ body[data-ui-mode='-1'] .main-container {
 
 body:not([data-ui-mode='-1']) .main-container {
     opacity: 1;
-    transition: opacity .1s ease-in;
+    /*transition: opacity .05s linear;*/
 }

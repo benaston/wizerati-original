@@ -102,8 +102,6 @@ body[data-ui-mode='0'] #search-form {
     top: 44%;
     margin-left: -200px;
     margin-top: -200px;
-
-    /*top: 106px;*/
     box-shadow: 0 0 100px 0px rgba(0, 0, 0, .3);
     border-radius: 80px;
     height: 400px;

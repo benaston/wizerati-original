@@ -13,6 +13,14 @@ body:not([data-ui-mode='-1']) .loading-container {
     overflow: hidden;
 }
 
+body:[data-ui-mode='-1'] .loading {
+    -webkit-animation-duration: 2.5s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
 .loading {
     position: absolute;
     display: inline-block;
@@ -23,12 +31,22 @@ body:not([data-ui-mode='-1']) .loading-container {
     border-radius: 50px;
     top: 50%;
     margin-top: -25px;
-    -webkit-animation-duration: 2.5s;
-    -webkit-animation-name: rotate;
-    -webkit-animation-iteration-count: 1;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
     margin-left: -25px;
 }
 
-
+body[data-ui-mode='-1'] .background-container:after,
+body[data-ui-mode='0'] .background-container:after {
+    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+    color: rgba(255,255,255,.2);
+    font-family: ionicons;
+    pointer-events: none;
+    display: inline-block;
+    content: '\f30c';
+    font-size: 77rem;
+    line-height: 48rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -370px;
+    margin-top: -376px;
+}
