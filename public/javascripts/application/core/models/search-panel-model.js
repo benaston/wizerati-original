@@ -18,15 +18,15 @@
     };
 
     this.setMode = function (value, options) {
-      if(_mode === value) {
+      if (_mode === value) {
         return;
       }
 
-      options = options || {silent:false};
+      options = options || { silent: false };
 
       _mode = value;
 
-      if(!options.silent) {
+      if (!options.silent) {
         $.publish(that.eventUris.default);
       }
     };

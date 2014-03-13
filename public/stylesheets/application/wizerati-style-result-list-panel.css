@@ -224,9 +224,9 @@ body[data-ui-mode='1'] .result-list-panel {
     color: #999;
 }
 
-.selected {
-    transition: width .3s ease-in-out 0s, opacity .3s ease-in-out;
-}
+/*.selected {*/
+    /*transition: width .3s ease-in-out 0s, opacity .3s ease-in-out;*/
+/*}*/
 
 /* Results End*/
 

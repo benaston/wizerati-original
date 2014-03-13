@@ -261,6 +261,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 *[data-is-waiting='success'] .btn-success, *[data-is-waiting='primary'] .btn-primary {
+    border: 1px solid rgba(2, 86, 244, .9);
     border-left: 0;
     -webkit-animation-duration: 2s;
     -webkit-animation-name: rotate;

@@ -23,11 +23,12 @@
   };
 
   $.publish = function () {
-    try {
+    //"optimization"
+//    try {
       o.trigger.apply(o, arguments);
-    } catch (e) {
-      throw 'tinyPubSub::publish exception: ' + e;
-    }
+//    } catch (e) {
+//      throw 'tinyPubSub::publish exception: ' + e;
+//    }
   };
 
 }($));

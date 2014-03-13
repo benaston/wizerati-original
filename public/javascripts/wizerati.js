@@ -1714,11 +1714,11 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
   };
 
   $.publish = function () {
-    try {
+//    try {
       o.trigger.apply(o, arguments);
-    } catch (e) {
-      throw 'tinyPubSub::publish exception: ' + e;
-    }
+//    } catch (e) {
+//      throw 'tinyPubSub::publish exception: ' + e;
+//    }
   };
 
 }($));
@@ -3553,15 +3553,15 @@ window.wizerati = {
     };
 
     this.setMode = function (value, options) {
-      if(_mode === value) {
+      if (_mode === value) {
         return;
       }
 
-      options = options || {silent:false};
+      options = options || { silent: false };
 
       _mode = value;
 
-      if(!options.silent) {
+      if (!options.silent) {
         $.publish(that.eventUris.default);
       }
     };
@@ -3622,13 +3622,13 @@ window.wizerati = {
     }
 
     var that = this,
-        _selectedResultId = null,
+        _selectedItemId = null,
         _previouslySelectedResultId = null;
 
     this.eventUris = { default:'update://selecteditemmodel/' };
 
     this.getSelectedItemId = function () {
-      return _selectedResultId;
+      return _selectedItemId;
     };
 
     this.getPreviouslySelectedItemId = function () {
@@ -3636,13 +3636,17 @@ window.wizerati = {
     };
 
     this.setSelectedItemId = function (value, options) {
+      if(_selectedItemId === value) {
+        return;
+      }
+
       options = options || { silent: false };
 
-      _previouslySelectedResultId = _selectedResultId;
-      _selectedResultId = value;
+      _previouslySelectedResultId = _selectedItemId;
+      _selectedItemId = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.default, _selectedItemId );
       }
     };
 
@@ -4029,6 +4033,8 @@ window.wizerati = {
     this.Model = null;
 
     this.render = function () {
+      that.$el.attr('data-id', that.Model.id); //used for render optimization for when selected item changed
+
       if (that.Model.isSelected) {
         that.$el.addClass('selected');
       } else {
@@ -4618,7 +4624,6 @@ window.wizerati = {
         _elPinnedItem5 = '.pinned-item:nth-child(6)',
         _elPinnedItem6 = '.pinned-item:nth-child(7)',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _renderOptimizations = {},
         _itemOfInterestViewFactory = null,
         _selectedCubeFaceModel = null,
         _selectedItemModel = null,
@@ -4627,6 +4632,7 @@ window.wizerati = {
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
         _layoutCoordinator = null,
+        _renderOptimizations = {},
         _scrollTopValues = {},
         _scrollLeft = 0;
 
@@ -4667,16 +4673,17 @@ window.wizerati = {
     };
 
     this.render = function (e, args) {
-
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, args);
-        return;
-      }
+      setTimeout(function(){ //vain attempt to enable other stuff to render before we attempt this possibly time-consuming render
+        if (e && _renderOptimizations[e.type]) {
+          _renderOptimizations[e.type].apply(this, args);
+          return;
+        }
 
 //      var args = Array.prototype.slice.call(arguments);
 //      var options = args.length > 1 ? args[1] : {};
 //      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
-      renderPrivate({ animateSelectedItem: false, removedItemId: null });
+        renderPrivate({ animateSelectedItem: false, removedItemId: null });
+      }, 0);
     };
 
     function renderPrivate(options) {
@@ -5095,7 +5102,8 @@ window.wizerati = {
         _hiddenItemsModel = null,
         _itemsOfInterestModel = null,
         _scrollTopValue = 0,
-        _lastKnownSearchId = null;
+        _lastKnownSearchId = null,
+        _renderOptimizations = {};
 
     this.$el = null;
     this.Model = null;
@@ -5109,7 +5117,13 @@ window.wizerati = {
       }
     }
 
-    this.render = function () {
+    this.render = function (e) {
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
 //      var $prevEl = that.$currentEl || that.$el2;
       var searchId = that.Model.getSearchId();
 //      var isFreshSearch = _lastKnownSearchId !== searchId;
@@ -5151,6 +5165,12 @@ window.wizerati = {
 //        $prevEl.removeClass('ios-scroll-enable');
 //      }, 300); //This timeout must be longer than the css transition to avoid interrupting it with a flicker.
     };
+
+    function renderSetSelectedItemId(selectedItemId) {
+      $(_el).find('.t.selected').removeClass('selected');
+      var selectorNew = '.t[data-id="' + selectedItemId + '"]';
+      $(_el).find(selectorNew).addClass('selected');
+    }
 
 //        function renderResults(results, index) {
 //            index = index === undefined ? 0 : index;
@@ -5214,6 +5234,8 @@ window.wizerati = {
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+
+      _renderOptimizations[_selectedItemModel.eventUris.default] = renderSetSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
@@ -6519,7 +6541,7 @@ window.wizerati = {
         }
 
         //this has to be set before the mode change to ensure correct layout calculation
-        _itemsOfInterestModel.setSelectedItemId(dto.id, {silent:true}); //do not want to trigger repaint the items of interest here
+        _itemsOfInterestModel.setSelectedItemId(dto.id, { silent: true }); //do not want to trigger repaint the items of interest here
 
         if (dto.source === _itemSelectionSourceEnum.Results) {
           _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
@@ -6528,7 +6550,6 @@ window.wizerati = {
         } else {
           throw "invalid source.";
         }
-
 
         _selectedItemModel.setSelectedItemId(dto.id);
       } catch (err) {

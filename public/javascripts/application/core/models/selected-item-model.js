@@ -8,13 +8,13 @@
     }
 
     var that = this,
-        _selectedResultId = null,
+        _selectedItemId = null,
         _previouslySelectedResultId = null;
 
     this.eventUris = { default:'update://selecteditemmodel/' };
 
     this.getSelectedItemId = function () {
-      return _selectedResultId;
+      return _selectedItemId;
     };
 
     this.getPreviouslySelectedItemId = function () {
@@ -22,13 +22,17 @@
     };
 
     this.setSelectedItemId = function (value, options) {
+      if(_selectedItemId === value) {
+        return;
+      }
+
       options = options || { silent: false };
 
-      _previouslySelectedResultId = _selectedResultId;
-      _selectedResultId = value;
+      _previouslySelectedResultId = _selectedItemId;
+      _selectedItemId = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.default, _selectedItemId );
       }
     };
 

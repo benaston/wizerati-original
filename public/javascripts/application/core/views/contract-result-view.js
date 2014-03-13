@@ -15,6 +15,8 @@
     this.Model = null;
 
     this.render = function () {
+      that.$el.attr('data-id', that.Model.id); //used for render optimization for when selected item changed
+
       if (that.Model.isSelected) {
         that.$el.addClass('selected');
       } else {

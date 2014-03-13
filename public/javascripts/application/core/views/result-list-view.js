@@ -25,7 +25,8 @@
         _hiddenItemsModel = null,
         _itemsOfInterestModel = null,
         _scrollTopValue = 0,
-        _lastKnownSearchId = null;
+        _lastKnownSearchId = null,
+        _renderOptimizations = {};
 
     this.$el = null;
     this.Model = null;
@@ -39,7 +40,13 @@
       }
     }
 
-    this.render = function () {
+    this.render = function (e) {
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
 //      var $prevEl = that.$currentEl || that.$el2;
       var searchId = that.Model.getSearchId();
 //      var isFreshSearch = _lastKnownSearchId !== searchId;
@@ -81,6 +88,12 @@
 //        $prevEl.removeClass('ios-scroll-enable');
 //      }, 300); //This timeout must be longer than the css transition to avoid interrupting it with a flicker.
     };
+
+    function renderSetSelectedItemId(selectedItemId) {
+      $(_el).find('.t.selected').removeClass('selected');
+      var selectorNew = '.t[data-id="' + selectedItemId + '"]';
+      $(_el).find(selectorNew).addClass('selected');
+    }
 
 //        function renderResults(results, index) {
 //            index = index === undefined ? 0 : index;
@@ -144,6 +157,8 @@
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+
+      _renderOptimizations[_selectedItemModel.eventUris.default] = renderSetSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);

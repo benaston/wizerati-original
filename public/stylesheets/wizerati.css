@@ -658,12 +658,14 @@ button.checked, a.btn.checked {
 }
 
 .rotating-button-container > .btn[data-is-waiting='false'] {
-    transition: border-left-width .2s ease-out;
+    transition: border-left-width .2s ease-out, border-color 2s ease-out;
 }
 
+/*Rotates and border-color changes when waiting*/
 .rotating-button-container > .btn[data-is-waiting='true'] {
+    border: 1px solid rgba(2, 86, 244, .9);
     border-left: 0;
-    transition: border-left-width .2s ease-out;
+    transition: border-left-width .2s ease-out, border-color 2s ease-out;
     -webkit-animation-duration: 2.5s;
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: 1;
@@ -1352,6 +1354,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 *[data-is-waiting='success'] .btn-success, *[data-is-waiting='primary'] .btn-primary {
+    border: 1px solid rgba(2, 86, 244, .9);
     border-left: 0;
     -webkit-animation-duration: 2s;
     -webkit-animation-name: rotate;
@@ -2136,9 +2139,9 @@ body[data-ui-mode='1'] .result-list-panel {
     color: #999;
 }
 
-.selected {
-    transition: width .3s ease-in-out 0s, opacity .3s ease-in-out;
-}
+/*.selected {*/
+    /*transition: width .3s ease-in-out 0s, opacity .3s ease-in-out;*/
+/*}*/
 
 /* Results End*/
 
@@ -2689,6 +2692,7 @@ figure {
     cursor: pointer;
     display: inline-block;
     vertical-align: top;
+    /*transition: background-color .1s ease-out;*/
 }
 
 .thumbnail h2, .t h2 {

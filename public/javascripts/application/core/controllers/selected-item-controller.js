@@ -28,7 +28,7 @@
         }
 
         //this has to be set before the mode change to ensure correct layout calculation
-        _itemsOfInterestModel.setSelectedItemId(dto.id, {silent:true}); //do not want to trigger repaint the items of interest here
+        _itemsOfInterestModel.setSelectedItemId(dto.id, { silent: true }); //do not want to trigger repaint the items of interest here
 
         if (dto.source === _itemSelectionSourceEnum.Results) {
           _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
@@ -37,7 +37,6 @@
         } else {
           throw "invalid source.";
         }
-
 
         _selectedItemModel.setSelectedItemId(dto.id);
       } catch (err) {

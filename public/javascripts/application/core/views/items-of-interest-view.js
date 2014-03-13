@@ -21,7 +21,6 @@
         _elPinnedItem5 = '.pinned-item:nth-child(6)',
         _elPinnedItem6 = '.pinned-item:nth-child(7)',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _renderOptimizations = {},
         _itemOfInterestViewFactory = null,
         _selectedCubeFaceModel = null,
         _selectedItemModel = null,
@@ -30,6 +29,7 @@
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
         _layoutCoordinator = null,
+        _renderOptimizations = {},
         _scrollTopValues = {},
         _scrollLeft = 0;
 
@@ -70,16 +70,17 @@
     };
 
     this.render = function (e, args) {
-
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, args);
-        return;
-      }
+      setTimeout(function(){ //vain attempt to enable other stuff to render before we attempt this possibly time-consuming render
+        if (e && _renderOptimizations[e.type]) {
+          _renderOptimizations[e.type].apply(this, args);
+          return;
+        }
 
 //      var args = Array.prototype.slice.call(arguments);
 //      var options = args.length > 1 ? args[1] : {};
 //      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
-      renderPrivate({ animateSelectedItem: false, removedItemId: null });
+        renderPrivate({ animateSelectedItem: false, removedItemId: null });
+      }, 0);
     };
 
     function renderPrivate(options) {
