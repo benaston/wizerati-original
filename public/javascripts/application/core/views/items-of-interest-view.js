@@ -188,7 +188,7 @@
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
-    function setSelectedItemId(previouslySelectedItemId) {
+    function renderSetSelectedItemId(previouslySelectedItemId) {
       if(previouslySelectedItemId) {
         renderPrivate({animateSelectedItem:false});
       } else {
@@ -197,11 +197,12 @@
     }
 
     function setMode() {
-      var otherMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
+      var mode = that.Model.getMode();
+      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
 
-      if(that.Model.getMode() === _modeEnum.Default) {
+      if(mode === _modeEnum.Default) {
         $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
         $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
@@ -210,7 +211,7 @@
       }
 
 
-      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
+      $('body').attr('data-items-of-interest-mode', mode)
     }
 
     function addPinnedItems(items, done) {
@@ -295,6 +296,7 @@
         throw 'layoutCoordinator not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -307,7 +309,7 @@
       _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
-      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = setSelectedItemId;
+      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = renderSetSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.itemRemoval, that.render);
