@@ -1,8 +1,8 @@
 $(function appStart() {
   'use strict';
 
-  //Try to enable active pseudo-class on iOS Safari.
-//  document.addEventListener("touchstart", function() {},false);
+  //Improves perceived responsiveness on iOS
+  document.addEventListener("touchstart", function() {},false);
 
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
   for (var v in window.wizerati.mod('views')) {
