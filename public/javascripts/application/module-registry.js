@@ -227,11 +227,11 @@
   'use strict';
 
   try {
-    mod.searchFormView = $.decorate(new wizerati.SearchFormView(wizerati.mod('models').searchFormModel), d.trace);
-    mod.searchPanelView = $.decorate(new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel), d.trace);
-    mod.resultListView = $.decorate(new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel), d.trace);
-    mod.itemsOfInterestView = $.decorate(new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator), d.trace);
-    mod.uiRootView = $.decorate(new wizerati.UIRootView(wizerati.mod('models').uiRootModel), d.trace);
+    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
+    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
+    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
