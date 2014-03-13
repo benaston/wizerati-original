@@ -2206,12 +2206,12 @@ and (max-device-width : 1024px) {
     .t a:focus, .t a:active {
         outline: none;
         outline-offset: 2px; /*why?*/
-        /*box-shadow: 0 0 0 4px #eee inset;*/
+        box-shadow: none !important;
         background: rgba(0,0,0,0.1)
     }
 
     .t.selected {
-        background: none;
+        background: none !important;
     }
 
     .t.selected a {
