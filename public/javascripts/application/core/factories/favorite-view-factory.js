@@ -6,7 +6,6 @@
     if (!(this instanceof app.FavoriteViewFactory)) {
       return new app.FavoriteViewFactory(loginService,
           itemRepository,
-//          selectedItemModel,
           hiddenItemsModel,
           actionedItemsModel,
           itemsOfInterestModel);
@@ -15,7 +14,6 @@
     var that = this,
         _loginService = null,
         _itemRepository = null,
-//        _selectedItemModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
@@ -60,10 +58,6 @@
         throw 'itemRepository not supplied.';
       }
 
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!hiddenItemsModel) {
         throw 'hiddenItemsModel not supplied.';
       }
@@ -78,7 +72,6 @@
 
       _loginService = loginService;
       _itemRepository = itemRepository;
-//      _selectedItemModel = selectedItemModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;

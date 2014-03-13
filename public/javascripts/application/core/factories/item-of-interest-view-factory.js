@@ -109,10 +109,6 @@
         throw 'itemRepository not supplied.';
       }
 
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!itemsOfInterestModel) {
         throw 'itemsOfInterestModel not supplied.';
       }
@@ -131,7 +127,6 @@
 
       _signInService = signInService;
       _itemRepository = itemRepository;
-//      _selectedItemModel = selectedItemModel;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;

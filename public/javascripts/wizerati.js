@@ -3989,11 +3989,9 @@ window.wizerati = {
 
       if (that.Model.shouldAnimateIn) {
         that.$el.css({
-//          left: model.width*-1,
           transition: '-webkit-transform .2s ease-out',
           '-webkit-transform': 'translate(' + model.width*-1 + ',0)'
         });
-//        that.$el.addClass('blur');
       }
 
       app.instance.renderTemplate(that.$el, _templateName, that.Model);
@@ -4132,7 +4130,6 @@ window.wizerati = {
       }
 
       if (that.Model.shouldAnimateIn) {
-//        that.$el.addClass('collapsed');
         that.$el.css({ left: '-' + model.width});
       }
 
@@ -4171,7 +4168,6 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '<li class="thumbnail thumbnail-219" data-id="' + model.Id + '"></li>',
         _templateName = 'result.html';
 
     this.$el = null;
@@ -4399,210 +4395,6 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.FavoritesCubeView);
 
 }(wizerati, $, invertebrate, _));
-;//(function (app, $, invertebrate, _) {
-//  'use strict';
-//
-//  //todo, render to in mem dom fragment with
-//  //single write to DOM to minimise repaint
-//  //use JQUery scrollTop to reset scroll position of
-//  //scrolled elements
-//  //fix jankiness of item selection and items of interest update
-//  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel) {
-//
-//    if (!(this instanceof app.ItemsOfInterestView)) {
-//      return new app.ItemsOfInterestView(model,
-//          itemOfInterestViewFactory,
-//          selectedCubeFaceModel,
-//          selectedItemModel,
-//          favoritesCubeModel,
-//          hiddenItemsModel,
-//          actionedItemsModel);
-//    }
-//
-//    var that = this,
-//        _el1 = '#items-of-interest-panel-1',
-//        _el2 = '#items-of-interest-panel-2',
-//        _itemOfInterestViewFactory = null,
-//        _selectedCubeFaceModel = null,
-//        _selectedItemModel = null,
-//        _favoritesCubeModel = null,
-//        _hiddenItemsModel = null,
-//        _actionedItemsModel = null,
-//        _scrollTopValues = {},
-//        _scrollLeft = 0;
-//
-//    this.$el = null;
-////    this.$el2 = null;
-////    this.$currentEl = null;
-//    this.Model = null;
-//
-//    function storeScrollTopValues() {
-//      var selectedItem = that.$el.find('.item-of-interest.selected');
-//
-//      if (selectedItem) {
-//        _scrollTopValues[selectedItem.attr('data-id') + 's'] = $(selectedItem).scrollTop();
-//      }
-//
-//      _.each(that.$el.find('.item-of-interest:not(.selected)'), function (e) {
-//        _scrollTopValues[$(e).attr('data-id')] = $(e).scrollTop();
-//      });
-//    }
-//
-//    function storeScrollLeftValue() {
-//      _scrollLeft = $('body').scrollLeft();
-//    }
-//
-//    this.renderWithSelectedItemAnimation = function () {
-//      renderPrivate();
-//    };
-//
-//    this.render = function () {
-//      var args = Array.prototype.slice.call(arguments);
-//      var options = args.length > 1 ? args[1] : {};
-//      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
-//    };
-//
-//    function renderPrivate(options) {
-//      options = options || {animateSelectedItem: true};
-//
-//      storeScrollTopValues();
-//      storeScrollLeftValue();
-//
-//      var $prevEl = that.$currentEl || that.$el2;
-//      that.$currentEl = $prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
-////      that.$currentEl.empty();
-//      that.$currentEl.children().not('.handle-pinned-items').remove();
-//
-//      var items = that.Model.getItemsOfInterest();
-//      items.selectedItem = _selectedItemModel.getSelectedItemId();
-//
-//      if (items.selectedItem) {
-//        _itemOfInterestViewFactory.create(items.selectedItem,
-//            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-//            true,
-//            options.animateSelectedItem,
-//            function ($v) {
-//
-//              function addSelectedItem() {
-//                that.$currentEl.prepend($v);
-//                $v.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-//                setTimeout(function () {
-//                  $v.removeClass('collapsed');
-//                }, 300);
-//
-//                $('body').scrollLeft(_scrollLeft);
-//              }
-//
-//              addPinnedItems(items.pinnedItems, addSelectedItem);
-//            });
-//      } else {
-//        addPinnedItems(items.pinnedItems, function () {
-//          $('body').scrollLeft(_scrollLeft);
-//        });
-//      }
-//
-//      if (options.removedItemId) {
-//        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
-//        setTimeout(function () {
-//          $prevEl.addClass('buffer');
-//          that.$currentEl.removeClass('buffer');
-//          setTimeout(function () {
-////            $prevEl.empty();
-//            $prevEl.children().not('.handle-pinned-items').remove();
-//          }, 300);
-//        }, 200); //wait for removal animation to complete
-//
-//        return;
-//      }
-//
-//      $prevEl.addClass('buffer');
-//      that.$currentEl.removeClass('buffer');
-//      setTimeout(function () {
-////        $prevEl.empty();
-//        $prevEl.children().not('.handle-pinned-items').remove();
-//      }, 300);
-//    }
-//
-//    function addPinnedItems(items, done) {
-//      done = done || function () {
-//      };
-//
-//      _.each(items, function (id) {
-//        if (id === null) {
-//          return;
-//        }
-//        _itemOfInterestViewFactory.create(id,
-//            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-//            false,
-//            false,
-//            function ($v) {
-//              that.$currentEl.prepend($v)
-//              $v.scrollTop(_scrollTopValues[id]);
-//            });
-//      });
-//      done();
-//    }
-//
-//    this.onDomReady = function () {
-//      that.$el = $(_el1);
-//      that.$el2 = $(_el2);
-//      that.render();
-//    };
-//
-//    function init() {
-//      if (!model) {
-//        throw 'model not supplied';
-//      }
-//
-//      if (!itemOfInterestViewFactory) {
-//        throw 'itemOfInterestViewFactory not supplied';
-//      }
-//
-//      if (!selectedCubeFaceModel) {
-//        throw 'selectedCubeFaceModel not supplied';
-//      }
-//
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied';
-//      }
-//
-//      if (!favoritesCubeModel) {
-//        throw 'selectedItemModel not supplied';
-//      }
-//
-//      if (!hiddenItemsModel) {
-//        throw 'hiddenItemsModel not supplied';
-//      }
-//
-//      if (!actionedItemsModel) {
-//        throw 'actionedItemsModel not supplied';
-//      }
-//
-//      that.Model = model;
-//      _itemOfInterestViewFactory = itemOfInterestViewFactory;
-//      _selectedCubeFaceModel = selectedCubeFaceModel;
-//      _selectedItemModel = selectedItemModel;
-//      _favoritesCubeModel = favoritesCubeModel;
-//      _hiddenItemsModel = hiddenItemsModel;
-//      _actionedItemsModel = actionedItemsModel;
-//
-//      $.subscribe(that.Model.updateEventUri, that.render);
-//      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-//      $.subscribe(_selectedItemModel.updateEventUri, that.renderWithSelectedItemAnimation);
-//      $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
-//      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-//      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-//
-//      return that;
-//    }
-//
-//    return init();
-//  }
-//
-//  app.ItemsOfInterestView = ItemsOfInterestView;
-//  invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
-//
-//}(wizerati, $, invertebrate, _));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -5254,7 +5046,6 @@ window.wizerati = {
     var that = this,
         _el = '#search-form',
         _templateName = 'search-form.html',
-//        _postRenderScriptName = 'search-form.js',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
 
@@ -5308,14 +5099,6 @@ window.wizerati = {
       }
     }
 
-    //We take control here in the view of changes to the view when the wait state changes (i.e. we do not leave this to the usual template rendering process).
-    //We do this because we want to control the precise timings of the checks to correspond to individual revolutions of the wait animation.
-    //This enables us to always stop the animation at its natural end, rather than stopping the animation half way through, which looks jarring.
-    //If we are waiting, then re-set the data-is-waiting state to false and wait a tick to enable the DOM to register the change in data attribute (so we can re-trigger the animation).
-    //On the next tick, we trigger the animation and wait the precise duration of the animation.
-    //We then (taking our time, because we are using setTimeout and not setInterval) see if we are still waiting, if we are, we repeat the process.
-    //If we are not waiting then we set the data-attribute to stop the animation and set a flag variable to indicate we are no-longer monitoring the model for changes to the wait state.
-    //Re-setting this flag means that when the search form is re-rendered, we know to kick off the wait state monitoring process again.
     function monitorWaitState() {
       _waitStateIsBeingMonitored = true;
 
@@ -6619,7 +6402,6 @@ window.wizerati = {
     if (!(this instanceof app.FavoriteViewFactory)) {
       return new app.FavoriteViewFactory(loginService,
           itemRepository,
-//          selectedItemModel,
           hiddenItemsModel,
           actionedItemsModel,
           itemsOfInterestModel);
@@ -6628,7 +6410,6 @@ window.wizerati = {
     var that = this,
         _loginService = null,
         _itemRepository = null,
-//        _selectedItemModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
@@ -6673,10 +6454,6 @@ window.wizerati = {
         throw 'itemRepository not supplied.';
       }
 
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!hiddenItemsModel) {
         throw 'hiddenItemsModel not supplied.';
       }
@@ -6691,7 +6468,6 @@ window.wizerati = {
 
       _loginService = loginService;
       _itemRepository = itemRepository;
-//      _selectedItemModel = selectedItemModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
@@ -6846,10 +6622,6 @@ window.wizerati = {
         throw 'itemRepository not supplied.';
       }
 
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!itemsOfInterestModel) {
         throw 'itemsOfInterestModel not supplied.';
       }
@@ -6868,7 +6640,6 @@ window.wizerati = {
 
       _signInService = signInService;
       _itemRepository = itemRepository;
-//      _selectedItemModel = selectedItemModel;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
@@ -6891,7 +6662,6 @@ window.wizerati = {
     if (!(this instanceof app.ResultViewFactory)) {
       return new app.ResultViewFactory(signInService,
           itemRepository,
-//          selectedItemModel,
           itemsOfInterestModel,
           hiddenItemsModel,
           actionedItemsModel);
@@ -6900,7 +6670,6 @@ window.wizerati = {
     var that = this,
         _signInService = null,
         _itemRepository = null,
-//        _selectedItemModel = null,
         _itemsOfInterestModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
@@ -6956,10 +6725,6 @@ window.wizerati = {
         throw 'itemRepository not supplied.';
       }
 
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!itemsOfInterestModel) {
         throw 'itemsOfInterestModel not supplied.';
       }
@@ -6974,7 +6739,6 @@ window.wizerati = {
 
       _signInService = signInService;
       _itemRepository = itemRepository;
-//      _selectedItemModel = selectedItemModel;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
@@ -7239,7 +7003,6 @@ window.wizerati = {
       var leftP6 = 0;//10 * 6;
 
       var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
-//      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
@@ -7250,7 +7013,6 @@ window.wizerati = {
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
         leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-5;
-//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 
@@ -7679,20 +7441,20 @@ window.wizerati = {
   'use strict';
 
   try {
-    mod.actionedItemsModel = $.decorate(new wizerati.ActionedItemsModel(), d.nop);
-    mod.advertisersPanelModel = $.decorate(new wizerati.AdvertisersPanelModel(), d.nop);
-    mod.deleteFavoriteGroupConfirmationDialogModel = $.decorate(new wizerati.DeleteFavoriteGroupConfirmationDialogModel(), d.nop);
-    mod.hiddenItemsModel = $.decorate(new wizerati.HiddenItemsModel(), d.nop);
-    mod.purchasePanelModel = $.decorate(new wizerati.PurchasePanelModel(), d.nop);
-    mod.resultListModel = $.decorate(new wizerati.ResultListModel(), d.nop);
-    mod.searchFormModel = $.decorate(new wizerati.SearchFormModel(), d.nop);
-    mod.searchPanelModel = $.decorate(new wizerati.SearchPanelModel(), d.nop);
-    mod.selectedCubeFaceModel = $.decorate(new wizerati.SelectedCubeFaceModel(), d.nop);
-    mod.signInPanelModel = $.decorate(new wizerati.SignInPanelModel(), d.nop);
-    mod.uiRootModel = $.decorate(new wizerati.UIRootModel(), d.nop);
+    mod.actionedItemsModel = new wizerati.ActionedItemsModel();
+    mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
+    mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
+    mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
+    mod.purchasePanelModel = new wizerati.PurchasePanelModel();
+    mod.resultListModel = new wizerati.ResultListModel();
+    mod.searchFormModel = new wizerati.SearchFormModel();
+    mod.searchPanelModel = new wizerati.SearchPanelModel();
+    mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
+    mod.signInPanelModel = new wizerati.SignInPanelModel();
+    mod.uiRootModel = new wizerati.UIRootModel();
 
-    mod.favoritesCubeModel = $.decorate(new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel), d.nop);
-    mod.itemsOfInterestModel = $.decorate(new wizerati.ItemsOfInterestModel(mod.resultListModel), d.nop);
+    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel);
+    mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;
@@ -7700,21 +7462,21 @@ window.wizerati = {
 
 }(wizerati.mod('models'), invertebrate, wizerati.mod('config').config.config, wizerati.mod('decorators').decorators));
 
-(function (mod) {
+(function (mod, m, s, r) {
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
+    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
     throw 'problem registering factories module. ' + e;
   }
 
-}(wizerati.mod('factories')));
+}(wizerati.mod('factories'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('repositories')));
 
 (function (mod) {
   'use strict';
@@ -7728,34 +7490,34 @@ window.wizerati = {
 
 }(wizerati.mod('connectors')));
 
-(function (mod) {
+(function (mod, m) {
   'use strict';
 
   try {
-    mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').itemsOfInterestModel, mod.layoutCalculator, wizerati.mod('models').searchPanelModel);
+    mod.layoutCalculator = new wizerati.LayoutCalculator(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
+    mod.layoutCoordinator = new wizerati.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator, m.searchPanelModel);
   }
   catch (e) {
     throw 'problem registering layout module. ' + e;
   }
 
-}(wizerati.mod('layout')));
+}(wizerati.mod('layout'), wizerati.mod('models')));
 
-(function (mod, d) {
+(function (mod, m, f) {
   'use strict';
 
   try {
-    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
-    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
-    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
-    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
+    mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
+    mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('decorators').decorators));
+}(wizerati.mod('views'), wizerati.mod('models'), wizerati.mod('factories')));
 
 (function (mod, m) {
   'use strict';

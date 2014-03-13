@@ -47,14 +47,14 @@ module.exports = function (grunt) {
 
 //          'public/stylesheets/vendor/lucid-style-animation.css',
           'public/stylesheets/vendor/lucid-style-buttons.css',
-          'public/stylesheets/vendor/lucid-style-declarative.css',
+//          'public/stylesheets/vendor/lucid-style-declarative.css',
 //          'public/stylesheets/vendor/lucid-style-dialogs.css',
           'public/stylesheets/vendor/lucid-style-faces.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
-          'public/stylesheets/vendor/lucid-style-table.css',
+//          'public/stylesheets/vendor/lucid-style-table.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
-          'public/stylesheets/vendor/lucid-style-declarative.css',
-          'public/stylesheets/vendor/lucid-style-colors.css',
+//          'public/stylesheets/vendor/lucid-style-declarative.css',
+//          'public/stylesheets/vendor/lucid-style-colors.css',
 
           'public/stylesheets/application/wizerati-style-animation.css',
           'public/stylesheets/application/wizerati-style-body.css',

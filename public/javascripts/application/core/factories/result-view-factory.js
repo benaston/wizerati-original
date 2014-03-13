@@ -6,7 +6,6 @@
     if (!(this instanceof app.ResultViewFactory)) {
       return new app.ResultViewFactory(signInService,
           itemRepository,
-//          selectedItemModel,
           itemsOfInterestModel,
           hiddenItemsModel,
           actionedItemsModel);
@@ -15,7 +14,6 @@
     var that = this,
         _signInService = null,
         _itemRepository = null,
-//        _selectedItemModel = null,
         _itemsOfInterestModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
@@ -71,10 +69,6 @@
         throw 'itemRepository not supplied.';
       }
 
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!itemsOfInterestModel) {
         throw 'itemsOfInterestModel not supplied.';
       }
@@ -89,7 +83,6 @@
 
       _signInService = signInService;
       _itemRepository = itemRepository;
-//      _selectedItemModel = selectedItemModel;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;

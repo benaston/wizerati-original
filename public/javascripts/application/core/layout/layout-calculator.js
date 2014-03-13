@@ -77,7 +77,6 @@
       var leftP6 = 0;//10 * 6;
 
       var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
-//      var leftHandlePinnedItems = newWidth;
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
@@ -88,7 +87,6 @@
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
         leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-5;
-//        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest));
         console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
       }
 

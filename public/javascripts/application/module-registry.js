@@ -160,20 +160,20 @@
   'use strict';
 
   try {
-    mod.actionedItemsModel = $.decorate(new wizerati.ActionedItemsModel(), d.nop);
-    mod.advertisersPanelModel = $.decorate(new wizerati.AdvertisersPanelModel(), d.nop);
-    mod.deleteFavoriteGroupConfirmationDialogModel = $.decorate(new wizerati.DeleteFavoriteGroupConfirmationDialogModel(), d.nop);
-    mod.hiddenItemsModel = $.decorate(new wizerati.HiddenItemsModel(), d.nop);
-    mod.purchasePanelModel = $.decorate(new wizerati.PurchasePanelModel(), d.nop);
-    mod.resultListModel = $.decorate(new wizerati.ResultListModel(), d.nop);
-    mod.searchFormModel = $.decorate(new wizerati.SearchFormModel(), d.nop);
-    mod.searchPanelModel = $.decorate(new wizerati.SearchPanelModel(), d.nop);
-    mod.selectedCubeFaceModel = $.decorate(new wizerati.SelectedCubeFaceModel(), d.nop);
-    mod.signInPanelModel = $.decorate(new wizerati.SignInPanelModel(), d.nop);
-    mod.uiRootModel = $.decorate(new wizerati.UIRootModel(), d.nop);
+    mod.actionedItemsModel = new wizerati.ActionedItemsModel();
+    mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
+    mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
+    mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
+    mod.purchasePanelModel = new wizerati.PurchasePanelModel();
+    mod.resultListModel = new wizerati.ResultListModel();
+    mod.searchFormModel = new wizerati.SearchFormModel();
+    mod.searchPanelModel = new wizerati.SearchPanelModel();
+    mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
+    mod.signInPanelModel = new wizerati.SignInPanelModel();
+    mod.uiRootModel = new wizerati.UIRootModel();
 
-    mod.favoritesCubeModel = $.decorate(new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel), d.nop);
-    mod.itemsOfInterestModel = $.decorate(new wizerati.ItemsOfInterestModel(mod.resultListModel), d.nop);
+    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel);
+    mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;
@@ -181,21 +181,21 @@
 
 }(wizerati.mod('models'), invertebrate, wizerati.mod('config').config.config, wizerati.mod('decorators').decorators));
 
-(function (mod) {
+(function (mod, m, s, r) {
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
+    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
     throw 'problem registering factories module. ' + e;
   }
 
-}(wizerati.mod('factories')));
+}(wizerati.mod('factories'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('repositories')));
 
 (function (mod) {
   'use strict';
@@ -209,34 +209,34 @@
 
 }(wizerati.mod('connectors')));
 
-(function (mod) {
+(function (mod, m) {
   'use strict';
 
   try {
-    mod.layoutCalculator = new wizerati.LayoutCalculator(wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.layoutCoordinator = new wizerati.LayoutCoordinator(wizerati.mod('models').itemsOfInterestModel, mod.layoutCalculator, wizerati.mod('models').searchPanelModel);
+    mod.layoutCalculator = new wizerati.LayoutCalculator(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
+    mod.layoutCoordinator = new wizerati.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator, m.searchPanelModel);
   }
   catch (e) {
     throw 'problem registering layout module. ' + e;
   }
 
-}(wizerati.mod('layout')));
+}(wizerati.mod('layout'), wizerati.mod('models')));
 
-(function (mod, d) {
+(function (mod, m, f) {
   'use strict';
 
   try {
-    mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
-    mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
-    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
-    mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
+    mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
+    mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('decorators').decorators));
+}(wizerati.mod('views'), wizerati.mod('models'), wizerati.mod('factories')));
 
 (function (mod, m) {
   'use strict';

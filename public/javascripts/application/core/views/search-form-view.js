@@ -10,7 +10,6 @@
     var that = this,
         _el = '#search-form',
         _templateName = 'search-form.html',
-//        _postRenderScriptName = 'search-form.js',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
 
@@ -64,14 +63,6 @@
       }
     }
 
-    //We take control here in the view of changes to the view when the wait state changes (i.e. we do not leave this to the usual template rendering process).
-    //We do this because we want to control the precise timings of the checks to correspond to individual revolutions of the wait animation.
-    //This enables us to always stop the animation at its natural end, rather than stopping the animation half way through, which looks jarring.
-    //If we are waiting, then re-set the data-is-waiting state to false and wait a tick to enable the DOM to register the change in data attribute (so we can re-trigger the animation).
-    //On the next tick, we trigger the animation and wait the precise duration of the animation.
-    //We then (taking our time, because we are using setTimeout and not setInterval) see if we are still waiting, if we are, we repeat the process.
-    //If we are not waiting then we set the data-attribute to stop the animation and set a flag variable to indicate we are no-longer monitoring the model for changes to the wait state.
-    //Re-setting this flag means that when the search form is re-rendered, we know to kick off the wait state monitoring process again.
     function monitorWaitState() {
       _waitStateIsBeingMonitored = true;
 

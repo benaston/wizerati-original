@@ -8,7 +8,6 @@
     }
 
     var that = this,
-        _el = '<li class="thumbnail thumbnail-219" data-id="' + model.Id + '"></li>',
         _templateName = 'result.html';
 
     this.$el = null;
