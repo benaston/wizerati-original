@@ -13,13 +13,10 @@ body[data-ui-mode='1']:not([data-are-transitions-enabled='false']) .items-of-int
 
 body[data-ui-mode='1'] .items-of-interest-panel {
     opacity: 1;
-    /*transition: opacity .1s ease-out;*/
-    /*transition: opacity .1s ease-out,  -webkit-transform .2s ease-out;*/
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
     -webkit-transform: translate(-266px, 0);
-    /*transition: -webkit-transform .2s ease-out;*/
 }
 
 body:not(.suppress-transitions) .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
@@ -44,7 +41,6 @@ body:not(.suppress-transitions) .search-panel[data-mode='0'] ~ .result-list-pane
     height: 100%;
     width: 0;
     vertical-align: top;
-
     /*transition: left .5s ease-in-out .3s, -webkit-filter .2s linear;*/
 }
 
@@ -78,27 +74,22 @@ body:not([data-are-transitions-enabled='false']) .selected-item-content, .pinned
 
 .pinned-item:nth-of-type(2) {
     z-index: 4;
-    /*box-shadow: 0 1px 0 2px #eee;*/
 }
 
 .pinned-item:nth-of-type(3) {
     z-index: 3;
-    /*box-shadow: 0 1px 0 2px #eee;*/
 }
 
 .pinned-item:nth-of-type(4) {
     z-index: 2;
-    /*box-shadow: 0 1px 0 2px #eee;*/
 }
 
 .pinned-item:nth-of-type(5) {
     z-index: 1;
-    /*box-shadow: 0 1px 0 2px #eee;*/
 }
 
 .pinned-item:nth-of-type(6) {
     z-index: 0;
-    /*box-shadow: 0 1px 0 2px #eee;*/
 }
 
 /*attempt to only blur out when a selected item is present*/
@@ -129,15 +120,9 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .menu {
-    /*margin-right: 17px;*/
     margin-right: 0;
     margin-top: 0;
     padding-top: 7px;
-    /*padding-right: 17px;*/
-}
-
-.menu a {
-    /*font-weight:bold;*/
 }
 
 .menu .centered-text {
@@ -145,19 +130,11 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .menu .is-favorite {
-    /*color: rgba(255, 211, 0, 1) !important;*/
     color: white;
-}
-
-.menu .label {
-    /*margin-top: 7px;*/
-    /*font-size: 1rem;*/
-
 }
 
 .items-of-interest-panel .menu {
     text-align: right;
-    /*margin-top: 7px;*/
 }
 
 .table-location-industry {
@@ -165,23 +142,17 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .table-title-rate, .table-location-industry {
-    /*float:right;*/
     font-size: .95rem;
 }
 
 .table-container {
     min-width: 358px;
     text-align: right;
-    /*margin: 5px 0 0 0;*/
-
 }
 
 .selected-item .table-bordered, .pinned-item .table-bordered {
     margin-top: 0;
-    /*margin-bottom: 5px;*/
     border: 0;
-    /*width: 100%;*/
-    /*margin: auto;*/
     display: inline-block;
 }
 
@@ -199,7 +170,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .itemMetadata, .itemMetadata code {
-    /*color: #08c;*/
     color: #999;
 }
 
@@ -226,7 +196,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 .selected-item table td:nth-of-type(2):nth-last-of-type(1),
 .pinned-item table td:nth-of-type(2):nth-last-of-type(1) {
     width: 50%;
-    /*box-shadow: -1px 0 0 0 #eee;*/
     text-align: left;
     padding-left: 31px;
 }
@@ -270,8 +239,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .t .is-favorite {
-    /*color: rgba(255, 211, 0, .4) !important;*/
-    /*color: rgba(0, 109, 204, 0.95);*/
     color: silver;
     font-size: 1.5rem;
 }
@@ -292,12 +259,6 @@ a.hidden:before {
     color: rgba(0, 0, 0, .2);
     -webkit-transform: rotate(-45deg);
 }
-
-/*button.checked, a.checked {*/
-/*background-color: rgba(0, 109, 204, .95);*/
-/*color: #fff;*/
-/*box-shadow: 0 0 0 2px rgba(255, 255, 255, 1), 0 0 0 4px rgba(0, 109, 204, 1) !important;*/
-/*}*/
 
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .pinned-item-content,
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .selected-item-content,
@@ -364,11 +325,12 @@ and (max-width: 568px) {
     .menu-and-metadata-container {
         min-width: 120px;
     }
+
     .width-76 {
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
 
 #selected-item-container-2 {
-    background:blue;
+    background: blue;
 }

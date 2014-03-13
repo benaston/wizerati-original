@@ -42,11 +42,7 @@ label {
 }
 
 input[type="radio"]:checked + label {
-    /*background-color: rgba(0, 109, 204, 0.95);*/
-    /*color: white;*/
-    /*box-shadow: 0 0 0 2px rgba(0, 109, 204, 1);*/
     text-decoration: underline;
-    /*border: 2px solid white;*/
 }
 
 label.radio {

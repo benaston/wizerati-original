@@ -274,8 +274,7 @@ body[data-ui-mode='1'] .result-list-panel {
 /* Handle end */
 
 /*"narrow-screen" devices like iphone*/
-@media only screen
-and (max-device-width: 568px) {
+@media only screen and (max-device-width: 568px) {
     .result-list-panel {
         width: 200px;
     }

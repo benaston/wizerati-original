@@ -66,7 +66,7 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-navbar-and-logo.css',
           'public/stylesheets/application/wizerati-style-result-list-panel.css',
-          'public/stylesheets/application/wizerati-style-cube.css',
+//          'public/stylesheets/application/wizerati-style-cube.css',
           'public/stylesheets/application/wizerati-style-special.css'
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
@@ -95,7 +95,7 @@ module.exports = function (grunt) {
     },
     cssmin: {
       css: {
-        src: 'public/stylesheets/<%= pkg.name %>.encoded.css',
+        src: 'public/stylesheets/<%= pkg.name %>.css',
         dest: 'public/stylesheets/<%= pkg.name %>.min.css'
       }
     },

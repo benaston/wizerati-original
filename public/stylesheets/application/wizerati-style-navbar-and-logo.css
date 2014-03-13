@@ -32,22 +32,6 @@ body[data-ui-mode='1'] .logo-image2 {
     display: none;
 }
 
-
-/*.logo-image2 {*/
-    /*opacity: 1;*/
-    /*pointer-events: none;*/
-    /*font-family: ionicons;*/
-    /*color: rgba(255,255,255,.2);*/
-    /*text-align: center;*/
-    /*width: 100%;*/
-    /*text-shadow: 0px 0px 159px rgba(0,0,0,0.4);*/
-    /*padding: 0;*/
-    /*margin-left: -367px;*/
-/*}*/
-
-/*.logo-image2:after {*/
-
-
 .navbar {
     left: 30px;
     bottom: 18px;
@@ -94,10 +78,8 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     margin: 0 0 0 20px;
     opacity: 0;
     pointer-events: none;
-    /*transition: opacity .1s linear;*/
     color: rgba(0, 109, 204, .95);
     z-index: 1;
-    /*text-align: center;*/
     font-family: helvetica-bold;
 }
 

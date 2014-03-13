@@ -10,13 +10,6 @@ body[data-ui-mode='1'] #favorites-cube {
     transition: opacity 1s ease-in-out;
 }
 
-/*footer {*/
-    /*clear: both;*/
-    /*top: 106px;*/
-    /*position: relative;*/
-    /*text-align: center;*/
-/*}*/
-
 figure {
     margin: 0; /*important to ensure rotational origin is centered*/
 }

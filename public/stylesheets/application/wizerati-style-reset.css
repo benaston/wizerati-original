@@ -2,7 +2,6 @@ a:focus, a:active {
     outline: none;
     outline-offset: 2px; /*why?*/
     box-shadow: 0 0 0 4px #eee inset;
-    /*background: rgba(0,0,0,0.1)*/
 }
 
 strong {
