@@ -1,13 +1,13 @@
 (function (app, $) {
   'use strict';
 
-  function ItemsOfInterestModel(selectedItemModel, resultListModel) {
+  function ItemsOfInterestModel(resultListModel) {
     if (!(this instanceof app.ItemsOfInterestModel)) {
-      return new app.ItemsOfInterestModel(selectedItemModel, resultListModel);
+      return new app.ItemsOfInterestModel(resultListModel);
     }
 
     var that = this,
-        _selectedItemModel = null,
+//        _selectedItemModel = null,
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
@@ -36,6 +36,10 @@
       return _itemsOfInterest.selectedItem;
     };
 
+    this.getPreviouslySelectedItemId = function () {
+      return _previouslySelectedItemId;
+    };
+
     this.setSelectedItemId = function (value, options) {
       options = options || { silent:false };
 
@@ -43,7 +47,7 @@
       _itemsOfInterest.selectedItem = value;
 
       if(!options.silent) {
-        $.publish(that.eventUris.setSelectedItemId, _previouslySelectedItemId);
+        $.publish(that.eventUris.setSelectedItemId, _itemsOfInterest.selectedItem, _previouslySelectedItemId);
       }
     };
 
@@ -131,15 +135,15 @@
     };
 
     function init() {
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied.';
-      }
+//      if (!selectedItemModel) {
+//        throw 'selectedItemModel not supplied.';
+//      }
 
       if (!resultListModel) {
         throw 'resultListModel not supplied.';
       }
 
-      _selectedItemModel = selectedItemModel;
+//      _selectedItemModel = selectedItemModel;
       _resultListModel = resultListModel;
 
       return that;

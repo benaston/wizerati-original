@@ -169,12 +169,11 @@
     mod.searchFormModel = $.decorate(new wizerati.SearchFormModel(), d.nop);
     mod.searchPanelModel = $.decorate(new wizerati.SearchPanelModel(), d.nop);
     mod.selectedCubeFaceModel = $.decorate(new wizerati.SelectedCubeFaceModel(), d.nop);
-    mod.selectedItemModel = $.decorate(new wizerati.SelectedItemModel(), d.nop);
     mod.signInPanelModel = $.decorate(new wizerati.SignInPanelModel(), d.nop);
     mod.uiRootModel = $.decorate(new wizerati.UIRootModel(), d.nop);
 
     mod.favoritesCubeModel = $.decorate(new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel), d.nop);
-    mod.itemsOfInterestModel = $.decorate(new wizerati.ItemsOfInterestModel(mod.selectedItemModel, mod.resultListModel), d.nop);
+    mod.itemsOfInterestModel = $.decorate(new wizerati.ItemsOfInterestModel(mod.resultListModel), d.nop);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;
@@ -186,10 +185,10 @@
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').selectedItemModel, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
+    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').selectedItemModel, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').selectedItemModel, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(wizerati.mod('services').signInService, wizerati.mod('repositories').itemRepository, wizerati.mod('models').itemsOfInterestModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').favoritesCubeModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
@@ -229,8 +228,8 @@
   try {
     mod.searchFormView = new wizerati.SearchFormView(wizerati.mod('models').searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(wizerati.mod('models').searchPanelModel);
-    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').selectedItemModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.resultListView = new wizerati.ResultListView(wizerati.mod('models').resultListModel, wizerati.mod('factories').resultViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(wizerati.mod('models').itemsOfInterestModel, wizerati.mod('factories').itemOfInterestViewFactory, wizerati.mod('models').selectedCubeFaceModel, wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').hiddenItemsModel, wizerati.mod('models').actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
     mod.uiRootView = new wizerati.UIRootView(wizerati.mod('models').uiRootModel);
   }
   catch (e) {
@@ -239,27 +238,25 @@
 
 }(wizerati.mod('views'), wizerati.mod('decorators').decorators));
 
-(function (mod) {
+(function (mod, m) {
   'use strict';
 
   try {
-    mod.actionedItemsController = new wizerati.ActionedItemsController(wizerati.mod('models').actionedItemsModel);
-    mod.favoritesController = new wizerati.FavoritesController(wizerati.mod('models').favoritesCubeModel, wizerati.mod('models').selectedCubeFaceModel);
-    mod.hiddenItemsController = new wizerati.HiddenItemsController(wizerati.mod('models').hiddenItemsModel);
-    mod.homeController = new wizerati.HomeController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel);
-    mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(wizerati.mod('models').itemsOfInterestModel);
-    mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(wizerati.mod('models').itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(wizerati.mod('models').uiRootModel, wizerati.mod('models').searchFormModel, wizerati.mod('services').searchService, wizerati.mod('models').resultListModel, wizerati.mod('factories').guidFactory, wizerati.mod('models').selectedItemModel, wizerati.mod('models').searchPanelModel);
-    mod.searchPanelModeController = new wizerati.SearchPanelModeController(wizerati.mod('models').searchPanelModel);
-//    selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel
-    mod.selectedItemController = new wizerati.SelectedItemController(wizerati.mod('models').selectedItemModel,
-        wizerati.mod('models').searchPanelModel, wizerati.mod('models').resultListModel, wizerati.mod('models').itemsOfInterestModel);
+    mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
+    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
+    mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
+    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel);
+    mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
+    mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, wizerati.mod('services').searchService, m.resultListModel, wizerati.mod('factories').guidFactory, m.searchPanelModel, m.itemsOfInterestModel);
+    mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
+    mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;
   }
 
-}(wizerati.mod('controllers')));
+}(wizerati.mod('controllers'), wizerati.mod('models')));
 
 (function (mod) {
   'use strict';

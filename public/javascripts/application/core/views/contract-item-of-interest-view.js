@@ -32,10 +32,7 @@
 //        that.$el.addClass('blur');
       }
 
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
+      app.instance.renderTemplate(that.$el, _templateName, that.Model);
 
       return that;
     };

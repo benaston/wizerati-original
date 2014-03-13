@@ -1,14 +1,11 @@
 (function (app) {
   'use strict';
 
-  //algo for re-drawing:
-  //items in dom ! (in latest item of interest collection ? leave : collapse and remove)
-  function  ItemOfInterestViewFactory(signInService, itemRepository, selectedItemModel, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel, favoritesCubeModel) {
+  function  ItemOfInterestViewFactory(signInService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel, favoritesCubeModel) {
 
     if (!(this instanceof app.ItemOfInterestViewFactory)) {
       return new app.ItemOfInterestViewFactory(signInService,
           itemRepository,
-          selectedItemModel,
           itemsOfInterestModel,
           hiddenItemsModel,
           actionedItemsModel,
@@ -18,7 +15,6 @@
     var that = this,
         _signInService = null,
         _itemRepository = null,
-        _selectedItemModel = null,
         _itemsOfInterestModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
@@ -62,13 +58,13 @@
           _itemRepository.getById(id, function (item) {
             item.isFavoritable = _favoritesCubeModel.getFavorites()[currentCubeFace].length < 6 && !_hiddenItemsModel.isHidden(item.id);
             item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _selectedItemModel.getSelectedItemId() === item.id;
+            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isPinned = !isSelectedItem;
             item.pinnedItemCount = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
             item.isPinnable = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && !_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               i === id;
             });
-            item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_selectedItemModel.getPreviouslySelectedItemId();
+            item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_itemsOfInterestModel.getPreviouslySelectedItemId();
             item.isHidden = _hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id));
             item.isActioned = _actionedItemsModel.isActioned(item.id);
@@ -90,7 +86,7 @@
             item.isPinnable = !_hiddenItemsModel.isHidden(item.id) && (_itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             })));
-            item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_selectedItemModel.getPreviouslySelectedItemId();
+            item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_itemsOfInterestModel.getPreviouslySelectedItemId();
             item.isHidden = _hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_actionedItemsModel.isActioned(item.id);
             item.isActioned = _actionedItemsModel.isActioned(item.id);
@@ -113,9 +109,9 @@
         throw 'itemRepository not supplied.';
       }
 
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied.';
-      }
+//      if (!selectedItemModel) {
+//        throw 'selectedItemModel not supplied.';
+//      }
 
       if (!itemsOfInterestModel) {
         throw 'itemsOfInterestModel not supplied.';
@@ -135,7 +131,7 @@
 
       _signInService = signInService;
       _itemRepository = itemRepository;
-      _selectedItemModel = selectedItemModel;
+//      _selectedItemModel = selectedItemModel;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;

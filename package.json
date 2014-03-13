@@ -17,6 +17,7 @@
     "grunt-contrib-qunit": "~0.4.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-css": "~0.5.4"
+    "grunt-css": "~0.5.4",
+    "grunt-replace": "~0.7.2"
   }
 }

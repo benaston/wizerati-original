@@ -541,21 +541,21 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 
 @font-face {
     font-family: ionicons;
-    src: url('../../fonts/ionicons.woff');
+    src: url('../fonts/ionicons.woff');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: helvetica-pro-light;
-    src: url('../../fonts/helvetica-pro-light.woff');
+    src: url('../fonts/helvetica-pro-light.woff');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: helvetica-bold;
-    src: url('../../fonts/helvetica-bold.woff');
+    src: url('../fonts/helvetica-bold.woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -1462,6 +1462,10 @@ and (max-width: 568px) {
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
+
+#selected-item-container-2 {
+    background:blue;
+}
 body[data-ui-mode='-1'] .loading-container,
 body[data-ui-mode='-1'] .background-container,
 body[data-ui-mode='0'] .background-container {
@@ -1470,6 +1474,10 @@ body[data-ui-mode='0'] .background-container {
 }
 
 body:not([data-ui-mode='-1']) .loading-container {
+    -webkit-filter: opacity(0%);
+}
+
+body[data-ui-mode='1'] .background-container {
     -webkit-filter: opacity(0%);
 }
 

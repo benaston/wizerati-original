@@ -83,10 +83,35 @@ module.exports = function (grunt) {
         }
       }
     },
+    cssUrlEmbed: {
+      encodeWithBaseDir: {
+        options: {
+          baseDir: './public/stylesheets'
+        },
+        files: {
+          'public/stylesheets/<%= pkg.name %>.encoded.css': ['public/stylesheets/<%= pkg.name %>.css']
+        }
+      }
+    },
     cssmin: {
       css: {
-        src: 'public/stylesheets/<%= pkg.name %>.css',
+        src: 'public/stylesheets/<%= pkg.name %>.encoded.css',
         dest: 'public/stylesheets/<%= pkg.name %>.min.css'
+      }
+    },
+    replace: {
+      dist: {
+        options: {
+          patterns: [
+            {
+              match: 'css',
+              replacement: '<%= grunt.file.read("public/stylesheets/'+ grunt.file.readJSON('package.json').name +'.min.css") %>'
+            }
+          ]
+        },
+        files: [
+          {src: ['views/index-dev.ejs'], dest: 'views/index.ejs'}
+        ]
       }
     },
     qunit: {
@@ -116,7 +141,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-css');
+  grunt.loadNpmTasks('grunt-css-url-embed');
+  grunt.loadNpmTasks('grunt-replace');
 
   grunt.registerTask('test', ['jshint', 'qunit']);
-  grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['concat', 'uglify', 'cssUrlEmbed', 'cssmin', 'replace']);
 };

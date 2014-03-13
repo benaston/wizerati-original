@@ -1,10 +1,10 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator);
     }
 
     var that = this,
@@ -23,11 +23,9 @@
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _itemOfInterestViewFactory = null,
         _selectedCubeFaceModel = null,
-        _selectedItemModel = null,
         _favoritesCubeModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
-        _itemsOfInterestModel = null,
         _layoutCoordinator = null,
         _renderOptimizations = {},
         _scrollTopValues = {},
@@ -69,10 +67,10 @@
       renderPrivate();
     };
 
-    this.render = function (e, args) {
-      setTimeout(function(){ //vain attempt to enable other stuff to render before we attempt this possibly time-consuming render
+    this.render = function (e) {
+//      setTimeout(function(){ //vain attempt to enable other stuff to render before we attempt this possibly time-consuming render
         if (e && _renderOptimizations[e.type]) {
-          _renderOptimizations[e.type].apply(this, args);
+          _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
           return;
         }
 
@@ -80,7 +78,7 @@
 //      var options = args.length > 1 ? args[1] : {};
 //      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
         renderPrivate({ animateSelectedItem: false, removedItemId: null });
-      }, 0);
+//      }, 0);
     };
 
     function renderPrivate(options) {
@@ -88,10 +86,11 @@
 
 //      that.$el.children().not('.handle-pinned-items').remove();
 //      that.$el.empty('.selected-item, .pinned-item');
-      var otherMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
+      var mode = that.Model.getMode();
+      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
-      if(that.Model.getMode() === _modeEnum.Default) {
+      if(mode === _modeEnum.Default) {
         $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
         $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
@@ -100,7 +99,7 @@
       }
 
 
-      that.$el.attr('data-selected-item-count', _selectedItemModel.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
+      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
 
       //these values should be stored before the modification of the DOM (hence before the removal below)
@@ -117,7 +116,6 @@
 //      that.$currentEl.children().not('.handle-pinned-items').remove();
 
       var items = that.Model.getItemsOfInterest();
-      items.selectedItem = _selectedItemModel.getSelectedItemId(); //todo consider refactoring wrt items of interest model
       if (items.selectedItem) {
         _itemOfInterestViewFactory.create(items.selectedItem,
             that.Model.getLayout().widthItemOfInterest,
@@ -188,7 +186,7 @@
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
-    function renderSetSelectedItemId(previouslySelectedItemId) {
+    function renderSetSelectedItemId(selectedItemId, previouslySelectedItemId) {
       if(previouslySelectedItemId) {
         renderPrivate({animateSelectedItem:false});
       } else {
@@ -259,7 +257,7 @@
       that.$el = $(_el);
       that.$elSelectedItem = $(_elSelectedItem);
       that.$elPinnedItems = $(_elPinnedItems);
-      that.render();
+//      that.render();
     };
 
     function init() {
@@ -274,10 +272,6 @@
 
       if (!selectedCubeFaceModel) {
         throw 'selectedCubeFaceModel not supplied';
-      }
-
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied';
       }
 
       if (!hiddenItemsModel) {
@@ -300,7 +294,6 @@
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
-      _selectedItemModel = selectedItemModel;
       _favoritesCubeModel = favoritesCubeModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
@@ -318,15 +311,11 @@
       $.subscribe(that.Model.eventUris.layoutChange, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_selectedItemModel.eventUris.default, that.renderWithSelectedItemAnimation);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
 
       that.Model = model;
-
-
-//      $.subscribe(that.Model.updateEventUri, that.render);
 
       return that;
     }

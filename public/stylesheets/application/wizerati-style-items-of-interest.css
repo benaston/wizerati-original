@@ -368,3 +368,7 @@ and (max-width: 568px) {
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
+
+#selected-item-container-2 {
+    background:blue;
+}

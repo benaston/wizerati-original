@@ -1,12 +1,12 @@
 (function (app) {
   'use strict';
 
-  function FavoriteViewFactory(loginService, itemRepository, selectedItemModel, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function FavoriteViewFactory(loginService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.FavoriteViewFactory)) {
       return new app.FavoriteViewFactory(loginService,
           itemRepository,
-          selectedItemModel,
+//          selectedItemModel,
           hiddenItemsModel,
           actionedItemsModel,
           itemsOfInterestModel);
@@ -15,7 +15,7 @@
     var that = this,
         _loginService = null,
         _itemRepository = null,
-        _selectedItemModel = null,
+//        _selectedItemModel = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _itemsOfInterestModel = null,
@@ -28,7 +28,7 @@
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
             item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _selectedItemModel.getSelectedItemId() === item.id;
+            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _hiddenItemsModel.isHidden(item.id);
             item.isActioned = _actionedItemsModel.isActioned(item.id);
             item.isItemOfInterest = _itemsOfInterestModel.isItemOfInterest(item.id);
@@ -39,7 +39,7 @@
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
             item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _selectedItemModel.getSelectedItemId() === item.id;
+            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _hiddenItemsModel.isHidden(item.id);
             item.isActioned = _actionedItemsModel.isActioned(item.id);
             item.isItemOfInterest = _itemsOfInterestModel.isItemOfInterest(item.id);
@@ -60,9 +60,9 @@
         throw 'itemRepository not supplied.';
       }
 
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied.';
-      }
+//      if (!selectedItemModel) {
+//        throw 'selectedItemModel not supplied.';
+//      }
 
       if (!hiddenItemsModel) {
         throw 'hiddenItemsModel not supplied.';
@@ -78,7 +78,7 @@
 
       _loginService = loginService;
       _itemRepository = itemRepository;
-      _selectedItemModel = selectedItemModel;
+//      _selectedItemModel = selectedItemModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;

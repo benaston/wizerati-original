@@ -1,13 +1,13 @@
 (function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, selectedItemModel, searchPanelModel) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.SearchController)) {
       return new app.SearchController(uiRootModel,
           searchFormModel,
           searchService,
-          resultListModel, guidFactory, selectedItemModel, searchPanelModel);
+          resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel);
     }
 
     var that = this,
@@ -18,8 +18,8 @@
         _searchService = null,
         _resultListModel = null,
         _guidFactory = null,
-        _selectedItemModel = null,
-        _searchPanelModel = null;
+        _searchPanelModel = null,
+        _itemsOfInterestModel = null;
 
     this.urlTransforms = {};
 
@@ -41,8 +41,8 @@
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
-              if(!_selectedItemModel.getSelectedItemId()) {
-                _selectedItemModel.setSelectedItemId(results[0].id, { silent: false });
+              if(!_itemsOfInterestModel.getSelectedItemId()) {
+                _itemsOfInterestModel.setSelectedItemId(results[0].id, { silent: false });
               }
 
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
@@ -90,12 +90,12 @@
         throw 'guidFactory not supplied.';
       }
 
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied.';
-      }
-
       if (!searchPanelModel) {
         throw 'searchPanelModel not supplied.';
+      }
+
+      if (!itemsOfInterestModel) {
+        throw 'itemsOfInterestModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -103,8 +103,8 @@
       _searchService = searchService;
       _resultListModel = resultListModel;
       _guidFactory = guidFactory;
-      _selectedItemModel = selectedItemModel;
       _searchPanelModel = searchPanelModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
 
       that.urlTransforms['/search'] = uriTransformShow;
 

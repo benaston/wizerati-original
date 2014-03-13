@@ -1,14 +1,13 @@
 (function (app) {
   'use strict';
 
-  function SelectedItemController(selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel) {
+  function SelectedItemController(searchPanelModel, resultListModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.SelectedItemController)) {
-      return new app.SelectedItemController(selectedItemModel, searchPanelModel, resultListModel, itemsOfInterestModel);
+      return new app.SelectedItemController(searchPanelModel, resultListModel, itemsOfInterestModel);
     }
 
     var that = this,
-        _selectedItemModel = null,
         _searchPanelModel = null,
         _resultListModel = null,
         _itemsOfInterestModel = null,
@@ -38,17 +37,13 @@
           throw "invalid source.";
         }
 
-        _selectedItemModel.setSelectedItemId(dto.id);
+        _itemsOfInterestModel.setSelectedItemId(dto.id); //trigger the repaint of the items of interest view
       } catch (err) {
         console.log('SelectedItemController::update exception: ' + err);
       }
     };
 
     function init() {
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied.';
-      }
-
       if (!searchPanelModel) {
         throw 'searchPanelModel not supplied.';
       }
@@ -61,7 +56,6 @@
         throw 'itemsOfInterestModel not supplied.';
       }
 
-      _selectedItemModel = selectedItemModel;
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _itemsOfInterestModel = itemsOfInterestModel;

@@ -1,13 +1,12 @@
-(function (app, $, invertebrate, _) {
+(function (app, $, invertebrate) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, selectedItemModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel) {
+  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.ResultListView)) {
       return new app.ResultListView(model,
           resultViewFactory,
           selectedCubeFaceModel,
-          selectedItemModel,
           favoritesCubeModel,
           hiddenItemsModel,
           actionedItemsModel,
@@ -19,7 +18,6 @@
         _elResultList = '.result-list',
         _resultViewFactory = null,
         _selectedCubeFaceModel = null,
-        _selectedItemModel = null,
         _favoritesCubeModel = null,
         _actionedItemsModel = null,
         _hiddenItemsModel = null,
@@ -129,10 +127,6 @@
         throw 'selectedCubeFaceModel not supplied';
       }
 
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied';
-      }
-
       if (!favoritesCubeModel) {
         throw 'selectedItemModel not supplied';
       }
@@ -153,21 +147,20 @@
       that.Model = model;
       _resultViewFactory = resultViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
-      _selectedItemModel = selectedItemModel;
       _favoritesCubeModel = favoritesCubeModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
 
-      _renderOptimizations[_selectedItemModel.eventUris.default] = renderSetSelectedItemId;
+      _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = renderSetSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_selectedItemModel.eventUris.default, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
       $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
 
       return that;
     }
@@ -178,4 +171,4 @@
   app.ResultListView = ResultListView;
   invertebrate.View.isExtendedBy(app.ResultListView);
 
-}(wizerati, $, invertebrate, _));
+}(wizerati, $, invertebrate));
