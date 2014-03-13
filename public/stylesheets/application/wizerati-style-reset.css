@@ -1,6 +1,6 @@
-a:focus {
+a:focus, a:active {
     outline: none;
-    outline-offset: 2px;
+    outline-offset: 2px; /*why?*/
     box-shadow: 0 0 0 4px #eee;
 }
 
