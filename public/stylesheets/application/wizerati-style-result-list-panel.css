@@ -279,4 +279,27 @@ and (max-device-width: 568px) {
     .result-list-panel {
         width: 200px;
     }
+
+
+}
+
+/*ipad*/
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px) {
+    .t a:focus, .t a:active {
+        outline: none;
+        outline-offset: 2px; /*why?*/
+        /*box-shadow: 0 0 0 4px #eee inset;*/
+        background: rgba(0,0,0,0.1)
+    }
+
+    .t.selected {
+        background: none;
+    }
+
+    .t.selected a {
+        background: rgba(0, 0, 0, .1);
+        border-radius: 0;
+    }
 }
