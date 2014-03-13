@@ -95,7 +95,7 @@ module.exports = function (grunt) {
     },
     cssmin: {
       css: {
-        src: 'public/stylesheets/<%= pkg.name %>.css',
+        src: 'public/stylesheets/<%= pkg.name %>.encoded.css',
         dest: 'public/stylesheets/<%= pkg.name %>.min.css'
       }
     },
