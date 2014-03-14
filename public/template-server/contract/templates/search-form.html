@@ -4,7 +4,7 @@ var keywords = model.getKeywords();
 %><form name="search-form" action="/search" method="GET">
     <h2 class="search-form-title">Search IT contract jobs</h2>
     <div class="search-fields">
-      <input type="search" autofocus id="keywords" name="keywords" <%= keywords ? "value='" + keywords + "'" : "''" %> class="field" required placeholder="my skills (e.g. ruby) and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
+      <input type="search" id="keywords" name="keywords" <%= keywords ? "value='" + keywords + "'" : "''" %> class="field" required placeholder="my skills (e.g. ruby) and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
       <span>minimum daily rate (gbp)</span>
