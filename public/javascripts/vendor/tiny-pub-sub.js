@@ -25,7 +25,7 @@
   $.publish = function () {
     //"optimization"
 //    try {
-      o.trigger.apply(o, arguments);
+      o.trigger.call(o, arguments[0], Array.prototype.slice.call(arguments, 1));
 //    } catch (e) {
 //      throw 'tinyPubSub::publish exception: ' + e;
 //    }
