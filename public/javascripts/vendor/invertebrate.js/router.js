@@ -37,7 +37,7 @@
       })[0];
 
       if (!firstMatchingRouteUri) {
-        throw 'no matching route ' + uriWithoutQueryString;
+        throw 'No matching client-side route "' + uriWithoutQueryString + '". Check your route-registry.';
       }
 
       var route = that.routes[firstMatchingRouteUri];

@@ -1,9 +1,9 @@
 (function (invertebrate, $, _, moment) {
   'use strict';
 
-  function App(templateServerSvc) {
+  function App(templateUrlHelper) {
     if (!(this instanceof invertebrate.App)) {
-      return new invertebrate.App(templateServerSvc);
+      return new invertebrate.App(templateUrlHelper);
     }
 
     var that = this,
@@ -123,11 +123,11 @@
     };
 
     function init() {
-      if (!templateServerSvc) {
-        throw 'templateServerSvc not supplied';
+      if (!templateUrlHelper) {
+        throw 'templateUrlHelper not supplied';
       }
 
-      _templateServerSvc = templateServerSvc;
+      _templateServerSvc = templateUrlHelper;
       return that;
     }
 

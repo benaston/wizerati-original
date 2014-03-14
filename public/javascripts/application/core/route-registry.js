@@ -15,6 +15,10 @@
           app.mod('controllers').homeController.index();
         });
 
+        instance.router.registerRoute('/indexs', function () {
+          app.mod('controllers').homeController.index();
+        });
+
 //        instance.router.registerRoute('/session/create', function (model) {
 //          app.mod('controllers').sessionController.create(model);
 //        });

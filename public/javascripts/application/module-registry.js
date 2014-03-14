@@ -148,7 +148,7 @@
   'use strict';
 
   try {
-    mod.TemplateUriHelper = new invertebrate.TemplateUriHelper(wizerati.mod('config').config, wizerati.mod('services').croniclService.getCroniclUri);
+    mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(wizerati.mod('config').config, wizerati.mod('services').croniclService.getCroniclUri);
   }
   catch (e) {
     throw 'problem registering templates module. ' + e;
@@ -156,7 +156,7 @@
 
 }(wizerati.mod('templates')));
 
-(function (mod, i, config, d) {
+(function (mod) {
   'use strict';
 
   try {

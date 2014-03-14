@@ -1,12 +1,10 @@
 <% try {
 var rate = model.getRate();
 var keywords = model.getKeywords();
-var location = model.getLocation();
 %><form name="search-form" action="/search" method="GET">
     <h2 class="search-form-title">Search IT contract jobs</h2>
     <div class="search-fields">
-      <input id="keywords" name="keywords" <%= keywords ? "value='" + keywords + "'" : "''" %> class="field" required placeholder="my skills (e.g. ruby) and / or location" tabindex="1" autocorrect="off" autocapitalize="none" type="search" tabindex="1">
-      <!--<input id="location" name="location" <%= location ? "value='" + location + "'" : "''" %> class="field" placeholder="location (e.g. london, w2)" autocorrect="off" autocapitalize="none" type="text" tabindex="1">-->
+      <input type="search" autofocus id="keywords" name="keywords" <%= keywords ? "value='" + keywords + "'" : "''" %> class="field" required placeholder="my skills (e.g. ruby) and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
       <span>minimum daily rate (gbp)</span>
@@ -18,25 +16,18 @@ var location = model.getLocation();
           </td>
             <td>
             <input id="r350" name="r" type="radio" value="350" tabindex="1" <%= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" %>>
-              <!--<span class="focus-indicator"></span>-->
               <label for="r350">350</label>
-
           </td>
           <td>
             <input id="r450" name="r" type="radio" value="450" tabindex="1" <%= rate ? rate === "450" ? "checked='checked'" : ""  : "" %>>
-              <!--<span class="focus-indicator"></span>-->
               <label for="r450">450</label>
-
           </td>
           <td>
             <input id="r550" name="r" type="radio" value="550" tabindex="1" <%= rate ? rate === "550" ? "checked='checked'" : ""  : "" %>>
-              <!--<span class="focus-indicator"></span>-->
               <label for="r550">550</label>
-
           </td>
           <td>
             <input id="r650" name="r" type="radio" value="650" tabindex="1" <%= rate ? rate === "650" ? "checked='checked'" : ""  : "" %>>
-              <!--<span class="focus-indicator"></span>-->
               <label for="r650">650</label>
           </td>
         </tr>
@@ -75,5 +66,3 @@ var location = model.getLocation();
 } catch(e) {
 throw "template exception: search-form. " + e;
 }%>
-
-<!--<span class="focus-indicator"></span><div class="label">search</div>-->

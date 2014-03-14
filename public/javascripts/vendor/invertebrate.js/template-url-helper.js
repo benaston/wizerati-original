@@ -1,10 +1,10 @@
 (function (invertebrate) {
   'use strict';
 
-  function TemplateUriHelper(configSvc, serverUriSelectionFunc) {
+  function TemplateUrlHelper(configSvc, serverUriSelectionFunc) {
 
-    if (!(this instanceof invertebrate.TemplateUriHelper)) {
-      return new invertebrate.TemplateUriHelper(configSvc, serverUriSelectionFunc);
+    if (!(this instanceof invertebrate.TemplateUrlHelper)) {
+      return new invertebrate.TemplateUrlHelper(configSvc, serverUriSelectionFunc);
     }
 
     var that = this,
@@ -62,5 +62,5 @@
     return init();
   }
 
-  invertebrate.TemplateUriHelper = TemplateUriHelper;
+  invertebrate.TemplateUrlHelper = TemplateUrlHelper;
 }(invertebrate));

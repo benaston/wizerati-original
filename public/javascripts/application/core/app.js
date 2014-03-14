@@ -20,7 +20,7 @@
       that.env = env;
       that.router = router;
 
-      return _.extend(that, new invertebrate.App(app.mod('templates').TemplateUriHelper));
+      return _.extend(that, new invertebrate.App(app.mod('templates').templateUrlHelper));
     }
 
     return init();
