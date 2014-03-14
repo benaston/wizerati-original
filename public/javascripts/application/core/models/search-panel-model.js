@@ -11,7 +11,10 @@
         _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _mode = _searchPanelModeEnum.Default;
 
-    this.eventUris = { default: 'update://searchpanelmodel/' };
+    this.eventUris = {
+      default: 'update://searchpanelmodel/',
+      setMode: 'update://searchpanelmodel/setmode'
+    };
 
     this.getMode = function () {
       return _mode || _searchPanelModeEnum.Default;
@@ -27,7 +30,7 @@
       _mode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setMode);
       }
     };
 

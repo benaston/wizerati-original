@@ -68,7 +68,6 @@
     };
 
     this.render = function (e) {
-//      setTimeout(function(){ //vain attempt to enable other stuff to render before we attempt this possibly time-consuming render
         if (e && _renderOptimizations[e.type]) {
           _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
           return;
@@ -78,7 +77,6 @@
 //      var options = args.length > 1 ? args[1] : {};
 //      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
         renderPrivate({ animateSelectedItem: false, removedItemId: null });
-//      }, 0);
     };
 
     function renderPrivate(options) {

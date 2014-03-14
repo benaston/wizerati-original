@@ -62,7 +62,7 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',
-          'public/stylesheets/application/wizerati-style-navbar-and-logo.css',
+          'public/stylesheets/application/wizerati-style-navbar-and-logo-and-build.css',
           'public/stylesheets/application/wizerati-style-result-list-panel.css'
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
@@ -203,8 +203,11 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      files: ['<%= jshint.files %>'],
-      tasks: ['jshint', 'qunit']
+      files: ['public/**/*', 'view-templates/index.ejs'],
+      tasks: ['default'],
+      options: {
+        debounceDelay: 250
+      }
     }
   });
 

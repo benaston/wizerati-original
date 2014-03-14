@@ -1,4 +1,4 @@
-(function (app) {
+(function (app, c) {
   'use strict';
 
   function RouteRegistry() {
@@ -8,127 +8,127 @@
 
     var that = this;
 
-    this.registerRoutes = function (instance) {
+    this.registerRoutes = function (router) {
       try {
 
-        instance.router.registerRoute('/', function () {
-          app.mod('controllers').homeController.index();
+        router.registerRoute('/', function () {
+          c.homeController.index();
         });
 
-        instance.router.registerRoute('/indexs', function () {
-          app.mod('controllers').homeController.index();
+        router.registerRoute('/indexs', function () {
+          c.homeController.index();
         });
 
-//        instance.router.registerRoute('/session/create', function (model) {
-//          app.mod('controllers').sessionController.create(model);
+//        router.registerRoute('/session/create', function (model) {
+//          c.sessionController.create(model);
 //        });
 //
-//        instance.router.registerRoute('/login', function () {
-//          app.mod('controllers').loginController.index();
+//        router.registerRoute('/login', function () {
+//          c.loginController.index();
 //        });
 //
-//        instance.router.registerRoute('/advertisers', function () {
-//          app.mod('controllers').advertisersController.index();
+//        router.registerRoute('/advertisers', function () {
+//          c.advertisersController.index();
 //        });
 
-        instance.router.registerRoute('/search', function (dto) {
-          app.mod('controllers').searchController.show(dto);
-        }, { title: 'Wizerati Search', uriTransform: app.mod('controllers').searchController.urlTransforms['/search'] });
+        router.registerRoute('/search', function (dto) {
+          c.searchController.show(dto);
+        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'] });
 
-        instance.router.registerRoute('/selecteditem/update', function (dto) {
-          app.mod('controllers').selectedItemController.update(dto);
+        router.registerRoute('/selecteditem/update', function (dto) {
+          c.selectedItemController.update(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/favorites/create', function (dto) {
-          app.mod('controllers').favoritesController.create(dto);
+        router.registerRoute('/favorites/create', function (dto) {
+          c.favoritesController.create(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/favorites/destroy', function (dto) {
-          app.mod('controllers').favoritesController.destroy(dto);
+        router.registerRoute('/favorites/destroy', function (dto) {
+          c.favoritesController.destroy(dto);
         }, { silent: true });
 
-//        instance.router.registerRoute('/selectedcubeface/update', function (dto) {
-//          app.mod('controllers').selectedCubeFaceController.update(dto);
+//        router.registerRoute('/selectedcubeface/update', function (dto) {
+//          c.selectedCubeFaceController.update(dto);
 //        }, { silent: true });
 
-        instance.router.registerRoute('/itemsofinterest/create', function (dto) {
-          app.mod('controllers').itemsOfInterestController.create(dto);
+        router.registerRoute('/itemsofinterest/create', function (dto) {
+          c.itemsOfInterestController.create(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/itemsofinterest/destroy', function (dto) {
-          app.mod('controllers').itemsOfInterestController.destroy(dto);
+        router.registerRoute('/itemsofinterest/destroy', function (dto) {
+          c.itemsOfInterestController.destroy(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/itemsofinterestpanelmode/update', function (dto) {
-          app.mod('controllers').itemsOfInterestPanelModeController.update(dto);
+        router.registerRoute('/itemsofinterestpanelmode/update', function (dto) {
+          c.itemsOfInterestPanelModeController.update(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/hiddenitems/create', function (dto) {
-          app.mod('controllers').hiddenItemsController.create(dto);
+        router.registerRoute('/hiddenitems/create', function (dto) {
+          c.hiddenItemsController.create(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/hiddenitems/destroy', function (dto) {
-          app.mod('controllers').hiddenItemsController.destroy(dto);
+        router.registerRoute('/hiddenitems/destroy', function (dto) {
+          c.hiddenItemsController.destroy(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/actioneditems/create', function (dto) {
-          app.mod('controllers').actionedItemsController.create(dto);
+        router.registerRoute('/actioneditems/create', function (dto) {
+          c.actionedItemsController.create(dto);
         }, { silent: true });
 
-        instance.router.registerRoute('/actioneditems/destroy', function (dto) {
-          app.mod('controllers').actionedItemsController.destroy(dto);
+        router.registerRoute('/actioneditems/destroy', function (dto) {
+          c.actionedItemsController.destroy(dto);
         }, { silent: true });
 
-//        instance.router.registerRoute('/purchasepanel', function (dto) {
-//          app.mod('controllers').purchasePanelController.index(dto);
+//        router.registerRoute('/purchasepanel', function (dto) {
+//          c.purchasePanelController.index(dto);
 //        });
 //
-//        instance.router.registerRoute('/purchasepanel/destroy', function (dto) {
-//          app.mod('controllers').purchasePanelController.destroy(dto);
+//        router.registerRoute('/purchasepanel/destroy', function (dto) {
+//          c.purchasePanelController.destroy(dto);
 //        }, { silent: true });
 //
-//        instance.router.registerRoute('/accountactivationpanel', function (dto) {
-//          app.mod('controllers').accountActivationPanelController.index(dto);
+//        router.registerRoute('/accountactivationpanel', function (dto) {
+//          c.accountActivationPanelController.index(dto);
 //        });
 //
-//        instance.router.registerRoute('/accountactivationpanel/destroy', function (dto) {
-//          app.mod('controllers').accountActivationPanelController.destroy(dto);
+//        router.registerRoute('/accountactivationpanel/destroy', function (dto) {
+//          c.accountActivationPanelController.destroy(dto);
 //        });
 //
-//        instance.router.registerRoute('/accountactivation/create', function (dto) {
-//          app.mod('controllers').accountActivationController.create(dto);
+//        router.registerRoute('/accountactivation/create', function (dto) {
+//          c.accountActivationController.create(dto);
 //        });
 //
-//        instance.router.registerRoute('/purchasepanelaccounts/create', function (dto) {
-//          app.mod('controllers').purchasePanelAccountsController.create(dto);
+//        router.registerRoute('/purchasepanelaccounts/create', function (dto) {
+//          c.purchasePanelAccountsController.create(dto);
 //        });
 //
-        instance.router.registerRoute('/searchpanelmode/update', function (dto) {
-          app.mod('controllers').searchPanelModeController.update(dto);
+        router.registerRoute('/searchpanelmode/update', function (dto) {
+          c.searchPanelModeController.update(dto);
         }, { silent: true });
 //
-//        instance.router.registerRoute('/resultlistmode/update', function (dto) {
-//          app.mod('controllers').resultListModeController.update(dto);
+//        router.registerRoute('/resultlistmode/update', function (dto) {
+//          c.resultListModeController.update(dto);
 //        }, { silent: true });
 //
-//        instance.router.registerRoute('/favoritegroup/create', function (dto) {
-//          app.mod('controllers').favoriteGroupController.create(dto);
+//        router.registerRoute('/favoritegroup/create', function (dto) {
+//          c.favoriteGroupController.create(dto);
 //        }, { silent: true });
 //
-//        instance.router.registerRoute('/favoritegroup/destroy', function (dto) {
-//          app.mod('controllers').favoriteGroupController.destroy(dto);
+//        router.registerRoute('/favoritegroup/destroy', function (dto) {
+//          c.favoriteGroupController.destroy(dto);
 //        }, { silent: true });
 //
-//        instance.router.registerRoute('/favoritescubemode/update', function (dto) {
-//          app.mod('controllers').favoritesCubeModeController.update(dto);
+//        router.registerRoute('/favoritescubemode/update', function (dto) {
+//          c.favoritesCubeModeController.update(dto);
 //        }, { silent: true });
 //
-//        instance.router.registerRoute('/deletefavoritegroupconfirmationdialog', function (dto) {
-//          app.mod('controllers').deleteFavoriteGroupConfirmationDialogController.index(dto);
+//        router.registerRoute('/deletefavoritegroupconfirmationdialog', function (dto) {
+//          c.deleteFavoriteGroupConfirmationDialogController.index(dto);
 //        }, { silent: true });
 //
-//        instance.router.registerRoute('/deletefavoritegroupconfirmationdialog/destroy', function (dto) {
-//          app.mod('controllers').deleteFavoriteGroupConfirmationDialogController.destroy(dto);
+//        router.registerRoute('/deletefavoritegroupconfirmationdialog/destroy', function (dto) {
+//          c.deleteFavoriteGroupConfirmationDialogController.destroy(dto);
 //        }, { silent: true });
 
       } catch (e) {
@@ -137,10 +137,11 @@
     };
 
     function init() {
+      return that;
     }
 
     return init();
   }
 
   app.RouteRegistry = RouteRegistry;
-}(wizerati));
+}(wizerati, wizerati.mod('controllers')));

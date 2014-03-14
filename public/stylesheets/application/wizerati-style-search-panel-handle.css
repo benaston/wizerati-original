@@ -1,39 +1,42 @@
 .handle-search-panel {
-    color: #333;
-    text-decoration: none;
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
-    margin: 5px 0 0 0;
-    opacity: 0;
-    z-index: 1;
-    cursor: pointer;
-    z-index: 2;
     width: 74px;
-}
-
-.handle-search-panel .btn {
-    color: rgba(0, 109, 204, 0.95);
-}
-
-.handle-search-panel .label {
-    padding: 0 1px 0 1px;
+    margin: 5px 0 0 0;
+    color: #333;
+    text-decoration: none;
+    /*opacity: 0;*/
+    z-index: 2;
+    -webkit-transform: scale(1);
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
 .search-panel[data-mode='0'] .handle-search-panel {
-    opacity: 0;
+    /*opacity: 0;*/
+    -webkit-filter: opacity(0%);
     pointer-events: none;
 }
 
-body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='0'] .handle-search-panel {
-    transition: opacity .1s ease-out 0;
-}
-
-body:not([data-are-transitions-enabled='false']) .search-panel[data-mode='1'] .handle-search-panel {
-    transition: opacity .2s ease-out .2s;
-}
-
 .search-panel[data-mode='1'] .handle-search-panel {
-    opacity: 1;
+    /*opacity: 1;*/
+    -webkit-filter: opacity(100%);
     pointer-events: auto;
 }
+
+/*body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] .handle-search-panel {*/
+    /*transition: opacity .1s ease-out 0;*/
+/*}*/
+
+/*body[data-are-transitions-enabled='true'] .search-panel[data-mode='1'] .handle-search-panel {*/
+    /*transition: opacity .1s ease-out 0;*/
+/*}*/
+
+.handle-search-panel-label {
+    padding: 0 1px 0 1px;
+}
+
+/*body[data-are-transitions-enabled='true'] .search-panel[data-mode='1'] #search-form {*/
+    /*transition: opacity .1s ease-out;*/
+/*}*/
+

@@ -1,32 +1,25 @@
 #search-form {
-    pointer-events: none;
     width: 340px; /* width explicitly spec'd to enable margin:auto centering on greenfield*/
     height: 330px;
     position: relative;
     text-align: left;
     margin: auto;
     padding-bottom: 12px;
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
-body[data-ui-mode='1'] #search-form:not(.hidden),
-body[data-ui-mode='0'] #search-form:not(.hidden) {
-    pointer-events: auto;
-    transition: opacity .1s linear;
+.search-panel[data-mode='1'] #search-form {
+    /*opacity: 0;*/
+    -webkit-filter: opacity(0%);
 }
 
-#search-form.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .1s linear;
+.search-panel[data-mode='0'] #search-form {
+    /*opacity: 0;*/
+    -webkit-filter: opacity(100%);
 }
 
 body[data-ui-mode='0'] #search-form .search-filters {
     text-align: left;
-}
-
-.search-form-title {
-    display: none;
-    margin: 38px 0 0;
 }
 
 body[data-ui-mode='0'] .search-form-title {
@@ -35,14 +28,14 @@ body[data-ui-mode='0'] .search-form-title {
 
 body[data-ui-mode='0'] #search-form {
     position: absolute;
+    height: 400px;
+    width: 400px;
     left: 50%;
     top: 44%;
     margin-left: -200px;
     margin-top: -200px;
     box-shadow: 0 0 100px 0px rgba(0, 0, 0, .3);
     border-radius: 80px;
-    height: 400px;
-    width: 400px;
     text-align: center;
     background: rgba(255, 255, 255, 1);
 }
@@ -58,7 +51,6 @@ form[name='search-form'] {
     font-weight: normal;
     font-family: helvetica-pro-light;
     line-height: 100px;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .search-button-container .label {
@@ -92,4 +84,31 @@ body[data-ui-mode='0'] .search-button-container {
 .search-filters {
     display: inline-block;
     position: relative;
+}
+
+.search-form-title {
+    display: none;
+    margin: 38px 0 0;
+}
+
+
+.search-filters input[type=radio]:not(:checked) + label:hover {
+    border-color: rgba(255, 200, 0, 0.3);
+}
+
+.search-filters label:active {
+    box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.05) inset;
+}
+
+.search-filters label {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 45px;
+    border: 0;
+    text-align: center;
+    height: 45px;
+    width: 45px;
+    border-radius: 45px;
+    margin: 8px 11px 0 0;
+    color: rgba(0, 109, 204, 0.95);
 }
