@@ -14,9 +14,14 @@ html input[type="tel"]{
     vertical-align: middle;
     outline: none;
     padding: 0;
-    width: 277px;
+    /*width: 277px;*/
+    width: 285px;
     transition: border linear 0.2s;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+input[type="search"] {
+    -webkit-appearance: textfield; /*negate safari horrible styling*/
 }
 
 input[type=radio]:not(:checked) + label:hover {

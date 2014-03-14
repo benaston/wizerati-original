@@ -279,6 +279,10 @@ html input[type="tel"]{
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
+input[type="search"] {
+    -webkit-appearance: textfield; /*negate safari horrible styling*/
+}
+
 input[type=radio]:not(:checked) + label:hover {
     border-color: rgba(255, 200, 0, 0.3);
 }

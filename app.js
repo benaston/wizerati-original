@@ -9,12 +9,13 @@ var app = express();
 app.set('port', process.env.PORT || 3002);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+app.use(express.compress()); //gzip compression for HTTP responses
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.compress());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
