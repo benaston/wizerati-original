@@ -42,32 +42,28 @@ module.exports = function (grunt) {
       },
       css: {
         src: [
-          'public/stylesheets/vendor/lucid-style-reset.css',
-          'public/stylesheets/application/wizerati-style-reset.css',
+          'public/stylesheets/vendor/third-party-reset.css',
+          'public/stylesheets/application/wizerati-style-reset-non-form.css',
+          'public/stylesheets/application/wizerati-style-reset-form.css',
 
-//          'public/stylesheets/vendor/lucid-style-animation.css',
           'public/stylesheets/vendor/lucid-style-buttons.css',
-//          'public/stylesheets/vendor/lucid-style-declarative.css',
 //          'public/stylesheets/vendor/lucid-style-dialogs.css',
-          'public/stylesheets/vendor/lucid-style-faces.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
-//          'public/stylesheets/vendor/lucid-style-table.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
-//          'public/stylesheets/vendor/lucid-style-declarative.css',
-//          'public/stylesheets/vendor/lucid-style-colors.css',
 
           'public/stylesheets/application/wizerati-style-animation.css',
           'public/stylesheets/application/wizerati-style-body.css',
           'public/stylesheets/application/wizerati-style-dialogs.css',
+          'public/stylesheets/application/wizerati-style-faces.css',
           'public/stylesheets/application/wizerati-style-items-of-interest.css',
           'public/stylesheets/application/wizerati-style-loading-and-background.css',
           'public/stylesheets/application/wizerati-style-main-container.css',
           'public/stylesheets/application/wizerati-style-modal-container.css',
           'public/stylesheets/application/wizerati-style-search-panel.css',
+          'public/stylesheets/application/wizerati-style-search-form.css',
+          'public/stylesheets/application/wizerati-style-search-panel-handle.css',
           'public/stylesheets/application/wizerati-style-navbar-and-logo.css',
-          'public/stylesheets/application/wizerati-style-result-list-panel.css',
-//          'public/stylesheets/application/wizerati-style-cube.css',
-          'public/stylesheets/application/wizerati-style-special.css'
+          'public/stylesheets/application/wizerati-style-result-list-panel.css'
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
       }

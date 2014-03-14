@@ -1,12 +1,9 @@
-/* Navbar */
-
 body[data-ui-mode='0'] .navbar, body[data-ui-mode='1'] .navbar {
     opacity: 1;
     pointer-events: auto;
 }
 
 body[data-ui-mode='0'] .logo-image {
-    /*opacity: 1;*/
     z-index: 2;
 }
 
@@ -41,10 +38,6 @@ body[data-ui-mode='1'] .logo-image2 {
     pointer-events: none;
     transition: opacity .1s linear;
 }
-
-/* End Navbar */
-
-/* Logo */
 
 body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     opacity: 1;
@@ -92,4 +85,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     top: 59px;
 }
 
-/* End Logo */
+body[data-ui-mode='1'] .logo,
+body[data-ui-mode='1'] .tag-line {
+    z-index: -1;
+}

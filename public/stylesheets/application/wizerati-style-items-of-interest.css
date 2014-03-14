@@ -1,4 +1,3 @@
-
 .items-of-interest-panel {
     position: relative;
     display: inline-block;
@@ -336,3 +335,42 @@ and (max-width: 568px) {
 #selected-item-container-2 {
     background: blue;
 }
+
+.itemMetadata h1 {
+    margin-bottom: 18px;
+}
+
+.itemMetadata h3 {
+    text-align: right;
+}
+
+
+.item-of-interest p {
+    margin-bottom: 2rem;
+}
+
+.item-of-interest .location, .item-of-interest .country {
+    font-size: .8rem;
+}
+
+.item-of-interest li {
+    line-height: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.item-of-interest ul, .item-of-interest ol {
+    margin-bottom: 20px;
+}
+
+.itemMetadata h3, .itemContact h3 {
+    line-height: .8rem;
+}
+
+.updatedDateTime {
+    font-size: .8rem;
+}
+
+.id {
+    font-size: .7rem;
+}
+
