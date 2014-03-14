@@ -673,6 +673,7 @@ body:not(.suppress-transitions) .search-panel[data-mode='0'] ~ .result-list-pane
 
 .selected-item, .pinned-item {
     /*transition: left .5s ease-in-out .3s, -webkit-filter .2s linear;*/
+    transition: -webkit-filter .2s linear;
 }
 
 body[data-items-of-interest-mode='1']:not(.suppress-transitions) .selected-item, body[data-items-of-interest-mode='1'] .pinned-item {
