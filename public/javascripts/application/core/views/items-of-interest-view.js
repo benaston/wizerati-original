@@ -288,7 +288,7 @@
         throw 'layoutCoordinator not supplied';
       }
 
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
+//      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;

@@ -9,12 +9,10 @@
 }
 
 .search-panel[data-mode='1'] #search-form {
-    /*opacity: 0;*/
     -webkit-filter: opacity(0%);
 }
 
 .search-panel[data-mode='0'] #search-form {
-    /*opacity: 0;*/
     -webkit-filter: opacity(100%);
 }
 
@@ -90,7 +88,6 @@ body[data-ui-mode='0'] .search-button-container {
     display: none;
     margin: 38px 0 0;
 }
-
 
 .search-filters input[type=radio]:not(:checked) + label:hover {
     border-color: rgba(255, 200, 0, 0.3);

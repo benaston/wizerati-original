@@ -2745,7 +2745,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'false'
+          'enableTrace': 'true'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -3807,6 +3807,10 @@ window.wizerati = {
     //useful to temporarily hiding the entire UI
     //to mask major activity in the UI.
     this.setIsVisible = function (value) {
+      if(value === _isVisible) {
+        return;
+      }
+
       _isVisible = value;
 
       $.publish(that.eventUris.isVisibleChange);
@@ -3817,6 +3821,10 @@ window.wizerati = {
     };
 
     this.setAreTransitionsEnabled = function (value) {
+      if(value === _areTransitionsEnabled) {
+        return;
+      }
+
       _areTransitionsEnabled = value;
 
       $.publish(that.eventUris.setAreTransitionsEnabled);
@@ -3832,6 +3840,10 @@ window.wizerati = {
 
     this.setUIMode = function (value, options) {
       options = options || {silent: false};
+
+      if(value === _uiMode) {
+        return;
+      }
 
       _uiMode = value;
 
@@ -4688,7 +4700,7 @@ window.wizerati = {
         throw 'layoutCoordinator not supplied';
       }
 
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
+//      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -6143,7 +6155,6 @@ window.wizerati = {
               }
 
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-//                _searchFormModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setAreTransitionsEnabled('false');
               }
@@ -7096,11 +7107,14 @@ window.wizerati = {
         throw 'layoutCalculator not supplied.';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       _itemsOfInterestModel = itemsOfInterestModel;
       _layoutCalculator = layoutCalculator;
 
       $.subscribe(searchPanelModel.eventUris.setMode, that.layOut);
       $.subscribe(itemsOfInterestModel.eventUris.modeChange, that.layOut);
+
+      return that;
     }
 
     init();

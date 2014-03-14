@@ -51,9 +51,9 @@ body[data-items-of-interest-mode='1']:not(.suppress-transitions) .selected-item,
     /*transition: left .5s ease-in-out, -webkit-filter .3s linear .5s;*/
 }
 
-body:not([data-are-transitions-enabled='false']) .selected-item-content, .pinned-item-content {
-    transition: width .2s ease-out;
-}
+/*body:not([data-are-transitions-enabled='false']) .selected-item-content, .pinned-item-content {*/
+    /*transition: width .2s ease-out;*/
+/*}*/
 
 .selected-item-content, .pinned-item-content {
     width: 340px;

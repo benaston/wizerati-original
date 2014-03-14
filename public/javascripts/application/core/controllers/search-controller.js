@@ -46,7 +46,6 @@
               }
 
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-//                _searchFormModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setAreTransitionsEnabled('false');
               }

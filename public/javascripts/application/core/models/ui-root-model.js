@@ -28,6 +28,10 @@
     //useful to temporarily hiding the entire UI
     //to mask major activity in the UI.
     this.setIsVisible = function (value) {
+      if(value === _isVisible) {
+        return;
+      }
+
       _isVisible = value;
 
       $.publish(that.eventUris.isVisibleChange);
@@ -38,6 +42,10 @@
     };
 
     this.setAreTransitionsEnabled = function (value) {
+      if(value === _areTransitionsEnabled) {
+        return;
+      }
+
       _areTransitionsEnabled = value;
 
       $.publish(that.eventUris.setAreTransitionsEnabled);
@@ -53,6 +61,10 @@
 
     this.setUIMode = function (value, options) {
       options = options || {silent: false};
+
+      if(value === _uiMode) {
+        return;
+      }
 
       _uiMode = value;
 

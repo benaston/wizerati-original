@@ -31,11 +31,14 @@
         throw 'layoutCalculator not supplied.';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       _itemsOfInterestModel = itemsOfInterestModel;
       _layoutCalculator = layoutCalculator;
 
       $.subscribe(searchPanelModel.eventUris.setMode, that.layOut);
       $.subscribe(itemsOfInterestModel.eventUris.modeChange, that.layOut);
+
+      return that;
     }
 
     init();
