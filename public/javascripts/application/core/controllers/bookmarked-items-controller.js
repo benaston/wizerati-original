@@ -24,7 +24,8 @@
         return;
       }
 
-      _favoritesCubeModel.addFavorite(dto.id, currentCubeFace);
+      setTimeout(function(){_favoritesCubeModel.addFavorite(dto.id, currentCubeFace);}, 440);
+
     };
 
     this.destroy = function (dto) {
@@ -32,7 +33,8 @@
         throw 'dto not supplied.';
       }
 
-      _favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
+      setTimeout(function(){_favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());}, 440);
+
     };
 
     function init() {
