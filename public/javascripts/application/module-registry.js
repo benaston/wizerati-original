@@ -229,7 +229,7 @@
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator, m.uiRootModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {

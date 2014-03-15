@@ -42,25 +42,27 @@
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
-              _layoutCoordinator.layOut();
-
-              if(!_itemsOfInterestModel.getSelectedItemId()) {
-                _itemsOfInterestModel.setSelectedItemId(results[0].id, { silent: false });
-              }
-
+              var delayToRender = 0;
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setAreTransitionsEnabled('false');
+                delayToRender = 120; //wait for the opacity fade to complete
               }
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-                _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:false});
+                _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
 
-                setTimeout(function() {
-                  _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
+                //this must occur *after the search panel mode is set* to its eventual value, to
+                //ensure the initial width rendering of otems of interest is the correct one
+                // (avoiding a repaint)
+                if(!_itemsOfInterestModel.getSelectedItemId()) {
+                  _itemsOfInterestModel.setSelectedItemId(results[0].id);
+                }
+
+                setTimeout(function() { _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
                 _uiRootModel.setIsVisible('true');
-              }, 150); //wait for the hide animation to complete before yanking the search panel to the left
+              }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);

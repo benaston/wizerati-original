@@ -3797,7 +3797,7 @@ window.wizerati = {
         _isVisible = 'true',
         _areTransitionsEnabled = 'true';
 
-    this.eventUris = { default: 'update://uirootmodel/',
+    this.eventUris = { default: 'update://uirootmodel',
       setIsVisible: 'update://uirootmodel/isvisible',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
     };
@@ -4419,10 +4419,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel);
     }
 
     var that = this,
@@ -4449,7 +4449,9 @@ window.wizerati = {
         _layoutCoordinator = null,
         _renderOptimizations = {},
         _scrollTopValues = {},
-        _scrollLeft = 0;
+        _scrollLeft = 0,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _uiRootModel = null;
 
     this.$el = null;
     this.Model = null;
@@ -4488,19 +4490,20 @@ window.wizerati = {
     };
 
     this.render = function (e) {
-        if (e && _renderOptimizations[e.type]) {
-          _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-          return;
-        }
+      console.log('CALLING FUCKING RENDER');
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
 
 //      var args = Array.prototype.slice.call(arguments);
 //      var options = args.length > 1 ? args[1] : {};
 //      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
-        renderPrivate({ animateSelectedItem: false, removedItemId: null });
+      renderPrivate({ animateSelectedItem: false, removedItemId: null });
     };
 
     function renderPrivate(options) {
-      console.log('renderPrivate called');
+      console.log('CALLING FUCKING RENDER PRIVATE');
       options = options || {animateSelectedItem: true};
 
 //      that.$el.children().not('.handle-pinned-items').remove();
@@ -4509,7 +4512,7 @@ window.wizerati = {
       var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
-      if(mode === _modeEnum.Default) {
+      if (mode === _modeEnum.Default) {
         $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
         $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
@@ -4590,27 +4593,47 @@ window.wizerati = {
 //      }, 300);
     }
 
-    this.renderLayout = function(layout) {
+    this.renderLayout = function (layout) {
+
+//      $(_elSelectedItemContent).css({width: layout.widthItemOfInterest}); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+
+
+
+      //wait if the selected item content has not yet made it into the DOM - futile setting layout on something that is non-existent
+      var selectedItemContent = $('.selected-item-container').find('.selected-item-content');
+
+      console.log('SETTING SELECTED ITEM CONTENT WIDTH T0 %s', layout.widthItemOfInterest);
+      console.dir(selectedItemContent.html());
+
+      //wait for the fucking selected item to be inserted in the DOM is we are in a mode where the selected item is visible
+//      if (_uiRootModel.getUIMode() === _uiModeEnum.Search) {
+//        if (selectedItemContent.length === 0) {
+//          setTimeout(function () {
+//            that.renderLayout(layout);
+//          }, 50);
+//        }
+//      }
+
       $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
       $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
       $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
       $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
 
-      $(_elSelectedItemContent).css({width: layout.widthItemOfInterest}); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     };
 
-    this.renderAddFavorite = function(favoriteId) {
-      var $btn = $('.pinned-item[data-id="'+ favoriteId +'"], .selected-item[data-id="'+ favoriteId +'"]').find('.btn-favorite');
+    this.renderAddFavorite = function (favoriteId) {
+      var $btn = $('.pinned-item[data-id="' + favoriteId + '"], .selected-item[data-id="' + favoriteId + '"]').find('.btn-favorite');
       $btn.attr('href', '/favorites/create?id=' + favoriteId);
       $btn.addClass('checked');
     };
 
-    this.renderSetSelectedItemId = function(selectedItemId, previouslySelectedItemId){
-
+    this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
+      console.log('CALLING FUCKING RENDER SET SELECTED ITEM ID');
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
 
       //these values should be stored before the modification of the DOM (hence before the removal below)
@@ -4636,7 +4659,7 @@ window.wizerati = {
               $('body').scrollLeft(_scrollLeft);
               $prevEl.addClass('buffer');
               $currentEl.removeClass('buffer');
-              _layoutCoordinator.layOut();
+//              _layoutCoordinator.layOut();
 
               setTimeout(function () {
                 $prevEl.empty();
@@ -4645,13 +4668,13 @@ window.wizerati = {
       }
     };
 
-    this.renderSetMode = function() {
+    this.renderSetMode = function () {
       var mode = that.Model.getMode();
       var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
 
 
-      if(mode === _modeEnum.Default) {
+      if (mode === _modeEnum.Default) {
         $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
         $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
       } else {
@@ -4664,7 +4687,8 @@ window.wizerati = {
     };
 
     function addPinnedItems(items, done) {
-      done = done || function () {};
+      done = done || function () {
+      };
 
       items.forEach(function (id) {
         if (id === null) {
@@ -4683,7 +4707,7 @@ window.wizerati = {
       });
 
 //      setTimeout(function(){ //temp
-        done();
+      done();
 //      }, 2000);
 
     }
@@ -4708,6 +4732,7 @@ window.wizerati = {
       that.$el = $(_el);
       that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
       that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
+      that.$elSelectedItemContainer = $('.selected-item-container');
       that.$elPinnedItems = $(_elPinnedItems);
     };
 
@@ -4741,6 +4766,10 @@ window.wizerati = {
         throw 'layoutCoordinator not supplied';
       }
 
+      if (!uiRootModel) {
+        throw 'uiRootModel not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
@@ -4749,6 +4778,7 @@ window.wizerati = {
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _layoutCoordinator = layoutCoordinator;
+      _uiRootModel = uiRootModel;
 
       _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
@@ -6193,11 +6223,10 @@ window.wizerati = {
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
-              _layoutCoordinator.layOut();
+//              _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:true}); //we need to set the state of the UI without rendering it, so that setting the selectedItemId renders with correct width
+//              _layoutCoordinator.layOut(); //ensure itemsofinterestmodel has the correct target layout
 
-              if(!_itemsOfInterestModel.getSelectedItemId()) {
-                _itemsOfInterestModel.setSelectedItemId(results[0].id, { silent: false });
-              }
+
 
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
@@ -6206,12 +6235,16 @@ window.wizerati = {
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
-                _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:false});
+                _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
 
-                setTimeout(function() {
-                  _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
+                //moved
+                if(!_itemsOfInterestModel.getSelectedItemId()) {
+                  _itemsOfInterestModel.setSelectedItemId(results[0].id);
+                }
+
+                setTimeout(function() { _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
                 _uiRootModel.setIsVisible('true');
-              }, 150); //wait for the hide animation to complete before yanking the search panel to the left
+              }, 120); //wait for the hide animation to complete before yanking the search panel to the left
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
@@ -7595,7 +7628,7 @@ window.wizerati = {
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator, m.uiRootModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {

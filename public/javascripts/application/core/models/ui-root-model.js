@@ -15,7 +15,7 @@
         _isVisible = 'true',
         _areTransitionsEnabled = 'true';
 
-    this.eventUris = { default: 'update://uirootmodel/',
+    this.eventUris = { default: 'update://uirootmodel',
       setIsVisible: 'update://uirootmodel/isvisible',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
     };
