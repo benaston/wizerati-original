@@ -101,7 +101,7 @@ label:focus {
 
 .btn:enabled:active, a.btn:not(.disabled):active {
     box-shadow: 0 2px 0px 2px rgba(0, 0, 0, 0.05) inset;
-    -webkit-transition: box-shadow 0.1s linear;
+    -webkit-transition: none;
 }
 
 .btn-primary:enabled:not(.checked):hover,
@@ -154,8 +154,14 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 @media only screen
 and (min-device-width: 768px)
 and (max-device-width: 1024px) {
+
+    .btn {
+        transition: border-color 0.1s linear, box-shadow 0.5s ease-out;
+    }
+
     .btn:enabled:active, a.btn:not(.disabled):active {
         box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
     }
+
 }
 

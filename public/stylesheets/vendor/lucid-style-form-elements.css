@@ -134,3 +134,15 @@ label.radio-inverted:active {
     line-height: 0px;
     visibility: hidden;
 }
+
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px) {
+    .rotating-button-container > .btn[data-is-waiting='false'] {
+        transition: border-left-width .2s ease-out, border-color 2s ease-out, box-shadow .5s ease-out;
+    }
+
+    .rotating-button-container > .btn[data-is-waiting='false']:active {
+        transition: border-left-width .2s ease-out, border-color 2s ease-out;
+    }
+}
