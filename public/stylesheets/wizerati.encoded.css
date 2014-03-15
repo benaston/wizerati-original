@@ -991,6 +991,13 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     font-size: .7rem;
 }
 
+.buffer {
+    pointer-events: none;
+    -webkit-filter: opacity(0);
+    transition: -webkit-filter .1s ease-out;
+}
+
+
 /*"narrow screen" devices like iphone*/
 @media only screen
 and (max-width: 568px) {

@@ -4422,8 +4422,10 @@ window.wizerati = {
     var that = this,
         _el = '.items-of-interest-panel',
         _elHandlePinnedItems = '.handle-pinned-items',
-        _elSelectedItem = '.selected-item',
-        _elSelectedItemContainer = '.selected-item-container',
+        _elSelectedItem1 = '.selected-item',
+        _elSelectedItemContainerCurrent = null,
+        _elSelectedItemContainer1 = '#selected-item-container-1',
+        _elSelectedItemContainer2 = '#selected-item-container-2',
         _elPinnedItemsContainer = '.pinned-items-container',
         _elPinnedItems = '.pinned-item',
         _elPinnedItem1 = '.pinned-item:nth-child(2)',
@@ -4444,6 +4446,9 @@ window.wizerati = {
         _scrollLeft = 0;
 
     this.$el = null;
+    this.$elSelectedItemContainer1 = null;
+    this.$elSelectedItemContainer2 = null;
+    this.$elSelectedItemContainerCurrent = null;
     this.Model = null;
 
 
@@ -4535,7 +4540,7 @@ window.wizerati = {
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
               function addSelectedItem() {
-                $(_elSelectedItemContainer).prepend($view);
+                $(_elSelectedItemContainer1).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
                 $view.css({
 //                  left: '0',
@@ -4590,17 +4595,46 @@ window.wizerati = {
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
       $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
 
-      $(_elSelectedItem).children().width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      $(_elSelectedItem1).children().width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
     function renderSetSelectedItemId(selectedItemId, previouslySelectedItemId) {
-      if(previouslySelectedItemId) {
-        renderPrivate({animateSelectedItem:false});
-      } else {
-        renderPrivate({animateSelectedItem:true});
+
+      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
+
+      //these values should be stored before the modification of the DOM (hence before the removal below)
+      storeScrollTopValues();
+      storeScrollLeftValue();
+
+
+      var prevEl = _elSelectedItemContainerCurrent || _elSelectedItemContainer2;
+      var $prevEl = $(prevEl);
+      _elSelectedItemContainerCurrent = prevEl === _elSelectedItemContainer1 ? _elSelectedItemContainer2 : _elSelectedItemContainer1;
+      var $currentEl = $(_elSelectedItemContainerCurrent);
+      $currentEl.addClass('buffer');
+      var items = that.Model.getItemsOfInterest();
+
+      if (items.selectedItem) {
+        _itemOfInterestViewFactory.create(items.selectedItem,
+            that.Model.getLayout().widthItemOfInterest,
+            _selectedCubeFaceModel.getSelectedCubeFaceId(),
+            true,
+            false, //should animate - hard code false for now
+            function done($view) {
+              $currentEl.html($view);
+              $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+//              $view.css({ '-webkit-transform': 'translate(0,0)' });
+                $('body').scrollLeft(_scrollLeft);
+//                _layoutCoordinator.layOut();
+              $prevEl.addClass('buffer');
+              $currentEl.removeClass('buffer');
+              setTimeout(function () {
+                $prevEl.empty();
+              }, 300);
+            });
       }
     }
 
@@ -4665,9 +4699,9 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.$elSelectedItem = $(_elSelectedItem);
+      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
+      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
       that.$elPinnedItems = $(_elPinnedItems);
-//      that.render();
     };
 
     function init() {
