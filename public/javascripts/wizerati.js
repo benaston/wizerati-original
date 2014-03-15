@@ -5634,7 +5634,7 @@ window.wizerati = {
         return;
       }
 
-      setTimeout(function(){_favoritesCubeModel.addFavorite(dto.id, currentCubeFace);}, 440);
+      setTimeout(function(){_favoritesCubeModel.addFavorite(dto.id, currentCubeFace);}, 800);
 
     };
 
@@ -5643,7 +5643,7 @@ window.wizerati = {
         throw 'dto not supplied.';
       }
 
-      setTimeout(function(){_favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());}, 440);
+      setTimeout(function(){_favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());}, 800);
 
     };
 
