@@ -52,7 +52,7 @@
     this.postRender = function () {
     };
 
-    function setIsVisible() {
+    this.setIsVisible = function() {
       if (that.Model.getIsVisible() === 'true') {
         that.$el.removeClass('hidden');
       } else if (that.Model.getIsVisible() === 'false') {
@@ -61,7 +61,7 @@
       else {
         throw 'invalid visibility state.'
       }
-    }
+    };
 
     function monitorWaitState() {
       _waitStateIsBeingMonitored = true;
@@ -88,12 +88,13 @@
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
+      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
 
       return that;
     }

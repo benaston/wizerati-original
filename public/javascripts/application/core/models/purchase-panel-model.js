@@ -12,7 +12,7 @@
         _isWaiting = '', //should identify the dom element to indicate waiting
         _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
 
-    this.updateEventUri = 'update://PurchasePanelModel/';
+    this.updateEventUri = 'update://purchasepanelmodel/';
 
     this.getNotifications = function () {
       return _notifications;

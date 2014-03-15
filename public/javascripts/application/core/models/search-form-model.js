@@ -16,16 +16,18 @@
 
 //    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = { default: 'update://searchformmodel/',
-      isVisibleChange: 'update://searchformmodel/isvisiblechange' };
+      setIsVisible: 'update://searchformmodel/setisvisible' };
 
+    //needed?
     this.getIsVisible = function () {
       return _isVisible;
     };
 
+    //needed?
     this.setIsVisible = function (value) {
       _isVisible = value;
 
-      $.publish(that.eventUris.isVisibleChange);
+      $.publish(that.eventUris.setIsVisible);
     };
 
     this.getKeywords = function () {

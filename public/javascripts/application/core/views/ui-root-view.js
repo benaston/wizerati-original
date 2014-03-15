@@ -49,17 +49,17 @@
       that.$mainContainer = $(_mainContainer);
     };
 
-    function setBodyWidth(){
+    this.setBodyWidth = function(){
       $('body').width(that.Model.getBodyWidth())
-    }
+    };
 
-    function setIsVisible() {
+    this.setIsVisible = function() {
       that.$mainContainer.attr('data-is-visible', that.Model.getIsVisible());
-    }
+    };
 
-    function setAreTransitionsEnabled() {
+    this.setAreTransitionsEnabled = function() {
         that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
-    }
+    };
 
     function init() {
       if (!model) {
@@ -68,13 +68,11 @@
 
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
-      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = setAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.setAreTransitionsEnabled;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
-      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
+      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
 
       that.bindEvents();

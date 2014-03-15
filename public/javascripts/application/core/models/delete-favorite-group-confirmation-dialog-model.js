@@ -12,7 +12,7 @@
         _isWaiting = '', //should identify the dom element to indicate waiting
         _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
 
-    this.updateEventUri = 'update://DeleteFavoriteGroupConfirmationDialogModel/';
+    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
 
     this.getFavoriteGroupId = function () {
       return _favoriteGroupId;

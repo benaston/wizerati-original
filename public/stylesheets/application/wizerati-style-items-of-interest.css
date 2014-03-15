@@ -3,9 +3,7 @@
     display: inline-block;
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     z-index: 0;
-    /*opacity: 0;*/
     -webkit-transform: translate(0, 0);
-    /*transition: -webkit-transform .2s ease-out; *//*moved here for simplicity - possible move out later*/
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
@@ -32,9 +30,19 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     /*transition: -webkit-transform .2s ease-out;*/
 }
 
+.pinned-items-container, .selected-item-container {
+    position: relative;
+    display: inline-block;
+    height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
+    vertical-align: top; /*important*/
+    -webkit-filter: opacity(100%);
+    transition: -webkit-filter .1s ease-out; /* this adds a 100ms fade when the selected item changes*/
+}
 
-
-
+.pinned-items-container.buffer, .selected-item-container.buffer {
+    pointer-events: none;
+    -webkit-filter: opacity(0);
+}
 
 .selected-item, .pinned-item {
     display: inline-block;
@@ -44,7 +52,13 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     height: 100%;
     width: 0;
     vertical-align: top;
-    /*transition: left .5s ease-in-out .3s, -webkit-filter .2s linear;*/
+
+
+    /*the following two styles stop a rendering issue in safari (flicker of unrendered content)*/
+    -webkit-transform: scale(1); /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+
+
 }
 
 .selected-item, .pinned-item {
@@ -114,13 +128,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     margin: 0;
 }
 
-/* Items of interest panel */
-.pinned-items-container, .selected-item-container {
-    position: relative;
-    display: inline-block;
-    height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
-    vertical-align: top; /*important*/
-}
+
 
 .menu {
     margin-right: 0;
@@ -367,11 +375,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     font-size: .7rem;
 }
 
-.buffer {
-    pointer-events: none;
-    -webkit-filter: opacity(0);
-    /*transition: -webkit-filter .1s ease-out;*/
-}
 
 
 /*"narrow screen" devices like iphone*/

@@ -2789,7 +2789,7 @@ window.wizerati = {
     var that = this,
         _actionedItems = {};
 
-    this.updateEventUri = 'update://ActionedItemsModel/';
+    this.updateEventUri = 'update://actioneditemsmodel/';
 
     this.isActioned = function (id) {
       return !!_actionedItems[id];
@@ -2830,7 +2830,7 @@ window.wizerati = {
     var that = this,
         _isVisible = false;
 
-    this.updateEventUri = 'update://AdvertisersPanelModel/';
+    this.updateEventUri = 'update://advertiserspanelmodel/';
 
     this.setIsVisible = function (value) {
       _isVisible = value;
@@ -2863,7 +2863,7 @@ window.wizerati = {
         _isWaiting = '', //should identify the dom element to indicate waiting
         _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
 
-    this.updateEventUri = 'update://DeleteFavoriteGroupConfirmationDialogModel/';
+    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
 
     this.getFavoriteGroupId = function () {
       return _favoriteGroupId;
@@ -3094,7 +3094,7 @@ window.wizerati = {
     var that = this,
         _hiddenItems = {};
 
-    this.updateEventUri = 'update://HiddenItemsModel/';
+    this.updateEventUri = 'update://hiddenitemsmodel/';
 
     this.isHidden = function (id) {
 
@@ -3152,12 +3152,11 @@ window.wizerati = {
         },
         _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
 
-    this.eventUris = {default: 'update://ItemsOfInterestModel/',
-      widthChange: 'update://itemsofinterestmodel/widthchange',
-      modeChange: 'update://itemsofinterestmodel/modechange',
-      layoutChange: 'update://itemsofinterestmodel/layoutchange',
-      itemRemoval: 'update://itemsofinterestmodel/itemremoval',
-      setSelectedItemId: 'update://itemsofinterestmodel/selecteditem' };
+    this.eventUris = {default: 'update://itemsofinterestmodel/',
+      setMode: 'update://itemsofinterestmodel/setmode',
+      setLayout: 'update://itemsofinterestmodel/setlayout',
+      removeItemOfInterest: 'update://itemsofinterestmodel/removeitemofinterest',
+      setSelectedItemId: 'update://itemsofinterestmodel/setselecteditemid' };
 
     this.getSelectedItemId = function () {
       return _itemsOfInterest.selectedItem;
@@ -3203,7 +3202,7 @@ window.wizerati = {
         _resultListModel.setMode(_resultListModeEnum.Default)
       }
 
-      $.publish(that.eventUris.modeChange);
+      $.publish(that.eventUris.setMode);
     };
 
     this.getLayout = function () {
@@ -3213,7 +3212,7 @@ window.wizerati = {
     this.setLayout = function (value) {
       _layout = value;
 
-      $.publish(that.eventUris.layoutChange);
+      $.publish(that.eventUris.setLayout, _layout);
     };
 
     this.isItemOfInterest = function (id) {
@@ -3252,7 +3251,7 @@ window.wizerati = {
         return idOfPinnedItem === id;
       });
 
-      $.publish(that.eventUris.itemRemoval, id);
+      $.publish(that.eventUris.removeItemOfInterest, id);
     };
 
     this.isPinned = function (id) {
@@ -3296,7 +3295,7 @@ window.wizerati = {
         _isWaiting = '', //should identify the dom element to indicate waiting
         _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
 
-    this.updateEventUri = 'update://PurchasePanelModel/';
+    this.updateEventUri = 'update://purchasepanelmodel/';
 
     this.getNotifications = function () {
       return _notifications;
@@ -3454,16 +3453,18 @@ window.wizerati = {
 
 //    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = { default: 'update://searchformmodel/',
-      isVisibleChange: 'update://searchformmodel/isvisiblechange' };
+      setIsVisible: 'update://searchformmodel/setisvisible' };
 
+    //needed?
     this.getIsVisible = function () {
       return _isVisible;
     };
 
+    //needed?
     this.setIsVisible = function (value) {
       _isVisible = value;
 
-      $.publish(that.eventUris.isVisibleChange);
+      $.publish(that.eventUris.setIsVisible);
     };
 
     this.getKeywords = function () {
@@ -3572,7 +3573,7 @@ window.wizerati = {
       _mode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.setMode);
+        $.publish(that.eventUris.setMode, _mode);
       }
     };
 
@@ -3797,8 +3798,7 @@ window.wizerati = {
         _areTransitionsEnabled = 'true';
 
     this.eventUris = { default: 'update://uirootmodel/',
-      bodyWidthChange: 'update://uirootmodel/bodywidth',
-      isVisibleChange: 'update://uirootmodel/isvisible',
+      setIsVisible: 'update://uirootmodel/isvisible',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
     };
 
@@ -3815,7 +3815,7 @@ window.wizerati = {
 
       _isVisible = value;
 
-      $.publish(that.eventUris.isVisibleChange);
+      $.publish(that.eventUris.setIsVisible);
     };
 
     this.getAreTransitionsEnabled = function () {
@@ -4021,6 +4021,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       return that;
@@ -4071,6 +4072,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       return that;
     }
@@ -4204,6 +4206,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       return that;
@@ -4386,6 +4389,7 @@ window.wizerati = {
         throw 'itemsOfInterestModel not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _favoriteViewFactory = favoriteViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -4499,6 +4503,7 @@ window.wizerati = {
     };
 
     function renderPrivate(options) {
+      console.log('renderPrivate called');
       options = options || {animateSelectedItem: true};
 
 //      that.$el.children().not('.handle-pinned-items').remove();
@@ -4588,9 +4593,7 @@ window.wizerati = {
 //      }, 300);
     }
 
-    function setLayout() {
-      var layout = that.Model.getLayout();
-
+    this.renderLayout = function(layout) {
       $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
       $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
       $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
@@ -4601,15 +4604,15 @@ window.wizerati = {
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
-    }
+    };
 
-    function renderAddFavorite(favoriteId) {
+    this.renderAddFavorite = function(favoriteId) {
       var $btn = $('.pinned-item[data-id="'+ favoriteId +'"], .selected-item[data-id="'+ favoriteId +'"]').find('.btn-favorite');
       $btn.attr('href', '/favorites/create?id=' + favoriteId);
       $btn.addClass('checked');
-    }
+    };
 
-    function renderSetSelectedItemId(selectedItemId, previouslySelectedItemId) {
+    this.renderSetSelectedItemId = function(selectedItemId, previouslySelectedItemId){
 
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
 
@@ -4643,9 +4646,9 @@ window.wizerati = {
               }, 300);
             });
       }
-    }
+    };
 
-    function setMode() {
+    this.renderSetMode = function() {
       var mode = that.Model.getMode();
       var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
@@ -4661,7 +4664,7 @@ window.wizerati = {
 
 
       $('body').attr('data-items-of-interest-mode', mode)
-    }
+    };
 
     function addPinnedItems(items, done) {
       done = done || function () {};
@@ -4678,7 +4681,7 @@ window.wizerati = {
             function ($view) {
               $(_elPinnedItemsContainer).append($view);
               $view.scrollTop(_scrollTopValues[id]);
-              setLayout();
+              that.renderLayout(that.Model.getLayout());
             });
       });
 
@@ -4741,7 +4744,7 @@ window.wizerati = {
         throw 'layoutCoordinator not supplied';
       }
 
-//      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -4750,17 +4753,16 @@ window.wizerati = {
       _actionedItemsModel = actionedItemsModel;
       _layoutCoordinator = layoutCoordinator;
 
-      _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
-      _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
-      _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
-      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = renderSetSelectedItemId;
-      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = renderAddFavorite;
+      _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.itemRemoval, that.render);
-      $.subscribe(that.Model.eventUris.widthChange, that.render);
-      $.subscribe(that.Model.eventUris.modeChange, that.render);
-      $.subscribe(that.Model.eventUris.layoutChange, that.render);
+      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
+//      $.subscribe(that.Model.eventUris.widthChange, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
@@ -4856,6 +4858,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       $.subscribe(that.Model.updateEventUri, that.render);
@@ -5005,11 +5008,11 @@ window.wizerati = {
 //      }, 300); //This timeout must be longer than the css transition to avoid interrupting it with a flicker.
     };
 
-    function renderSetSelectedItemId(selectedItemId) {
+    this.renderSetSelectedItemId = function(selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
       var selectorNew = '.t[data-id="' + selectedItemId + '"]';
       $(_el).find(selectorNew).addClass('selected');
-    }
+    };
 
 //        function renderResults(results, index) {
 //            index = index === undefined ? 0 : index;
@@ -5070,7 +5073,7 @@ window.wizerati = {
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
 
-      _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = renderSetSelectedItemId;
+      _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
@@ -5144,7 +5147,7 @@ window.wizerati = {
     this.postRender = function () {
     };
 
-    function setIsVisible() {
+    this.setIsVisible = function() {
       if (that.Model.getIsVisible() === 'true') {
         that.$el.removeClass('hidden');
       } else if (that.Model.getIsVisible() === 'false') {
@@ -5153,7 +5156,7 @@ window.wizerati = {
       else {
         throw 'invalid visibility state.'
       }
-    }
+    };
 
     function monitorWaitState() {
       _waitStateIsBeingMonitored = true;
@@ -5180,12 +5183,13 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
+      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
 
       return that;
     }
@@ -5229,18 +5233,19 @@ window.wizerati = {
       that.$el = $(_el);
     };
 
-    function renderSetMode(mode) {
+    this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
-    }
+    };
 
     function init() {
       if (!model) {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.setMode] = renderSetMode;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
 
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.default, that.render);
@@ -5306,17 +5311,17 @@ window.wizerati = {
       that.$mainContainer = $(_mainContainer);
     };
 
-    function setBodyWidth(){
+    this.setBodyWidth = function(){
       $('body').width(that.Model.getBodyWidth())
-    }
+    };
 
-    function setIsVisible() {
+    this.setIsVisible = function() {
       that.$mainContainer.attr('data-is-visible', that.Model.getIsVisible());
-    }
+    };
 
-    function setAreTransitionsEnabled() {
+    this.setAreTransitionsEnabled = function() {
         that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
-    }
+    };
 
     function init() {
       if (!model) {
@@ -5325,13 +5330,11 @@ window.wizerati = {
 
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.bodyWidthChange] = setBodyWidth;
-      _renderOptimizations[that.Model.eventUris.isVisibleChange] = setIsVisible;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = setAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.setAreTransitionsEnabled;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.bodyWidthChange, that.render);
-      $.subscribe(that.Model.eventUris.isVisibleChange, that.render);
+      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
 
       that.bindEvents();
@@ -6282,9 +6285,11 @@ window.wizerati = {
 
     this.update = function (dto) {
       try {
+
         if (_searchPanelModel.getMode() !== dto.mode) {
           _searchPanelModel.setMode(dto.mode);
         }
+
       } catch (err) {
         console.log('error: SearchPanelController.update. ' + err);
       }
@@ -7155,7 +7160,7 @@ window.wizerati = {
       _layoutCalculator = layoutCalculator;
 
       $.subscribe(searchPanelModel.eventUris.setMode, that.layOut);
-      $.subscribe(itemsOfInterestModel.eventUris.modeChange, that.layOut);
+      $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
 
       return that;
     }
@@ -7178,7 +7183,7 @@ window.wizerati = {
 
     this.trace = function (context, done) {
       if (config.enableTrace === 'true') {
-        console.log('%s: %s::%s %s', context.timestamp, context.ctor, context.methodName, context.args.length ? ' called with: ' + context.args : '');
+        console.log('%s: %s::%s %s', context.timestamp, context.ctor, context.methodName, context.args.length ? 'called with: ' + context.args : 'called with no arguments');
       }
       return done(null, null);
     };

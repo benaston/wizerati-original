@@ -10,7 +10,7 @@
 
     this.trace = function (context, done) {
       if (config.enableTrace === 'true') {
-        console.log('%s: %s::%s %s', context.timestamp, context.ctor, context.methodName, context.args.length ? ' called with: ' + context.args : '');
+        console.log('%s: %s::%s %s', context.timestamp, context.ctor, context.methodName, context.args.length ? 'called with: ' + context.args : 'called with no arguments');
       }
       return done(null, null);
     };

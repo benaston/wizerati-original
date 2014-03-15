@@ -10,7 +10,7 @@
     var that = this,
         _hiddenItems = {};
 
-    this.updateEventUri = 'update://HiddenItemsModel/';
+    this.updateEventUri = 'update://hiddenitemsmodel/';
 
     this.isHidden = function (id) {
 

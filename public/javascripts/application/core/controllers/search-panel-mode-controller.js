@@ -12,9 +12,11 @@
 
     this.update = function (dto) {
       try {
+
         if (_searchPanelModel.getMode() !== dto.mode) {
           _searchPanelModel.setMode(dto.mode);
         }
+
       } catch (err) {
         console.log('error: SearchPanelController.update. ' + err);
       }

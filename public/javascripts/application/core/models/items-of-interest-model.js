@@ -25,12 +25,11 @@
         },
         _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
 
-    this.eventUris = {default: 'update://ItemsOfInterestModel/',
-      widthChange: 'update://itemsofinterestmodel/widthchange',
-      modeChange: 'update://itemsofinterestmodel/modechange',
-      layoutChange: 'update://itemsofinterestmodel/layoutchange',
-      itemRemoval: 'update://itemsofinterestmodel/itemremoval',
-      setSelectedItemId: 'update://itemsofinterestmodel/selecteditem' };
+    this.eventUris = {default: 'update://itemsofinterestmodel/',
+      setMode: 'update://itemsofinterestmodel/setmode',
+      setLayout: 'update://itemsofinterestmodel/setlayout',
+      removeItemOfInterest: 'update://itemsofinterestmodel/removeitemofinterest',
+      setSelectedItemId: 'update://itemsofinterestmodel/setselecteditemid' };
 
     this.getSelectedItemId = function () {
       return _itemsOfInterest.selectedItem;
@@ -76,7 +75,7 @@
         _resultListModel.setMode(_resultListModeEnum.Default)
       }
 
-      $.publish(that.eventUris.modeChange);
+      $.publish(that.eventUris.setMode);
     };
 
     this.getLayout = function () {
@@ -86,7 +85,7 @@
     this.setLayout = function (value) {
       _layout = value;
 
-      $.publish(that.eventUris.layoutChange);
+      $.publish(that.eventUris.setLayout, _layout);
     };
 
     this.isItemOfInterest = function (id) {
@@ -125,7 +124,7 @@
         return idOfPinnedItem === id;
       });
 
-      $.publish(that.eventUris.itemRemoval, id);
+      $.publish(that.eventUris.removeItemOfInterest, id);
     };
 
     this.isPinned = function (id) {

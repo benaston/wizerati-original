@@ -30,18 +30,19 @@
       that.$el = $(_el);
     };
 
-    function renderSetMode(mode) {
+    this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
-    }
+    };
 
     function init() {
       if (!model) {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.setMode] = renderSetMode;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
 
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.default, that.render);

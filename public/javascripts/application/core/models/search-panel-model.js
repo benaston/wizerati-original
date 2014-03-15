@@ -30,7 +30,7 @@
       _mode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.setMode);
+        $.publish(that.eventUris.setMode, _mode);
       }
     };
 

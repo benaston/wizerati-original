@@ -87,11 +87,11 @@
 //      }, 300); //This timeout must be longer than the css transition to avoid interrupting it with a flicker.
     };
 
-    function renderSetSelectedItemId(selectedItemId) {
+    this.renderSetSelectedItemId = function(selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
       var selectorNew = '.t[data-id="' + selectedItemId + '"]';
       $(_el).find(selectorNew).addClass('selected');
-    }
+    };
 
 //        function renderResults(results, index) {
 //            index = index === undefined ? 0 : index;
@@ -152,7 +152,7 @@
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
 
-      _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = renderSetSelectedItemId;
+      _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);

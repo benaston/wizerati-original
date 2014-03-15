@@ -85,6 +85,7 @@
     };
 
     function renderPrivate(options) {
+      console.log('renderPrivate called');
       options = options || {animateSelectedItem: true};
 
 //      that.$el.children().not('.handle-pinned-items').remove();
@@ -174,9 +175,7 @@
 //      }, 300);
     }
 
-    function setLayout() {
-      var layout = that.Model.getLayout();
-
+    this.renderLayout = function(layout) {
       $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
       $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
       $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
@@ -187,15 +186,15 @@
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
-    }
+    };
 
-    function renderAddFavorite(favoriteId) {
+    this.renderAddFavorite = function(favoriteId) {
       var $btn = $('.pinned-item[data-id="'+ favoriteId +'"], .selected-item[data-id="'+ favoriteId +'"]').find('.btn-favorite');
       $btn.attr('href', '/favorites/create?id=' + favoriteId);
       $btn.addClass('checked');
-    }
+    };
 
-    function renderSetSelectedItemId(selectedItemId, previouslySelectedItemId) {
+    this.renderSetSelectedItemId = function(selectedItemId, previouslySelectedItemId){
 
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
 
@@ -229,9 +228,9 @@
               }, 300);
             });
       }
-    }
+    };
 
-    function setMode() {
+    this.renderSetMode = function() {
       var mode = that.Model.getMode();
       var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
@@ -247,7 +246,7 @@
 
 
       $('body').attr('data-items-of-interest-mode', mode)
-    }
+    };
 
     function addPinnedItems(items, done) {
       done = done || function () {};
@@ -264,7 +263,7 @@
             function ($view) {
               $(_elPinnedItemsContainer).append($view);
               $view.scrollTop(_scrollTopValues[id]);
-              setLayout();
+              that.renderLayout(that.Model.getLayout());
             });
       });
 
@@ -327,7 +326,7 @@
         throw 'layoutCoordinator not supplied';
       }
 
-//      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -336,17 +335,16 @@
       _actionedItemsModel = actionedItemsModel;
       _layoutCoordinator = layoutCoordinator;
 
-      _renderOptimizations[that.Model.eventUris.widthChange] = setLayout;
-      _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
-      _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
-      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = renderSetSelectedItemId;
-      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = renderAddFavorite;
+      _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.itemRemoval, that.render);
-      $.subscribe(that.Model.eventUris.widthChange, that.render);
-      $.subscribe(that.Model.eventUris.modeChange, that.render);
-      $.subscribe(that.Model.eventUris.layoutChange, that.render);
+      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
+//      $.subscribe(that.Model.eventUris.widthChange, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);

@@ -16,8 +16,7 @@
         _areTransitionsEnabled = 'true';
 
     this.eventUris = { default: 'update://uirootmodel/',
-      bodyWidthChange: 'update://uirootmodel/bodywidth',
-      isVisibleChange: 'update://uirootmodel/isvisible',
+      setIsVisible: 'update://uirootmodel/isvisible',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
     };
 
@@ -34,7 +33,7 @@
 
       _isVisible = value;
 
-      $.publish(that.eventUris.isVisibleChange);
+      $.publish(that.eventUris.setIsVisible);
     };
 
     this.getAreTransitionsEnabled = function () {
