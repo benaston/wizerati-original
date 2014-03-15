@@ -189,6 +189,12 @@
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     }
 
+    function renderAddFavorite(favoriteId) {
+      var $btn = $('.pinned-item[data-id="'+ favoriteId +'"], .selected-item[data-id="'+ favoriteId +'"]').find('.btn-favorite');
+      $btn.attr('href', '/favorites/create?id=' + favoriteId);
+      $btn.addClass('checked');
+    }
+
     function renderSetSelectedItemId(selectedItemId, previouslySelectedItemId) {
 
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
@@ -196,7 +202,6 @@
       //these values should be stored before the modification of the DOM (hence before the removal below)
       storeScrollTopValues();
       storeScrollLeftValue();
-
 
       var prevEl = _elSelectedItemContainerCurrent || _elSelectedItemContainer2;
       var $prevEl = $(prevEl);
@@ -214,11 +219,11 @@
             function done($view) {
               $currentEl.html($view);
               $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-//              $view.css({ '-webkit-transform': 'translate(0,0)' });
-                $('body').scrollLeft(_scrollLeft);
-//                _layoutCoordinator.layOut();
+              $('body').scrollLeft(_scrollLeft);
               $prevEl.addClass('buffer');
               $currentEl.removeClass('buffer');
+              _layoutCoordinator.layOut();
+
               setTimeout(function () {
                 $prevEl.empty();
               }, 300);
@@ -335,6 +340,7 @@
       _renderOptimizations[that.Model.eventUris.layoutChange] = setLayout;
       _renderOptimizations[that.Model.eventUris.modeChange] = setMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = renderSetSelectedItemId;
+      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = renderAddFavorite;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.itemRemoval, that.render);
@@ -344,6 +350,7 @@
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
 

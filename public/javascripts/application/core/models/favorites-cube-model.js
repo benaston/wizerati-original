@@ -24,6 +24,8 @@
         _modeEnum = app.mod('enum').FavoritesCubeMode,
         _mode = _modeEnum.Default;
 
+    this.eventUris = {default: 'update://favoritescubemodel/',
+      addFavorite: 'update://favoritescubemodel/addfavorite'};
     this.updateEventUri = 'update://FavoritesCubeModel/';
     this.updateEventUriPrivate = 'update://favoritescubemodel/private'; //used when it is unneccessary to tell other UI elements of a change, saving re-painting.
 
@@ -106,7 +108,7 @@
         _favorites[face].push(id);
         _itemRepository.getById(id, function (item) {
           item['isFavoriteOnFace' + face] = true;
-          $.publish(that.updateEventUri);
+          $.publish(that.eventUris.addFavorite, id);
         });
       }
     };
