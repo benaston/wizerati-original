@@ -244,6 +244,7 @@
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
+    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);

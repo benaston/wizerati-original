@@ -208,10 +208,28 @@
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     };
 
-    this.renderAddFavorite = function (favoriteId) {
-      var $btn = $('.pinned-item[data-id="' + favoriteId + '"], .selected-item[data-id="' + favoriteId + '"]').find('.btn-favorite');
-      $btn.attr('href', '/favorites/create?id=' + favoriteId);
-      $btn.addClass('checked');
+    this.renderAddHiddenItem = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
+      $frm.find('.btn').addClass('checked');
+    };
+
+    this.renderRemoveHiddenItem = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/create?id=' + itemId);
+      $frm.find('.btn').removeClass('checked');
+    };
+
+    this.renderAddFavorite = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
+      $frm.attr('action', '/bookmarkeditems/destroy?id=' + itemId);
+      $frm.find('.btn').addClass('checked');
+    };
+
+    this.renderRemoveFavorite = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
+      $frm.attr('action', '/bookmarkeditems/create?id=' + itemId);
+      $frm.find('.btn').removeClass('checked');
     };
 
     this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
@@ -366,6 +384,9 @@
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
@@ -375,7 +396,10 @@
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
 
       that.Model = model;

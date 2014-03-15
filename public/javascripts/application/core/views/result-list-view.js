@@ -93,6 +93,26 @@
       $(_el).find(selectorNew).addClass('selected');
     };
 
+    this.renderAddHiddenItem = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).addClass('hidden');
+    };
+
+    this.renderRemoveHiddenItem = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).removeClass('hidden');
+    };
+
+    this.renderAddFavorite = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-favorite', 'true');
+    };
+
+    this.renderRemoveFavorite = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-favorite', 'false');
+    };
+
 //        function renderResults(results, index) {
 //            index = index === undefined ? 0 : index;
 //
@@ -153,11 +173,19 @@
       _itemsOfInterestModel = itemsOfInterestModel;
 
       _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
       $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
       $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);

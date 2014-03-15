@@ -3,27 +3,30 @@
 
     <article class="item-of-interest-content <%=model.isHidden ? 'hidden' : '' %>">
         <section class="menu-and-metadata-container" style="">
-        <section class="menu" ><div class="menu-item"><a
-            <%=(model.isFavoritable || model.isFavorite) ? 'href' : 'disabled'%>="/favorites/<%=model.isFavorite ? 'destroy' : 'create' %>?id=<%=model.id%>"
-            class="btn btn-40 btn-primary <% if(!model.isFavoritable && !model.isFavorite) {%>disabled<%}%> <%=model.isFavorite ? 'is-favorite checked' : '' %> btn-favorite"
-            title="<% if(model.isFavorite) {%>Remove favorite<%} else if(model.isFavoritable){ %> Add To Favourites <% } else { %>You have maxed out your favorites / You cannot favorite hidden items<% } %>">&#xf1df;</a>
-            <div class="label">favorite</div>
-        </div><div class="menu-item"><a
+        <section class="menu" >
+            <form class="frm-favorite" method="POST" action="/bookmarkeditems/<%=model.isFavorite ? 'destroy' : 'create' %>">
+                <input type="hidden" name="id" value="<%=model.id%>" />
+                <div class="menu-item">
+                    <button id="btn-favorite-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isFavoritable || model.isFavorite ? '' : 'disabled' %> <% if(model.isFavorite) {%>checked<%} %> btn-favorite"
+                        title="<%=model.isFavoritable ? 'Favorite' : '' %>">&#xf26b;</button>
+            <label class="label" for="btn-favorite-<%= model.id%>"><%= model.isFavorite ? 'remove bookmark' : 'bookmark' %></label>
+            </div></form><form class="frm-hide" method="POST" action="/hiddenitems/<%=model.isHidden ? 'destroy' : 'create' %>">
+                <input type="hidden" name="id" value="<%=model.id%>" />
+                <div class="menu-item">
+                    <button id="btn-hide-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isHideable || model.isHidden ? '' : 'disabled' %> <% if(model.isHidden) {%>checked<%} %> btn-hide"
+                        title="<%=model.isHideable ? 'Hide this from future results' : '' %>">&#xf1ac;</button>
+            <label class="label" for="btn-hide-<%= model.id%>"><%= model.isHidden ? 'un-hide' : 'hide' %></label>
+            </div></form>
 
-            <%=(model.isHideable || model.isHidden) ? 'href' : 'disabled'%>="/hiddenitems/<%=!model.isHidden ? 'create' : 'destroy' %>?id=<%=model.id%>"
-            class="btn btn-40 btn-primary <%=(model.isHidden ? 'checked' : '')%> btn-hide <% if(!model.isHideable) {%>disabled <%}%>"
-
-            title="<%=model.isHideable ? 'Hide this from future results' : 'You cannot hide items that are favorites, are applied-for or are pinned' %>">&#xf1ac;</a>
-            <div class="label">hide</div>
-        </div><div class="menu-item"><a
+            <div class="menu-item"><a
             <%=(model.isActionable || model.isActionable) ? 'href' : 'disabled'%>="/actioneditems/<%=!model.isActioned ? 'create' : 'destroy' %>?id=<%=model.id%>"
             class="btn btn-40 btn-primary <%=model.isActioned ? 'checked' : '' %> <%=model.isActionable ? '' : 'disabled' %>  btn-apply"
             title="<%=model.isActionable ? 'Apply for this job' : 'You cannot apply for hidden items' %>">&#xf16c;</a>
             <div class="label">apply</div>
-        </div><form method="POST" action="/itemsofinterest/<%=!model.isPinned ? 'create' : 'destroy' %>"><input type="hidden" name="id" value="<%=model.id%>" /><div class="menu-item"><button id="foo"
+        </div><form class= "frm-pin" method="POST" action="/itemsofinterest/<%=!model.isPinned ? 'create' : 'destroy' %>"><input type="hidden" name="id" value="<%=model.id%>" /><div class="menu-item"><button id="btn-pin-<%= model.id%>"
             class="btn btn-40 btn-primary <%=model.isPinnable || model.isPinned ? '' : 'disabled' %> <% if(model.isPinned) {%>checked<%} %> btn-pin"
             title="<%=model.isPinnable ? 'Pin' : 'This item is already pinned / You have the maximum number of permitted pinned items / You cannot pin hidden items' %>"><%= model.isPinned ? '&#xf2ba;' : '&#xf2ba;' %></button>
-            <label class="label" for="foo"><%= model.isPinned ? 'remove from comparison list' : 'add to comparison list' %></label>
+            <label class="label" for="btn-pin-<%= model.id%>"><%= model.isPinned ? 'remove from comparison list' : 'add to comparison list' %></label>
             </div></form>
         </section>
         <section class="itemMetadata" style="margin-left:16px;margin-top: 7px; text-align: left;">
@@ -52,3 +55,20 @@
 } catch(e) {
 throw "template exception: item-of-interest. " + e;
 }%>
+
+<!--<div class="menu-item">-->
+    <!--<a-->
+    <!--<%=(model.isFavoritable || model.isFavorite) ? 'href' : 'disabled'%>="/favorites/<%=model.isFavorite ? 'destroy' : 'create' %>?id=<%=model.id%>"-->
+    <!--class="btn btn-40 btn-primary <% if(!model.isFavoritable && !model.isFavorite) {%>disabled<%}%> <%=model.isFavorite ? 'is-favorite checked' : '' %> btn-favorite"-->
+    <!--title="<% if(model.isFavorite) {%>Remove favorite<%} else if(model.isFavoritable){ %> Add To Favourites <% } else { %>You have maxed out your favorites / You cannot favorite hidden items<% } %>">&#xf1df;</a>-->
+    <!--<div class="label">favorite</div>-->
+<!--</div>-->
+
+<!--<div class="menu-item"><a-->
+
+    <!--<%=(model.isHideable || model.isHidden) ? 'href' : 'disabled'%>="/hiddenitems/<%=!model.isHidden ? 'create' : 'destroy' %>?id=<%=model.id%>"-->
+    <!--class="btn btn-40 btn-primary <%=(model.isHidden ? 'checked' : '')%> btn-hide <% if(!model.isHideable) {%>disabled <%}%>"-->
+
+    <!--title="<%=model.isHideable ? 'Hide this from future results' : 'You cannot hide items that are favorites, are applied-for or are pinned' %>">&#xf1ac;</a>-->
+    <!--<div class="label">hide</div>-->
+<!--</div>-->

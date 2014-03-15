@@ -39,6 +39,14 @@
           c.selectedItemController.update(dto);
         }, { silent: true });
 
+        router.registerRoute('/bookmarkeditems/create', function (dto) {
+          c.bookmarkedItemsController.create(dto);
+        }, { silent: true });
+
+        router.registerRoute('/bookmarkeditems/destroy', function (dto) {
+          c.bookmarkedItemsController.destroy(dto);
+        }, { silent: true });
+
         router.registerRoute('/favorites/create', function (dto) {
           c.favoritesController.create(dto);
         }, { silent: true });

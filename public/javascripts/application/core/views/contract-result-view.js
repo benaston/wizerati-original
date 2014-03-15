@@ -23,6 +23,17 @@
         that.$el.removeClass('selected');
       }
 
+      if (that.Model.isHidden) {
+        that.$el.addClass('hidden');
+      } else {
+        that.$el.removeClass('hidden');
+      }
+
+      that.$el.attr('data-is-unread', !that.Model.isRead);
+      that.$el.attr('data-is-actioned', that.Model.isActioned);
+      that.$el.attr('data-is-favorite', that.Model.isFavorite);
+      that.$el.attr('data-is-pinned', that.Model.isPinned);
+
       app.instance.renderTemplate(that.$el,
           _templateName,
           that.Model,

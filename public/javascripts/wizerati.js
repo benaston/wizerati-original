@@ -2939,7 +2939,9 @@ window.wizerati = {
         _mode = _modeEnum.Default;
 
     this.eventUris = {default: 'update://favoritescubemodel/',
-      addFavorite: 'update://favoritescubemodel/addfavorite'};
+      addFavorite: 'update://favoritescubemodel/addfavorite',
+      removeFavorite: 'update://favoritescubemodel/removefavorite'
+    };
     this.updateEventUri = 'update://FavoritesCubeModel/';
     this.updateEventUriPrivate = 'update://favoritescubemodel/private'; //used when it is unneccessary to tell other UI elements of a change, saving re-painting.
 
@@ -3042,7 +3044,7 @@ window.wizerati = {
 
       _itemRepository.getById(id, function (item) {
         item['isFavoriteOnFace' + face] = false;
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.removeFavorite, id);
       });
     };
 
@@ -3094,6 +3096,9 @@ window.wizerati = {
     var that = this,
         _hiddenItems = {};
 
+    this.eventUris = { default: 'update://hiddenitemsmodel',
+                       addHiddenItemId: 'update://hiddenitemsmodel/addHiddenItemId',
+                       removeHiddenItemId: 'update://hiddenitemsmodel/removeHiddenItemId' };
     this.updateEventUri = 'update://hiddenitemsmodel/';
 
     this.isHidden = function (id) {
@@ -3104,13 +3109,13 @@ window.wizerati = {
     this.addHiddenItemId = function (value) {
       _hiddenItems[value] = value;
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.addHiddenItemId, _hiddenItems[value]);
     };
 
     this.removeHiddenItemId = function (value) {
       delete _hiddenItems[value];
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.removeHiddenItemId, value);
     };
 
     function init() {
@@ -4059,6 +4064,17 @@ window.wizerati = {
         that.$el.removeClass('selected');
       }
 
+      if (that.Model.isHidden) {
+        that.$el.addClass('hidden');
+      } else {
+        that.$el.removeClass('hidden');
+      }
+
+      that.$el.attr('data-is-unread', !that.Model.isRead);
+      that.$el.attr('data-is-actioned', that.Model.isActioned);
+      that.$el.attr('data-is-favorite', that.Model.isFavorite);
+      that.$el.attr('data-is-pinned', that.Model.isPinned);
+
       app.instance.renderTemplate(that.$el,
           _templateName,
           that.Model,
@@ -4626,10 +4642,28 @@ window.wizerati = {
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
     };
 
-    this.renderAddFavorite = function (favoriteId) {
-      var $btn = $('.pinned-item[data-id="' + favoriteId + '"], .selected-item[data-id="' + favoriteId + '"]').find('.btn-favorite');
-      $btn.attr('href', '/favorites/create?id=' + favoriteId);
-      $btn.addClass('checked');
+    this.renderAddHiddenItem = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
+      $frm.find('.btn').addClass('checked');
+    };
+
+    this.renderRemoveHiddenItem = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/create?id=' + itemId);
+      $frm.find('.btn').removeClass('checked');
+    };
+
+    this.renderAddFavorite = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
+      $frm.attr('action', '/bookmarkeditems/destroy?id=' + itemId);
+      $frm.find('.btn').addClass('checked');
+    };
+
+    this.renderRemoveFavorite = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
+      $frm.attr('action', '/bookmarkeditems/create?id=' + itemId);
+      $frm.find('.btn').removeClass('checked');
     };
 
     this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
@@ -4784,6 +4818,9 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
@@ -4793,7 +4830,10 @@ window.wizerati = {
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
 
       that.Model = model;
@@ -5040,6 +5080,26 @@ window.wizerati = {
       $(_el).find(selectorNew).addClass('selected');
     };
 
+    this.renderAddHiddenItem = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).addClass('hidden');
+    };
+
+    this.renderRemoveHiddenItem = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).removeClass('hidden');
+    };
+
+    this.renderAddFavorite = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-favorite', 'true');
+    };
+
+    this.renderRemoveFavorite = function(itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-favorite', 'false');
+    };
+
 //        function renderResults(results, index) {
 //            index = index === undefined ? 0 : index;
 //
@@ -5100,11 +5160,19 @@ window.wizerati = {
       _itemsOfInterestModel = itemsOfInterestModel;
 
       _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
+      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
       $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
       $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
@@ -5538,6 +5606,64 @@ window.wizerati = {
   }
 
   app.AdvertisersController = AdvertisersController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel) {
+
+    if (!(this instanceof app.BookmarkedItemsController)) {
+      return new app.BookmarkedItemsController(favoritesCubeModel,
+          selectedCubeFaceModel);
+    }
+
+    var that = this,
+        _favoritesCubeModel = null,
+        _selectedCubeFaceModel = null;
+
+    this.create = function (dto) {
+      if (!dto) {
+        throw 'dto not supplied.';
+      }
+
+      var currentCubeFace = _selectedCubeFaceModel.getSelectedCubeFaceId();
+      if (_.find(_favoritesCubeModel.getFavorites[currentCubeFace], function (id) {
+        return id === dto.id;
+      })) {
+        return;
+      }
+
+      _favoritesCubeModel.addFavorite(dto.id, currentCubeFace);
+    };
+
+    this.destroy = function (dto) {
+      if (!dto) {
+        throw 'dto not supplied.';
+      }
+
+      _favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
+    };
+
+    function init() {
+      if (!favoritesCubeModel) {
+        throw 'favoritesCubeModel not supplied.';
+      }
+
+      if (!selectedCubeFaceModel) {
+        throw 'selectedCubeFaceModel not supplied.';
+      }
+
+      _favoritesCubeModel = favoritesCubeModel;
+      _selectedCubeFaceModel = selectedCubeFaceModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkedItemsController = BookmarkedItemsController;
 
 }(wizerati));
 ;(function (app) {
@@ -6223,28 +6349,27 @@ window.wizerati = {
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
-//              _searchPanelModel.setMode(_searchPanelModeEnum.Minimized, {silent:true}); //we need to set the state of the UI without rendering it, so that setting the selectedItemId renders with correct width
-//              _layoutCoordinator.layOut(); //ensure itemsofinterestmodel has the correct target layout
-
-
-
+              var delayToRender = 0;
               if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
                 _uiRootModel.setIsVisible('false'); //we hide the transition to the left
                 _uiRootModel.setAreTransitionsEnabled('false');
+                delayToRender = 120; //wait for the opacity fade to complete
               }
 
               setTimeout(function() {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
 
-                //moved
+                //this must occur *after the search panel mode is set* to its eventual value, to
+                //ensure the initial width rendering of items of interest is the correct one
+                // (avoiding a repaint)
                 if(!_itemsOfInterestModel.getSelectedItemId()) {
                   _itemsOfInterestModel.setSelectedItemId(results[0].id);
                 }
 
                 setTimeout(function() { _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
                 _uiRootModel.setIsVisible('true');
-              }, 120); //wait for the hide animation to complete before yanking the search panel to the left
+              }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
             });
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
@@ -7291,6 +7416,14 @@ window.wizerati = {
           c.selectedItemController.update(dto);
         }, { silent: true });
 
+        router.registerRoute('/bookmarkeditems/create', function (dto) {
+          c.bookmarkedItemsController.create(dto);
+        }, { silent: true });
+
+        router.registerRoute('/bookmarkeditems/destroy', function (dto) {
+          c.bookmarkedItemsController.destroy(dto);
+        }, { silent: true });
+
         router.registerRoute('/favorites/create', function (dto) {
           c.favoritesController.create(dto);
         }, { silent: true });
@@ -7643,6 +7776,7 @@ window.wizerati = {
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
+    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);

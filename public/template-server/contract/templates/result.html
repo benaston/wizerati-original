@@ -1,9 +1,11 @@
 <% try { %>
-<% if(!model.isRead) { %><i class="ti p is-unread"></i><% } %>
-<% if(model.isActioned) { %><i class="ti p actioned"></i><% } %>
-<% if(model.isFavorite) { %><i class="ti p is-favorite"></i><% } %>
-<% if(model.isPinned) { %><i class="ti p ti-pinned is-pinned" style="position:absolute;"></i> <% } %>
-<a tabindex="1" href="/selecteditem/update?id=<%=model.id%>&source=0" class="<%=model.isHidden ? 'hidden' : '' %>">
+<div class="icon-container">
+    <i class="ti is-unread"></i>
+    <i class="ti actioned"></i>
+    <i class="ti is-favorite"></i>
+    <i class="ti ti-pinned is-pinned"></i>
+</div>
+<a tabindex="1" href="/selecteditem/update?id=<%=model.id%>&source=0">
 <h3><%= model.title %></h3>
 <p class="tld"><%= model.tld %></p>
 <p class="rate"><%= model.rateLower %> GBP/day</p>

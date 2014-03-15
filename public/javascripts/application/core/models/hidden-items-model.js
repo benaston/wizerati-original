@@ -10,6 +10,9 @@
     var that = this,
         _hiddenItems = {};
 
+    this.eventUris = { default: 'update://hiddenitemsmodel',
+                       addHiddenItemId: 'update://hiddenitemsmodel/addHiddenItemId',
+                       removeHiddenItemId: 'update://hiddenitemsmodel/removeHiddenItemId' };
     this.updateEventUri = 'update://hiddenitemsmodel/';
 
     this.isHidden = function (id) {
@@ -20,13 +23,13 @@
     this.addHiddenItemId = function (value) {
       _hiddenItems[value] = value;
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.addHiddenItemId, _hiddenItems[value]);
     };
 
     this.removeHiddenItemId = function (value) {
       delete _hiddenItems[value];
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.removeHiddenItemId, value);
     };
 
     function init() {

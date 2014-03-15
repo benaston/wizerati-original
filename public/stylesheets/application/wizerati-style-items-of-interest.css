@@ -381,8 +381,8 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 
 
 /*"narrow screen" devices like iphone*/
-@media only screen
-and (max-device-width: 568px) {
+/*media queries must be on a single lime to avoid safari bug*/
+@media only screen and (max-device-width: 568px) {
     .menu-and-metadata-container {
         min-width: 120px;
     }

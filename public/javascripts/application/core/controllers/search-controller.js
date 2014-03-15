@@ -54,7 +54,7 @@
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
 
                 //this must occur *after the search panel mode is set* to its eventual value, to
-                //ensure the initial width rendering of otems of interest is the correct one
+                //ensure the initial width rendering of items of interest is the correct one
                 // (avoiding a repaint)
                 if(!_itemsOfInterestModel.getSelectedItemId()) {
                   _itemsOfInterestModel.setSelectedItemId(results[0].id);
