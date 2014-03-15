@@ -10,7 +10,7 @@
     var that = this,
         _el = '.items-of-interest-panel',
         _elHandlePinnedItems = '.handle-pinned-items',
-        _elSelectedItem1 = '.selected-item',
+        _elSelectedItemContent = '.selected-item-content',
         _elSelectedItemContainerCurrent = null,
         _elSelectedItemContainer1 = '#selected-item-container-1',
         _elSelectedItemContainer2 = '#selected-item-container-2',
@@ -34,9 +34,6 @@
         _scrollLeft = 0;
 
     this.$el = null;
-    this.$elSelectedItemContainer1 = null;
-    this.$elSelectedItemContainer2 = null;
-    this.$elSelectedItemContainerCurrent = null;
     this.Model = null;
 
 
@@ -182,7 +179,7 @@
       $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
       $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
 
-      $(_elSelectedItem1).children().width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      $(_elSelectedItemContent).css({width: layout.widthItemOfInterest}); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
@@ -225,7 +222,7 @@
 
               setTimeout(function () {
                 $prevEl.empty();
-              }, 300);
+              }, 300); //give time for fade effect to complete
             });
       }
     };
@@ -342,7 +339,6 @@
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
-//      $.subscribe(that.Model.eventUris.widthChange, that.render);
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);

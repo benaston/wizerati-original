@@ -6,15 +6,16 @@
       return new LayoutCalculator(searchPanelModel, resultListModel, itemsOfInterestModel);
     }
 
-    var _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+    var that = this,
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _searchPanelModel = null,
         _resultListModel = null,
         _itemsOfInterestModel = null,
-        _minWidthItemOfInterest = 340,
+        _minWidthItemOfInterest = 370,
         _minWidthItemOfInterestSmallScreen = 310,
-        _effectiveWidthSearchPanelDefault = 370,
+        _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,
@@ -54,11 +55,11 @@
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
-        console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s));', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle);
+        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s) + effectiveWidthPinnedItemsHandle (%s)));', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, effectiveWidthPinnedItemsHandle);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         if ((widthTakenBySearchAndResultsAndPinnedHandle + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle) / numberOfItemsOfInterest;
-          console.log('newWidth (%s) = (viewPortWidth (%s) - widthTakenBySearchAndResultsAndPinnedHandle (%s)) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTakenBySearchAndResultsAndPinnedHandle, numberOfItemsOfInterest);
+          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s) + effectiveWidthPinnedItemsHandle (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, effectiveWidthPinnedItemsHandle, numberOfItemsOfInterest);
         } else {
           console.log('no resize required.')
         }
@@ -119,9 +120,13 @@
         throw 'itemsOfInterestModel not supplied.';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+
+      return that;
     }
 
     init();

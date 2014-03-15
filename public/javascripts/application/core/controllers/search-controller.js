@@ -1,13 +1,13 @@
 (function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, layoutCoordinator) {
 
     if (!(this instanceof app.SearchController)) {
       return new app.SearchController(uiRootModel,
           searchFormModel,
           searchService,
-          resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel);
+          resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, layoutCoordinator);
     }
 
     var that = this,
@@ -19,7 +19,8 @@
         _resultListModel = null,
         _guidFactory = null,
         _searchPanelModel = null,
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _layoutCoordinator = null;
 
     this.urlTransforms = {};
 
@@ -40,6 +41,8 @@
                 return r.id;
               }), _guidFactory.create());
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+              _layoutCoordinator.layOut();
 
               if(!_itemsOfInterestModel.getSelectedItemId()) {
                 _itemsOfInterestModel.setSelectedItemId(results[0].id, { silent: false });
@@ -97,6 +100,10 @@
         throw 'itemsOfInterestModel not supplied.';
       }
 
+      if (!layoutCoordinator) {
+        throw 'layoutCoordinator not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
@@ -104,6 +111,7 @@
       _guidFactory = guidFactory;
       _searchPanelModel = searchPanelModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _layoutCoordinator = layoutCoordinator;
 
       that.urlTransforms['/search'] = uriTransformShow;
 
