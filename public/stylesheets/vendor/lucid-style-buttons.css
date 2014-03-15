@@ -150,3 +150,12 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     left: 34px;
     box-shadow: 0px -1px 0px 2px #0059b8, 0px -7px 0px 2px #0059b8, 5px -9px 0px 2px #0059b8, 5px -3px 0px 2px #0059b8;
 }
+
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)  {
+    .btn:enabled:active, a.btn:not(.disabled):active {
+        box-shadow: 0 0px 25px 15px rgba(0,109,204,.2);
+    }
+}
+
