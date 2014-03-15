@@ -4544,10 +4544,10 @@ window.wizerati = {
               function addSelectedItem() {
                 $(_elSelectedItemContainer1).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                $view.css({
-//                  left: '0',
-                  '-webkit-transform': 'translate(0,0)'
-                });
+//                $view.css({
+////                  left: '0',
+//                  '-webkit-transform': 'translate(0,0)'
+//                });
 
 //                setTimeout(function () {
 //                  $view.removeClass('blur');
