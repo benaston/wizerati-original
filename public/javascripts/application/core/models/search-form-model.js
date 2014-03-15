@@ -15,7 +15,7 @@
         _isVisible = 'true';
 
 //    this.updateEventUri = 'update://SearchFormModel/';
-    this.eventUris = { default: 'update://searchformmodel/',
+    this.eventUris = { default: 'update://searchformmodel',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
     //needed?

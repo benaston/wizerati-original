@@ -1674,7 +1674,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
       timestamp: new Date().toISOString(),
       args: args.map(function (a) {
         if (typeof a === 'object') {
-          return JSON.stringify(a);
+          try { return JSON.stringify(a); } catch(e) { return '$.decorate::createContext: Unable to stringify arguments.'}
         }
 
         return a;
@@ -3452,7 +3452,7 @@ window.wizerati = {
         _isVisible = 'true';
 
 //    this.updateEventUri = 'update://SearchFormModel/';
-    this.eventUris = { default: 'update://searchformmodel/',
+    this.eventUris = { default: 'update://searchformmodel',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
     //needed?
@@ -5111,11 +5111,11 @@ window.wizerati = {
     this.$el = null;
     this.Model = null;
 
-    this.render = function (e, args) {
+    this.render = function (e) {
       var options = { done: that.bindEvents, postRenderScriptName: null };
 
       if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, args);
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
@@ -7006,7 +7006,7 @@ window.wizerati = {
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 340,
         _minWidthItemOfInterestSmallScreen = 310,
-        _effectiveWidthSearchPanelDefault = 340,
+        _effectiveWidthSearchPanelDefault = 370,
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,

@@ -4,6 +4,11 @@
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     z-index: 0;
     -webkit-transform: translate(0, 0);
+    opacity: 0;
+}
+
+body[data-ui-mode='1'] .items-of-interest-panel {
+opacity: 1;
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
@@ -22,9 +27,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-p
     transition: -webkit-transform .2s ease-out; /*TESTING ON IOS*/
 }
 
-/*body[data-ui-mode='1'] .items-of-interest-panel {*/
-    /*opacity: 1;*/
-/*}*/
+
 
 body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
     /*transition: -webkit-transform .2s ease-out;*/
@@ -379,7 +382,7 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 
 /*"narrow screen" devices like iphone*/
 @media only screen
-and (max-width: 568px) {
+and (max-device-width: 568px) {
     .menu-and-metadata-container {
         min-width: 120px;
     }

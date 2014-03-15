@@ -14,7 +14,7 @@
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 340,
         _minWidthItemOfInterestSmallScreen = 310,
-        _effectiveWidthSearchPanelDefault = 340,
+        _effectiveWidthSearchPanelDefault = 370,
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,

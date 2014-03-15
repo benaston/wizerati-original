@@ -16,11 +16,11 @@
     this.$el = null;
     this.Model = null;
 
-    this.render = function (e, args) {
+    this.render = function (e) {
       var options = { done: that.bindEvents, postRenderScriptName: null };
 
       if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, args);
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 

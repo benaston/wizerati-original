@@ -32,7 +32,7 @@
       timestamp: new Date().toISOString(),
       args: args.map(function (a) {
         if (typeof a === 'object') {
-          return JSON.stringify(a);
+          try { return JSON.stringify(a); } catch(e) { return '$.decorate::createContext: Unable to stringify arguments.'}
         }
 
         return a;
