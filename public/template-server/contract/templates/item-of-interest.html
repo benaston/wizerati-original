@@ -25,7 +25,7 @@
             <div class="label">apply</div>
         </div><form class= "frm-pin" method="POST" action="/itemsofinterest/<%=!model.isPinned ? 'create' : 'destroy' %>"><input type="hidden" name="id" value="<%=model.id%>" /><div class="menu-item"><button id="btn-pin-<%= model.id%>"
             class="btn btn-40 btn-primary <%=model.isPinnable || model.isPinned ? '' : 'disabled' %> <% if(model.isPinned) {%>checked<%} %> btn-pin"
-            title="<%=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already pinned / You have the maximum number of permitted pinned items / You cannot pin hidden items' %>"><%= model.isPinned ? '&#xf30d;' : '&#xf30d;' %></button>
+            title="<%=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already pinned / You have the maximum number of permitted pinned items / You cannot pin hidden items' %>"><%= model.isPinned ? '&#xf30e;' : '&#xf30e;' %></button>
             <label class="label" for="btn-pin-<%= model.id%>"><%= model.isPinned ? 'remove from comparison list' : 'add to comparison list' %></label>
             </div></form>
         </section>
