@@ -159,6 +159,7 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 
     .btn:enabled:active, a.btn:not(.disabled):active {
         box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
+        transition: border-color 0.1s linear, box-shadow 0s ease-out;
     }
 /*}*/
 
