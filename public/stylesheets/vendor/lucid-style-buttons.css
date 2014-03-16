@@ -151,21 +151,45 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     box-shadow: 0px -1px 0px 2px #0059b8, 0px -7px 0px 2px #0059b8, 5px -9px 0px 2px #0059b8, 5px -3px 0px 2px #0059b8;
 }
 
-
 .btn.halo {
     box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
     transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
 }
 
+*[data-is-waiting='success'] .btn-success, *[data-is-waiting='primary'] .btn-primary {
+    border: 1px solid rgba(2, 86, 244, .9);
+    border-left: 0;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
+.rotating-button-container > .btn[data-is-waiting='false'] {
+    transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
+    /*transition: border-left-width .2s ease-out, border-color 2s ease-out;*/
+}
+
+/*Rotates and border-color changes when waiting*/
+.rotating-button-container > .btn[data-is-waiting='true'] {
+    border: 1px solid rgba(2, 86, 244, .9);
+    border-left: 0;
+    /*transition: border-left-width .2s ease-out, border-color 2s ease-out;*/
+    -webkit-animation-duration: 2.5s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-out-in;
+}
+
 /*media queries must be on a single lime to avoid safari bug*/
 /*@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {*/
-    .btn {
-        transition: border-color 0.1s linear, box-shadow .5s linear, border-left-width .2s ease-out;
-    }
+.btn {
+    transition: border-color 0.1s linear, box-shadow .5s linear, border-left-width .2s ease-out;
+}
 
-    /*.btn:enabled:active, a.btn:not(.disabled):active {*/
-        /*box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);*/
-        /*transition: border-color 0.1s linear, box-shadow 0s linear;*/
-    /*}*/
+/*.btn:enabled:active, a.btn:not(.disabled):active {*/
+/*box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);*/
+/*transition: border-color 0.1s linear, box-shadow 0s linear;*/
+/*}*/
 /*}*/
 
