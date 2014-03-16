@@ -131,6 +131,8 @@
       //Improves perceived responsiveness on iOS
       //event.preventDefault()
       document.addEventListener("touchstart", function() {},false);
+      $(document).on('touchstart', 'button', function(){ $(this).addClass('halo') });
+      $(document).on('touchend', 'button', function(){ $(this).removeClass('halo') });
       $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);
       $(document).on('submit', 'form', routeFormSubmission);
     }
