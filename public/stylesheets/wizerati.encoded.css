@@ -404,7 +404,7 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 }
 
 .rotating-button-container > .btn[data-is-waiting='false'] {
-    transition: border-color 0.1s linear, box-shadow .5s linear, border-left-width .2s ease-out;
+    /*transition: border-color 0.1s linear, box-shadow .5s linear, border-left-width .2s ease-out;*/
     /*transition: border-left-width .2s ease-out, border-color 2s ease-out;*/
 }
 
