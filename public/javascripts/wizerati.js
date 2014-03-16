@@ -5634,7 +5634,7 @@ window.wizerati = {
         return;
       }
 
-      setTimeout(function(){_favoritesCubeModel.addFavorite(dto.id, currentCubeFace);}, 800);
+//      setTimeout(function(){_favoritesCubeModel.addFavorite(dto.id, currentCubeFace);}, 800);
 
     };
 
