@@ -2081,6 +2081,10 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
 
+      var interactionEvent = (navigator.userAgent.match(/iPad/i)) ? "touchend" : "click";
+      //Improves perceived responsiveness on iOS
+      //event.preventDefault()
+      document.addEventListener("touchstart", function() {},false);
       $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);
       $(document).on('submit', 'form', routeFormSubmission);
     }
@@ -7850,9 +7854,6 @@ window.wizerati = {
 }(wizerati, invertebrate, _));
 ;$(function appStart() {
   'use strict';
-
-  //Improves perceived responsiveness on iOS
-//  document.addEventListener("touchstart", function() {},false);
 
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
   for (var v in window.wizerati.mod('views')) {

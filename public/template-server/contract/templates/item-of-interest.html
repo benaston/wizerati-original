@@ -15,7 +15,7 @@
             <form class="frm-favorite" method="POST" action="/bookmarkeditems/<%=model.isFavorite ? 'destroy' : 'create' %>">
                 <input type="hidden" name="id" value="<%=model.id%>" />
                 <div class="menu-item">
-                    <button id="btn-favorite-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isFavoritable || model.isFavorite ? '' : 'disabled' %> <% if(model.isFavorite) {%>checked<%} %> btn-favorite"
+                    <button type="submit" id="btn-favorite-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isFavoritable || model.isFavorite ? '' : 'disabled' %> <% if(model.isFavorite) {%>checked<%} %> btn-favorite"
                         title="<%=model.isFavoritable ? 'Favorite' : '' %>">&#xf26b;</button>
             <label class="label" for="btn-favorite-<%= model.id%>"><%= model.isFavorite ? 'remove bookmark' : 'bookmark' %></label>
             </div></form><form class="frm-hide" method="POST" action="/hiddenitems/<%=model.isHidden ? 'destroy' : 'create' %>">

@@ -1,9 +1,6 @@
 $(function appStart() {
   'use strict';
 
-  //Improves perceived responsiveness on iOS
-//  document.addEventListener("touchstart", function() {},false);
-
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();
