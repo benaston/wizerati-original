@@ -3461,7 +3461,9 @@ window.wizerati = {
         _isVisible = 'true';
 
 //    this.updateEventUri = 'update://SearchFormModel/';
-    this.eventUris = { default: 'update://searchformmodel',
+    this.eventUris = {
+      default: 'update://searchformmodel',
+      setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
     //needed?
@@ -3535,7 +3537,7 @@ window.wizerati = {
       _isWaiting = value;
 
       if (options.silent === false) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setIsWaiting);
       }
     };
 
@@ -5245,7 +5247,7 @@ window.wizerati = {
     this.postRender = function () {
     };
 
-    this.setIsVisible = function() {
+    this.renderSetIsVisible = function () {
       if (that.Model.getIsVisible() === 'true') {
         that.$el.removeClass('hidden');
       } else if (that.Model.getIsVisible() === 'false') {
@@ -5253,6 +5255,14 @@ window.wizerati = {
       }
       else {
         throw 'invalid visibility state.'
+      }
+    };
+
+    this.renderSetIsWaiting = function () {
+      that.$el.find('btn-search').attr('data-is-waiting', that.Model.getIsWaiting());
+
+      if (!_waitStateIsBeingMonitored) {
+        monitorWaitState();
       }
     };
 
@@ -5284,10 +5294,12 @@ window.wizerati = {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
+      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.renderSetIsVisible;
+      _renderOptimizations[that.Model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setIsVisible, that.render);
+      $.subscribe(that.Model.eventUris.setIsWaiting, that.render);
 
       return that;
     }

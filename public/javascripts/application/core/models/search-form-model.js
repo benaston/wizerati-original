@@ -15,7 +15,9 @@
         _isVisible = 'true';
 
 //    this.updateEventUri = 'update://SearchFormModel/';
-    this.eventUris = { default: 'update://searchformmodel',
+    this.eventUris = {
+      default: 'update://searchformmodel',
+      setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
     //needed?
@@ -89,7 +91,7 @@
       _isWaiting = value;
 
       if (options.silent === false) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setIsWaiting);
       }
     };
 
