@@ -5652,8 +5652,7 @@ window.wizerati = {
         return;
       }
 
-//      setTimeout(function(){_favoritesCubeModel.addFavorite(dto.id, currentCubeFace);}, 800);
-
+      _favoritesCubeModel.addFavorite(dto.id, currentCubeFace);
     };
 
     this.destroy = function (dto) {
@@ -5661,8 +5660,7 @@ window.wizerati = {
         throw 'dto not supplied.';
       }
 
-      setTimeout(function(){_favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());}, 800);
-
+      _favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
     };
 
     function init() {

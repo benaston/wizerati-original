@@ -14,7 +14,7 @@
                 <input type="hidden" name="id" value="<%=model.id%>" />
                 <div class="menu-item">
                     <button id="btn-hide-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isHideable || model.isHidden ? '' : 'disabled' %> <% if(model.isHidden) {%>checked<%} %> btn-hide"
-                        title="<%=model.isHideable ? 'Hide this from future results' : '' %>">&#xf2bd;</button>
+                        title="<%=model.isHideable ? 'Hide this from future results' : '' %>">&#xf30f;</button>
             <label class="label" for="btn-hide-<%= model.id%>"><%= model.isHidden ? 'un-hide' : 'hide' %></label>
             </div></form>
 
