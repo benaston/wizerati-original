@@ -7852,7 +7852,7 @@ window.wizerati = {
   'use strict';
 
   //Improves perceived responsiveness on iOS
-  document.addEventListener("touchstart", function() {},false);
+//  document.addEventListener("touchstart", function() {},false);
 
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
   for (var v in window.wizerati.mod('views')) {

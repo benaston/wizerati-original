@@ -9,6 +9,9 @@
                 <button id="btn-update-search-panel-mode" class="btn btn-40 btn-primary handle-element" title="Pin"></button>
                 <label class="handle-search-panel-label handle-element label" for="btn-update-search-panel-mode">show search &amp; bookmarks</label>
             </form>
+            <div class="rotating-button-container centered-text">
+                <button type="submit" id="btn-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">search</span>
+            </div>
             <form class="frm-favorite" method="POST" action="/bookmarkeditems/<%=model.isFavorite ? 'destroy' : 'create' %>">
                 <input type="hidden" name="id" value="<%=model.id%>" />
                 <div class="menu-item">
