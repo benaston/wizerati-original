@@ -4,6 +4,11 @@
     <article class="item-of-interest-content <%=model.isHidden ? 'hidden' : '' %>">
         <section class="menu-and-metadata-container" style="">
         <section class="menu" >
+            <form method="POST" action="/searchpanelmode/update?mode=0">
+                <input type="hidden" name="mode" value="0">
+                <button id="btn-update-search-panel-mode" class="btn btn-40 btn-primary handle-element" title="Pin"></button>
+                <label class="handle-search-panel-label handle-element label" for="btn-update-search-panel-mode">show search &amp; bookmarks</label>
+            </form>
             <form class="frm-favorite" method="POST" action="/bookmarkeditems/<%=model.isFavorite ? 'destroy' : 'create' %>">
                 <input type="hidden" name="id" value="<%=model.id%>" />
                 <div class="menu-item">
