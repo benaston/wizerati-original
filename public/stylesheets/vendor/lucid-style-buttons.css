@@ -184,7 +184,7 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 /*media queries must be on a single lime to avoid safari bug*/
 /*@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {*/
 .btn {
-    transition: border-color 0.1s linear, box-shadow .5s linear, border-left-width .2s ease-out;
+    transition: border-color 0.1s ease-out, box-shadow .3s ease-out, border-left-width .2s ease-out;
 }
 
 /*.btn:enabled:active, a.btn:not(.disabled):active {*/
