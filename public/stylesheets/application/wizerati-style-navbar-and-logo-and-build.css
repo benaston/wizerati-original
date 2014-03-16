@@ -94,7 +94,8 @@ body[data-ui-mode='1'] .tag-line {
     position: fixed;
     top:40%;
     width:300px;
-    display: inline-block;
+    /*display: inline-block;*/
+    display: none;
     left:50%;
     margin-left:-150px;
     z-index: 9999999;
