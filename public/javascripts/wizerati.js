@@ -2081,7 +2081,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
 
-      var interactionEvent = (navigator.userAgent.match(/iPad/i)) ? "touchend" : "click";
+//      var interactionEvent = (navigator.userAgent.match(/iPad/i)) ? "touchend" : "click";
       //Improves perceived responsiveness on iOS
       //event.preventDefault()
 //      document.addEventListener("touchstart", function() {},false);
