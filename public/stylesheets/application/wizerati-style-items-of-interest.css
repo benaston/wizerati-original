@@ -299,7 +299,7 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 }
 
 .btn-hide {
-    -webkit-transform: rotate(-45deg);
+    /*-webkit-transform: rotate(-45deg);*/
 }
 
 .handle-pinned-items .btn {
