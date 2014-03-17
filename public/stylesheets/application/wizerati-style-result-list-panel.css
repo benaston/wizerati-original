@@ -319,14 +319,14 @@ body[data-ui-mode='1'] .result-list-panel {
     /*-webkit-transition: height .3s ease-in-out;*/
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     max-height: 250px; /*larger than it will ever get*/
-    transition: max-height 1s ease-out; /* we use max-height because involve transition to auto height*/
+    transition: max-height .2s ease-out; /* we use max-height because involve transition to auto height*/
 }
 
 /*.c is the content container for the result, located inside the anchor itself (minus the icon-container)*/
 .t .c, .t .icon-container, .t .tld, .t h3 {
     -webkit-filter: opacity(100%);
     -webkit-backface-visibility: hidden;
-    transition: -webkit-filter 1s ease-out;
+    transition: -webkit-filter .2s ease-out;
 }
 
 .t.hidden .c, .t.hidden .icon-container {
@@ -349,7 +349,7 @@ body[data-ui-mode='1'] .result-list-panel {
     margin-bottom: 9px;
     -webkit-filter: opacity(100%);
     -webkit-backface-visibility: hidden;
-    transition: -webkit-filter 1s ease-out;
+    transition: -webkit-filter .2s ease-out;
 }
 
 .t h2 {

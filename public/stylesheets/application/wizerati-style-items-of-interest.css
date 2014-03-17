@@ -51,7 +51,9 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
 .pinned-item .item-of-interest-content > :not(.menu-and-metadata-container),
 .pinned-item .item-of-interest-content .itemMetadata {
     -webkit-filter: opacity(100%);
-    transition: -webkit-filter 1s ease-out;
+    transition: -webkit-filter .2s ease-out;
+    /*-webkit-transform: scale(1);*/
+    z-index: -1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
@@ -60,7 +62,7 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
 .selected-item.hidden .item-of-interest-content .itemMetadata,
 .pinned-item.hidden .item-of-interest-content .itemMetadata {
     -webkit-filter: opacity(10%);
-    transition: -webkit-filter 1s ease-out;
+    transition: -webkit-filter .2s ease-out;
 }
 
 .selected-item, .pinned-item {
@@ -343,6 +345,10 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     margin-left: 15px;
     margin-bottom: 10px;
     min-width: 305px;
+    position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
+    /*-webkit-transform: scale(1);*/ /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    -webkit-backface-visibility: hidden;
 }
 
 #selected-item-container-2 {

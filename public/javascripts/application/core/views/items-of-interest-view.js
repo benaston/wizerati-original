@@ -72,7 +72,6 @@
     };
 
     this.render = function (e) {
-      console.log('CALLING FUCKING RENDER');
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
