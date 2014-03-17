@@ -56,3 +56,8 @@ label:focus {
     outline: 5px auto rgb(230, 240, 248);
     outline-offset: 2px;
 }
+
+
+button:disabled + label {
+    opacity: .1;
+}

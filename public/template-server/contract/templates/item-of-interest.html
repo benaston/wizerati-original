@@ -8,9 +8,9 @@
                 <input type="hidden" name="id" value="<%=model.id%>" />
                 <div class="menu-item">
                     <button type="submit" id="btn-favorite-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isFavoritable || model.isFavorite ? '' : 'disabled' %> <% if(model.isFavorite) {%>checked<%} %> btn-favorite"
-                        title="<%=model.isFavoritable ? 'Favorite' : '' %>">&#xf26b;</button>
+                        title="<%=model.isFavoritable ? 'Favorite' : '' %>" <%=model.isHidden ? 'disabled' : '' %>>&#xf26b;</button>
             <label class="label" for="btn-favorite-<%= model.id%>"><%= model.isFavorite ? 'remove bookmark' : 'bookmark' %></label>
-            </div></form><form class="frm-hide" method="POST" action="/hiddenitems/<%=model.isHidden ? 'destroy' : 'create' %>">
+             </div></form><form class="frm-hide" method="POST" action="/hiddenitems/<%=model.isHidden ? 'destroy' : 'create' %>">
                 <input type="hidden" name="id" value="<%=model.id%>" />
                 <div class="menu-item">
                     <button id="btn-hide-<%= model.id%>" class="btn btn-40 btn-primary <%=model.isHideable || model.isHidden ? '' : 'disabled' %> <% if(model.isHidden) {%>checked<%} %> btn-hide"

@@ -236,6 +236,10 @@ label:focus {
     outline-offset: 2px;
 }
 
+
+button:disabled + label {
+    opacity: .1;
+}
 .btn {
     padding: 0 !important;
     cursor: pointer;

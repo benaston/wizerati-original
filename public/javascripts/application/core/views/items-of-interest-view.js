@@ -194,6 +194,7 @@
       $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
       $frm.find('.btn').addClass('checked');
       $items.addClass('hidden');
+      $items.find('.btn:not(.btn-hide)').attr('disabled','disabled');
     };
 
     this.renderRemoveHiddenItem = function (itemId) {
@@ -202,6 +203,7 @@
       $frm.attr('action', '/hiddenitems/create?id=' + itemId);
       $frm.find('.btn').removeClass('checked');
       $items.removeClass('hidden');
+      $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
     };
 
     this.renderAddFavorite = function (itemId) {
