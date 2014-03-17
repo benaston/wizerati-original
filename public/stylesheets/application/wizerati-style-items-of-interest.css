@@ -47,6 +47,22 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     -webkit-filter: opacity(0);
 }
 
+.selected-item .item-of-interest-content > :not(.menu-and-metadata-container),
+.pinned-item .item-of-interest-content > :not(.menu-and-metadata-container),
+.pinned-item .item-of-interest-content .itemMetadata {
+    -webkit-filter: opacity(100%);
+    transition: -webkit-filter 1s ease-out;
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+}
+
+.selected-item.hidden .item-of-interest-content > :not(.menu-and-metadata-container),
+.pinned-item.hidden .item-of-interest-content > :not(.menu-and-metadata-container),
+.selected-item.hidden .item-of-interest-content .itemMetadata,
+.pinned-item.hidden .item-of-interest-content .itemMetadata {
+    -webkit-filter: opacity(10%);
+    transition: -webkit-filter 1s ease-out;
+}
+
 .selected-item, .pinned-item {
     display: inline-block;
     position: relative;
@@ -56,12 +72,11 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     width: 0;
     vertical-align: top;
 
-
+    /*-webkit-filter: opacity(100%);*/
     /*the following two styles stop a rendering issue in safari (flicker of unrendered content)*/
     -webkit-transform: scale(1); /*required to circumvent transform z-index bug in webkit when transforms applied*/
-    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
-
-
+    /*-webkit-backface-visibility: hidden; *//*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+    /*transition: -webkit-filter 2s ease-out;*/
 }
 
 .selected-item, .pinned-item {

@@ -190,15 +190,19 @@
     };
 
     this.renderAddHiddenItem = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-hide');
+      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
+      var $frm = $items.find('.frm-hide');
       $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
       $frm.find('.btn').addClass('checked');
+      $items.addClass('hidden');
     };
 
     this.renderRemoveHiddenItem = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-hide');
+      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
+      var $frm = $items.find('.frm-hide');
       $frm.attr('action', '/hiddenitems/create?id=' + itemId);
       $frm.find('.btn').removeClass('checked');
+      $items.removeClass('hidden');
     };
 
     this.renderAddFavorite = function (itemId) {

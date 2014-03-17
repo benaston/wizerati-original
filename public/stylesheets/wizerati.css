@@ -728,6 +728,22 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     -webkit-filter: opacity(0);
 }
 
+.selected-item .item-of-interest-content > :not(.menu-and-metadata-container),
+.pinned-item .item-of-interest-content > :not(.menu-and-metadata-container),
+.pinned-item .item-of-interest-content .itemMetadata {
+    -webkit-filter: opacity(100%);
+    transition: -webkit-filter 1s ease-out;
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+}
+
+.selected-item.hidden .item-of-interest-content > :not(.menu-and-metadata-container),
+.pinned-item.hidden .item-of-interest-content > :not(.menu-and-metadata-container),
+.selected-item.hidden .item-of-interest-content .itemMetadata,
+.pinned-item.hidden .item-of-interest-content .itemMetadata {
+    -webkit-filter: opacity(10%);
+    transition: -webkit-filter 1s ease-out;
+}
+
 .selected-item, .pinned-item {
     display: inline-block;
     position: relative;
@@ -737,12 +753,11 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     width: 0;
     vertical-align: top;
 
-
+    /*-webkit-filter: opacity(100%);*/
     /*the following two styles stop a rendering issue in safari (flicker of unrendered content)*/
     -webkit-transform: scale(1); /*required to circumvent transform z-index bug in webkit when transforms applied*/
-    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
-
-
+    /*-webkit-backface-visibility: hidden; *//*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+    /*transition: -webkit-filter 2s ease-out;*/
 }
 
 .selected-item, .pinned-item {
@@ -1733,6 +1748,7 @@ body[data-ui-mode='1'] .result-list-panel {
 .location-and-posted {
     text-align: right;
     font-style: italic;
+    padding-right: 1px; /*avoid overflowing to the right (which is clipped when backface visibility is set*/
 }
 
 .rate {
@@ -1830,13 +1846,14 @@ body[data-ui-mode='1'] .result-list-panel {
     transition: max-height 1s ease-out; /* we use max-height because involve transition to auto height*/
 }
 
-.t h3,.t p, .t .icon-container {
+/*.c is the content container for the result, located inside the anchor itself (minus the icon-container)*/
+.t .c, .t .icon-container, .t .tld, .t h3 {
     -webkit-filter: opacity(100%);
     -webkit-backface-visibility: hidden;
     transition: -webkit-filter 1s ease-out;
 }
 
-.t.hidden h3,.t.hidden p, .t.hidden .icon-container {
+.t.hidden .c, .t.hidden .icon-container {
     -webkit-filter: opacity(10%);
 }
 
@@ -1845,12 +1862,14 @@ body[data-ui-mode='1'] .result-list-panel {
     text-overflow:ellipsis;
     overflow: hidden;
     width: 100%;
+    -webkit-filter: opacity(10%); /*I found I needed to specify the fade behavior of the H3 explicitly*/
 }
+
 .t.hidden .tld {
     -webkit-filter: opacity(0%);
 }
 
-.thumbnail .tld, .t .tld {
+.t .tld {
     margin-bottom: 9px;
     -webkit-filter: opacity(100%);
     -webkit-backface-visibility: hidden;

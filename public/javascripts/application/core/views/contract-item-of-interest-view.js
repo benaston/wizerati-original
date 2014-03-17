@@ -23,6 +23,12 @@
         that.$el.addClass('pinned-item');
       }
 
+      if (that.Model.isHidden) {
+        that.$el.addClass('hidden');
+      } else {
+        that.$el.removeClass('hidden');
+      }
+
       if (that.Model.shouldAnimateIn) {
 //        that.$el.css({
 //          transition: '-webkit-transform .2s ease-out',
