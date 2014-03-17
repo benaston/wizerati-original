@@ -2751,7 +2751,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'true'
+          'enableTrace': 'false'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -4527,7 +4527,6 @@ window.wizerati = {
     };
 
     function renderPrivate(options) {
-      console.log('CALLING FUCKING RENDER PRIVATE');
       options = options || {animateSelectedItem: true};
 
 //      that.$el.children().not('.handle-pinned-items').remove();
@@ -4618,26 +4617,7 @@ window.wizerati = {
     }
 
     this.renderLayout = function (layout) {
-
-//      $(_elSelectedItemContent).css({width: layout.widthItemOfInterest}); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
-
-
-
-      //wait if the selected item content has not yet made it into the DOM - futile setting layout on something that is non-existent
       var selectedItemContent = $('.selected-item-container').find('.selected-item-content');
-
-      console.log('SETTING SELECTED ITEM CONTENT WIDTH T0 %s', layout.widthItemOfInterest);
-      console.dir(selectedItemContent.html());
-
-      //wait for the fucking selected item to be inserted in the DOM is we are in a mode where the selected item is visible
-//      if (_uiRootModel.getUIMode() === _uiModeEnum.Search) {
-//        if (selectedItemContent.length === 0) {
-//          setTimeout(function () {
-//            that.renderLayout(layout);
-//          }, 50);
-//        }
-//      }
-
       $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
       $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
       $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
@@ -4645,6 +4625,7 @@ window.wizerati = {
       $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
 
       selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      console.log('INFO: Setting ItemOfInterest width to %s.', layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
@@ -4675,7 +4656,6 @@ window.wizerati = {
     };
 
     this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
-      console.log('CALLING FUCKING RENDER SET SELECTED ITEM ID');
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
 
       //these values should be stored before the modification of the DOM (hence before the removal below)
@@ -5090,12 +5070,15 @@ window.wizerati = {
 
     this.renderAddHiddenItem = function(itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).addClass('hidden');
+
+      var $selector = $(_el).find(selector);
+      $selector.addClass('hidden');
     };
 
     this.renderRemoveHiddenItem = function(itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).removeClass('hidden');
+      var $selector = $(_el).find(selector);
+      $selector.removeClass('hidden');
     };
 
     this.renderAddFavorite = function(itemId) {

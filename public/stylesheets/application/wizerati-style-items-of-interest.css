@@ -248,27 +248,28 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 
 
 
-.t .is-favorite {
-    color: silver;
-    font-size: 1.5rem;
-}
+/*.t .is-favorite {*/
+    /*color: silver;*/
+    /*font-size: 1.5rem;*/
+/*}*/
 
-a.hidden {
-    opacity: .3;
-}
+/*.t.hidden {*/
+    /*opacity: .3;*/
+/*}*/
 
-a.hidden:before {
-    position: absolute;
-    left: 75px;
-    top: 19px;
-    display: block;
-    font-family: glyph;
-    content: '\e802';
-    font-size: 4rem;
-    font-weight: 700;
-    color: rgba(0, 0, 0, .2);
-    -webkit-transform: rotate(-45deg);
-}
+/*.t.hidden:before {*/
+    /*opacity: 1;*/
+    /*position: absolute;*/
+    /*left: 75px;*/
+    /*top: 19px;*/
+    /*display: block;*/
+    /*font-family: glyph;*/
+    /*content: '\e802';*/
+    /*font-size: 4rem;*/
+    /*font-weight: 700;*/
+    /*color: rgba(0, 0, 0, .2);*/
+    /*-webkit-transform: rotate(-45deg);*/
+/*}*/
 
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .pinned-item-content,
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .selected-item-content,

@@ -95,12 +95,15 @@
 
     this.renderAddHiddenItem = function(itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).addClass('hidden');
+
+      var $selector = $(_el).find(selector);
+      $selector.addClass('hidden');
     };
 
     this.renderRemoveHiddenItem = function(itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).removeClass('hidden');
+      var $selector = $(_el).find(selector);
+      $selector.removeClass('hidden');
     };
 
     this.renderAddFavorite = function(itemId) {
