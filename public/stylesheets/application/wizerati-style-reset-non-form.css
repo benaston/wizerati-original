@@ -100,7 +100,7 @@ ol li {
 }
 
 strong {
-    font-weight: bold;
+    font-family: helvetica-bold, Arial, sans-serif;
 }
 
 span, div, p, input, label {

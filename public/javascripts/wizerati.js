@@ -2335,13 +2335,14 @@ window.wizerati = {
         _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent:true});
       }
 
-      _model.setItem(_itemRepository.getById(itemId, function(){_uiRootModel.setModal(_modalEnum.ActionContract);})); //triggers render
-
-
+      _itemRepository.getById(itemId, function(item){
+        _model.setItem(item); //triggers render
+        _uiRootModel.setModal(_modalEnum.ActionContract);
+      })
     };
 
     this.hide = function() {
-      that.Model.reset();
+      _model.reset();
       _uiRootModel.setModal(_modalEnum.None);
     };
 
@@ -2492,6 +2493,25 @@ window.wizerati = {
 //      $.publish(that.updateEventUri);
 //    };
 
+    this.addFavorite = function (id, face) {
+      if (!id) {
+        throw 'favorite not supplied';
+      }
+
+      if (!face) {
+        throw 'face not supplied';
+      }
+
+      if (!_.find(_favorites[face], function (i) {
+        return i === id;
+      })) {
+        _favorites[face].push(id);
+        _itemRepository.getById(id, function (item) {
+          item['isFavoriteOnFace' + face] = true;
+          $.publish(that.eventUris.addFavorite, id);
+        });
+      }
+    };
 
     function init() {
 //      if (!book) {
@@ -3251,23 +3271,23 @@ window.wizerati = {
     };
 
     this.addFavorite = function (id, face) {
-//      if (!id) {
-//        throw 'favorite not supplied';
-//      }
-//
-//      if (!face) {
-//        throw 'face not supplied';
-//      }
-//
-//      if (!_.find(_favorites[face], function (i) {
-//        return i === id;
-//      })) {
-//        _favorites[face].push(id);
-//        _itemRepository.getById(id, function (item) {
-//          item['isFavoriteOnFace' + face] = true;
-//          $.publish(that.eventUris.addFavorite, id);
-//        });
-//      }
+      if (!id) {
+        throw 'favorite not supplied';
+      }
+
+      if (!face) {
+        throw 'face not supplied';
+      }
+
+      if (!_.find(_favorites[face], function (i) {
+        return i === id;
+      })) {
+        _favorites[face].push(id);
+        _itemRepository.getById(id, function (item) {
+          item['isFavoriteOnFace' + face] = true;
+          $.publish(that.eventUris.addFavorite, id);
+        });
+      }
     };
 
     this.removeFavorite = function (id, face) {
@@ -6001,6 +6021,8 @@ window.wizerati = {
       _favoritesCubeModel = favoritesCubeModel;
       _selectedCubeFaceModel = selectedCubeFaceModel;
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 
@@ -7832,6 +7854,10 @@ window.wizerati = {
 
         router.registerRoute('/applytocontractdialog/create', function (dto) {
           c.applyToContractDialogController.create(dto);
+        }, { silent: true });
+
+        router.registerRoute('/applytocontractdialog/destroy', function (dto) {
+          c.applyToContractDialogController.destroy(dto);
         }, { silent: true });
 
 //        router.registerRoute('/purchasepanel', function (dto) {

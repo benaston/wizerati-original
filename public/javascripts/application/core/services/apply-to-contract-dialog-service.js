@@ -23,13 +23,14 @@
         _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent:true});
       }
 
-      _model.setItem(_itemRepository.getById(itemId, function(){_uiRootModel.setModal(_modalEnum.ActionContract);})); //triggers render
-
-
+      _itemRepository.getById(itemId, function(item){
+        _model.setItem(item); //triggers render
+        _uiRootModel.setModal(_modalEnum.ActionContract);
+      })
     };
 
     this.hide = function() {
-      that.Model.reset();
+      _model.reset();
       _uiRootModel.setModal(_modalEnum.None);
     };
 

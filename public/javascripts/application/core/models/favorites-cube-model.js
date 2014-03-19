@@ -94,23 +94,23 @@
     };
 
     this.addFavorite = function (id, face) {
-//      if (!id) {
-//        throw 'favorite not supplied';
-//      }
-//
-//      if (!face) {
-//        throw 'face not supplied';
-//      }
-//
-//      if (!_.find(_favorites[face], function (i) {
-//        return i === id;
-//      })) {
-//        _favorites[face].push(id);
-//        _itemRepository.getById(id, function (item) {
-//          item['isFavoriteOnFace' + face] = true;
-//          $.publish(that.eventUris.addFavorite, id);
-//        });
-//      }
+      if (!id) {
+        throw 'favorite not supplied';
+      }
+
+      if (!face) {
+        throw 'face not supplied';
+      }
+
+      if (!_.find(_favorites[face], function (i) {
+        return i === id;
+      })) {
+        _favorites[face].push(id);
+        _itemRepository.getById(id, function (item) {
+          item['isFavoriteOnFace' + face] = true;
+          $.publish(that.eventUris.addFavorite, id);
+        });
+      }
     };
 
     this.removeFavorite = function (id, face) {

@@ -91,6 +91,10 @@
           c.applyToContractDialogController.create(dto);
         }, { silent: true });
 
+        router.registerRoute('/applytocontractdialog/destroy', function (dto) {
+          c.applyToContractDialogController.destroy(dto);
+        }, { silent: true });
+
 //        router.registerRoute('/purchasepanel', function (dto) {
 //          c.purchasePanelController.index(dto);
 //        });

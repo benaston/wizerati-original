@@ -47,6 +47,8 @@
       _favoritesCubeModel = favoritesCubeModel;
       _selectedCubeFaceModel = selectedCubeFaceModel;
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 

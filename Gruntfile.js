@@ -59,7 +59,7 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-loading-and-background.css',
           'public/stylesheets/application/wizerati-style-main-container.css',
           'public/stylesheets/application/wizerati-style-modal-container.css',
-          'public/stylesheets/application/wizerati-style-action-item-modal-contract.css',
+          'public/stylesheets/application/wizerati-style-apply-to-contract-dialog.css',
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',

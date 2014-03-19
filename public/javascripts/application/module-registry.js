@@ -211,7 +211,7 @@
   try {
     mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new wizerati.AuthenticationService();
-    mod.bookmarkBookService = new wizerati.BookmarkBookService();
+    mod.bookmarkBookService = new wizerati.BookmarkBookService(m.favoritesCubeModel);
 
     mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);

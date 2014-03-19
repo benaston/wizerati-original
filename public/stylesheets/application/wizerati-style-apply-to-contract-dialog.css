@@ -18,7 +18,7 @@
     -webkit-filter: opacity(0%);
 }
 
-body[data-modal='5'] #modal-action-contract {
+body[data-modal='5'] #apply-to-contract-dialog {
     -webkit-filter: opacity(100%);
     pointer-events: auto;
     visibility: visible;
@@ -32,7 +32,7 @@ body[data-modal='5'] #modal-action-contract {
     width: 100%;
 }
 
-body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-is-visible=true] {
+body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-visibility-mode='2'] {
     -webkit-filter: opacity(100%) blur(20px);
     transition: -webkit-filter .1s ease-out;
 }

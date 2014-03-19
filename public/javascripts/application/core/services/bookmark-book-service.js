@@ -1,14 +1,14 @@
 (function (app) {
   'use strict';
 
-  function BookmarkBookService(book) {
+  function BookmarkBookService(bookModel) {
 
     if (!(this instanceof app.BookmarkBookService)) {
-      return new app.BookmarkBookService(book);
+      return new app.BookmarkBookService(bookModel);
     }
 
     var that = this,
-        _book = null;
+        _bookModel = null;
 
     //needed? simply have empty page?
 //    this.deactivateFace = function (faceId) {
@@ -35,13 +35,32 @@
 //      $.publish(that.updateEventUri);
 //    };
 
+    this.addFavorite = function (id, face) {
+      if (!id) {
+        throw 'favorite not supplied';
+      }
+
+      if (!face) {
+        throw 'face not supplied';
+      }
+
+      if (!_.find(_favorites[face], function (i) {
+        return i === id;
+      })) {
+        _favorites[face].push(id);
+        _itemRepository.getById(id, function (item) {
+          item['isFavoriteOnFace' + face] = true;
+          $.publish(that.eventUris.addFavorite, id);
+        });
+      }
+    };
 
     function init() {
-//      if (!book) {
-//        throw 'book not supplied';
-//      }
-//
-//      _book = book;
+      if (!bookModel) {
+        throw 'bookModel not supplied';
+      }
+
+      _bookModel = bookModel;
 
       return that;
     }
