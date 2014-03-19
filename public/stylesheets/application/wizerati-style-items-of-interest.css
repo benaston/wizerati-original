@@ -39,7 +39,7 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     vertical-align: top; /*important*/
     -webkit-filter: opacity(100%);
-    transition: -webkit-filter .1s ease-out; /* this adds a 100ms fade when the selected item changes*/
+    /*transition: -webkit-filter .1s ease-out; *//* this adds a 100ms fade when the selected item changes*/
 }
 
 .pinned-items-container.buffer, .selected-item-container.buffer {
