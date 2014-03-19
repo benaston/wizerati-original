@@ -15,33 +15,15 @@
     this.$el = null;
     this.Model = null;
 
-    this.render = function (e, options) {
-      options = options || { done: that.postRender };
-
-      if (_renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, e.args);
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
-      //two step DOM manipulation to enable visibility of CSS transition
-      //first set display property
-      var modal = that.Model.getModal();
       that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
-      that.$el.attr('data-modal', modal);
-
-      if (modal) {
-        setTimeout(function () {
-          that.$el.addClass('modal-visible');
-        }, 0);  //re-adding of this class will trigger CSS transition
-      }
-
-    };
-
-    this.postRender = function () {
-    };
-
-    this.bindEvents = function () {
+      that.$el.attr('data-modal', that.Model.getModal());
     };
 
     this.onDomReady = function () {
@@ -49,16 +31,20 @@
       that.$mainContainer = $(_mainContainer);
     };
 
-    this.setBodyWidth = function(){
-      $('body').width(that.Model.getBodyWidth())
+    this.renderSetVisibilityMode = function(mode) {
+      that.$mainContainer.attr('data-visibility-mode', mode);
     };
 
-    this.setIsVisible = function() {
-      that.$mainContainer.attr('data-is-visible', that.Model.getIsVisible());
-    };
-
-    this.setAreTransitionsEnabled = function() {
+    this.renderSetAreTransitionsEnabled = function() {
         that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    };
+
+    this.renderSetModal = function(modal) {
+        that.$el.attr('data-modal', modal);
+    };
+
+    this.renderSetUIMode = function(uiMode) {
+        that.$el.attr('data-ui-mode', uiMode);
     };
 
     function init() {
@@ -66,16 +52,19 @@
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.setAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
+      _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
+      $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
-
-      that.bindEvents();
+      $.subscribe(that.Model.eventUris.setModal, that.render);
+      $.subscribe(that.Model.eventUris.setUIMode, that.render);
 
       return that;
     }

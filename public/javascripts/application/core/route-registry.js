@@ -87,6 +87,10 @@
           c.actionedItemsController.destroy(dto);
         }, { silent: true });
 
+        router.registerRoute('/applytocontractdialog/create', function (dto) {
+          c.applyToContractDialogController.create(dto);
+        }, { silent: true });
+
 //        router.registerRoute('/purchasepanel', function (dto) {
 //          c.purchasePanelController.index(dto);
 //        });

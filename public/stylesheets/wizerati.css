@@ -348,8 +348,20 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     color: rgba(0, 109, 204, 1);
 }
 
+.btn-success ~ .button-icon {
+    color: rgba(0,200,0,1);
+}
+
 .btn-success {
     border-color: rgba(0, 200, 0, 0.45) rgba(0, 200, 0, 0.45) rgba(0, 200, 0, 0.45) !important;
+}
+
+.btn-neutral ~ .button-icon {
+    color: #333;
+}
+
+.btn-neutral {
+    border-color: rgba(99,99, 99, 1);
 }
 
 .btn-success:enabled:hover {
@@ -471,12 +483,21 @@ button.checked, a.btn.checked {
 .field {
     height: 35px;
 }
-
 .form-button-container {
-    list-style: none;
-    float: right;
+    display: block;
+    text-align:right;
     padding-top: 40px;
 }
+
+.form-button-container > * {
+    margin-left:10px;
+    margin-right:10px;
+}
+/*.form-button-container {*/
+    /*list-style: none;*/
+    /*float: right;*/
+    /*padding-top: 40px;*/
+/*}*/
 
 .form-button-container-item {
     display: inline-block;
@@ -499,8 +520,8 @@ button.checked, a.btn.checked {
     transition: opacity .2s linear 0s, visibility 0s linear .2s;
     position: absolute;
     width: 200px;
-    top: 24px;
-    left: 270px;
+    top: 0;
+    left: 330px;
     width: 200px;
 }
 
@@ -559,10 +580,7 @@ label.radio-inverted:active {
     box-shadow: 0 0 19px 12px rgba(200, 200, 200, .3);
 }
 
-.form-button-container {
-    float: right;
-    padding-top: 40px;
-}
+
 
 .form-button-container:after {
     content: ".";
@@ -570,6 +588,10 @@ label.radio-inverted:active {
     clear: both;
     line-height: 0px;
     visibility: hidden;
+}
+
+.field-and-metadata-container {
+    position: relative;
 }
 
 /*@media only screen*/
@@ -1091,19 +1113,51 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
-body[data-ui-mode='-1'] .loading-container,
-body[data-ui-mode='-1'] .background-container,
-body[data-ui-mode='0'] .background-container {
+/*Background visible during loading and search screen.*/
+/*body[data-ui-mode='-1'] .background-container,*/
+/*body[data-ui-mode='0'] .background-container {*/
+    /*-webkit-filter: opacity(100%);*/
+    /*-moz-filter: opacity(100%);*/
+/*}*/
+
+/*Loading container visible during loading and search screen whilst waiting for the search form to render*/
+/*body[data-ui-mode='-1'] .loading-container,*/
+/*body[data-ui-mode='0'] .main-container[data-visibility-mode='0'] ~ .loading-container {*/
+    /*-webkit-filter: opacity(100%);*/
+/*}*/
+
+/*body[data-ui-mode='1'] .loading-container {*/
+    /*-webkit-filter: opacity(0%);*/
+/*}*/
+
+/*body[data-ui-mode='1'] .background-container {*/
+    /*-webkit-filter: opacity(0%);*/
+/*}*/
+
+/*We want the loading indicator to be hidden whenever the main-container is visible.*/
+/*.main-container[data-is-visible='true'] ~ .loading-container {*/
+    /*-webkit-filter: opacity(0%);*/
+/*}*/
+
+/*Background visible during loading and search screen.*/
+.main-container[data-visibility-mode='0'] ~ .background-container,
+.main-container[data-visibility-mode='0'] ~ .loading-container {
     -webkit-filter: opacity(100%);
-    -moz-filter: opacity(100%);
 }
 
-body:not([data-ui-mode='-1']) .loading-container {
+.main-container[data-visibility-mode='1'] ~ .background-container,
+.main-container[data-visibility-mode='1'] ~ .loading-container {
     -webkit-filter: opacity(0%);
 }
 
-body[data-ui-mode='1'] .background-container {
+.main-container[data-visibility-mode='2'] ~ .background-container,
+.main-container[data-visibility-mode='2'] ~ .loading-container {
     -webkit-filter: opacity(0%);
+}
+
+/*We want the background visible on the search screen.*/
+body[data-ui-mode='0'] .main-container[data-visibility-mode='2'] ~ .background-container {
+    -webkit-filter: opacity(100%);
 }
 
 .background-container,
@@ -1119,12 +1173,13 @@ body[data-ui-mode='1'] .background-container {
     transition: -webkit-filter .1s ease-out;
 }
 
-.main-container[data-is-visible='false'] ~ .background-container,
-.main-container[data-is-visible='false'] ~ .loading-container {
-    -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
-}
+/*.main-container[data-is-visible='false'] ~ .background-container,*/
+/*.main-container[data-is-visible='false'] ~ .loading-container {*/
+    /*-webkit-filter: opacity(0%); *//*we use a filter because the normal opacity transition is janky*/
+/*}*/
 
-body[data-ui-mode='-1'] .loading {
+/*Loading indicator should rotate while rendering the search page.*/
+body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .loading-container .loading {
     -webkit-animation-duration: 2.5s;
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: 1;
@@ -1175,16 +1230,18 @@ body[data-ui-mode='-1'] .main-container {
     transition: none;
 }
 
-.main-container[data-is-visible='false'] {
+.main-container[data-visibility-mode='0'], .main-container[data-visibility-mode='1'] {
     -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
     transition: -webkit-filter .1s ease-out;
 }
 
-body:not([data-ui-mode='-1']) .main-container[data-is-visible='true'] {
+body:not([data-ui-mode='-1']) .main-container[data-visibility-mode='2'] {
     -webkit-filter: opacity(100%); /*we use a filter because the normal opacity transition is janky*/
     transition: -webkit-filter .1s ease-out;
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
+
+
 
 /*This prevents the inline-block layout elements from wrapping on narrow screens.*/
 .main-container {

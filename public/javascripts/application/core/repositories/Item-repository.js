@@ -1,16 +1,16 @@
 (function (app, $) {
   'use strict';
 
-  function ItemRepository(itemCache, croniclService) {
+  function ItemRepository(itemCache, croniclIService) {
 
     if (!(this instanceof app.ItemRepository)) {
       return new app.ItemRepository(itemCache,
-          croniclService);
+          croniclIService);
     }
 
     var that = this,
         _itemCache = null,
-        _croniclService = null;
+        _croniclIService = null;
 
     this.getById = function (id, done) {
       var cachedItem = _itemCache.items[id];
@@ -30,11 +30,11 @@
         done(result);
       }
 
-      setTimeout(function () {
-        $.ajax({ url: _croniclService.getCroniclUri() + 'items/' + id,
+//      setTimeout(function () {
+        $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
           success: success,
           cache: false });
-      }, 2000);
+//      }, 2000);
     };
 
     function init() {
@@ -42,12 +42,12 @@
         throw 'itemCache not supplied.';
       }
 
-      if (!croniclService) {
-        throw 'croniclService not supplied.';
+      if (!croniclIService) {
+        throw 'croniclIService not supplied.';
       }
 
       _itemCache = itemCache;
-      _croniclService = croniclService;
+      _croniclIService = croniclIService;
 
       return that;
     }

@@ -5,6 +5,7 @@ $(function appStart() {
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();
   }
+  //TODO read application state from local storage, before applying this first layout calculation
   window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
   window.addEventListener('resize', function () {
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());

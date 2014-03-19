@@ -8,14 +8,16 @@
     }
 
     var that = this,
-        _actionedItemsModel = null;
+        _actionedItemsModel = null,
+        _modalEnum = app.mod('enum').Modal;
 
     this.create = function (dto) {
       if (!dto) {
         throw 'dto not supplied.';
       }
 
-      _actionedItemsModel.addActionedItemId(dto.id);
+      _uiRootModel.setModal(_modalEnum.ActionItem);
+//      _actionedItemsModel.addActionedItemId(dto.id);
     };
 
     this.destroy = function (dto) {

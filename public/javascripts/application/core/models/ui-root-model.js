@@ -8,32 +8,35 @@
     }
 
     var that = this,
-        _uiMode = '0',
-        _modal = null,
-        _bodyWidth = null,
         _uiModeEnum = app.mod('enum').UIMode,
-        _isVisible = 'true',
+        _modalEnum = app.mod('enum').Modal,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiMode = _uiModeEnum.NotReady,
+        _modal = _modalEnum.None,
+        _bodyWidth = null,
+        _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
 
     this.eventUris = { default: 'update://uirootmodel',
-      setIsVisible: 'update://uirootmodel/isvisible',
-      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
+      setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
+      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
+      setModal: 'update://uirootmodel/setmodal',
+      setUIMode: 'update://uirootmodel/setuimode'
     };
 
-    this.getIsVisible = function () {
-      return _isVisible;
+    this.getVisibilityMode = function () {
+      return _visibilityMode;
     };
 
-    //useful to temporarily hiding the entire UI
-    //to mask major activity in the UI.
-    this.setIsVisible = function (value) {
-      if(value === _isVisible) {
+    //useful to temporarily hide the entire UI
+    this.setVisibilityMode = function (value) {
+      if (value === _visibilityMode) {
         return;
       }
 
-      _isVisible = value;
+      _visibilityMode = value;
 
-      $.publish(that.eventUris.setIsVisible);
+      $.publish(that.eventUris.setVisibilityMode, _visibilityMode);
     };
 
     this.getAreTransitionsEnabled = function () {
@@ -41,7 +44,7 @@
     };
 
     this.setAreTransitionsEnabled = function (value) {
-      if(value === _areTransitionsEnabled) {
+      if (value === _areTransitionsEnabled) {
         return;
       }
 
@@ -61,14 +64,14 @@
     this.setUIMode = function (value, options) {
       options = options || {silent: false};
 
-      if(value === _uiMode) {
+      if (value === _uiMode) {
         return;
       }
 
       _uiMode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setUIMode, _uiMode);
       }
     };
 
@@ -76,13 +79,21 @@
       return _modal || '';
     };
 
-    this.setModal = function (value) {
+    this.setModal = function (value, options) {
+      options = options || {silent: false};
+
       _modal = value;
-      $.publish(that.eventUris.default);
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setModal, _modal);
+      }
     };
 
     function init() {
-      _uiMode = _uiModeEnum.GreenfieldSearch;
+
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 

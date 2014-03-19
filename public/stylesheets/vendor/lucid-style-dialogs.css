@@ -36,6 +36,8 @@
     width: 450px;
     top: 25px;
     position: absolute;
+    background-color: rgba(255,255,255,.9);
+    padding:20px;
 }
 
 body.modal-container.modal-visible {

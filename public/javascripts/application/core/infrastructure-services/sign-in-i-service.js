@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function SignInService(cookieService) {
+  function SignInIService(cookieService) {
 
-    if (!(this instanceof app.SignInService)) {
-      return new app.SignInService(cookieService);
+    if (!(this instanceof app.SignInIService)) {
+      return new app.SignInIService(cookieService);
     }
 
     var that = this,
@@ -89,6 +89,6 @@
     return init();
   }
 
-  app.SignInService = SignInService;
+  app.SignInIService = SignInIService;
 
 }(wizerati));

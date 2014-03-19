@@ -66,39 +66,39 @@
     };
 
     this.renderTemplate = function ($el, templateName, model, options) {
-      var defaults = {
-        done: function ($el) {
-        },
-        error: function (jqxhr, settings, exception) {
-          console.log(exception);
-          throw exception;
-        },
-        postRenderActionScriptUri: null
-      };
-      options = _.extend({}, defaults, options);
+        var defaults = {
+          done: function ($el) {
+          },
+          error: function (jqxhr, settings, exception) {
+            console.log(exception);
+            throw exception;
+          },
+          postRenderActionScriptUri: null
+        };
+        options = _.extend({}, defaults, options);
 
-      if (!$el) {
-        throw '$el1 not supplied';
-      }
-      if (!model) {
-        throw 'model not supplied';
-      }
-
-      var templateUri = _templateServerSvc.getTemplateUri(templateName);
-      //could modify to use self cache
-      that.fetchTemplate(templateUri, { done: function (tmpl) {
-        $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
-
-        if (options.postRenderScriptName) {
-          var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
-          that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
-            _templatePostRenderScripts[postRenderScriptUri]($, $el);
-            options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
-          });
-        } else {
-          options.done($el); //complete for when there is no post-render action script
+        if (!$el) {
+          throw '$el1 not supplied';
         }
-      }});
+        if (!model) {
+          throw 'model not supplied';
+        }
+
+        var templateUri = _templateServerSvc.getTemplateUri(templateName);
+        //could modify to use self cache
+        that.fetchTemplate(templateUri, { done: function (tmpl) {
+          $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
+
+          if (options.postRenderScriptName) {
+            var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
+            that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
+              _templatePostRenderScripts[postRenderScriptUri]($, $el);
+              options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
+            });
+          } else {
+            options.done($el); //complete for when there is no post-render action script
+          }
+        }});
     };
 
     //invoked by this.renderTemplate if a post-render action script is specified.

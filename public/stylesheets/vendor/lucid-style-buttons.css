@@ -106,8 +106,20 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     color: rgba(0, 109, 204, 1);
 }
 
+.btn-success ~ .button-icon {
+    color: rgba(0,200,0,1);
+}
+
 .btn-success {
     border-color: rgba(0, 200, 0, 0.45) rgba(0, 200, 0, 0.45) rgba(0, 200, 0, 0.45) !important;
+}
+
+.btn-neutral ~ .button-icon {
+    color: #333;
+}
+
+.btn-neutral {
+    border-color: rgba(99,99, 99, 1);
 }
 
 .btn-success:enabled:hover {

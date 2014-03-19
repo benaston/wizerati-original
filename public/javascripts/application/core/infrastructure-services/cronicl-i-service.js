@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function CroniclService(signInService, config) {
+  function CroniclIService(signInService, config) {
 
-    if (!(this instanceof app.CroniclService)) {
-      return new app.CroniclService(signInService, config);
+    if (!(this instanceof app.CroniclIService)) {
+      return new app.CroniclIService(signInService, config);
     }
 
     var that = this,
@@ -32,6 +32,6 @@
     return init();
   }
 
-  app.CroniclService = CroniclService;
+  app.CroniclIService = CroniclIService;
 
 }(wizerati));

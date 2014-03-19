@@ -3,30 +3,10 @@
   'use strict';
 
   try {
-    mod.UserRole = {
-      Contractor: '1',
-      Employer: '2',
-      ContractorStranger: '3',
-      EmployerStranger: '4'
-    };
 
-    mod.UIMode = {
-      NotReady: '-1',
-      GreenfieldSearch: '0',
-      Search: '1',
-      SingleItem: '2' /*note: hidden is not on this list because it is useful to have hiding separate from the mode of the ui*/
-    };
-
-    mod.Modal = {
-      Purchase: '0',
-      LogIn: '1',
-      MyAccount: '2',
-      AccountActivation: '3',
-      DeleteFavoriteGroupConfirmationDialog: '4'
-    };
-
-    mod.ItemsOfInterestAction = {
-      Remove: '0'
+    mod.ApplyToContractDialogPanel = {
+      CVSelection: '0',
+      SignInOrContinue: '1'
     };
 
     mod.FavoritesCubeMode = {
@@ -34,15 +14,13 @@
       Edit: '1'
     };
 
-    mod.SearchPanelMode = {
-      Default: '0',
-      Minimized: '1',
-      Hidden: '2'
+    mod.ItemSelectionSource = {
+      Results: '0',
+      Favorites: '1'
     };
 
-    mod.ResultListMode = {
-      Default: '0',
-      Minimized: '1'
+    mod.ItemsOfInterestAction = {
+      Remove: '0'
     };
 
     mod.ItemsOfInterestMode = {
@@ -55,9 +33,45 @@
       WindowResize: '1'
     };
 
-    mod.ItemSelectionSource = {
-      Results: '0',
-      Favorites: '1'
+    mod.MainContainerVisibilityMode = {
+      Hidden: '0',
+      HiddenNoBackgroundAndLoadingIndicator: '1',
+      Visible: '2'
+    };
+
+    mod.Modal = {
+      None: '-1',
+      Purchase: '0',
+      LogIn: '1',
+      MyAccount: '2',
+      AccountActivation: '3',
+      DeleteFavoriteGroupConfirmationDialog: '4',
+      ActionContract: '5'
+    };
+
+    mod.ResultListMode = {
+      Default: '0',
+      Minimized: '1'
+    };
+
+    mod.SearchPanelMode = {
+      Default: '0',
+      Minimized: '1',
+      Hidden: '2'
+    };
+
+    mod.UIMode = {
+      NotReady: '-1',
+      GreenfieldSearch: '0',
+      Search: '1',
+      SingleItem: '2' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
+    };
+
+    mod.UserRole = {
+      Contractor: '1',
+      Employer: '2',
+      ContractorStranger: '3',
+      EmployerStranger: '4'
     };
 
   } catch (e) {
@@ -79,6 +93,7 @@
 
 }(wizerati.mod('config')));
 
+
 (function (mod) {
   'use strict';
 
@@ -90,6 +105,7 @@
   }
 
 }(wizerati.mod('clients')));
+
 
 (function (mod) {
   'use strict';
@@ -103,6 +119,7 @@
 
 }(wizerati.mod('caches')));
 
+
 (function (mod) {
   'use strict';
 
@@ -115,52 +132,13 @@
 
 }(wizerati.mod('decorators')));
 
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.accountService = new wizerati.AccountService(wizerati.mod('clients').wizeratiHttpClient);
-    mod.authenticationService = new wizerati.AuthenticationService();
-    mod.cookieService = new wizerati.CookieService();
-
-    mod.signInService = new wizerati.SignInService(mod.cookieService);
-    mod.croniclService = new wizerati.CroniclService(wizerati.mod('services').signInService, wizerati.mod('config').config);
-    mod.searchService = new wizerati.SearchService(mod.croniclService, wizerati.mod('caches').itemCache);
-  }
-  catch (e) {
-    throw 'problem registering services module. ' + e;
-  }
-
-}(wizerati.mod('services')));
-
-(function (mod) {
-
-  try {
-    mod.itemRepository = new wizerati.ItemRepository(wizerati.mod('caches').itemCache, wizerati.mod('services').croniclService);
-  }
-  catch (e) {
-    throw 'problem registering repositories module. ' + e;
-  }
-
-}(wizerati.mod('repositories')));
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(wizerati.mod('config').config, wizerati.mod('services').croniclService.getCroniclUri);
-  }
-  catch (e) {
-    throw 'problem registering templates module. ' + e;
-  }
-
-}(wizerati.mod('templates')));
 
 (function (mod) {
   'use strict';
 
   try {
     mod.actionedItemsModel = new wizerati.ActionedItemsModel();
+    mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
     mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
@@ -172,42 +150,109 @@
     mod.signInPanelModel = new wizerati.SignInPanelModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
-    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel);
+    //TODO: extract the functionality requiring the repo into a service
+    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(mod.resultListModel);
     mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;
   }
 
-}(wizerati.mod('models'), invertebrate, wizerati.mod('config').config.config, wizerati.mod('decorators').decorators));
+}(wizerati.mod('models')));
 
-(function (mod, m, s, r) {
+
+//infrastructure services are services that are sufficiently
+// de-coupled from the domain logic that they can be initialized
+// before the repositories.
+//This enables the use of specific services by repositories (which can be desirable).
+(function (mod, c) {
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+    mod.cookieIService = new wizerati.CookieIService();
+    mod.signInIService = new wizerati.SignInIService(mod.cookieIService);
+    mod.croniclIService = new wizerati.CroniclIService(mod.signInIService, c.config);
+  }
+  catch (e) {
+    throw 'problem registering infrastructure services module. ' + e;
+  }
+
+}(wizerati.mod('infrastructure-services'), wizerati.mod('config')));
+
+
+(function (mod, c, i) {
+  'use strict';
+
+  try {
+    mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(c.config, i.croniclIService.getCroniclUri);
+  }
+  catch (e) {
+    throw 'problem registering templates module. ' + e;
+  }
+
+}(wizerati.mod('templates'), wizerati.mod('config'), wizerati.mod('infrastructure-services')));
+
+
+(function (mod, i) {
+
+  try {
+    mod.itemRepository = new wizerati.ItemRepository(wizerati.mod('caches').itemCache, i.croniclIService);
+  }
+  catch (e) {
+    throw 'problem registering repositories module. ' + e;
+  }
+
+}(wizerati.mod('repositories'), wizerati.mod('infrastructure-services')));
+
+
+(function (mod, c, ca, i, m, r) {
+  'use strict';
+
+  try {
+    mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
+    mod.authenticationService = new wizerati.AuthenticationService();
+    mod.bookmarkBookService = new wizerati.BookmarkBookService();
+
+    mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
+    mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
+    mod.searchService = new wizerati.SearchService(i.croniclIService, ca.itemCache);
+  }
+  catch (e) {
+    throw 'problem registering services module. ' + e;
+  }
+
+}(wizerati.mod('services'), wizerati.mod('clients'), wizerati.mod('caches'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
+
+
+(function (mod, i, m, r) {
+  'use strict';
+
+  try {
+    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
     throw 'problem registering factories module. ' + e;
   }
 
-}(wizerati.mod('factories'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('repositories')));
+}(wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
 
-(function (mod) {
+
+(function (mod, c, f) {
   'use strict';
 
   try {
-    mod.wizeratiConnector = new wizerati.WizeratiConnector(wizerati.mod('clients').wizeratiHttpClient, wizerati.mod('factories').wizeratiRequestFactory);
+    mod.wizeratiConnector = new wizerati.WizeratiConnector(c.wizeratiHttpClient, f.wizeratiRequestFactory);
   }
   catch (e) {
     throw 'problem registering connectors module. ' + e;
   }
 
-}(wizerati.mod('connectors')));
+}(wizerati.mod('connectors'), wizerati.mod('clients'), wizerati.mod('factories')));
+
 
 (function (mod, m) {
   'use strict';
@@ -222,34 +267,38 @@
 
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
-(function (mod, m, f) {
+
+(function (mod, f, l, m) {
   'use strict';
 
   try {
+    mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator, m.uiRootModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('models'), wizerati.mod('factories')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models')));
 
-(function (mod, m) {
+
+(function (mod, f, l, m, s) {
   'use strict';
 
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
-    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
+    mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
+//    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
     mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
-    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel);
+    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, wizerati.mod('services').searchService, m.resultListModel, wizerati.mod('factories').guidFactory, m.searchPanelModel, m.itemsOfInterestModel, wizerati.mod('layout').layoutCoordinator);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, l.layoutCoordinator);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
   }
@@ -257,7 +306,8 @@
     throw 'problem registering controllers module. ' + e;
   }
 
-}(wizerati.mod('controllers'), wizerati.mod('models')));
+}(wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
+
 
 (function (mod) {
   'use strict';
@@ -270,6 +320,7 @@
   }
 
 }(wizerati.mod('ui')));
+
 
 (function (mod) {
   'use strict';

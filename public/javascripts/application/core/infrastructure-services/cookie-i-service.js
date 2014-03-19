@@ -1,10 +1,10 @@
 (function (app, _) {
   'use strict';
 
-  function CookieService() {
+  function CookieIService() {
 
-    if (!(this instanceof CookieService)) {
-      return new CookieService();
+    if (!(this instanceof CookieIService)) {
+      return new CookieIService();
     }
 
     var that = this,
@@ -29,6 +29,6 @@
     return init();
   }
 
-  app.CookieService = CookieService;
+  app.CookieIService = CookieIService;
 
 }(wizerati, _));

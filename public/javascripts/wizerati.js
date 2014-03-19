@@ -1799,39 +1799,39 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     };
 
     this.renderTemplate = function ($el, templateName, model, options) {
-      var defaults = {
-        done: function ($el) {
-        },
-        error: function (jqxhr, settings, exception) {
-          console.log(exception);
-          throw exception;
-        },
-        postRenderActionScriptUri: null
-      };
-      options = _.extend({}, defaults, options);
+        var defaults = {
+          done: function ($el) {
+          },
+          error: function (jqxhr, settings, exception) {
+            console.log(exception);
+            throw exception;
+          },
+          postRenderActionScriptUri: null
+        };
+        options = _.extend({}, defaults, options);
 
-      if (!$el) {
-        throw '$el1 not supplied';
-      }
-      if (!model) {
-        throw 'model not supplied';
-      }
-
-      var templateUri = _templateServerSvc.getTemplateUri(templateName);
-      //could modify to use self cache
-      that.fetchTemplate(templateUri, { done: function (tmpl) {
-        $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
-
-        if (options.postRenderScriptName) {
-          var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
-          that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
-            _templatePostRenderScripts[postRenderScriptUri]($, $el);
-            options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
-          });
-        } else {
-          options.done($el); //complete for when there is no post-render action script
+        if (!$el) {
+          throw '$el1 not supplied';
         }
-      }});
+        if (!model) {
+          throw 'model not supplied';
+        }
+
+        var templateUri = _templateServerSvc.getTemplateUri(templateName);
+        //could modify to use self cache
+        that.fetchTemplate(templateUri, { done: function (tmpl) {
+          $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
+
+          if (options.postRenderScriptName) {
+            var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
+            that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
+              _templatePostRenderScripts[postRenderScriptUri]($, $el);
+              options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
+            });
+          } else {
+            options.done($el); //complete for when there is no post-render action script
+          }
+        }});
     };
 
     //invoked by this.renderTemplate if a post-render action script is specified.
@@ -2313,6 +2313,72 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function ApplyToContractDialogService(model, uiRootModel, authorizationService, itemRepository) {
+
+    if (!(this instanceof app.ApplyToContractDialogService)) {
+      return new app.ApplyToContractDialogService(model, uiRootModel, authorizationService, itemRepository);
+    }
+
+    var that = this,
+        _model = null,
+        _uiRootModel = null,
+        _authorizationService = null,
+        _itemRepository = null,
+        _roleEnum = app.mod('enum').UserRole,
+        _modalEnum = app.mod('enum').Modal,
+        _dialogPanelEnum = app.mod('enum').ApplyToContractDialogPanel;
+
+    this.show = function(itemId) {
+      if(_authorizationService.getCurrentRole() == _roleEnum.Contractor) {
+        _model.setCurrentDialogPanel(_dialogPanelEnum.CVSelection, {silent:true});
+      } else {
+        _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent:true});
+      }
+
+      _model.setItem(_itemRepository.getById(itemId, function(){_uiRootModel.setModal(_modalEnum.ActionContract);})); //triggers render
+
+
+    };
+
+    this.hide = function() {
+      that.Model.reset();
+      _uiRootModel.setModal(_modalEnum.None);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      if (!uiRootModel) {
+        throw 'uiRootModel not supplied';
+      }
+
+     if (!authorizationService) {
+        throw 'authorizationService not supplied';
+      }
+
+      if (!itemRepository) {
+        throw 'itemRepository not supplied';
+      }
+
+      _uiRootModel = uiRootModel;
+      _authorizationService = authorizationService;
+      _model = model;
+      _itemRepository = itemRepository;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogService = ApplyToContractDialogService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   //todo: split authorization and authentication?
   function AuthenticationService() {
 
@@ -2339,67 +2405,46 @@ window.wizerati = {
   app.AuthenticationService = AuthenticationService;
 
 }(wizerati));
-;(function (app, _) {
-  'use strict';
-
-  function CookieService() {
-
-    if (!(this instanceof CookieService)) {
-      return new CookieService();
-    }
-
-    var that = this,
-        _cookieName = 'wizerati';
-
-    this.getAuthorizationCookie = function () {
-      return _.cookie(_cookieName);
-    };
-
-    this.setAuthorizationCookie = function (role) {
-      _.cookie(_cookieName, role, { expires: 7, path: '/' });
-    };
-
-    this.deleteAuthorizationCookie = function () {
-      _.cookie(_cookieName, null);
-    };
-
-    function init() {
-      return that;
-    }
-
-    return init();
-  }
-
-  app.CookieService = CookieService;
-
-}(wizerati, _));
 ;(function (app) {
   'use strict';
 
-  function CroniclService(signInService, config) {
+  function AuthorizationService(cookieIService) {
 
-    if (!(this instanceof app.CroniclService)) {
-      return new app.CroniclService(signInService, config);
+    if (!(this instanceof app.AuthorizationService)) {
+      return new app.AuthorizationService(cookieIService);
     }
 
     var that = this,
-        _signInService = null,
-        _config = null;
+        _cookieIService = null,
+        _roleEnum = null;
 
-    this.getCroniclUri = function () {
-      return _config.config.templateServerUris[_signInService.getCurrentRole()];
+
+    this.getCurrentRole = function () {
+      var cookie = _cookieIService.getAuthorizationCookie();
+
+      if (!cookie) {
+        return _roleEnum.ContractorStranger;
+      }
+
+      if (cookie !== _roleEnum.Contractor
+          && cookie !== _roleEnum.Employer
+          && cookie !== _roleEnum.ContractorStranger
+          && cookie !== _roleEnum.EmployerStranger) {
+
+        throw 'invalid role found in cookie "' + cookie + '"';
+      }
+
+      return cookie;
     };
 
     function init() {
-      if (!signInService) {
-        throw 'signInService not supplied';
-      }
-      if (!config) {
-        throw 'config not supplied';
+      if (!cookieIService) {
+        throw 'cookieService not supplied';
       }
 
-      _signInService = signInService;
-      _config = config;
+      _roleEnum = app.mod('enum').UserRole;
+
+      _cookieIService = cookieIService;
 
       return that;
     }
@@ -2407,47 +2452,101 @@ window.wizerati = {
     return init();
   }
 
-  app.CroniclService = CroniclService;
+  app.AuthorizationService = AuthorizationService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function BookmarkBookService(book) {
+
+    if (!(this instanceof app.BookmarkBookService)) {
+      return new app.BookmarkBookService(book);
+    }
+
+    var that = this,
+        _book = null;
+
+    //needed? simply have empty page?
+//    this.deactivateFace = function (faceId) {
+//      if (faceId > 5) {
+//        throw 'faceId invalid.';
+//      }
+//
+//      _faceActiveStatuses[faceId] = false;
+//
+//      //update the client-side results collection
+//      for (var i = 0; i < _favorites[faceId].length; i++) {
+//        var id = _favorites[faceId][i];
+//        _itemRepository.getById(id, function (item) {
+//          item['isFavoriteOnFace' + faceId] = false;
+//        });
+//      }
+//
+//      _favorites[faceId] = [];
+//
+//      if (_faceActiveStatuses.indexOf(true) === -1) {
+//        _mode = _modeEnum.Default;
+//      }
+//      //ensure the items of interest and result list views are notified
+//      $.publish(that.updateEventUri);
+//    };
+
+
+    function init() {
+//      if (!book) {
+//        throw 'book not supplied';
+//      }
+//
+//      _book = book;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkBookService = BookmarkBookService;
 
 }(wizerati));
 ;//try forcing service types to communicate with the UI only via routing and local storage?
 (function (app, $) {
   'use strict';
 
-  function SearchService(croniclService, itemCache) {
+  function SearchService(croniclIService, itemCache) {
 
     if (!(this instanceof app.SearchService)) {
-      return new app.SearchService(croniclService, itemCache);
+      return new app.SearchService(croniclIService, itemCache);
     }
 
     var that = this,
-        _croniclService = null,
+        _croniclIService = null,
         _itemCache = null;
 
     //rename to success, plus add timeout argument and error
     this.runSearch = function (keywords, location, rate, done) {
-      done = !done ? function (data) {
-      } : done;
+        done = !done ? function (data) {
+        } : done;
 
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
+        $.ajax({
+          url: _croniclIService.getCroniclUri() + 'search',
+          success: success,
+          cache: false
+        });
+
+        function success(data) {
+          if (!data) {
+            throw 'data not supplied';
+          }
+
+          var results = $.parseJSON(data);
+          _itemCache.insert(results);
+          done(results);
         }
-
-        var results = $.parseJSON(data);
-        _itemCache.insert(results);
-        done(results);
-      }
-
-      $.ajax({
-        url: _croniclService.getCroniclUri() + 'search',
-        success: success,
-        cache: false
-      });
     };
 
     function init() {
-      if (!croniclService) {
+      if (!croniclIService) {
         throw 'croniclService not supplied.';
       }
 
@@ -2455,7 +2554,7 @@ window.wizerati = {
         throw 'itemCache not supplied.';
       }
 
-      _croniclService = croniclService;
+      _croniclIService = croniclIService;
       _itemCache = itemCache;
 
       return that;
@@ -2511,13 +2610,84 @@ window.wizerati = {
 //                _.each(results, function (r) {
 //                    resultModels.push(_resultModelFactory.create(r));
 //                });
+;(function (app, _) {
+  'use strict';
+
+  function CookieIService() {
+
+    if (!(this instanceof CookieIService)) {
+      return new CookieIService();
+    }
+
+    var that = this,
+        _cookieName = 'wizerati';
+
+    this.getAuthorizationCookie = function () {
+      return _.cookie(_cookieName);
+    };
+
+    this.setAuthorizationCookie = function (role) {
+      _.cookie(_cookieName, role, { expires: 7, path: '/' });
+    };
+
+    this.deleteAuthorizationCookie = function () {
+      _.cookie(_cookieName, null);
+    };
+
+    function init() {
+      return that;
+    }
+
+    return init();
+  }
+
+  app.CookieIService = CookieIService;
+
+}(wizerati, _));
 ;(function (app) {
   'use strict';
 
-  function SignInService(cookieService) {
+  function CroniclIService(signInService, config) {
 
-    if (!(this instanceof app.SignInService)) {
-      return new app.SignInService(cookieService);
+    if (!(this instanceof app.CroniclIService)) {
+      return new app.CroniclIService(signInService, config);
+    }
+
+    var that = this,
+        _signInService = null,
+        _config = null;
+
+    this.getCroniclUri = function () {
+      return _config.config.templateServerUris[_signInService.getCurrentRole()];
+    };
+
+    function init() {
+      if (!signInService) {
+        throw 'signInService not supplied';
+      }
+      if (!config) {
+        throw 'config not supplied';
+      }
+
+      _signInService = signInService;
+      _config = config;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.CroniclIService = CroniclIService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function SignInIService(cookieService) {
+
+    if (!(this instanceof app.SignInIService)) {
+      return new app.SignInIService(cookieService);
     }
 
     var that = this,
@@ -2602,7 +2772,7 @@ window.wizerati = {
     return init();
   }
 
-  app.SignInService = SignInService;
+  app.SignInIService = SignInIService;
 
 }(wizerati));
 ;(function (app) {
@@ -2751,7 +2921,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'false'
+          'enableTrace': 'true'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -2795,7 +2965,7 @@ window.wizerati = {
     var that = this,
         _actionedItems = {};
 
-    this.updateEventUri = 'update://actioneditemsmodel/';
+    this.updateEventUri = 'update://actioneditemsmodel';
 
     this.isActioned = function (id) {
       return !!_actionedItems[id];
@@ -2836,7 +3006,7 @@ window.wizerati = {
     var that = this,
         _isVisible = false;
 
-    this.updateEventUri = 'update://advertiserspanelmodel/';
+    this.updateEventUri = 'update://advertiserspanelmodel';
 
     this.setIsVisible = function (value) {
       _isVisible = value;
@@ -2853,6 +3023,73 @@ window.wizerati = {
 
   app.AdvertisersPanelModel = AdvertisersPanelModel;
   invertebrate.Model.isExtendedBy(app.AdvertisersPanelModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ApplyToContractDialogModel() {
+
+    if (!(this instanceof app.ApplyToContractDialogModel)) {
+      return new app.ApplyToContractDialogModel();
+    }
+
+    var that = this,
+        _currentDialogPanel = null,
+        _item = null,
+        _actionContractDialogPanelEnum = app.mod('enum').ActionContractDialogPanel,
+        _isWaiting = '', //should identify the dom element to indicate waiting
+        _isVisible = false,
+        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
+
+    this.eventUris = {
+      default: 'update://actioncontractmodalmodel',
+      show: 'update://actioncontractmodalmodel/show' }
+
+    this.reset = function() {
+      _currentDialogPanel = null;
+      _item = null;
+    };
+
+    this.getCurrentDialogPanel = function() {
+      return _currentDialogPanel;
+    };
+
+    this.setCurrentDialogPanel = function(value, options) {
+      options = options || {silent:false};
+
+      _currentDialogPanel = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.setCurrentDialogPanel, _currentDialogPanel);
+      }
+    };
+
+    this.getItem = function() {
+      return _item;
+    };
+
+    this.setItem = function(value, options) {
+      options = options || {silent:false};
+
+      _item = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.default);
+      }
+    };
+
+
+    function init() {
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogModel = ApplyToContractDialogModel;
+  invertebrate.Model.isExtendedBy(app.ApplyToContractDialogModel);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -2921,11 +3158,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate, _) {
   'use strict';
 
-  function FavoritesCubeModel(itemRepository, resultListModel) {
+  function FavoritesCubeModel(resultListModel) {
 
     if (!(this instanceof app.FavoritesCubeModel)) {
-      return new app.FavoritesCubeModel(itemRepository,
-          resultListModel);
+      return new app.FavoritesCubeModel(resultListModel);
     }
 
     var that = this,
@@ -2938,7 +3174,6 @@ window.wizerati = {
           []  //back
         ],
         _faceLabels = ['my favorites', 'my favorites 2', 'my favorites 3', 'my favorites 4', 'my favorites 5', 'my favorites 6'],
-        _itemRepository = null,
         _resultListModel = null,
         _faceActiveStatuses = [true, false, false, false, false, false],
         _modeEnum = app.mod('enum').FavoritesCubeMode,
@@ -2972,29 +3207,29 @@ window.wizerati = {
       $.publish(that.updateEventUriPrivate);
     };
 
-    this.deactivateFace = function (faceId) {
-      if (faceId > 5) {
-        throw 'faceId invalid.';
-      }
-
-      _faceActiveStatuses[faceId] = false;
-
-      //update the client-side results collection
-      for (var i = 0; i < _favorites[faceId].length; i++) {
-        var id = _favorites[faceId][i];
-        _itemRepository.getById(id, function (item) {
-          item['isFavoriteOnFace' + faceId] = false;
-        });
-      }
-
-      _favorites[faceId] = [];
-
-      if (_faceActiveStatuses.indexOf(true) === -1) {
-        _mode = _modeEnum.Default;
-      }
-      //ensure the items of interest and result list views are notified
-      $.publish(that.updateEventUri);
-    };
+//    this.deactivateFace = function (faceId) {
+//      if (faceId > 5) {
+//        throw 'faceId invalid.';
+//      }
+//
+//      _faceActiveStatuses[faceId] = false;
+//
+//      //update the client-side results collection
+//      for (var i = 0; i < _favorites[faceId].length; i++) {
+//        var id = _favorites[faceId][i];
+//        _itemRepository.getById(id, function (item) {
+//          item['isFavoriteOnFace' + faceId] = false;
+//        });
+//      }
+//
+//      _favorites[faceId] = [];
+//
+//      if (_faceActiveStatuses.indexOf(true) === -1) {
+//        _mode = _modeEnum.Default;
+//      }
+//      //ensure the items of interest and result list views are notified
+//      $.publish(that.updateEventUri);
+//    };
 
     this.getFaceStatuses = function () {
 
@@ -3016,23 +3251,23 @@ window.wizerati = {
     };
 
     this.addFavorite = function (id, face) {
-      if (!id) {
-        throw 'favorite not supplied';
-      }
-
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      if (!_.find(_favorites[face], function (i) {
-        return i === id;
-      })) {
-        _favorites[face].push(id);
-        _itemRepository.getById(id, function (item) {
-          item['isFavoriteOnFace' + face] = true;
-          $.publish(that.eventUris.addFavorite, id);
-        });
-      }
+//      if (!id) {
+//        throw 'favorite not supplied';
+//      }
+//
+//      if (!face) {
+//        throw 'face not supplied';
+//      }
+//
+//      if (!_.find(_favorites[face], function (i) {
+//        return i === id;
+//      })) {
+//        _favorites[face].push(id);
+//        _itemRepository.getById(id, function (item) {
+//          item['isFavoriteOnFace' + face] = true;
+//          $.publish(that.eventUris.addFavorite, id);
+//        });
+//      }
     };
 
     this.removeFavorite = function (id, face) {
@@ -3069,15 +3304,10 @@ window.wizerati = {
     };
 
     function init() {
-      if (!itemRepository) {
-        throw 'itemRepository not supplied.';
-      }
-
       if (!resultListModel) {
         throw 'resultListModel not supplied.';
       }
 
-      _itemRepository = itemRepository;
       _resultListModel = resultListModel;
 
       return that;
@@ -3377,7 +3607,7 @@ window.wizerati = {
         _mode = _modeEnum.Default,
         _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
 
-    this.eventUris = { default: 'update://resultlistmodel/' };
+    this.eventUris = { default: 'update://resultlistmodel' };
 
     this.getSearchId = function () {
       return _searchId;
@@ -3460,7 +3690,8 @@ window.wizerati = {
         _location = null,
         _isWaiting = 'false',
         _rate = null,
-        _isVisible = 'true';
+        _isVisible = 'true',
+        _firstRenderCompleteFlag = false;
 
 //    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = {
@@ -3473,7 +3704,14 @@ window.wizerati = {
       return _isVisible;
     };
 
-    //needed?
+    this.getFirstRenderCompleteFlag = function () {
+      return _firstRenderCompleteFlag;
+    };
+
+    this.setFirstRenderCompleteFlag = function () {
+      _firstRenderCompleteFlag = true;
+    };
+
     this.setIsVisible = function (value) {
       _isVisible = value;
 
@@ -3544,6 +3782,8 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 
@@ -3803,32 +4043,35 @@ window.wizerati = {
     }
 
     var that = this,
-        _uiMode = '0',
-        _modal = null,
-        _bodyWidth = null,
         _uiModeEnum = app.mod('enum').UIMode,
-        _isVisible = 'true',
+        _modalEnum = app.mod('enum').Modal,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiMode = _uiModeEnum.NotReady,
+        _modal = _modalEnum.None,
+        _bodyWidth = null,
+        _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
 
     this.eventUris = { default: 'update://uirootmodel',
-      setIsVisible: 'update://uirootmodel/isvisible',
-      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled'
+      setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
+      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
+      setModal: 'update://uirootmodel/setmodal',
+      setUIMode: 'update://uirootmodel/setuimode'
     };
 
-    this.getIsVisible = function () {
-      return _isVisible;
+    this.getVisibilityMode = function () {
+      return _visibilityMode;
     };
 
-    //useful to temporarily hiding the entire UI
-    //to mask major activity in the UI.
-    this.setIsVisible = function (value) {
-      if(value === _isVisible) {
+    //useful to temporarily hide the entire UI
+    this.setVisibilityMode = function (value) {
+      if (value === _visibilityMode) {
         return;
       }
 
-      _isVisible = value;
+      _visibilityMode = value;
 
-      $.publish(that.eventUris.setIsVisible);
+      $.publish(that.eventUris.setVisibilityMode, _visibilityMode);
     };
 
     this.getAreTransitionsEnabled = function () {
@@ -3836,7 +4079,7 @@ window.wizerati = {
     };
 
     this.setAreTransitionsEnabled = function (value) {
-      if(value === _areTransitionsEnabled) {
+      if (value === _areTransitionsEnabled) {
         return;
       }
 
@@ -3856,14 +4099,14 @@ window.wizerati = {
     this.setUIMode = function (value, options) {
       options = options || {silent: false};
 
-      if(value === _uiMode) {
+      if (value === _uiMode) {
         return;
       }
 
       _uiMode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setUIMode, _uiMode);
       }
     };
 
@@ -3871,13 +4114,21 @@ window.wizerati = {
       return _modal || '';
     };
 
-    this.setModal = function (value) {
+    this.setModal = function (value, options) {
+      options = options || {silent: false};
+
       _modal = value;
-      $.publish(that.eventUris.default);
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setModal, _modal);
+      }
     };
 
     function init() {
-      _uiMode = _uiModeEnum.GreenfieldSearch;
+
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 
@@ -3930,6 +4181,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       $.subscribe(that.Model.updateEventUri, that.render);
@@ -3942,6 +4194,51 @@ window.wizerati = {
 
   app.AccountActivationView = AccountActivationView;
   invertebrate.View.isExtendedBy(app.AccountActivationView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ApplyToContractDialogView(model) {
+
+    if (!(this instanceof app.ApplyToContractDialogView)) {
+      return new app.ApplyToContractDialogView(model);
+    }
+
+    var that = this,
+        _el = '#apply-to-contract-dialog',
+        _jobTitleEl = '.job-title',
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogView = ApplyToContractDialogView;
+  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -3980,6 +4277,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       return that;
@@ -4104,6 +4402,7 @@ window.wizerati = {
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
+
       return that;
     }
 
@@ -4143,8 +4442,10 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       that.render();
+
       return that;
     }
 
@@ -4195,6 +4496,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       return that;
@@ -4297,6 +4599,7 @@ window.wizerati = {
         throw 'favoritesCubeModel not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _favoritesCubeModel = favoritesCubeModel;
 
@@ -4970,6 +5273,7 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
       $.subscribe(that.Model.updateEventUri, that.render);
@@ -5208,7 +5512,7 @@ window.wizerati = {
     this.Model = null;
 
     this.render = function (e) {
-      var options = { done: that.bindEvents, postRenderScriptName: null };
+      var options = { done: that.postRender, postRenderScriptName: null };
 
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -5241,6 +5545,8 @@ window.wizerati = {
     };
 
     this.postRender = function () {
+      that.bindEvents();
+      that.Model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
     };
 
     this.renderSetIsVisible = function () {
@@ -5279,7 +5585,7 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.render();
+      that.render(); //this introduces the wait on initial visit
     };
 
     function init() {
@@ -5383,33 +5689,15 @@ window.wizerati = {
     this.$el = null;
     this.Model = null;
 
-    this.render = function (e, options) {
-      options = options || { done: that.postRender };
-
-      if (_renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, e.args);
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
-      //two step DOM manipulation to enable visibility of CSS transition
-      //first set display property
-      var modal = that.Model.getModal();
       that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
-      that.$el.attr('data-modal', modal);
-
-      if (modal) {
-        setTimeout(function () {
-          that.$el.addClass('modal-visible');
-        }, 0);  //re-adding of this class will trigger CSS transition
-      }
-
-    };
-
-    this.postRender = function () {
-    };
-
-    this.bindEvents = function () {
+      that.$el.attr('data-modal', that.Model.getModal());
     };
 
     this.onDomReady = function () {
@@ -5417,16 +5705,20 @@ window.wizerati = {
       that.$mainContainer = $(_mainContainer);
     };
 
-    this.setBodyWidth = function(){
-      $('body').width(that.Model.getBodyWidth())
+    this.renderSetVisibilityMode = function(mode) {
+      that.$mainContainer.attr('data-visibility-mode', mode);
     };
 
-    this.setIsVisible = function() {
-      that.$mainContainer.attr('data-is-visible', that.Model.getIsVisible());
-    };
-
-    this.setAreTransitionsEnabled = function() {
+    this.renderSetAreTransitionsEnabled = function() {
         that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    };
+
+    this.renderSetModal = function(modal) {
+        that.$el.attr('data-modal', modal);
+    };
+
+    this.renderSetUIMode = function(uiMode) {
+        that.$el.attr('data-ui-mode', uiMode);
     };
 
     function init() {
@@ -5434,16 +5726,19 @@ window.wizerati = {
         throw 'model not supplied';
       }
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
-      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.setIsVisible;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.setAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
+      _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
+      $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
-
-      that.bindEvents();
+      $.subscribe(that.Model.eventUris.setModal, that.render);
+      $.subscribe(that.Model.eventUris.setUIMode, that.render);
 
       return that;
     }
@@ -5465,8 +5760,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _uiRootModel = null,
-        _modalEnum = wizerati.mod('enum').Modal;
+        _uiRootModel = null;
 
     this.create = function (dto) {
 
@@ -5552,14 +5846,16 @@ window.wizerati = {
     }
 
     var that = this,
-        _actionedItemsModel = null;
+        _actionedItemsModel = null,
+        _modalEnum = app.mod('enum').Modal;
 
     this.create = function (dto) {
       if (!dto) {
         throw 'dto not supplied.';
       }
 
-      _actionedItemsModel.addActionedItemId(dto.id);
+      _uiRootModel.setModal(_modalEnum.ActionItem);
+//      _actionedItemsModel.addActionedItemId(dto.id);
     };
 
     this.destroy = function (dto) {
@@ -5618,6 +5914,42 @@ window.wizerati = {
   }
 
   app.AdvertisersController = AdvertisersController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ApplyToContractDialogController(service) {
+
+    if (!(this instanceof app.ApplyToContractDialogController)) {
+      return new app.ApplyToContractDialogController(service);
+    }
+
+    var that = this,
+       _service = null;
+
+    this.create = function (dto) {
+      _service.show(dto.id); //will show the relevant screens given the user's logged-in status
+    };
+
+    this.destroy = function () {
+      _service.hide();
+    };
+
+    function init() {
+      if (!service) {
+        throw 'service not supplied.';
+      }
+
+      _service = service;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogController = ApplyToContractDialogController;
 
 }(wizerati));
 ;(function (app) {
@@ -5921,31 +6253,45 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function HomeController(uiRootModel, searchPanelModel, resultListModel) {
+  function HomeController(uiRootModel, searchPanelModel, resultListModel, searchFormModel) {
 
     if (!(this instanceof app.HomeController)) {
-      return new app.HomeController(uiRootModel, searchPanelModel, resultListModel);
+      return new app.HomeController(uiRootModel, searchPanelModel, resultListModel, searchFormModel);
     }
 
     var that = this,
         _uiRootModel = null,
         _searchPanelModel = null,
         _resultListModel = null,
+        _searchFormModel = null,
+        _modalEnum = wizerati.mod('enum').Modal,
         _uiModeEnum = wizerati.mod('enum').UIMode,
+        _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
         _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
         _resultListModeEnum = wizerati.mod('enum').ResultListMode;
 
-
     this.index = function () {
       try {
-        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch, {silent: true}); //todo: retrieve state from local state bag
-        _searchPanelModel.setMode(_searchPanelModeEnum.Default, {silent: false});
-        _resultListModel.setMode(_resultListModeEnum.Default, {silent: false});
-        _uiRootModel.setModal(null);
+        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag
+        _searchPanelModel.setMode(_searchPanelModeEnum.Default);
+        _resultListModel.setMode(_resultListModeEnum.Default);
+        _uiRootModel.setModal(_modalEnum.None);
+
+        //now wait for the search form to be injected into the dom, then show everything
+        waitForSearchFormToBeRendered();
       } catch (err) {
         console.log('HomeController::index exception: ' + err);
       }
     };
+
+    function waitForSearchFormToBeRendered() {
+      if (_searchFormModel.getFirstRenderCompleteFlag()) {
+        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+        return;
+      }
+
+      setTimeout(waitForSearchFormToBeRendered, 10);
+    }
 
     function init() {
       if (!uiRootModel) {
@@ -5960,9 +6306,16 @@ window.wizerati = {
         throw 'resultListModel not supplied.';
       }
 
+      if (!searchFormModel) {
+        throw 'searchFormModel not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
+      _searchFormModel = searchFormModel;
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
 
       return that;
     }
@@ -6320,26 +6673,23 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, layoutCoordinator) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.SearchController)) {
-      return new app.SearchController(uiRootModel,
-          searchFormModel,
-          searchService,
-          resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, layoutCoordinator);
+      return new app.SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel);
     }
 
     var that = this,
         _uiModeEnum = wizerati.mod('enum').UIMode,
         _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
+        _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
         _uiRootModel = null,
         _searchFormModel = null,
         _searchService = null,
         _resultListModel = null,
         _guidFactory = null,
         _searchPanelModel = null,
-        _itemsOfInterestModel = null,
-        _layoutCoordinator = null;
+        _itemsOfInterestModel = null;
 
     this.urlTransforms = {};
 
@@ -6362,25 +6712,34 @@ window.wizerati = {
               _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
               var delayToRender = 0;
-              if(_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-                _uiRootModel.setIsVisible('false'); //we hide the transition to the left
-                _uiRootModel.setAreTransitionsEnabled('false');
-                delayToRender = 120; //wait for the opacity fade to complete
+              if (_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
+                _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundAndLoadingIndicator);
+//                _uiRootModel.setIsVisible(false); //we hide the transition to the left
+                _uiRootModel.setAreTransitionsEnabled(false);
+                delayToRender = 100; //wait for the opacity fade to complete
               }
 
-              setTimeout(function() {
+              setTimeout(function () {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
 
                 //this must occur *after the search panel mode is set* to its eventual value, to
                 //ensure the initial width rendering of items of interest is the correct one
                 // (avoiding a repaint)
-                if(!_itemsOfInterestModel.getSelectedItemId()) {
+                if (!_itemsOfInterestModel.getSelectedItemId()) {
                   _itemsOfInterestModel.setSelectedItemId(results[0].id);
                 }
 
-                setTimeout(function() { _uiRootModel.setAreTransitionsEnabled('true');}, 0); /*attempt to ensure that UI rendered before re-enabling transitions*/
-                _uiRootModel.setIsVisible('true');
+                setTimeout(function () {
+                  _uiRootModel.setAreTransitionsEnabled('true');
+                }, 0);
+                /*attempt to ensure that UI rendered before re-enabling transitions*/
+
+//              setTimeout(function () {
+//              _uiRootModel.setIsVisible(true);
+                setTimeout(function () {
+                  _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+                }, 0);
               }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
             });
       } catch (err) {
@@ -6388,7 +6747,7 @@ window.wizerati = {
       }
     };
 
-    function uriTransformShow (uri, dto) {
+    function uriTransformShow(uri, dto) {
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
@@ -6421,10 +6780,6 @@ window.wizerati = {
         throw 'itemsOfInterestModel not supplied.';
       }
 
-      if (!layoutCoordinator) {
-        throw 'layoutCoordinator not supplied.';
-      }
-
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
@@ -6432,7 +6787,6 @@ window.wizerati = {
       _guidFactory = guidFactory;
       _searchPanelModel = searchPanelModel;
       _itemsOfInterestModel = itemsOfInterestModel;
-      _layoutCoordinator = layoutCoordinator;
 
       that.urlTransforms['/search'] = uriTransformShow;
 
@@ -6637,10 +6991,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function FavoriteViewFactory(loginService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function FavoriteViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.FavoriteViewFactory)) {
-      return new app.FavoriteViewFactory(loginService,
+      return new app.FavoriteViewFactory(signInIService,
           itemRepository,
           hiddenItemsModel,
           actionedItemsModel,
@@ -6648,7 +7002,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _loginService = null,
+        _signInIService = null,
         _itemRepository = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
@@ -6656,7 +7010,7 @@ window.wizerati = {
         _roleEnum = app.mod('enum').UserRole;
 
     this.create = function (id, currentCubeFace, done) {
-      var role = _loginService.getCurrentRole();
+      var role = _signInIService.getCurrentRole();
       switch (role) {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
@@ -6686,7 +7040,7 @@ window.wizerati = {
     };
 
     function init() {
-      if (!loginService) {
+      if (!signInIService) {
         throw 'loginService not supplied.';
       }
 
@@ -6706,7 +7060,7 @@ window.wizerati = {
         throw 'itemsOfInterestModel not supplied.';
       }
 
-      _loginService = loginService;
+      _signInIService = signInIService;
       _itemRepository = itemRepository;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
@@ -6754,10 +7108,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function  ItemOfInterestViewFactory(signInService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel, favoritesCubeModel) {
+  function  ItemOfInterestViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel, favoritesCubeModel) {
 
     if (!(this instanceof app.ItemOfInterestViewFactory)) {
-      return new app.ItemOfInterestViewFactory(signInService,
+      return new app.ItemOfInterestViewFactory(signInIService,
           itemRepository,
           itemsOfInterestModel,
           hiddenItemsModel,
@@ -6766,7 +7120,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _signInService = null,
+        _signInIService = null,
         _itemRepository = null,
         _itemsOfInterestModel = null,
         _hiddenItemsModel = null,
@@ -6804,7 +7158,7 @@ window.wizerati = {
         throw 'done not supplied.';
       }
 
-      var role = _signInService.getCurrentRole();
+      var role = _signInIService.getCurrentRole();
       switch (role) {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
@@ -6854,7 +7208,7 @@ window.wizerati = {
     };
 
     function init() {
-      if (!signInService) {
+      if (!signInIService) {
         throw 'loginService not supplied.';
       }
 
@@ -6878,7 +7232,7 @@ window.wizerati = {
         throw 'favoritesCubeModel not supplied.';
       }
 
-      _signInService = signInService;
+      _signInIService = signInIService;
       _itemRepository = itemRepository;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
@@ -6897,10 +7251,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ResultViewFactory(signInService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function ResultViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.ResultViewFactory)) {
-      return new app.ResultViewFactory(signInService,
+      return new app.ResultViewFactory(signInIService,
           itemRepository,
           itemsOfInterestModel,
           hiddenItemsModel,
@@ -6908,7 +7262,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _signInService = null,
+        _signInIService = null,
         _itemRepository = null,
         _itemsOfInterestModel = null,
         _hiddenItemsModel = null,
@@ -6928,7 +7282,7 @@ window.wizerati = {
         throw 'done not supplied.';
       }
 
-      var role = _signInService.getCurrentRole();
+      var role = _signInIService.getCurrentRole();
       switch (role) {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
@@ -6957,7 +7311,7 @@ window.wizerati = {
     };
 
     function init() {
-      if (!signInService) {
+      if (!signInIService) {
         throw 'loginService not supplied.';
       }
 
@@ -6977,7 +7331,7 @@ window.wizerati = {
         throw 'actionedItemsModel not supplied.';
       }
 
-      _signInService = signInService;
+      _signInIService = signInIService;
       _itemRepository = itemRepository;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;
@@ -7107,16 +7461,16 @@ window.wizerati = {
 ;(function (app, $) {
   'use strict';
 
-  function ItemRepository(itemCache, croniclService) {
+  function ItemRepository(itemCache, croniclIService) {
 
     if (!(this instanceof app.ItemRepository)) {
       return new app.ItemRepository(itemCache,
-          croniclService);
+          croniclIService);
     }
 
     var that = this,
         _itemCache = null,
-        _croniclService = null;
+        _croniclIService = null;
 
     this.getById = function (id, done) {
       var cachedItem = _itemCache.items[id];
@@ -7136,11 +7490,11 @@ window.wizerati = {
         done(result);
       }
 
-      setTimeout(function () {
-        $.ajax({ url: _croniclService.getCroniclUri() + 'items/' + id,
+//      setTimeout(function () {
+        $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
           success: success,
           cache: false });
-      }, 2000);
+//      }, 2000);
     };
 
     function init() {
@@ -7148,12 +7502,12 @@ window.wizerati = {
         throw 'itemCache not supplied.';
       }
 
-      if (!croniclService) {
-        throw 'croniclService not supplied.';
+      if (!croniclIService) {
+        throw 'croniclIService not supplied.';
       }
 
       _itemCache = itemCache;
-      _croniclService = croniclService;
+      _croniclIService = croniclIService;
 
       return that;
     }
@@ -7476,6 +7830,10 @@ window.wizerati = {
           c.actionedItemsController.destroy(dto);
         }, { silent: true });
 
+        router.registerRoute('/applytocontractdialog/create', function (dto) {
+          c.applyToContractDialogController.create(dto);
+        }, { silent: true });
+
 //        router.registerRoute('/purchasepanel', function (dto) {
 //          c.purchasePanelController.index(dto);
 //        });
@@ -7547,30 +7905,10 @@ window.wizerati = {
   'use strict';
 
   try {
-    mod.UserRole = {
-      Contractor: '1',
-      Employer: '2',
-      ContractorStranger: '3',
-      EmployerStranger: '4'
-    };
 
-    mod.UIMode = {
-      NotReady: '-1',
-      GreenfieldSearch: '0',
-      Search: '1',
-      SingleItem: '2' /*note: hidden is not on this list because it is useful to have hiding separate from the mode of the ui*/
-    };
-
-    mod.Modal = {
-      Purchase: '0',
-      LogIn: '1',
-      MyAccount: '2',
-      AccountActivation: '3',
-      DeleteFavoriteGroupConfirmationDialog: '4'
-    };
-
-    mod.ItemsOfInterestAction = {
-      Remove: '0'
+    mod.ApplyToContractDialogPanel = {
+      CVSelection: '0',
+      SignInOrContinue: '1'
     };
 
     mod.FavoritesCubeMode = {
@@ -7578,15 +7916,13 @@ window.wizerati = {
       Edit: '1'
     };
 
-    mod.SearchPanelMode = {
-      Default: '0',
-      Minimized: '1',
-      Hidden: '2'
+    mod.ItemSelectionSource = {
+      Results: '0',
+      Favorites: '1'
     };
 
-    mod.ResultListMode = {
-      Default: '0',
-      Minimized: '1'
+    mod.ItemsOfInterestAction = {
+      Remove: '0'
     };
 
     mod.ItemsOfInterestMode = {
@@ -7599,9 +7935,45 @@ window.wizerati = {
       WindowResize: '1'
     };
 
-    mod.ItemSelectionSource = {
-      Results: '0',
-      Favorites: '1'
+    mod.MainContainerVisibilityMode = {
+      Hidden: '0',
+      HiddenNoBackgroundAndLoadingIndicator: '1',
+      Visible: '2'
+    };
+
+    mod.Modal = {
+      None: '-1',
+      Purchase: '0',
+      LogIn: '1',
+      MyAccount: '2',
+      AccountActivation: '3',
+      DeleteFavoriteGroupConfirmationDialog: '4',
+      ActionContract: '5'
+    };
+
+    mod.ResultListMode = {
+      Default: '0',
+      Minimized: '1'
+    };
+
+    mod.SearchPanelMode = {
+      Default: '0',
+      Minimized: '1',
+      Hidden: '2'
+    };
+
+    mod.UIMode = {
+      NotReady: '-1',
+      GreenfieldSearch: '0',
+      Search: '1',
+      SingleItem: '2' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
+    };
+
+    mod.UserRole = {
+      Contractor: '1',
+      Employer: '2',
+      ContractorStranger: '3',
+      EmployerStranger: '4'
     };
 
   } catch (e) {
@@ -7623,6 +7995,7 @@ window.wizerati = {
 
 }(wizerati.mod('config')));
 
+
 (function (mod) {
   'use strict';
 
@@ -7634,6 +8007,7 @@ window.wizerati = {
   }
 
 }(wizerati.mod('clients')));
+
 
 (function (mod) {
   'use strict';
@@ -7647,6 +8021,7 @@ window.wizerati = {
 
 }(wizerati.mod('caches')));
 
+
 (function (mod) {
   'use strict';
 
@@ -7659,52 +8034,13 @@ window.wizerati = {
 
 }(wizerati.mod('decorators')));
 
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.accountService = new wizerati.AccountService(wizerati.mod('clients').wizeratiHttpClient);
-    mod.authenticationService = new wizerati.AuthenticationService();
-    mod.cookieService = new wizerati.CookieService();
-
-    mod.signInService = new wizerati.SignInService(mod.cookieService);
-    mod.croniclService = new wizerati.CroniclService(wizerati.mod('services').signInService, wizerati.mod('config').config);
-    mod.searchService = new wizerati.SearchService(mod.croniclService, wizerati.mod('caches').itemCache);
-  }
-  catch (e) {
-    throw 'problem registering services module. ' + e;
-  }
-
-}(wizerati.mod('services')));
-
-(function (mod) {
-
-  try {
-    mod.itemRepository = new wizerati.ItemRepository(wizerati.mod('caches').itemCache, wizerati.mod('services').croniclService);
-  }
-  catch (e) {
-    throw 'problem registering repositories module. ' + e;
-  }
-
-}(wizerati.mod('repositories')));
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(wizerati.mod('config').config, wizerati.mod('services').croniclService.getCroniclUri);
-  }
-  catch (e) {
-    throw 'problem registering templates module. ' + e;
-  }
-
-}(wizerati.mod('templates')));
 
 (function (mod) {
   'use strict';
 
   try {
     mod.actionedItemsModel = new wizerati.ActionedItemsModel();
+    mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
     mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
@@ -7716,42 +8052,109 @@ window.wizerati = {
     mod.signInPanelModel = new wizerati.SignInPanelModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
-    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(wizerati.mod('repositories').itemRepository, mod.resultListModel);
+    //TODO: extract the functionality requiring the repo into a service
+    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(mod.resultListModel);
     mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
     throw 'problem registering models module. ' + e;
   }
 
-}(wizerati.mod('models'), invertebrate, wizerati.mod('config').config.config, wizerati.mod('decorators').decorators));
+}(wizerati.mod('models')));
 
-(function (mod, m, s, r) {
+
+//infrastructure services are services that are sufficiently
+// de-coupled from the domain logic that they can be initialized
+// before the repositories.
+//This enables the use of specific services by repositories (which can be desirable).
+(function (mod, c) {
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+    mod.cookieIService = new wizerati.CookieIService();
+    mod.signInIService = new wizerati.SignInIService(mod.cookieIService);
+    mod.croniclIService = new wizerati.CroniclIService(mod.signInIService, c.config);
+  }
+  catch (e) {
+    throw 'problem registering infrastructure services module. ' + e;
+  }
+
+}(wizerati.mod('infrastructure-services'), wizerati.mod('config')));
+
+
+(function (mod, c, i) {
+  'use strict';
+
+  try {
+    mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(c.config, i.croniclIService.getCroniclUri);
+  }
+  catch (e) {
+    throw 'problem registering templates module. ' + e;
+  }
+
+}(wizerati.mod('templates'), wizerati.mod('config'), wizerati.mod('infrastructure-services')));
+
+
+(function (mod, i) {
+
+  try {
+    mod.itemRepository = new wizerati.ItemRepository(wizerati.mod('caches').itemCache, i.croniclIService);
+  }
+  catch (e) {
+    throw 'problem registering repositories module. ' + e;
+  }
+
+}(wizerati.mod('repositories'), wizerati.mod('infrastructure-services')));
+
+
+(function (mod, c, ca, i, m, r) {
+  'use strict';
+
+  try {
+    mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
+    mod.authenticationService = new wizerati.AuthenticationService();
+    mod.bookmarkBookService = new wizerati.BookmarkBookService();
+
+    mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
+    mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
+    mod.searchService = new wizerati.SearchService(i.croniclIService, ca.itemCache);
+  }
+  catch (e) {
+    throw 'problem registering services module. ' + e;
+  }
+
+}(wizerati.mod('services'), wizerati.mod('clients'), wizerati.mod('caches'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
+
+
+(function (mod, i, m, r) {
+  'use strict';
+
+  try {
+    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(s.signInService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
     throw 'problem registering factories module. ' + e;
   }
 
-}(wizerati.mod('factories'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('repositories')));
+}(wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
 
-(function (mod) {
+
+(function (mod, c, f) {
   'use strict';
 
   try {
-    mod.wizeratiConnector = new wizerati.WizeratiConnector(wizerati.mod('clients').wizeratiHttpClient, wizerati.mod('factories').wizeratiRequestFactory);
+    mod.wizeratiConnector = new wizerati.WizeratiConnector(c.wizeratiHttpClient, f.wizeratiRequestFactory);
   }
   catch (e) {
     throw 'problem registering connectors module. ' + e;
   }
 
-}(wizerati.mod('connectors')));
+}(wizerati.mod('connectors'), wizerati.mod('clients'), wizerati.mod('factories')));
+
 
 (function (mod, m) {
   'use strict';
@@ -7766,34 +8169,38 @@ window.wizerati = {
 
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
-(function (mod, m, f) {
+
+(function (mod, f, l, m) {
   'use strict';
 
   try {
+    mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, wizerati.mod('layout').layoutCoordinator, m.uiRootModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('models'), wizerati.mod('factories')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models')));
 
-(function (mod, m) {
+
+(function (mod, f, l, m, s) {
   'use strict';
 
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
-    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
+    mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
+//    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
     mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
-    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel);
+    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, wizerati.mod('services').searchService, m.resultListModel, wizerati.mod('factories').guidFactory, m.searchPanelModel, m.itemsOfInterestModel, wizerati.mod('layout').layoutCoordinator);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, l.layoutCoordinator);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
   }
@@ -7801,7 +8208,8 @@ window.wizerati = {
     throw 'problem registering controllers module. ' + e;
   }
 
-}(wizerati.mod('controllers'), wizerati.mod('models')));
+}(wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
+
 
 (function (mod) {
   'use strict';
@@ -7814,6 +8222,7 @@ window.wizerati = {
   }
 
 }(wizerati.mod('ui')));
+
 
 (function (mod) {
   'use strict';
@@ -7865,6 +8274,7 @@ window.wizerati = {
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();
   }
+  //TODO read application state from local storage, before applying this first layout calculation
   window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
   window.addEventListener('resize', function () {
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());

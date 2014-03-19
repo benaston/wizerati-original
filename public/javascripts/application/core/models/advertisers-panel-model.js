@@ -10,7 +10,7 @@
     var that = this,
         _isVisible = false;
 
-    this.updateEventUri = 'update://advertiserspanelmodel/';
+    this.updateEventUri = 'update://advertiserspanelmodel';
 
     this.setIsVisible = function (value) {
       _isVisible = value;

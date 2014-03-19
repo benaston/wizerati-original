@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function FavoriteViewFactory(loginService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function FavoriteViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.FavoriteViewFactory)) {
-      return new app.FavoriteViewFactory(loginService,
+      return new app.FavoriteViewFactory(signInIService,
           itemRepository,
           hiddenItemsModel,
           actionedItemsModel,
@@ -12,7 +12,7 @@
     }
 
     var that = this,
-        _loginService = null,
+        _signInIService = null,
         _itemRepository = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
@@ -20,7 +20,7 @@
         _roleEnum = app.mod('enum').UserRole;
 
     this.create = function (id, currentCubeFace, done) {
-      var role = _loginService.getCurrentRole();
+      var role = _signInIService.getCurrentRole();
       switch (role) {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
@@ -50,7 +50,7 @@
     };
 
     function init() {
-      if (!loginService) {
+      if (!signInIService) {
         throw 'loginService not supplied.';
       }
 
@@ -70,7 +70,7 @@
         throw 'itemsOfInterestModel not supplied.';
       }
 
-      _loginService = loginService;
+      _signInIService = signInIService;
       _itemRepository = itemRepository;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;

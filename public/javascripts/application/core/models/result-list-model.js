@@ -12,7 +12,7 @@
         _mode = _modeEnum.Default,
         _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
 
-    this.eventUris = { default: 'update://resultlistmodel/' };
+    this.eventUris = { default: 'update://resultlistmodel' };
 
     this.getSearchId = function () {
       return _searchId;

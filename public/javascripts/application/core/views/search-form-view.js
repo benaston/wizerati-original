@@ -17,7 +17,7 @@
     this.Model = null;
 
     this.render = function (e) {
-      var options = { done: that.bindEvents, postRenderScriptName: null };
+      var options = { done: that.postRender, postRenderScriptName: null };
 
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -50,6 +50,8 @@
     };
 
     this.postRender = function () {
+      that.bindEvents();
+      that.Model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
     };
 
     this.renderSetIsVisible = function () {
@@ -88,7 +90,7 @@
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.render();
+      that.render(); //this introduces the wait on initial visit
     };
 
     function init() {

@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function ResultViewFactory(signInService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function ResultViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.ResultViewFactory)) {
-      return new app.ResultViewFactory(signInService,
+      return new app.ResultViewFactory(signInIService,
           itemRepository,
           itemsOfInterestModel,
           hiddenItemsModel,
@@ -12,7 +12,7 @@
     }
 
     var that = this,
-        _signInService = null,
+        _signInIService = null,
         _itemRepository = null,
         _itemsOfInterestModel = null,
         _hiddenItemsModel = null,
@@ -32,7 +32,7 @@
         throw 'done not supplied.';
       }
 
-      var role = _signInService.getCurrentRole();
+      var role = _signInIService.getCurrentRole();
       switch (role) {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
@@ -61,7 +61,7 @@
     };
 
     function init() {
-      if (!signInService) {
+      if (!signInIService) {
         throw 'loginService not supplied.';
       }
 
@@ -81,7 +81,7 @@
         throw 'actionedItemsModel not supplied.';
       }
 
-      _signInService = signInService;
+      _signInIService = signInIService;
       _itemRepository = itemRepository;
       _itemsOfInterestModel = itemsOfInterestModel;
       _hiddenItemsModel = hiddenItemsModel;

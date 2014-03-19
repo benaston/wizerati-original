@@ -12,7 +12,8 @@
         _location = null,
         _isWaiting = 'false',
         _rate = null,
-        _isVisible = 'true';
+        _isVisible = 'true',
+        _firstRenderCompleteFlag = false;
 
 //    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = {
@@ -25,7 +26,14 @@
       return _isVisible;
     };
 
-    //needed?
+    this.getFirstRenderCompleteFlag = function () {
+      return _firstRenderCompleteFlag;
+    };
+
+    this.setFirstRenderCompleteFlag = function () {
+      _firstRenderCompleteFlag = true;
+    };
+
     this.setIsVisible = function (value) {
       _isVisible = value;
 
@@ -96,6 +104,8 @@
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 

@@ -8,8 +8,7 @@
     }
 
     var that = this,
-        _uiRootModel = null,
-        _modalEnum = wizerati.mod('enum').Modal;
+        _uiRootModel = null;
 
     this.create = function (dto) {
 

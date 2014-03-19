@@ -2,40 +2,40 @@
 (function (app, $) {
   'use strict';
 
-  function SearchService(croniclService, itemCache) {
+  function SearchService(croniclIService, itemCache) {
 
     if (!(this instanceof app.SearchService)) {
-      return new app.SearchService(croniclService, itemCache);
+      return new app.SearchService(croniclIService, itemCache);
     }
 
     var that = this,
-        _croniclService = null,
+        _croniclIService = null,
         _itemCache = null;
 
     //rename to success, plus add timeout argument and error
     this.runSearch = function (keywords, location, rate, done) {
-      done = !done ? function (data) {
-      } : done;
+        done = !done ? function (data) {
+        } : done;
 
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
+        $.ajax({
+          url: _croniclIService.getCroniclUri() + 'search',
+          success: success,
+          cache: false
+        });
+
+        function success(data) {
+          if (!data) {
+            throw 'data not supplied';
+          }
+
+          var results = $.parseJSON(data);
+          _itemCache.insert(results);
+          done(results);
         }
-
-        var results = $.parseJSON(data);
-        _itemCache.insert(results);
-        done(results);
-      }
-
-      $.ajax({
-        url: _croniclService.getCroniclUri() + 'search',
-        success: success,
-        cache: false
-      });
     };
 
     function init() {
-      if (!croniclService) {
+      if (!croniclIService) {
         throw 'croniclService not supplied.';
       }
 
@@ -43,7 +43,7 @@
         throw 'itemCache not supplied.';
       }
 
-      _croniclService = croniclService;
+      _croniclIService = croniclIService;
       _itemCache = itemCache;
 
       return that;

@@ -20,6 +20,7 @@ module.exports = function (grunt) {
           'public/javascripts/vendor/invertebrate.js/**.js',
           'public/javascripts/application/wizerati.js',
           'public/javascripts/application/core/services/**/*.js',
+          'public/javascripts/application/core/infrastructure-services/**/*.js',
           'public/javascripts/application/core/clients/**/*.js',
           'public/javascripts/application/core/connectors/**/*.js',
           'public/javascripts/application/core/config.js',
@@ -47,7 +48,6 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-reset-form.css',
 
           'public/stylesheets/vendor/lucid-style-buttons.css',
-//          'public/stylesheets/vendor/lucid-style-dialogs.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
 
@@ -59,6 +59,7 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-loading-and-background.css',
           'public/stylesheets/application/wizerati-style-main-container.css',
           'public/stylesheets/application/wizerati-style-modal-container.css',
+          'public/stylesheets/application/wizerati-style-action-item-modal-contract.css',
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',

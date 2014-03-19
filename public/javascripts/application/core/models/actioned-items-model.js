@@ -10,7 +10,7 @@
     var that = this,
         _actionedItems = {};
 
-    this.updateEventUri = 'update://actioneditemsmodel/';
+    this.updateEventUri = 'update://actioneditemsmodel';
 
     this.isActioned = function (id) {
       return !!_actionedItems[id];
