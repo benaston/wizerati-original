@@ -3277,7 +3277,7 @@ window.wizerati = {
       addFavorite: 'update://favoritescubemodel/addfavorite',
       removeFavorite: 'update://favoritescubemodel/removefavorite'
     };
-    this.updateEventUri = 'update://FavoritesCubeModel/';
+    this.updateEventUri = 'update://favoritescubemodel/';
     this.updateEventUriPrivate = 'update://favoritescubemodel/private'; //used when it is unneccessary to tell other UI elements of a change, saving re-painting.
 
     this.getFaceLabels = function () {
@@ -3964,7 +3964,7 @@ window.wizerati = {
     var that = this,
         _selectedCubeFaceId = '0';
 
-    this.updateEventUri = 'update://SelectedCubeFaceModel/';
+    this.updateEventUri = 'update://selectedcubefacemodel/';
 
     this.getSelectedCubeFaceId = function () {
       return _selectedCubeFaceId;
@@ -3986,55 +3986,6 @@ window.wizerati = {
   invertebrate.Model.isExtendedBy(app.SelectedCubeFaceModel);
 
 }(wizerati, $, invertebrate));
-;//(function (app, $, invertebrate) {
-//  'use strict';
-//
-//  function SelectedItemModel() {
-//
-//    if (!(this instanceof app.SelectedItemModel)) {
-//      return new app.SelectedItemModel();
-//    }
-//
-//    var that = this,
-//        _selectedItemId = null,
-//        _previouslySelectedResultId = null;
-//
-//    this.eventUris = { default:'update://selecteditemmodel/' };
-//
-//    this.getSelectedItemId = function () {
-//      return _selectedItemId;
-//    };
-//
-//    this.getPreviouslySelectedItemId = function () {
-//      return _previouslySelectedResultId;
-//    };
-//
-//    this.setSelectedItemId = function (value, options) {
-//      if(_selectedItemId === value) {
-//        return;
-//      }
-//
-//      options = options || { silent: false };
-//
-//      _previouslySelectedResultId = _selectedItemId;
-//      _selectedItemId = value;
-//
-//      if (!options.silent) {
-//        $.publish(that.eventUris.default, _selectedItemId );
-//      }
-//    };
-//
-//    function init() {
-//      return that;
-//    }
-//
-//    return init();
-//  }
-//
-//  app.SelectedItemModel = SelectedItemModel;
-//  invertebrate.Model.isExtendedBy(app.SelectedItemModel);
-//
-//}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4050,7 +4001,7 @@ window.wizerati = {
         _isLoginFailedMessageVisible = false,
         _isVisible = false;
 
-    this.updateEventUri = 'update://LoginPanelModel/';
+    this.updateEventUri = 'update://signinpanelmodel/';
 
     this.getUsername = function () {
       return _username;
@@ -4110,7 +4061,7 @@ window.wizerati = {
         _selectedResultId = null,
         _previouslySelectedResultId = null;
 
-    this.updateEventUri = 'update://SelectedItemModel/';
+    this.updateEventUri = 'update://singleitemmodel/';
 
     this.getSelectedItemId = function () {
       return _selectedResultId;
@@ -4728,26 +4679,20 @@ window.wizerati = {
 ;(function (app, $, invertebrate, _) {
   'use strict';
 
-  function FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, selectedItemModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel) {
+  function FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
 
     if (!(this instanceof app.FavoritesCubeView)) {
-      return new app.FavoritesCubeView(model,
-          favoriteViewFactory,
-          selectedCubeFaceModel,
-          selectedItemModel,
-          hiddenItemsModel,
-          actionedItemsModel,
-          itemsOfInterestModel);
+      return new app.FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
     }
 
     var that = this,
         _el = '#favorites-cube',
         _favoriteViewFactory = null,
         _selectedCubeFaceModel = null,
-        _selectedItemModel = null,
         _actionedItemsModel = null,
         _hiddenItemsModel = null,
         _itemsOfInterestModel = null,
+        _bookmarkService = null,
         _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
           '.cube-face-labels li:nth-child(2)',   //left
           '.cube-face-labels li:nth-child(3)',   //front
@@ -4816,10 +4761,6 @@ window.wizerati = {
         throw 'selectedCubeFaceModel not supplied';
       }
 
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied';
-      }
-
       if (!hiddenItemsModel) {
         throw 'hiddenItemsModel not supplied';
       }
@@ -4832,22 +4773,27 @@ window.wizerati = {
         throw 'itemsOfInterestModel not supplied';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _favoriteViewFactory = favoriteViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
-      _selectedItemModel = selectedItemModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
 
       $.subscribe(that.Model.updateEventUriPrivate, that.render);
       $.subscribe(that.Model.updateEventUri, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_selectedItemModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
 
       return that;
     }
@@ -6596,8 +6542,6 @@ window.wizerati = {
   app.ItemsOfInterestPanelModeController = ItemsOfInterestPanelModeController;
 
 }(wizerati));
-
-
 ;(function (app) {
   'use strict';
 
@@ -8309,6 +8253,7 @@ window.wizerati = {
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
+    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.favoritesCubeModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;

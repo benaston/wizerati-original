@@ -13,7 +13,7 @@
         _isLoginFailedMessageVisible = false,
         _isVisible = false;
 
-    this.updateEventUri = 'update://LoginPanelModel/';
+    this.updateEventUri = 'update://signinpanelmodel/';
 
     this.getUsername = function () {
       return _username;

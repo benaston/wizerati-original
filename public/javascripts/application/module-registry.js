@@ -278,6 +278,7 @@
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
+    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.favoritesCubeModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;

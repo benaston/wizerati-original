@@ -26,7 +26,7 @@
       addFavorite: 'update://favoritescubemodel/addfavorite',
       removeFavorite: 'update://favoritescubemodel/removefavorite'
     };
-    this.updateEventUri = 'update://FavoritesCubeModel/';
+    this.updateEventUri = 'update://favoritescubemodel/';
     this.updateEventUriPrivate = 'update://favoritescubemodel/private'; //used when it is unneccessary to tell other UI elements of a change, saving re-painting.
 
     this.getFaceLabels = function () {

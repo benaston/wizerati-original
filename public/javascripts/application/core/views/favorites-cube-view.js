@@ -1,26 +1,20 @@
 (function (app, $, invertebrate, _) {
   'use strict';
 
-  function FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, selectedItemModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel) {
+  function FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
 
     if (!(this instanceof app.FavoritesCubeView)) {
-      return new app.FavoritesCubeView(model,
-          favoriteViewFactory,
-          selectedCubeFaceModel,
-          selectedItemModel,
-          hiddenItemsModel,
-          actionedItemsModel,
-          itemsOfInterestModel);
+      return new app.FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
     }
 
     var that = this,
         _el = '#favorites-cube',
         _favoriteViewFactory = null,
         _selectedCubeFaceModel = null,
-        _selectedItemModel = null,
         _actionedItemsModel = null,
         _hiddenItemsModel = null,
         _itemsOfInterestModel = null,
+        _bookmarkService = null,
         _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
           '.cube-face-labels li:nth-child(2)',   //left
           '.cube-face-labels li:nth-child(3)',   //front
@@ -89,10 +83,6 @@
         throw 'selectedCubeFaceModel not supplied';
       }
 
-      if (!selectedItemModel) {
-        throw 'selectedItemModel not supplied';
-      }
-
       if (!hiddenItemsModel) {
         throw 'hiddenItemsModel not supplied';
       }
@@ -105,22 +95,27 @@
         throw 'itemsOfInterestModel not supplied';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _favoriteViewFactory = favoriteViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
-      _selectedItemModel = selectedItemModel;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
 
       $.subscribe(that.Model.updateEventUriPrivate, that.render);
       $.subscribe(that.Model.updateEventUri, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_selectedItemModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
 
       return that;
     }

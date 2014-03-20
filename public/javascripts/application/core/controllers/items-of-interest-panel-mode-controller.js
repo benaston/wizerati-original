@@ -36,5 +36,3 @@
   app.ItemsOfInterestPanelModeController = ItemsOfInterestPanelModeController;
 
 }(wizerati));
-
-

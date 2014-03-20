@@ -10,7 +10,7 @@
     var that = this,
         _selectedCubeFaceId = '0';
 
-    this.updateEventUri = 'update://SelectedCubeFaceModel/';
+    this.updateEventUri = 'update://selectedcubefacemodel/';
 
     this.getSelectedCubeFaceId = function () {
       return _selectedCubeFaceId;

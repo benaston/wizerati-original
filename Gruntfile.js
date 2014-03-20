@@ -53,6 +53,7 @@ module.exports = function (grunt) {
 
           'public/stylesheets/application/wizerati-style-animation.css',
           'public/stylesheets/application/wizerati-style-body.css',
+          'public/stylesheets/application/wizerati-style-cube.css',
           'public/stylesheets/application/wizerati-style-dialogs.css',
           'public/stylesheets/application/wizerati-style-faces.css',
           'public/stylesheets/application/wizerati-style-items-of-interest.css',
@@ -75,7 +76,8 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'public/javascripts/<%= pkg.name %>.min.broken-angle-bracket-percent.js': ['<%= concat.dist.dest %>']
+//          'public/javascripts/<%= pkg.name %>.min.broken-angle-bracket-percent.js': ['<%= concat.dist.dest %>']
+          'public/javascripts/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
         }
       }
     },
@@ -209,14 +211,17 @@ module.exports = function (grunt) {
           patterns: [
             {
               match: 'javascript',
+//              replacement: '<script><%= grunt.file.read("public/javascripts/' + grunt.file.readJSON('package.json').name + '.min.js") %></script>'
               replacement: '<script><%= grunt.file.read("public/javascripts/' + grunt.file.readJSON('package.json').name + '.min.js") %></script>'
             }
           ]
         },
         files: [
+//          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-javascript-injected.ejs'}
           {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-javascript-injected.ejs'}
         ]
       },
+      //corrects for an apparent bug in the replace plugin for grunt that replaces "$&&" with "@@javascript"
       correctForReplaceTaskBug: {
         options: {
           patterns: [
@@ -265,8 +270,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-replace');
 
   grunt.registerTask('test', ['jshint', 'qunit']);
-  grunt.registerTask('default', ['concat', 'uglify', 'cssUrlEmbed', 'cssmin',
-    'replace:escapeAngleBracketPercent',
+  grunt.registerTask('default', ['concat',
+    'uglify',
+    'cssUrlEmbed',
+    'cssmin',
+//    'replace:escapeAngleBracketPercent',
     'replace:injectEditWarningIntoHead',
     'replace:injectCssIntoHead',
     'replace:injectBuildNumber',
