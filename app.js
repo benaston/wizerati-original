@@ -2,6 +2,7 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var ejs = require('ejs');
 
 var app = express();
 
@@ -15,6 +16,9 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
+
+ejs.open = '{{';
+ejs.close = '}}';
 
 app.use(express.static(path.join(__dirname, 'public')));
 

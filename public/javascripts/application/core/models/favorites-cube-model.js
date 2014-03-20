@@ -93,25 +93,35 @@
       return _favorites;
     };
 
-    this.addFavorite = function (id, face) {
-      if (!id) {
-        throw 'favorite not supplied';
-      }
-
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      if (!_.find(_favorites[face], function (i) {
+    this.isFavoriteOnFace = function (id, face) {
+      return !_.find(_favorites[face], function (i) {
         return i === id;
-      })) {
-        _favorites[face].push(id);
-        _itemRepository.getById(id, function (item) {
-          item['isFavoriteOnFace' + face] = true;
-          $.publish(that.eventUris.addFavorite, id);
-        });
-      }
+      });
     };
+
+    this.addFavoriteToFace = function (id, face) {
+        _favorites[face].push(id);
+    };
+
+//    this.addFavorite = function (id, face) {
+//      if (!id) {
+//        throw 'favorite not supplied';
+//      }
+//
+//      if (!face) {
+//        throw 'face not supplied';
+//      }
+//
+//      if (!_.find(_favorites[face], function (i) {
+//        return i === id;
+//      })) {
+//        _favorites[face].push(id);
+//        _itemRepository.getById(id, function (item) {
+//          item['isFavoriteOnFace' + face] = true;
+//          $.publish(that.eventUris.addFavorite, id);
+//        });
+//      }
+//    };
 
     this.removeFavorite = function (id, face) {
       if (!id) {

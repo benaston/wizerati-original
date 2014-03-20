@@ -7,11 +7,12 @@
     visibility: hidden; /*enables click through for inspector in webkit*/
 }
 
-.modal-action-contract-content-panel-container {
+.apply-to-contract-dialog-content-panel-container {
     width: 550px;
     margin: auto;
     background-color: rgba(255,255,255,.9);
     padding: 20px 40px 20px 40px;
+    border-radius: 0 0 150px 150px;
 }
 
 #apply-to-contract-dialog .error-message {

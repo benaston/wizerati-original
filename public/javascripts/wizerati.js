@@ -1760,7 +1760,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     this.fetchTemplate = function (uri, options) {
       var defaultOptions = {
-        done: function (metadata) {
+        done: function (data) {
         },
         fail: function (jqxhr) {
           throw 'fetchTemplate failed. Ensure the TemplateUrlHelper in your application has been instantiated correctly. ' + jqxhr.status;
@@ -1770,16 +1770,18 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       options = _.extend({}, defaultOptions, options);
 
       //attempt to solve issue of sending off many requests for the same template before first request has returned
-      if(_inFlightRequests[uri]) {
-        setTimeout(function checkCacheForTemplate(){
+      if (_inFlightRequests[uri]) {
+        setTimeout(function checkCacheForTemplate() {
           if (_templates[uri]) {
             return options.done(_templates[uri]);
           } else {
             setTimeout(checkCacheForTemplate, 20);
           }
-        }, 20); /*impact on framerate is currently unknown*/
+        }, 20);
+        /*impact on framerate is currently unknown*/
 
-        return; /*critical*/
+        return;
+        /*critical*/
       }
 
       if (_templates[uri]) {
@@ -1791,47 +1793,80 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
           .done(function (data) {
             delete _inFlightRequests[uri];
             var t = _.template(data);
+            /*Templatization step.*/
             _templates[uri] = t;
             options.done(t);
           })
           .fail(options.fail);
+    };
 
+    this.fetchTemplateLocal = function (uri, options) {
+      var defaultOptions = {
+        done: function (data) {
+        },
+        fail: function (jqxhr) {
+          throw 'fetchTemplateLocal failed.' + jqxhr.status;
+        }
+      };
+
+      options = _.extend({}, defaultOptions, options);
+
+      if (_templates[uri]) {
+        return options.done(_templates[uri]);
+      }
+
+      var templateMarkup = $('script[type="text/template"][data-template-uri="' + uri + '"]').html();
+
+      if (!$.trim(templateMarkup)) {
+        throw 'Local template "' + uri + '" is empty.';
+      }
+
+      var template = _.template(templateMarkup)
+      _templates[uri] = template;
+      options.done(template);
     };
 
     this.renderTemplate = function ($el, templateName, model, options) {
-        var defaults = {
-          done: function ($el) {
-          },
-          error: function (jqxhr, settings, exception) {
-            console.log(exception);
-            throw exception;
-          },
-          postRenderActionScriptUri: null
-        };
-        options = _.extend({}, defaults, options);
+      var defaults = {
+        done: function ($el) {
+        },
+        error: function (jqxhr, settings, exception) {
+          console.log(exception);
+          throw exception;
+        },
+        postRenderActionScriptUri: null
+      };
+      options = _.extend({}, defaults, options);
 
-        if (!$el) {
-          throw '$el1 not supplied';
-        }
-        if (!model) {
-          throw 'model not supplied';
-        }
+      if (!$el) {
+        throw '$el1 not supplied';
+      }
+      if (!model) {
+        throw 'model not supplied';
+      }
 
-        var templateUri = _templateServerSvc.getTemplateUri(templateName);
+      var templateUri = _templateServerSvc.getTemplateUri(templateName);
+
+      if (templateName.match(/-local$/g)) {
+        that.fetchTemplateLocal(templateUri, { done: done });
+      } else {
         //could modify to use self cache
-        that.fetchTemplate(templateUri, { done: function (tmpl) {
-          $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
+        that.fetchTemplate(templateUri, { done: done });
+      }
 
-          if (options.postRenderScriptName) {
-            var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
-            that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
-              _templatePostRenderScripts[postRenderScriptUri]($, $el);
-              options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
-            });
-          } else {
-            options.done($el); //complete for when there is no post-render action script
-          }
-        }});
+      function done(tmpl) {
+        $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
+
+        if (options.postRenderScriptName) {
+          var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
+          that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
+            _templatePostRenderScripts[postRenderScriptUri]($, $el);
+            options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
+          });
+        } else {
+          options.done($el); //complete for when there is no post-render action script
+        }
+      }
     };
 
     //invoked by this.renderTemplate if a post-render action script is specified.
@@ -2459,15 +2494,17 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarkBookService(book) {
+  function BookmarkService(bookModel, itemRepository) {
 
-    if (!(this instanceof app.BookmarkBookService)) {
-      return new app.BookmarkBookService(book);
+    if (!(this instanceof app.BookmarkService)) {
+      return new app.BookmarkService(bookModel, itemRepository);
     }
 
     var that = this,
-        _book = null;
+        _bookModel = null,
+        _itemRepository = null;
 
+    this.eventUris = { addFavorite: 'update://bookmarkservice/addfavorite' }
     //needed? simply have empty page?
 //    this.deactivateFace = function (faceId) {
 //      if (faceId > 5) {
@@ -2502,10 +2539,8 @@ window.wizerati = {
         throw 'face not supplied';
       }
 
-      if (!_.find(_favorites[face], function (i) {
-        return i === id;
-      })) {
-        _favorites[face].push(id);
+      if (!_bookModel.isFavoriteOnFace(id, face)) {
+        _bookModel.addFavoriteToFace(id, face);
         _itemRepository.getById(id, function (item) {
           item['isFavoriteOnFace' + face] = true;
           $.publish(that.eventUris.addFavorite, id);
@@ -2514,11 +2549,16 @@ window.wizerati = {
     };
 
     function init() {
-//      if (!book) {
-//        throw 'book not supplied';
-//      }
-//
-//      _book = book;
+      if (!bookModel) {
+        throw 'bookModel not supplied';
+      }
+
+      if (!itemRepository) {
+        throw 'itemRepository not supplied';
+      }
+
+      _bookModel = bookModel;
+      _itemRepository = itemRepository;
 
       return that;
     }
@@ -2526,7 +2566,7 @@ window.wizerati = {
     return init();
   }
 
-  app.BookmarkBookService = BookmarkBookService;
+  app.BookmarkService = BookmarkService;
 
 }(wizerati));
 ;//try forcing service types to communicate with the UI only via routing and local storage?
@@ -3270,25 +3310,35 @@ window.wizerati = {
       return _favorites;
     };
 
-    this.addFavorite = function (id, face) {
-      if (!id) {
-        throw 'favorite not supplied';
-      }
-
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      if (!_.find(_favorites[face], function (i) {
+    this.isFavoriteOnFace = function (id, face) {
+      return !_.find(_favorites[face], function (i) {
         return i === id;
-      })) {
-        _favorites[face].push(id);
-        _itemRepository.getById(id, function (item) {
-          item['isFavoriteOnFace' + face] = true;
-          $.publish(that.eventUris.addFavorite, id);
-        });
-      }
+      });
     };
+
+    this.addFavoriteToFace = function (id, face) {
+        _favorites[face].push(id);
+    };
+
+//    this.addFavorite = function (id, face) {
+//      if (!id) {
+//        throw 'favorite not supplied';
+//      }
+//
+//      if (!face) {
+//        throw 'face not supplied';
+//      }
+//
+//      if (!_.find(_favorites[face], function (i) {
+//        return i === id;
+//      })) {
+//        _favorites[face].push(id);
+//        _itemRepository.getById(id, function (item) {
+//          item['isFavoriteOnFace' + face] = true;
+//          $.publish(that.eventUris.addFavorite, id);
+//        });
+//      }
+//    };
 
     this.removeFavorite = function (id, face) {
       if (!id) {
@@ -5524,7 +5574,7 @@ window.wizerati = {
 
     var that = this,
         _el = '#search-form',
-        _templateName = 'search-form.html',
+        _templateName = 'search-form.html-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
 
@@ -8139,7 +8189,7 @@ window.wizerati = {
   try {
     mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new wizerati.AuthenticationService();
-    mod.bookmarkBookService = new wizerati.BookmarkBookService();
+    mod.bookmarkBookService = new wizerati.BookmarkService(m.favoritesCubeModel, r.itemRepository);
 
     mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);

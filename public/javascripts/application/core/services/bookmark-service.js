@@ -1,15 +1,17 @@
 (function (app) {
   'use strict';
 
-  function BookmarkBookService(bookModel) {
+  function BookmarkService(bookModel, itemRepository) {
 
-    if (!(this instanceof app.BookmarkBookService)) {
-      return new app.BookmarkBookService(bookModel);
+    if (!(this instanceof app.BookmarkService)) {
+      return new app.BookmarkService(bookModel, itemRepository);
     }
 
     var that = this,
-        _bookModel = null;
+        _bookModel = null,
+        _itemRepository = null;
 
+    this.eventUris = { addFavorite: 'update://bookmarkservice/addfavorite' }
     //needed? simply have empty page?
 //    this.deactivateFace = function (faceId) {
 //      if (faceId > 5) {
@@ -44,10 +46,8 @@
         throw 'face not supplied';
       }
 
-      if (!_.find(_favorites[face], function (i) {
-        return i === id;
-      })) {
-        _favorites[face].push(id);
+      if (!_bookModel.isFavoriteOnFace(id, face)) {
+        _bookModel.addFavoriteToFace(id, face);
         _itemRepository.getById(id, function (item) {
           item['isFavoriteOnFace' + face] = true;
           $.publish(that.eventUris.addFavorite, id);
@@ -60,7 +60,12 @@
         throw 'bookModel not supplied';
       }
 
+      if (!itemRepository) {
+        throw 'itemRepository not supplied';
+      }
+
       _bookModel = bookModel;
+      _itemRepository = itemRepository;
 
       return that;
     }
@@ -68,6 +73,6 @@
     return init();
   }
 
-  app.BookmarkBookService = BookmarkBookService;
+  app.BookmarkService = BookmarkService;
 
 }(wizerati));
