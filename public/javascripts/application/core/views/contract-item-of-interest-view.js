@@ -9,7 +9,7 @@
 
     var that = this,
         _el = '<article></article>',
-        _templateName = 'item-of-interest.html';
+        _templateName = 'item-of-interest.html-local';
 
     this.$el = $(_el);
     this.Model = null;

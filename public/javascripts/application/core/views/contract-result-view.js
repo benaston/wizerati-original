@@ -9,7 +9,7 @@
 
     var that = this,
         _el = '<li class="t t-219"></li>',
-        _templateName = 'result.html';
+        _templateName = 'result.html-local';
 
     this.$el = $(_el);
     this.Model = null;

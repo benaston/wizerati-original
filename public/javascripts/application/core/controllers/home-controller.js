@@ -25,8 +25,10 @@
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
 
+        //uirootview should listen to the searchform model for the rendered flag
+        //and then render the change to the visibility mode to avoid expensieve polling?
         //now wait for the search form to be injected into the dom, then show everything
-        waitForSearchFormToBeRendered();
+//        waitForSearchFormToBeRendered();
       } catch (err) {
         console.log('HomeController::index exception: ' + err);
       }

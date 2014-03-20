@@ -20,7 +20,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="./images/apple-touch-icon-152.png">
 </head>
 <body data-ui-mode="-1" data-are-transitions-enabled="false" data-modal="-1">
-<div class="modal-container main-container" data-visibility-mode="0">
+<div class="modal-container main-container" data-visibility-mode="2">
     <div class="search-panel" data-mode="0">
         <div class="centered-text handle-search-panel btn-container handle-element">
             <form method="POST" action="/searchpanelmode/update?mode=0">
@@ -45,8 +45,7 @@
             <div>345 results for "Dssnnsbns, London"</div>
         </div>
         <ul class="result-list"></ul>
-    </article>
-    <div class="items-of-interest-panel">
+    </article><div class="items-of-interest-panel">
         <div id="selected-item-container-1" class="selected-item-container"></div><div id="selected-item-container-2" class="selected-item-container"></div>
         <div class="pinned-items-container">
             <div class="handle-pinned-items btn-container"><a href="/itemsofinterestpanelmode/update?mode=1"
@@ -65,7 +64,6 @@
 <div class="loading-container">
     <div class="loading"></div>
 </div>
-
 <div id="apply-to-contract-dialog" class="modal modal-full-screen">
     <div class="apply-to-contract-dialog-content-panel-container">
         <div class="modal-content-panel">
@@ -131,75 +129,13 @@
     </div>
 </div>
 <script type="text/template" data-template-uri="./template-server/contract/templates/search-form.html-local">
-   <% try {
-var rate = model.getRate();
-var keywords = model.getKeywords();
-%><form name="search-form" action="/search" method="GET">
-        <h2 class="search-form-title">Search IT contract jobs</h2>
-        <div class="search-fields">
-            <input type="search" id="keywords" name="keywords" <%= keywords ? "value='" + keywords + "'" : "''" %> class="field" required placeholder="my skills (e.g. ruby) and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
-        </div>
-        <div class="search-filters">
-            <span>minimum daily rate (gbp)</span>
-            <table>
-                <tbody><tr>
-                    <td>
-                        <input id="r250" name="r" type="radio" value="250" tabindex="1" <%= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" %>>
-                        <label for="r250">250</label>
-                    </td>
-                    <td>
-                        <input id="r350" name="r" type="radio" value="350" tabindex="1" <%= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" %>>
-                        <label for="r350">350</label>
-                    </td>
-                    <td>
-                        <input id="r450" name="r" type="radio" value="450" tabindex="1" <%= rate ? rate === "450" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r450">450</label>
-                    </td>
-                    <td>
-                        <input id="r550" name="r" type="radio" value="550" tabindex="1" <%= rate ? rate === "550" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r550">550</label>
-                    </td>
-                    <td>
-                        <input id="r650" name="r" type="radio" value="650" tabindex="1" <%= rate ? rate === "650" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r650">650</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input id="r300" name="r" type="radio" value="300" tabindex="1" <%= rate ? rate === "300" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r300">300</label>
-                    </td>
-                    <td>
-                        <input id="r400" name="r" type="radio" value="400" tabindex="1" <%= rate ? rate === "400" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r400">400</label>
-                    </td>
-                    <td>
-                        <input id="r500" name="r" type="radio" value="500" tabindex="1" <%= rate ? rate === "500" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r500">500</label>
-                    </td>
-                    <td>
-                        <input id="r600" name="r" type="radio" value="600" tabindex="1" <%= rate ? rate === "600" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r600">600</label>
-                    </td>
-                    <td>
-                        <input id="r700" name="r" type="radio" value="700" tabindex="1" required="required" <%= rate ? rate === "700" ? "checked='checked'" : ""  : "" %>>
-                        <label for="r700">700</label>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="inline-block width-62 search-button-container centered-text">
-            <div class="rotating-button-container centered-text">
-                <button type="submit" id="btn-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">search</span>
-            </div>
-        </div>
-    </form>
-<%
-} catch(e) {
-throw "template exception: search-form. " + e;
-}%>
-
+@@search-form-contract-template
+</script>
+<script type="text/template" data-template-uri="./template-server/contract/templates/item-of-interest.html-local">
+@@item-of-interest-contract-template
+</script>
+<script type="text/template" data-template-uri="./template-server/contract/templates/result.html-local">
+@@result-contract-template
 </script>
 <div class="build">( @@build )</div>
 <div id="no-script">

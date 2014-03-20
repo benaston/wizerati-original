@@ -143,6 +143,16 @@ module.exports = function (grunt) {
             {
               match: 'build',
               replacement: new Date().toISOString()
+            },
+            {
+              match: 'search-form-contract-template',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/search-form.html") %>'
+            },{
+              match: 'item-of-interest-contract-template',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/item-of-interest.html") %>'
+            },{
+              match: 'result-contract-template',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/result.html") %>'
             }
           ]
         },

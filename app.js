@@ -17,8 +17,8 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 
-ejs.open = '{{';
-ejs.close = '}}';
+//ejs.open = '{{';
+//ejs.close = '}}';
 
 app.use(express.static(path.join(__dirname, 'public')));
 
