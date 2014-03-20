@@ -1836,7 +1836,10 @@ body[data-ui-mode='1'] .result-list-panel {
 }
 
 /*.c is the content container for the result, located inside the anchor itself (minus the icon-container)*/
-/*.t .c, .t .icon-container, .t .tld, .t h3 {*/
+.c {
+    display: inline-block; /*required to ensure opacity takes effect on children*/
+}
+
 .t .c, .t .icon-container {
     -webkit-filter: opacity(100%);
     -webkit-backface-visibility: hidden;
