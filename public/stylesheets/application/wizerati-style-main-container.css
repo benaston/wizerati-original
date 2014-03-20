@@ -1,5 +1,3 @@
-/*The main-container concept introduced deliberately to be "helpful".*/
-
 body[data-ui-mode='-1'] .main-container {
     -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
     transition: none;
@@ -15,8 +13,6 @@ body:not([data-ui-mode='-1']) .main-container[data-visibility-mode='2'] {
     transition: -webkit-filter .1s ease-out;
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
-
-
 
 /*This prevents the inline-block layout elements from wrapping on narrow screens.*/
 .main-container {

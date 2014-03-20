@@ -3,14 +3,13 @@
     -webkit-backface-visibility: hidden; /*bypass chrome rendering bug*/
     pointer-events: none;
     transition: -webkit-filter .2s ease-out;
-    /*z-index: auto;*/
     visibility: hidden; /*enables click through for inspector in webkit*/
 }
 
 .apply-to-contract-dialog-content-panel-container {
     width: 550px;
     margin: auto;
-    background-color: rgba(255,255,255,.9);
+    background-color: rgba(255, 255, 255, .9);
     padding: 20px 40px 20px 40px;
     border-radius: 0 0 150px 150px;
 }

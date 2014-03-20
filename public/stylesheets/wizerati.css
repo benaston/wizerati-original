@@ -183,7 +183,7 @@ html input[type="text"],
 html input[type="password"],
 html input[type="email"],
 html input[type="search"],
-html input[type="tel"]{
+html input[type="tel"] {
     display: inline-block;
     width: 285px;
     margin: 20px 20px 0 20px;
@@ -195,7 +195,7 @@ html input[type="tel"]{
     outline: none;
     padding: 0;
     transition: border linear 0.2s;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-appearance: none; /*Prevent iOS styling (e.g. rounded corners on search input)*/
 }
 
@@ -214,7 +214,7 @@ label {
     display: block;
     margin: 0;
     cursor: pointer;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 input[type="radio"]:not(:checked) + label:hover {
@@ -235,7 +235,6 @@ label:focus {
     outline: 5px auto rgb(230, 240, 248);
     outline-offset: 2px;
 }
-
 
 button:disabled + label {
     opacity: .1;
@@ -671,10 +670,6 @@ body {
     background-color: whitesmoke;
 }
 
-/*body[data-ui-mode='1'] {*/
-    /*background-color: white;*/
-/*}*/
-
 body[data-ui-mode='-1'],
 body[data-ui-mode='0'] {
     overflow: hidden;
@@ -715,7 +710,7 @@ body[data-ui-mode='0'] {
 }
 
 body[data-ui-mode='1'] .items-of-interest-panel {
-opacity: 1;
+    opacity: 1;
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
@@ -733,8 +728,6 @@ opacity: 1;
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-panel {
     transition: -webkit-transform .2s ease-out; /*TESTING ON IOS*/
 }
-
-
 
 body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
     /*transition: -webkit-transform .2s ease-out;*/
@@ -798,7 +791,7 @@ body[data-items-of-interest-mode='1'][data-are-transitions-enabled='true'] .sele
 }
 
 /*body:not([data-are-transitions-enabled='false']) .selected-item-content, .pinned-item-content {*/
-    /*transition: width .2s ease-out;*/
+/*transition: width .2s ease-out;*/
 /*}*/
 
 .selected-item-content, .pinned-item-content {
@@ -854,8 +847,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     padding: 0;
     margin: 0;
 }
-
-
 
 .menu {
     margin-right: 0;
@@ -970,29 +961,27 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     -webkit-overflow-scrolling: touch;
 }
 
-
-
 /*.t .is-favorite {*/
-    /*color: silver;*/
-    /*font-size: 1.5rem;*/
+/*color: silver;*/
+/*font-size: 1.5rem;*/
 /*}*/
 
 /*.t.hidden {*/
-    /*opacity: .3;*/
+/*opacity: .3;*/
 /*}*/
 
 /*.t.hidden:before {*/
-    /*opacity: 1;*/
-    /*position: absolute;*/
-    /*left: 75px;*/
-    /*top: 19px;*/
-    /*display: block;*/
-    /*font-family: glyph;*/
-    /*content: '\e802';*/
-    /*font-size: 4rem;*/
-    /*font-weight: 700;*/
-    /*color: rgba(0, 0, 0, .2);*/
-    /*-webkit-transform: rotate(-45deg);*/
+/*opacity: 1;*/
+/*position: absolute;*/
+/*left: 75px;*/
+/*top: 19px;*/
+/*display: block;*/
+/*font-family: glyph;*/
+/*content: '\e802';*/
+/*font-size: 4rem;*/
+/*font-weight: 700;*/
+/*color: rgba(0, 0, 0, .2);*/
+/*-webkit-transform: rotate(-45deg);*/
 /*}*/
 
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .pinned-item-content,
@@ -1053,7 +1042,8 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     margin-bottom: 10px;
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    /*-webkit-transform: scale(1);*/ /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    /*-webkit-transform: scale(1);*/
+    /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
 }
@@ -1069,7 +1059,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 .itemMetadata h3 {
     text-align: right;
 }
-
 
 .item-of-interest p {
     margin-bottom: 2rem;
@@ -1100,8 +1089,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     font-size: .7rem;
 }
 
-
-
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
@@ -1113,32 +1100,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
         width: 82px; /*force two up/two down for aesthetic*/
     }
 }
-/*Background visible during loading and search screen.*/
-/*body[data-ui-mode='-1'] .background-container,*/
-/*body[data-ui-mode='0'] .background-container {*/
-    /*-webkit-filter: opacity(100%);*/
-    /*-moz-filter: opacity(100%);*/
-/*}*/
-
-/*Loading container visible during loading and search screen whilst waiting for the search form to render*/
-/*body[data-ui-mode='-1'] .loading-container,*/
-/*body[data-ui-mode='0'] .main-container[data-visibility-mode='0'] ~ .loading-container {*/
-    /*-webkit-filter: opacity(100%);*/
-/*}*/
-
-/*body[data-ui-mode='1'] .loading-container {*/
-    /*-webkit-filter: opacity(0%);*/
-/*}*/
-
-/*body[data-ui-mode='1'] .background-container {*/
-    /*-webkit-filter: opacity(0%);*/
-/*}*/
-
-/*We want the loading indicator to be hidden whenever the main-container is visible.*/
-/*.main-container[data-is-visible='true'] ~ .loading-container {*/
-    /*-webkit-filter: opacity(0%);*/
-/*}*/
-
 /*Background visible during loading and search screen.*/
 .main-container[data-visibility-mode='0'] ~ .background-container,
 .main-container[data-visibility-mode='0'] ~ .loading-container {
@@ -1173,11 +1134,6 @@ body[data-ui-mode='0'] .main-container[data-visibility-mode='2'] ~ .background-c
     transition: -webkit-filter .1s ease-out;
 }
 
-/*.main-container[data-is-visible='false'] ~ .background-container,*/
-/*.main-container[data-is-visible='false'] ~ .loading-container {*/
-    /*-webkit-filter: opacity(0%); *//*we use a filter because the normal opacity transition is janky*/
-/*}*/
-
 /*Loading indicator should rotate while rendering the search page.*/
 body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .loading-container .loading {
     -webkit-animation-duration: 2.5s;
@@ -1208,8 +1164,8 @@ body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .l
 
 body[data-ui-mode='-1'] .background-container .background-image,
 body[data-ui-mode='0'] .background-container .background-image {
-    text-shadow: 0 0 159px rgba(0,0,0,.1);
-    color: rgba(255,255,255,.6);
+    text-shadow: 0 0 159px rgba(0, 0, 0, .1);
+    color: rgba(255, 255, 255, .6);
     font-family: ionicons;
     pointer-events: none;
     display: inline-block;
@@ -1223,8 +1179,6 @@ body[data-ui-mode='0'] .background-container .background-image {
     margin-top: -376px;
     -webkit-font-smoothing: subpixel-antialiased;
 }
-
-/*The main-container concept introduced deliberately to be "helpful".*/
 
 body[data-ui-mode='-1'] .main-container {
     -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
@@ -1241,8 +1195,6 @@ body:not([data-ui-mode='-1']) .main-container[data-visibility-mode='2'] {
     transition: -webkit-filter .1s ease-out;
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
-
-
 
 /*This prevents the inline-block layout elements from wrapping on narrow screens.*/
 .main-container {
@@ -1262,14 +1214,13 @@ body[data-ui-mode='0'] .main-container {
     -webkit-backface-visibility: hidden; /*bypass chrome rendering bug*/
     pointer-events: none;
     transition: -webkit-filter .2s ease-out;
-    /*z-index: auto;*/
     visibility: hidden; /*enables click through for inspector in webkit*/
 }
 
 .apply-to-contract-dialog-content-panel-container {
     width: 550px;
     margin: auto;
-    background-color: rgba(255,255,255,.9);
+    background-color: rgba(255, 255, 255, .9);
     padding: 20px 40px 20px 40px;
     border-radius: 0 0 150px 150px;
 }
@@ -1541,10 +1492,10 @@ body[data-ui-mode='0'] .logo-image {
     font-family: ionicons;
     font-size: 17rem;
     line-height: 15rem;
-    color: rgba(255,255,255,1);
+    color: rgba(255, 255, 255, 1);
     text-align: center;
     width: 100%;
-    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+    text-shadow: 0 0 159px rgba(0, 0, 0, 0.4);
 }
 
 .logo-image:after {
@@ -1619,17 +1570,16 @@ body[data-ui-mode='1'] .tag-line {
 
 .build {
     position: fixed;
-    top:40%;
-    width:300px;
-    /*display: inline-block;*/
+    top: 40%;
+    width: 300px;
     display: none;
-    left:50%;
-    margin-left:-150px;
+    left: 50%;
+    margin-left: -150px;
     z-index: 9999999;
     font-weight: bold;
     text-align: center;
-    background-color: rgba(255,255,255,.4);
-    box-shadow: 0 0 10px 10px rgba(255,255,255,.4) ;
+    background-color: rgba(255, 255, 255, .4);
+    box-shadow: 0 0 10px 10px rgba(255, 255, 255, .4);
 }
 
 /* Result List Panel */

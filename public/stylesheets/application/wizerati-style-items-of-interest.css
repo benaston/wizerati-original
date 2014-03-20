@@ -8,7 +8,7 @@
 }
 
 body[data-ui-mode='1'] .items-of-interest-panel {
-opacity: 1;
+    opacity: 1;
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
@@ -26,8 +26,6 @@ opacity: 1;
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-panel {
     transition: -webkit-transform .2s ease-out; /*TESTING ON IOS*/
 }
-
-
 
 body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
     /*transition: -webkit-transform .2s ease-out;*/
@@ -91,7 +89,7 @@ body[data-items-of-interest-mode='1'][data-are-transitions-enabled='true'] .sele
 }
 
 /*body:not([data-are-transitions-enabled='false']) .selected-item-content, .pinned-item-content {*/
-    /*transition: width .2s ease-out;*/
+/*transition: width .2s ease-out;*/
 /*}*/
 
 .selected-item-content, .pinned-item-content {
@@ -147,8 +145,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     padding: 0;
     margin: 0;
 }
-
-
 
 .menu {
     margin-right: 0;
@@ -263,29 +259,27 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     -webkit-overflow-scrolling: touch;
 }
 
-
-
 /*.t .is-favorite {*/
-    /*color: silver;*/
-    /*font-size: 1.5rem;*/
+/*color: silver;*/
+/*font-size: 1.5rem;*/
 /*}*/
 
 /*.t.hidden {*/
-    /*opacity: .3;*/
+/*opacity: .3;*/
 /*}*/
 
 /*.t.hidden:before {*/
-    /*opacity: 1;*/
-    /*position: absolute;*/
-    /*left: 75px;*/
-    /*top: 19px;*/
-    /*display: block;*/
-    /*font-family: glyph;*/
-    /*content: '\e802';*/
-    /*font-size: 4rem;*/
-    /*font-weight: 700;*/
-    /*color: rgba(0, 0, 0, .2);*/
-    /*-webkit-transform: rotate(-45deg);*/
+/*opacity: 1;*/
+/*position: absolute;*/
+/*left: 75px;*/
+/*top: 19px;*/
+/*display: block;*/
+/*font-family: glyph;*/
+/*content: '\e802';*/
+/*font-size: 4rem;*/
+/*font-weight: 700;*/
+/*color: rgba(0, 0, 0, .2);*/
+/*-webkit-transform: rotate(-45deg);*/
 /*}*/
 
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .pinned-item-content,
@@ -346,7 +340,8 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     margin-bottom: 10px;
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    /*-webkit-transform: scale(1);*/ /*required to circumvent transform z-index bug in webkit when transforms applied*/
+    /*-webkit-transform: scale(1);*/
+    /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
 }
@@ -362,7 +357,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 .itemMetadata h3 {
     text-align: right;
 }
-
 
 .item-of-interest p {
     margin-bottom: 2rem;
@@ -392,8 +386,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 .id {
     font-size: .7rem;
 }
-
-
 
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/

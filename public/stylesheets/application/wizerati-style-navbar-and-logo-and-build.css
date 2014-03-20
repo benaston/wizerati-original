@@ -14,10 +14,10 @@ body[data-ui-mode='0'] .logo-image {
     font-family: ionicons;
     font-size: 17rem;
     line-height: 15rem;
-    color: rgba(255,255,255,1);
+    color: rgba(255, 255, 255, 1);
     text-align: center;
     width: 100%;
-    text-shadow: 0px 0px 159px rgba(0,0,0,0.4);
+    text-shadow: 0 0 159px rgba(0, 0, 0, 0.4);
 }
 
 .logo-image:after {
@@ -92,15 +92,14 @@ body[data-ui-mode='1'] .tag-line {
 
 .build {
     position: fixed;
-    top:40%;
-    width:300px;
-    /*display: inline-block;*/
+    top: 40%;
+    width: 300px;
     display: none;
-    left:50%;
-    margin-left:-150px;
+    left: 50%;
+    margin-left: -150px;
     z-index: 9999999;
     font-weight: bold;
     text-align: center;
-    background-color: rgba(255,255,255,.4);
-    box-shadow: 0 0 10px 10px rgba(255,255,255,.4) ;
+    background-color: rgba(255, 255, 255, .4);
+    box-shadow: 0 0 10px 10px rgba(255, 255, 255, .4);
 }
