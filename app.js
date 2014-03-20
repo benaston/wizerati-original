@@ -6,6 +6,9 @@ var ejs = require('ejs');
 
 var app = express();
 
+app.disable('x-powered-by');
+app.disable('etag');
+
 // all environments
 app.set('port', process.env.PORT || 3002);
 app.set('views', __dirname + '/views');
@@ -41,7 +44,7 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 function noCache(req, res, next) {
-  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Cache-Control', 'no-cache');
   res.header('Expires', '-1');
   res.header('Pragma', 'no-cache');
   next();
