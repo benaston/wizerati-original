@@ -7,7 +7,7 @@ var ejs = require('ejs');
 var app = express();
 
 app.disable('x-powered-by');
-app.disable('etag');
+//app.disable('etag');
 
 // all environments
 app.set('port', process.env.PORT || 3002);
