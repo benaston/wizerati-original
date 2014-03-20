@@ -93,8 +93,8 @@ body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .l
 
 body[data-ui-mode='-1'] .background-container .background-image,
 body[data-ui-mode='0'] .background-container .background-image {
-    text-shadow: 0px 0px 159px rgba(0, 0, 0, 0.1);
-    color: rgba(255, 255, 255, .2);
+    text-shadow: 0 0 159px rgba(0,0,0,.1);
+    color: rgba(255,255,255,.6);
     font-family: ionicons;
     pointer-events: none;
     display: inline-block;
@@ -106,4 +106,5 @@ body[data-ui-mode='0'] .background-container .background-image {
     left: 50%;
     margin-left: -370px;
     margin-top: -376px;
+    -webkit-font-smoothing: subpixel-antialiased;
 }

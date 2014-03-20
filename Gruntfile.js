@@ -143,7 +143,15 @@ module.exports = function (grunt) {
             {
               match: 'build',
               replacement: new Date().toISOString()
-            },
+            }
+          ]
+        },
+        files: [
+          {src: ['view-templates/_index-css-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
+        ]
+      },injectInPageTemplates: {
+        options: {
+          patterns: [
             {
               match: 'search-form-contract-template',
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/search-form.html") %>'
@@ -157,9 +165,10 @@ module.exports = function (grunt) {
           ]
         },
         files: [
-          {src: ['view-templates/_index-css-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
+          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
         ]
-      }, injectScriptTagForDebugging: {
+      },
+      injectScriptTagForDebugging: {
         options: {
           patterns: [
             {
@@ -237,6 +246,7 @@ module.exports = function (grunt) {
     'replace:injectEditWarningIntoHead',
     'replace:injectCssIntoHead',
     'replace:injectBuildNumber',
+    'replace:injectInPageTemplates',
     'replace:injectScriptTagForDebugging',
     'replace:injectJavaScriptIntoBody',
     'replace:correctForReplaceTaskBug'

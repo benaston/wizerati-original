@@ -1208,8 +1208,8 @@ body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .l
 
 body[data-ui-mode='-1'] .background-container .background-image,
 body[data-ui-mode='0'] .background-container .background-image {
-    text-shadow: 0px 0px 159px rgba(0, 0, 0, 0.1);
-    color: rgba(255, 255, 255, .2);
+    text-shadow: 0 0 159px rgba(0,0,0,.1);
+    color: rgba(255,255,255,.6);
     font-family: ionicons;
     pointer-events: none;
     display: inline-block;
@@ -1221,6 +1221,7 @@ body[data-ui-mode='0'] .background-container .background-image {
     left: 50%;
     margin-left: -370px;
     margin-top: -376px;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 /*The main-container concept introduced deliberately to be "helpful".*/
@@ -1396,21 +1397,22 @@ body[data-ui-mode='0'] .search-form-title {
 
 body[data-ui-mode='0'] #search-form {
     position: absolute;
-    height: 400px;
-    width: 400px;
+    height: 450px;
+    width: 450px;
     left: 50%;
     top: 44%;
-    margin-left: -200px;
-    margin-top: -200px;
-    box-shadow: 0 0 100px 0px rgba(0, 0, 0, .3);
-    border-radius: 80px;
+    margin-left: -225px;
+    margin-top: -225px;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 1);
+    border-radius: 250px;
     text-align: center;
-    background: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.6);
 }
 
-/*form[name='search-form'] {*/
-    /*margin-left: 9px;*/
-/*}*/
+body[data-ui-mode='0'] form[name='search-form'] {
+    top: 53px;
+    position: relative;
+}
 
 #btn-search {
     width: 100px;

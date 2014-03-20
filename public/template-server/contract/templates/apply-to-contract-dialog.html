@@ -1,0 +1,42 @@
+<div id="apply-to-contract-dialog" class="modal modal-full-screen">
+    <div class="apply-to-contract-dialog-content-panel-container">
+        <div class="modal-content-panel">
+            <div id="dialog-panel-sign-in-or-register">
+                <h1>Apply Online</h1>
+
+                <div class="message-container">
+                    <p>You are applying for the job <strong class="job-title"></strong>.</p>
+
+                    <div class="sign-in">
+                        <form id="frm-action-item-modal-sign-in" method="POST" action="/session/create">
+                            <p>Sign-in below, or <a href="#">continue and register as part of applying to this job</a>.
+                            </p>
+                            <p class="error-message">The username or password you have entered is incorrect.</p>
+                        <span class="field-and-metadata-container">
+                        <input id="email-address" class="field" type="email" name="email-address"
+                               placeholder="email address"/>
+                        <label for="email-address" class="meta-info">e.g. example@example.com</label>
+                        </span>
+                            <input id="password" class="field" type="password" placeholder="password" name="name"/>
+                        </form>
+                    </div>
+                </div>
+                <div class="form-button-container">
+                    <div class="rotating-button-container centered-text">
+                        <form method="POST" action="/applytocontractdialog/destroy">
+                            <button id="btn-search" tabindex="1" class="btn btn-40 btn-neutral btn-rotating"
+                                    data-is-waiting="false"></button>
+                            <span class="focus-indicator"></span><span class="button-icon">cancel</span>
+                        </form>
+                    </div>
+
+                    <div class="rotating-button-container centered-text">
+                        <button id="btn-search" form="frm-action-item-modal-sign-in" tabindex="1"
+                                class="btn btn-40 btn-success btn-rotating" data-is-waiting="false"></button>
+                        <span class="focus-indicator"></span><span class="button-icon">sign-in</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
