@@ -1,16 +1,17 @@
 (function (app) {
   'use strict';
 
-  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel) {
+  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService) {
 
     if (!(this instanceof app.BookmarkedItemsController)) {
       return new app.BookmarkedItemsController(favoritesCubeModel,
-          selectedCubeFaceModel);
+          selectedCubeFaceModel, bookmarkService);
     }
 
     var that = this,
         _favoritesCubeModel = null,
-        _selectedCubeFaceModel = null;
+        _selectedCubeFaceModel = null,
+        _bookmarkService = null;
 
     this.create = function (dto) {
       if (!dto) {
@@ -24,7 +25,7 @@
         return;
       }
 
-      _favoritesCubeModel.addFavorite(dto.id, currentCubeFace);
+      _bookmarkService.addFavorite(dto.id, currentCubeFace);
     };
 
     this.destroy = function (dto) {
@@ -32,7 +33,7 @@
         throw 'dto not supplied.';
       }
 
-      _favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
+      _bookmarkService.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
     };
 
     function init() {
@@ -44,8 +45,13 @@
         throw 'selectedCubeFaceModel not supplied.';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied.';
+      }
+
       _favoritesCubeModel = favoritesCubeModel;
       _selectedCubeFaceModel = selectedCubeFaceModel;
+      _bookmarkService = bookmarkService;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 

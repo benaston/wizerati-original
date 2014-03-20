@@ -94,13 +94,19 @@
     };
 
     this.isFavoriteOnFace = function (id, face) {
-      return !_.find(_favorites[face], function (i) {
+      return _.find(_favorites[face], function (i) {
         return i === id;
       });
     };
 
     this.addFavoriteToFace = function (id, face) {
         _favorites[face].push(id);
+    };
+
+    this.removeFavoriteFromFace = function (id, face) {
+      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
+        return idOnCubeFace === id;
+      });
     };
 
 //    this.addFavorite = function (id, face) {
@@ -123,24 +129,24 @@
 //      }
 //    };
 
-    this.removeFavorite = function (id, face) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
-        return idOnCubeFace === id;
-      });
-
-      _itemRepository.getById(id, function (item) {
-        item['isFavoriteOnFace' + face] = false;
-        $.publish(that.eventUris.removeFavorite, id);
-      });
-    };
+//    this.removeFavorite = function (id, face) {
+//      if (!id) {
+//        throw 'id not supplied';
+//      }
+//
+//      if (!face) {
+//        throw 'face not supplied';
+//      }
+//
+//      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
+//        return idOnCubeFace === id;
+//      });
+//
+//      _itemRepository.getById(id, function (item) {
+//        item['isFavoriteOnFace' + face] = false;
+//        $.publish(that.eventUris.removeFavorite, id);
+//      });
+//    };
 
     this.isFavoriteOnAnyFace = function (id) {
       if (!id) {

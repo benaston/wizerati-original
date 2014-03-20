@@ -167,6 +167,18 @@ module.exports = function (grunt) {
         files: [
           {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
         ]
+      },injectDialogs: {
+        options: {
+          patterns: [
+            {
+              match: 'apply-to-contract-dialog',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/apply-to-contract-dialog.html") %>'
+            }
+          ]
+        },
+        files: [
+          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
+        ]
       },
       injectScriptTagForDebugging: {
         options: {
@@ -247,6 +259,7 @@ module.exports = function (grunt) {
     'replace:injectCssIntoHead',
     'replace:injectBuildNumber',
     'replace:injectInPageTemplates',
+    'replace:injectDialogs',
     'replace:injectScriptTagForDebugging',
     'replace:injectJavaScriptIntoBody',
     'replace:correctForReplaceTaskBug'

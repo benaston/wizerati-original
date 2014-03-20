@@ -1,16 +1,10 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel) {
+  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
 
     if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model,
-          resultViewFactory,
-          selectedCubeFaceModel,
-          favoritesCubeModel,
-          hiddenItemsModel,
-          actionedItemsModel,
-          itemsOfInterestModel);
+      return new app.ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
     }
 
     var that = this,
@@ -22,6 +16,7 @@
         _actionedItemsModel = null,
         _hiddenItemsModel = null,
         _itemsOfInterestModel = null,
+        _bookmarkService = null,
         _scrollTopValue = 0,
         _lastKnownSearchId = null,
         _renderOptimizations = {};
@@ -166,6 +161,10 @@
         throw 'itemsOfInterestModel not supplied';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _resultViewFactory = resultViewFactory;
@@ -174,18 +173,19 @@
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
 
       _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);

@@ -11,7 +11,10 @@
         _bookModel = null,
         _itemRepository = null;
 
-    this.eventUris = { addFavorite: 'update://bookmarkservice/addfavorite' }
+    this.eventUris = {
+      addFavorite: 'update://bookmarkservice/addfavorite',
+      removeFavorite: 'update://bookmarkservice/removefavorite'
+    };
     //needed? simply have empty page?
 //    this.deactivateFace = function (faceId) {
 //      if (faceId > 5) {
@@ -55,6 +58,22 @@
       }
     };
 
+    this.removeFavorite = function (id, face) {
+      if (!id) {
+        throw 'id not supplied';
+      }
+
+      if (!face) {
+        throw 'face not supplied';
+      }
+
+      _bookModel.removeFavoriteFromFace(id, face);
+      _itemRepository.getById(id, function (item) {
+        item['isFavoriteOnFace' + face] = false;
+        $.publish(that.eventUris.removeFavorite, id);
+      });
+    };
+
     function init() {
       if (!bookModel) {
         throw 'bookModel not supplied';
@@ -63,6 +82,8 @@
       if (!itemRepository) {
         throw 'itemRepository not supplied';
       }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
 
       _bookModel = bookModel;
       _itemRepository = itemRepository;

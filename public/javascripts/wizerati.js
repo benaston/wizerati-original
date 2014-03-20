@@ -2517,7 +2517,10 @@ window.wizerati = {
         _bookModel = null,
         _itemRepository = null;
 
-    this.eventUris = { addFavorite: 'update://bookmarkservice/addfavorite' }
+    this.eventUris = {
+      addFavorite: 'update://bookmarkservice/addfavorite',
+      removeFavorite: 'update://bookmarkservice/removefavorite'
+    };
     //needed? simply have empty page?
 //    this.deactivateFace = function (faceId) {
 //      if (faceId > 5) {
@@ -2561,6 +2564,22 @@ window.wizerati = {
       }
     };
 
+    this.removeFavorite = function (id, face) {
+      if (!id) {
+        throw 'id not supplied';
+      }
+
+      if (!face) {
+        throw 'face not supplied';
+      }
+
+      _bookModel.removeFavoriteFromFace(id, face);
+      _itemRepository.getById(id, function (item) {
+        item['isFavoriteOnFace' + face] = false;
+        $.publish(that.eventUris.removeFavorite, id);
+      });
+    };
+
     function init() {
       if (!bookModel) {
         throw 'bookModel not supplied';
@@ -2569,6 +2588,8 @@ window.wizerati = {
       if (!itemRepository) {
         throw 'itemRepository not supplied';
       }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
 
       _bookModel = bookModel;
       _itemRepository = itemRepository;
@@ -3324,13 +3345,19 @@ window.wizerati = {
     };
 
     this.isFavoriteOnFace = function (id, face) {
-      return !_.find(_favorites[face], function (i) {
+      return _.find(_favorites[face], function (i) {
         return i === id;
       });
     };
 
     this.addFavoriteToFace = function (id, face) {
         _favorites[face].push(id);
+    };
+
+    this.removeFavoriteFromFace = function (id, face) {
+      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
+        return idOnCubeFace === id;
+      });
     };
 
 //    this.addFavorite = function (id, face) {
@@ -3353,24 +3380,24 @@ window.wizerati = {
 //      }
 //    };
 
-    this.removeFavorite = function (id, face) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
-        return idOnCubeFace === id;
-      });
-
-      _itemRepository.getById(id, function (item) {
-        item['isFavoriteOnFace' + face] = false;
-        $.publish(that.eventUris.removeFavorite, id);
-      });
-    };
+//    this.removeFavorite = function (id, face) {
+//      if (!id) {
+//        throw 'id not supplied';
+//      }
+//
+//      if (!face) {
+//        throw 'face not supplied';
+//      }
+//
+//      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
+//        return idOnCubeFace === id;
+//      });
+//
+//      _itemRepository.getById(id, function (item) {
+//        item['isFavoriteOnFace' + face] = false;
+//        $.publish(that.eventUris.removeFavorite, id);
+//      });
+//    };
 
     this.isFavoriteOnAnyFace = function (id) {
       if (!id) {
@@ -4835,10 +4862,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel, bookmarkService) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel, bookmarkService);
     }
 
     var that = this,
@@ -4860,6 +4887,7 @@ window.wizerati = {
         _itemOfInterestViewFactory = null,
         _selectedCubeFaceModel = null,
         _favoritesCubeModel = null,
+        _bookmarkService = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _layoutCoordinator = null,
@@ -4871,7 +4899,6 @@ window.wizerati = {
 
     this.$el = null;
     this.Model = null;
-
 
 //    this.render = function (e) {
 //      e = e || { eventType: that.eventType.Default, args: [] };
@@ -5181,6 +5208,10 @@ window.wizerati = {
         throw 'selectedItemModel not supplied';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied';
+      }
+
       if (!layoutCoordinator) {
         throw 'layoutCoordinator not supplied';
       }
@@ -5194,6 +5225,7 @@ window.wizerati = {
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
       _favoritesCubeModel = favoritesCubeModel;
+      _bookmarkService = bookmarkService;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _layoutCoordinator = layoutCoordinator;
@@ -5202,8 +5234,8 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
@@ -5214,8 +5246,8 @@ window.wizerati = {
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
@@ -5374,16 +5406,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel) {
+  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
 
     if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model,
-          resultViewFactory,
-          selectedCubeFaceModel,
-          favoritesCubeModel,
-          hiddenItemsModel,
-          actionedItemsModel,
-          itemsOfInterestModel);
+      return new app.ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
     }
 
     var that = this,
@@ -5395,6 +5421,7 @@ window.wizerati = {
         _actionedItemsModel = null,
         _hiddenItemsModel = null,
         _itemsOfInterestModel = null,
+        _bookmarkService = null,
         _scrollTopValue = 0,
         _lastKnownSearchId = null,
         _renderOptimizations = {};
@@ -5539,6 +5566,10 @@ window.wizerati = {
         throw 'itemsOfInterestModel not supplied';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _resultViewFactory = resultViewFactory;
@@ -5547,18 +5578,19 @@ window.wizerati = {
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
 
       _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
@@ -6038,16 +6070,17 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel) {
+  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService) {
 
     if (!(this instanceof app.BookmarkedItemsController)) {
       return new app.BookmarkedItemsController(favoritesCubeModel,
-          selectedCubeFaceModel);
+          selectedCubeFaceModel, bookmarkService);
     }
 
     var that = this,
         _favoritesCubeModel = null,
-        _selectedCubeFaceModel = null;
+        _selectedCubeFaceModel = null,
+        _bookmarkService = null;
 
     this.create = function (dto) {
       if (!dto) {
@@ -6061,7 +6094,7 @@ window.wizerati = {
         return;
       }
 
-      _favoritesCubeModel.addFavorite(dto.id, currentCubeFace);
+      _bookmarkService.addFavorite(dto.id, currentCubeFace);
     };
 
     this.destroy = function (dto) {
@@ -6069,7 +6102,7 @@ window.wizerati = {
         throw 'dto not supplied.';
       }
 
-      _favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
+      _bookmarkService.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
     };
 
     function init() {
@@ -6081,8 +6114,13 @@ window.wizerati = {
         throw 'selectedCubeFaceModel not supplied.';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied.';
+      }
+
       _favoritesCubeModel = favoritesCubeModel;
       _selectedCubeFaceModel = selectedCubeFaceModel;
+      _bookmarkService = bookmarkService;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -8204,7 +8242,7 @@ window.wizerati = {
   try {
     mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new wizerati.AuthenticationService();
-    mod.bookmarkBookService = new wizerati.BookmarkService(m.favoritesCubeModel, r.itemRepository);
+    mod.bookmarkService = new wizerati.BookmarkService(m.favoritesCubeModel, r.itemRepository);
 
     mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
@@ -8261,13 +8299,13 @@ window.wizerati = {
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (mod, f, l, m) {
+(function (mod, f, l, m, s) {
   'use strict';
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
@@ -8276,7 +8314,7 @@ window.wizerati = {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
 
 
 (function (mod, f, l, m, s) {
@@ -8286,7 +8324,7 @@ window.wizerati = {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
 //    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
-    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel);
+    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);

@@ -1,10 +1,10 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel, bookmarkService) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel, bookmarkService);
     }
 
     var that = this,
@@ -26,6 +26,7 @@
         _itemOfInterestViewFactory = null,
         _selectedCubeFaceModel = null,
         _favoritesCubeModel = null,
+        _bookmarkService = null,
         _hiddenItemsModel = null,
         _actionedItemsModel = null,
         _layoutCoordinator = null,
@@ -37,7 +38,6 @@
 
     this.$el = null;
     this.Model = null;
-
 
 //    this.render = function (e) {
 //      e = e || { eventType: that.eventType.Default, args: [] };
@@ -347,6 +347,10 @@
         throw 'selectedItemModel not supplied';
       }
 
+      if (!bookmarkService) {
+        throw 'bookmarkService not supplied';
+      }
+
       if (!layoutCoordinator) {
         throw 'layoutCoordinator not supplied';
       }
@@ -360,6 +364,7 @@
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
       _selectedCubeFaceModel = selectedCubeFaceModel;
       _favoritesCubeModel = favoritesCubeModel;
+      _bookmarkService = bookmarkService;
       _hiddenItemsModel = hiddenItemsModel;
       _actionedItemsModel = actionedItemsModel;
       _layoutCoordinator = layoutCoordinator;
@@ -368,8 +373,8 @@
       _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[_favoritesCubeModel.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_favoritesCubeModel.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
@@ -380,8 +385,8 @@
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
       $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.addFavorite, that.render);
-      $.subscribe(_favoritesCubeModel.eventUris.removeFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
       $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
