@@ -33,21 +33,21 @@ if ('development' === app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/indexs', routes.indexs);
+app.get('/indexs', noCache, routes.indexs);
 app.get('/search', routes.index);
 app.get('/advertisers', routes.index);
 app.get('/accountactivationpanel', routes.index);
 app.get('/purchasepanel', routes.index);
 app.get('/deletefavoritegroupconfirmationdialog', routes.index);
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-//function noCache(req, res, next) {
-////  res.header('Cache-Control', 'no-cache');
-//  res.header('Cache-Control', 'public, max-age=0');
-////  res.header('Expires', '-1');
-////  res.header('Pragma', 'no-cache');
-//  next();
-//}
+function noCache(req, res, next) {
+//  res.header('Cache-Control', 'no-cache');
+  res.header('Cache-Control', 'public, max-age=0');
+//  res.header('Expires', '-1');
+//  res.header('Pragma', 'no-cache');
+  next();
+}
