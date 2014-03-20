@@ -179,6 +179,18 @@ module.exports = function (grunt) {
         files: [
           {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
         ]
+      },injectFavoriteCube: {
+        options: {
+          patterns: [
+            {
+              match: 'favorite-cube',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/favorite-cube.html") %>'
+            }
+          ]
+        },
+        files: [
+          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
+        ]
       },
       injectScriptTagForDebugging: {
         options: {
@@ -260,6 +272,7 @@ module.exports = function (grunt) {
     'replace:injectBuildNumber',
     'replace:injectInPageTemplates',
     'replace:injectDialogs',
+    'replace:injectFavoriteCube',
     'replace:injectScriptTagForDebugging',
     'replace:injectJavaScriptIntoBody',
     'replace:correctForReplaceTaskBug'

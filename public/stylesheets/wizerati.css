@@ -1655,32 +1655,15 @@ body[data-ui-mode='1'] .result-list-panel {
     transition: left .3s ease-in-out;
 }
 
-
-
-/*.t.hidden h3 {*/
-    /*font-size: 1rem;*/
-    /*line-height: 1rem;*/
-/*}*/
-
-/*.t.hidden h3, .t.hidden  p,.t.hidden  .tld, .t.hidden .icon-container {*/
-    /*opacity: .1;*/
-/*}*/
-
-
-
 .t-219 {
     width: 100%;
     margin: 0;
 }
 
 .thumbnail-info, .ti {
-    /*setting width and height enables correct vertical centering of font glyphs*/
     width: 22px;
-    /*height: 14px;*/
-    /*position: absolute;*/
     font-family: 'glyph';
     text-align: center;
-    /*display: inline-block;*/
     color: silver;
 }
 
@@ -1693,64 +1676,15 @@ body[data-ui-mode='1'] .result-list-panel {
     content: '';
 }
 
-/*.thumbnail-info.thumbnail-info-h3.is-unread, .ti.is-unread {*/
-    /*display: inline-block;*/
-/*}*/
-
-/*.thumbnail-info.thumbnail-info-h3.is-pinned, .ti.ti-pinned.is-pinned {*/
-    /*display: inline-block;*/
-/*}*/
-
-/*.t[data-is-unread='true'] .is-unread,*/
-/*.t[data-is-actioned='true'] .is-actioned,*/
-/*.t[data-is-favorite='true'] .is-favorite,*/
-/*.t[data-is-pinned='true'] .is-pinned {*/
-    /*left: 7px;*/
-    /*top: 24px;*/
-/*}*/
-
-/*.t[data-is-unread='true'][data-is-actioned='true'] .is-actioned,*/
-/*.t[data-is-unread='true'][data-is-actioned='true'] .is-actioned,*/
-/*.t[data-is-actioned='true'] .is-actioned,*/
-/*.t[data-is-favorite='true'] .is-favorite,*/
-/*.t[data-is-pinned='true'] .is-pinned {*/
-    /*left: 7px;*/
-    /*top: 48px;*/
-/*}*/
-
-/*.t[data-is-favorite='true'] {*/
-
-/*}*/
-
 .icon-container {
     position: absolute;
     left: 7px;
     top: 25px;
-    width:22px;
+    width: 22px;
 }
 
-/*.ti:nth-child(1) {*/
-    /*left: 7px;*/
-    /*top: 24px;*/
-/*}*/
-
-/*.ti:nth-child(2) {*/
-    /*left: 7px;*/
-    /*top: 48px;*/
-/*}*/
-
-/*.ti:nth-child(3) {*/
-    /*left: 7px;*/
-    /*top: 75px; *//*empirical*/
-/*}*/
-
-/*.ti:nth-child(4) {*/
-    /*left: 7px;*/
-    /*top: 105px; *//*empirical*/
-/*}*/
-
 .is-favorite, .is-pinned, .is-unread, .actioned {
-    float:left;
+    float: left;
     /*width:50px;*/
     display: none;
 }
@@ -1821,8 +1755,6 @@ body[data-ui-mode='1'] .result-list-panel {
     word-wrap: break-word; /*avoid word clipping*/
 }
 
-
-
 .thumbnail a, .t a {
     display: block;
     color: #333;
@@ -1888,9 +1820,6 @@ body[data-ui-mode='1'] .result-list-panel {
     display: inline-block;
     vertical-align: top;
     overflow: hidden;
-    /*max-height: 250px; *//*larger than it will ever get*/
-
-    /*transition: max-height 1s ease-out; *//* we use max-height because involve transition to auto height*/
 }
 
 .t.hidden a {
@@ -1907,7 +1836,8 @@ body[data-ui-mode='1'] .result-list-panel {
 }
 
 /*.c is the content container for the result, located inside the anchor itself (minus the icon-container)*/
-.t .c, .t .icon-container, .t .tld, .t h3 {
+/*.t .c, .t .icon-container, .t .tld, .t h3 {*/
+.t .c, .t .icon-container {
     -webkit-filter: opacity(100%);
     -webkit-backface-visibility: hidden;
     transition: -webkit-filter .2s ease-out;
@@ -1919,21 +1849,22 @@ body[data-ui-mode='1'] .result-list-panel {
 
 .t.hidden h3 {
     white-space: nowrap;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     overflow: hidden;
     width: 100%;
-    -webkit-filter: opacity(10%); /*I found I needed to specify the fade behavior of the H3 explicitly*/
+    /*-webkit-filter: opacity(10%); *//*I found I needed to specify the fade behavior of the H3 explicitly*/
 }
 
-.t.hidden .tld {
-    -webkit-filter: opacity(0%);
+.t.hidden .tld, .t.hidden .rate, .t.hidden .location-and-posted {
+    visibility: hidden;
+    /*-webkit-filter: opacity(0%);*/
 }
 
 .t .tld {
     margin-bottom: 9px;
-    -webkit-filter: opacity(100%);
-    -webkit-backface-visibility: hidden;
-    transition: -webkit-filter .2s ease-out;
+    /*-webkit-filter: opacity(100%);*/
+    /*-webkit-backface-visibility: hidden;*/
+    /*transition: -webkit-filter .2s ease-out;*/
 }
 
 .t h2 {
