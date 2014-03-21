@@ -26,6 +26,7 @@ body[data-ui-mode='0'] .search-panel[data-mode='0'] {
 }
 
 body[data-ui-mode='1'] .search-panel {
+    margin-left: 74px;
     width: 340px;
     background-color: white; /*applied in this mode to avoid hiding background on greenfield*/
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
@@ -38,7 +39,8 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] .handle-search-panel
 
 body[data-ui-mode='1'] .search-panel[data-mode='1'] {
     opacity: 1;
-    -webkit-transform: translate(-266px, 0);
+    /*-webkit-transform: translate(-266px, 0);*/
+    -webkit-transform: translate(-340px, 0);
 }
 
 /*"narrow-screen" devices like iphone*/

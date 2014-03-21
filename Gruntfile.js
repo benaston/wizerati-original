@@ -57,13 +57,16 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-dialogs.css',
           'public/stylesheets/application/wizerati-style-faces.css',
           'public/stylesheets/application/wizerati-style-items-of-interest.css',
+          'public/stylesheets/application/wizerati-style-comparison-list-handle.css',
           'public/stylesheets/application/wizerati-style-loading-and-background.css',
           'public/stylesheets/application/wizerati-style-main-container.css',
           'public/stylesheets/application/wizerati-style-modal-container.css',
           'public/stylesheets/application/wizerati-style-apply-to-contract-dialog.css',
+          'public/stylesheets/application/wizerati-style-nav-panel.css',
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',
+          'public/stylesheets/application/wizerati-style-bookmarks-panel-handle.css',
           'public/stylesheets/application/wizerati-style-navbar-and-logo-and-build.css',
           'public/stylesheets/application/wizerati-style-result-list-panel.css'
         ],
@@ -149,7 +152,7 @@ module.exports = function (grunt) {
           ]
         },
         files: [
-          {src: ['view-templates/_index-css-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
+          {src: ['view-templates/_index-in-page-templates-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
         ]
       },injectInPageTemplates: {
         options: {
@@ -163,11 +166,31 @@ module.exports = function (grunt) {
             },{
               match: 'result-contract-template',
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/result.html") %>'
+            },
+            {
+              match: 'no-script',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/no-script.html") %>'
+            },
+            {
+              match: 'search-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/search-panel.html") %>'
+            },
+            {
+              match: 'result-list-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/result-list-panel.html") %>'
+            },
+            {
+              match: 'items-of-interest-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/items-of-interest-panel.html") %>'
+            },
+            {
+              match: 'nav-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/nav-panel.html") %>'
             }
           ]
         },
         files: [
-          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
+          {src: ['view-templates/_index-css-injected.ejs'], dest: 'view-templates/_index-in-page-templates-injected.ejs'}
         ]
       },injectDialogs: {
         options: {
@@ -277,8 +300,8 @@ module.exports = function (grunt) {
 //    'replace:escapeAngleBracketPercent',
     'replace:injectEditWarningIntoHead',
     'replace:injectCssIntoHead',
-    'replace:injectBuildNumber',
     'replace:injectInPageTemplates',
+    'replace:injectBuildNumber',
     'replace:injectDialogs',
     'replace:injectFavoriteCube',
     'replace:injectScriptTagForDebugging',

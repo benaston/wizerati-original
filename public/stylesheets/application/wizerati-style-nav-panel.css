@@ -1,0 +1,41 @@
+#nav-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 74px;
+    background-color: rgba(34,34,34, 1);
+    z-index: 3;
+    box-shadow: 1px 0 1px -1px #0c0917;
+}
+
+#nav-panel label {
+    color: whitesmoke;
+}
+
+#nav-panel button {
+    color: rgba(0, 109, 204, .95);
+    border-color: rgba(0, 109, 204, .95);
+}
+
+.home-link:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color:white;
+}
+
+.home-link {
+    display: inline-block;
+    width: 74px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-family: helvetica-bold;
+    color:white;
+}
+
+.nav-item-sign-out {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}

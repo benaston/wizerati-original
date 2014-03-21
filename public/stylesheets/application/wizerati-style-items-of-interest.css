@@ -12,15 +12,18 @@ body[data-ui-mode='1'] .items-of-interest-panel {
 }
 
 .search-panel[data-mode='1'] ~ .items-of-interest-panel {
-    -webkit-transform: translate(-266px, 0);
+    /*-webkit-transform: translate(-266px, 0);*/
+    -webkit-transform: translate(-340px, 0);
 }
 
 .search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
-    -webkit-transform: translate(-420px, 0); /*420 (result list effective width)*/
+    /*-webkit-transform: translate(-420px, 0); *//*420 (result list effective width)*/
+    -webkit-transform: translate(-494px, 0); /*420 (result list effective width)*/
 }
 
 .search-panel[data-mode='1'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
-    -webkit-transform: translate(-686px, 0); /*420 (result list effective width) +274 (search panel effective width)*/
+    /*-webkit-transform: translate(-686px, 0); *//*420 (result list effective width) +274 (search panel effective width)*/
+    -webkit-transform: translate(-760px, 0); /*420 (result list effective width) +340 (search panel effective width)*/
 }
 
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-panel {
@@ -300,39 +303,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     padding-right: 69px; /*enable blur to spread out to the right, avoiding hard cut-off*/
 }
 
-.items-of-interest-panel[data-pinned-item-count='2'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='3'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='4'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='5'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='6'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='7'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .handle-pinned-items {
-    opacity: 1;
-}
-
-.btn-hide {
-    /*-webkit-transform: rotate(-45deg);*/
-}
-
-.handle-pinned-items .btn {
-    color: rgba(0, 109, 204, 0.95);
-}
-
-.handle-pinned-items {
-    position: absolute;
-    display: inline-block;
-    top: 0;
-    left: 0;
-    width: 69px;
-    text-align: center;
-    color: #333;
-    text-decoration: none;
-    opacity: 0;
-    cursor: pointer;
-    overflow: visible;
-    margin: 5px 0 0 0;
-    z-index: 99999; /*ensure in-front of all pinned items*/
-}
 
 .menu-and-metadata-container {
     float: right;

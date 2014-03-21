@@ -13,7 +13,7 @@
         _searchPanelModel = null,
         _resultListModel = null,
         _itemsOfInterestModel = null,
-        _minWidthItemOfInterest = 370,
+        _minWidthItemOfInterest = 381, /*empirical to stop line-wrap of top menu*/
         _minWidthItemOfInterestSmallScreen = 310,
         _effectiveWidthSearchPanelDefault = 340,
         _effectiveWidthResultListPanel = 480,

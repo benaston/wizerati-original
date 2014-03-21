@@ -16,7 +16,7 @@
           [], //bottom
           []  //back
         ],
-        _faceLabels = ['my favorites', 'my favorites 2', 'my favorites 3', 'my favorites 4', 'my favorites 5', 'my favorites 6'],
+        _faceLabels = ['bookmarks', 'bookmarks 2', 'bookmarks 3', 'bookmarks 4', 'bookmarks 5', 'bookmarks 6'],
         _resultListModel = null,
         _faceActiveStatuses = [true, false, false, false, false, false],
         _modeEnum = app.mod('enum').FavoritesCubeMode,

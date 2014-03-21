@@ -13,7 +13,7 @@ var errorHandler = require('errorhandler');
 var app = express();
 
 app.disable('x-powered-by');
-//app.disable('etag'); //this fixes ios safari bug at the expense of performance
+//app.disable('etag'); //this fixes ios safari bug at the expense of performance. Commented because iOS bug does not seem to surface on single file version of application.
 
 // all environments
 app.set('port', process.env.PORT || 3002);

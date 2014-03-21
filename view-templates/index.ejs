@@ -17,43 +17,8 @@
 </head>
 <body data-ui-mode="-1" data-are-transitions-enabled="false" data-modal="-1">
 <div class="modal-container main-container" data-visibility-mode="2">
-    <div class="search-panel" data-mode="0">
-        <div class="centered-text handle-search-panel btn-container handle-element">
-            <form method="POST" action="/searchpanelmode/update?mode=0">
-                <input type="hidden" name="mode" value="0">
-                <button id="btn-update-search-panel-mode" class="btn btn-40 btn-primary handle-element" title="show search & bookmarks">
-                    &#xf264;</button>
-                <label class="handle-search-panel-label handle-element label" for="btn-update-search-panel-mode">show
-                    search &amp; bookmarks</label>
-            </form>
-        </div>
-        <div id="search-form">
-        </div>
-        <!-- fav cube goes here -->
-        @@favorite-cube
-        <div class="navbar">
-            <a class="btn-my-account" href="/user/show?id=userid">sign in</a> &nbsp;|&nbsp; <a
-                    href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a> <span class="legal"><span
-                        class="legal-logo">&#xf30c;</span> wizerati &copy; 2014</span>
-        </div>
-    </div>
-    <article class="result-list-panel ios-scroll-enable">
-        <div class="result-list-search-summary-container">
-            <div>345 results for "Dssnnsbns, London"</div>
-        </div>
-        <ul class="result-list"></ul>
-    </article><div class="items-of-interest-panel">
-        <div id="selected-item-container-1" class="selected-item-container"></div><div id="selected-item-container-2" class="selected-item-container"></div>
-        <div class="pinned-items-container">
-            <div class="handle-pinned-items btn-container"><a href="/itemsofinterestpanelmode/update?mode=1"
-                                                              class="btn btn-primary btn-40">&#xf264;</a>
-
-                <div class="label"></div>
-            </div>
-        </div>
-    </div>
+    @@nav-panel @@search-panel@@result-list-panel@@items-of-interest-panel
     <h1 class="logo">wizerati</h1>
-
     <h2 class="tag-line">UK IT contract job search</h2></div>
 <div class="background-container"><div class="background-image">&#xf30c;</div></div>
 <div class="loading-container"><div class="loading"></div></div>
@@ -69,15 +34,7 @@
 </script>
 <div class="build">( @@build )</div>
 <div id="no-script">
-    <div class="no-script-content">
-        <div class="center-content">
-            <div class="logo-image"></div>
-            <h1>JavaScript is required.</h1>
-
-            <p>To use Wizerati, enable JavaScript in your browser and try again.</p>
-        </div>
-        <footer>Copyright &copy; Wizerati 2014. All rights reserved. ( @@build )</footer>
-    </div>
+@@no-script
 </div>
 @@warning
 @@javascript

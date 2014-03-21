@@ -1,10 +1,11 @@
 #search-form {
     width: 340px; /* width explicitly spec'd to enable margin:auto centering on greenfield*/
-    height: 330px;
+    /*height: 330px;*/
+    height: 320px;
     position: relative;
     text-align: left;
     margin: auto;
-    padding-bottom: 12px;
+    /*padding-bottom: 12px;*/
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
@@ -32,14 +33,14 @@ body[data-ui-mode='0'] #search-form {
     top: 44%;
     margin-left: -225px;
     margin-top: -225px;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 1);
+    box-shadow: 0 0px 50px 51px rgba(255,255,255,1);
     border-radius: 250px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 1);
 }
 
 body[data-ui-mode='0'] form[name='search-form'] {
-    top: 53px;
+    top: 49px;
     position: relative;
 }
 
@@ -64,7 +65,7 @@ body[data-ui-mode='0'] form[name='search-form'] {
 .search-button-container {
     position: absolute;
     left: 0; /*important to ensure correct placement*/
-    top: 224px;
+    top: 209px;
     width: 100%;
 }
 
@@ -87,7 +88,7 @@ body[data-ui-mode='0'] .search-button-container {
 
 .search-form-title {
     display: none;
-    margin: 38px 0 0;
+    margin: 18px 0 10px 0;
 }
 
 .search-filters input[type=radio]:not(:checked) + label:hover {

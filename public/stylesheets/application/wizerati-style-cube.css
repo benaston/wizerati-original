@@ -22,7 +22,7 @@ figure {
     margin: auto;
     margin-bottom: 35px; /*space for face label*/
     -webkit-user-select: none;
-    top: 26px;
+    top: 0;
 }
 
 .cube-container:not([data-selected-face-id='0']) .cube-controls .face-selector:nth-child(1):hover,
@@ -246,13 +246,31 @@ figure {
     text-align: center;
 }
 
+.cube-face-labels li {
+    line-height: 1.1rem;
+    font-size: 1rem;
+}
 .cube-face-labels {
+    /*position: relative;*/
+    /*top: -36px;*/
+    /*text-align: center;*/
+    /*list-style: none;*/
+    /*width: 100%;*/
+    /*padding: 0;*/
+
     position: relative;
-    top: -36px;
+    top: 14px;
     text-align: center;
     list-style: none;
-    width: 100%;
+    width: 12px;
     padding: 0;
+    /* -webkit-transform: rotate(90deg); */
+    word-break: break-all;
+    line-height: .11rem;
+    font-size: .91rem;
+    font-kerning: initial;
+    left: -25px;
+    text-align: center;
 }
 
 .cube-controls label, .cube-controls .face-selector {
@@ -466,10 +484,6 @@ figure {
     left: 227px;
 }
 
-.cube-container {
-    top: 42px;
-}
-
 .cube .thumbnail p {
     line-height: .9rem;
 }
@@ -478,4 +492,12 @@ figure {
     text-align: left;
     display: inline-block;
     margin: 10px 6px 10px 6px;
+}
+
+.cube h3 {
+    font-size:.8rem;
+}
+
+.cube p {
+    font-size:.8rem;
 }
