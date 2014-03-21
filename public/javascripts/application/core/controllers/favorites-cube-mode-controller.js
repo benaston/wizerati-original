@@ -16,7 +16,7 @@
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'FavoritesCubeModeController::init favoritesCubeModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;

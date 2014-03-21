@@ -40,11 +40,11 @@
 
     function init() {
       if (!purchasePanelModel) {
-        throw 'purchasePanelModel not supplied.';
+        throw 'PurchasePanelAccountsController::init purchasePanelModel not supplied.';
       }
 
       if (!accountService) {
-        throw 'accountService not supplied.';
+        throw 'PurchasePanelAccountsController:init accountService not supplied.';
       }
 
       _purchasePanelModel = purchasePanelModel;

@@ -37,7 +37,7 @@
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'AccountActivationPanelController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;

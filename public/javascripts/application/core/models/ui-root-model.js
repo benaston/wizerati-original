@@ -10,9 +10,11 @@
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _modalEnum = app.mod('enum').Modal,
+        _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
+        _activeTab = _tabEnum.Search,
         _bodyWidth = null,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
@@ -21,7 +23,8 @@
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
       setModal: 'update://uirootmodel/setmodal',
-      setUIMode: 'update://uirootmodel/setuimode'
+      setUIMode: 'update://uirootmodel/setuimode',
+      setActiveTab: 'update://uirootmodel/setactivetab'
     };
 
     this.getVisibilityMode = function () {
@@ -51,6 +54,16 @@
       _areTransitionsEnabled = value;
 
       $.publish(that.eventUris.setAreTransitionsEnabled);
+    };
+
+    this.setActiveTab = function (value) {
+      if (value === _activeTab) {
+        return;
+      }
+
+      _activeTab = value;
+
+      $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
     this.getBodyWidth = function () {

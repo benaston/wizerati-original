@@ -27,7 +27,7 @@
 
     function init() {
       if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied.';
+        throw 'ActionedItemsController::init actionedItemsModel not supplied.';
       }
 
       _actionedItemsModel = actionedItemsModel;

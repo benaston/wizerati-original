@@ -45,19 +45,19 @@
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'HomeController::init uiRootModel not supplied.';
       }
 
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'HomeController::init searchPanelModel not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'HomeController::init resultListModel not supplied.';
       }
 
       if (!searchFormModel) {
-        throw 'searchFormModel not supplied.';
+        throw 'HomeController::init searchFormModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;

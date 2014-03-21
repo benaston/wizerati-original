@@ -81,31 +81,31 @@
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'SearchController::init uiRootModel not supplied.';
       }
 
       if (!searchFormModel) {
-        throw 'searchFormModel not supplied.';
+        throw 'SearchController::init searchFormModel not supplied.';
       }
 
       if (!searchService) {
-        throw 'searchService not supplied.';
+        throw 'SearchController::init searchService not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'SearchController::init resultListModel not supplied.';
       }
 
       if (!guidFactory) {
-        throw 'guidFactory not supplied.';
+        throw 'SearchController::init guidFactory not supplied.';
       }
 
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'SearchController::init searchPanelModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'SearchController::init itemsOfInterestModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;

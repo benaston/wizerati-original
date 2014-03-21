@@ -58,22 +58,47 @@ body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .l
     top: 50%;
     margin-top: -25px;
     margin-left: -25px;
+
+}
+
+.background-container {
+    pointer-events: none;
+    display: inline-block;
+    /*background-size: 1000px 1000px;*/
+    /*background-image: ;*/
+    /*background-position: center center;*/
+    /*background-repeat: no-repeat;*/
+    /*-webkit-backface-visibility: hidden;*/
+
+    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
+    /*background-image: url('../images/logo.svg');*/
 }
 
 body[data-ui-mode='-1'] .background-container .background-image,
 body[data-ui-mode='0'] .background-container .background-image {
-    /*text-shadow: 0 0 159px rgba(0, 0, 0, .1);*/
-    color: rgba(250, 250, 250, 1);
-    font-family: ionicons;
-    pointer-events: none;
-    display: inline-block;
-    content: '\f30c';
-    font-size: 77rem;
-    line-height: 48rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -370px;
-    margin-top: -376px;
-    -webkit-font-smoothing: subpixel-antialiased;
+    /*color: rgba(250, 250, 250, 1);*/
+    /*font-family: ionicons;*/
+    /*pointer-events: none;*/
+    /*display: inline-block;*/
+    /*content: '\f30c';*/
+    /*font-size: 77rem;*/
+    /*line-height: 48rem;*/
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*margin-left: -370px;*/
+    /*margin-top: -376px;*/
+    /*-webkit-font-smoothing: subpixel-antialiased;*/
+
+    /* position: absolute; */
+    /* top: 0; */
+    /* left: 0; */
+    /* -webkit-font-smoothing: subpixel-antialiased; */
+    background-size: 1000px 1000px;
+    background-image: url('../images/logo.svg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /*fix webkit blurry bug on svgs*/
 }

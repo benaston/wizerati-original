@@ -23,10 +23,10 @@
 
     function init() {
       if (!loginPanelModel) {
-        throw 'loginPanelModel not supplied.';
+        throw 'LoginController::init loginPanelModel not supplied.';
       }
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'LoginController::init uiRootModel not supplied.';
       }
 
       _loginPanelModel = loginPanelModel;

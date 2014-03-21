@@ -38,15 +38,15 @@
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'BookmarkedItemsController::init favoritesCubeModel not supplied.';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied.';
+        throw 'BookmarkedItemsController::init selectedCubeFaceModel not supplied.';
       }
 
       if (!bookmarkService) {
-        throw 'bookmarkService not supplied.';
+        throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;

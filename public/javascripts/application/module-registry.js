@@ -54,9 +54,9 @@
       ActionContract: '5'
     };
 
-    mod.NavPanelItem = {
+    mod.Tab = {
       Search: '0',
-      Bookmarks: '1',
+      Bookmark: '1',
       ComparisonList: '2'
     };
 
@@ -74,8 +74,8 @@
     mod.UIMode = {
       NotReady: '-1',
       GreenfieldSearch: '0',
-      Search: '1',
-      SingleItem: '2' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
+      Search: '1', /*rename to greenfield and brownfield*/
+      SingleItem: '4' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
     };
 
     mod.UserRole = {

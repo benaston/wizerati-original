@@ -45,15 +45,15 @@
 
     function init() {
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'SelectedItemController::init searchPanelModel not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'SelectedItemController::init resultListModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'SelectedItemController::init itemsOfInterestModel not supplied.';
       }
 
       _searchPanelModel = searchPanelModel;

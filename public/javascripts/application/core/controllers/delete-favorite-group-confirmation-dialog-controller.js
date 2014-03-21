@@ -35,11 +35,11 @@
 
     function init() {
       if (!deleteFavoriteGroupConfirmationDialogModel) {
-        throw 'deleteFavoriteGroupConfirmationDialogModel not supplied.';
+        throw 'DeleteFavoriteGroupConfirmationDialogController::init deleteFavoriteGroupConfirmationDialogModel not supplied.';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'DeleteFavoriteGroupConfirmationDialogController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;

@@ -4064,6 +4064,40 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
+  function SelectedTabModel() {
+
+    if (!(this instanceof app.SelectedTabModel)) {
+      return new app.SelectedTabModel();
+    }
+
+    var that = this,
+        _selectedCubeFaceId = '0';
+
+    this.updateEventUri = 'update://selectedtabmodel';
+
+    this.getSelectedTab = function () {
+      return _selectedCubeFaceId;
+    };
+
+    this.setSelectedTab = function (value) {
+      _selectedCubeFaceId = value;
+      $.publish(that.updateEventUri);
+    };
+
+    function init() {
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SelectedTabModel = SelectedTabModel;
+  invertebrate.Model.isExtendedBy(app.SelectedTabModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
   function SignInPanelModel() {
 
     if (!(this instanceof app.SignInPanelModel)) {
@@ -4181,9 +4215,11 @@ window.wizerati = {
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _modalEnum = app.mod('enum').Modal,
+        _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
+        _activeTab = _tabEnum.Search,
         _bodyWidth = null,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
@@ -4192,7 +4228,8 @@ window.wizerati = {
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
       setModal: 'update://uirootmodel/setmodal',
-      setUIMode: 'update://uirootmodel/setuimode'
+      setUIMode: 'update://uirootmodel/setuimode',
+      setActiveTab: 'update://uirootmodel/setactivetab'
     };
 
     this.getVisibilityMode = function () {
@@ -4222,6 +4259,16 @@ window.wizerati = {
       _areTransitionsEnabled = value;
 
       $.publish(that.eventUris.setAreTransitionsEnabled);
+    };
+
+    this.setActiveTab = function (value) {
+      if (value === _activeTab) {
+        return;
+      }
+
+      _activeTab = value;
+
+      $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
     this.getBodyWidth = function () {
@@ -5924,6 +5971,10 @@ window.wizerati = {
         that.$el.attr('data-ui-mode', uiMode);
     };
 
+    this.renderSetActiveTab = function(tab) {
+        that.$el.attr('data-active-tab', tab);
+    };
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -5936,12 +5987,14 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
       _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
       _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+      _renderOptimizations[that.Model.eventUris.setActiveTab] = that.renderSetActiveTab;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
       $.subscribe(that.Model.eventUris.setModal, that.render);
       $.subscribe(that.Model.eventUris.setUIMode, that.render);
+      $.subscribe(that.Model.eventUris.setActiveTab, that.render);
 
       return that;
     }
@@ -5972,7 +6025,7 @@ window.wizerati = {
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'AccountActivationController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -6025,7 +6078,7 @@ window.wizerati = {
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'AccountActivationPanelController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -6068,7 +6121,7 @@ window.wizerati = {
 
     function init() {
       if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied.';
+        throw 'ActionedItemsController::init actionedItemsModel not supplied.';
       }
 
       _actionedItemsModel = actionedItemsModel;
@@ -6105,7 +6158,7 @@ window.wizerati = {
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'AdvertisersController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -6141,7 +6194,7 @@ window.wizerati = {
 
     function init() {
       if (!service) {
-        throw 'service not supplied.';
+        throw 'ApplyToContractDialogController::init service not supplied.';
       }
 
       _service = service;
@@ -6195,15 +6248,15 @@ window.wizerati = {
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'BookmarkedItemsController::init favoritesCubeModel not supplied.';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied.';
+        throw 'BookmarkedItemsController::init selectedCubeFaceModel not supplied.';
       }
 
       if (!bookmarkService) {
-        throw 'bookmarkService not supplied.';
+        throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;
@@ -6258,11 +6311,11 @@ window.wizerati = {
 
     function init() {
       if (!deleteFavoriteGroupConfirmationDialogModel) {
-        throw 'deleteFavoriteGroupConfirmationDialogModel not supplied.';
+        throw 'DeleteFavoriteGroupConfirmationDialogController::init deleteFavoriteGroupConfirmationDialogModel not supplied.';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'DeleteFavoriteGroupConfirmationDialogController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -6311,11 +6364,11 @@ window.wizerati = {
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'FavoriteGroupController::init favoritesCubeModel not supplied.';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'FavoriteGroupController::init uiRootModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;
@@ -6369,11 +6422,11 @@ window.wizerati = {
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'FavoritesController::init favoritesCubeModel not supplied.';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied.';
+        throw 'FavoritesController:selectedCubeFaceModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;
@@ -6406,7 +6459,7 @@ window.wizerati = {
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'FavoritesCubeModeController::init favoritesCubeModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;
@@ -6447,7 +6500,7 @@ window.wizerati = {
 
     function init() {
       if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied.';
+        throw 'HiddenItemsController::init hiddenItemsModel not supplied.';
       }
 
       _hiddenItemsModel = hiddenItemsModel;
@@ -6508,19 +6561,19 @@ window.wizerati = {
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'HomeController::init uiRootModel not supplied.';
       }
 
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'HomeController::init searchPanelModel not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'HomeController::init resultListModel not supplied.';
       }
 
       if (!searchFormModel) {
-        throw 'searchFormModel not supplied.';
+        throw 'HomeController::init searchFormModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -6632,7 +6685,7 @@ window.wizerati = {
 
     function init() {
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'ItemsOfInterestController::init itemsOfInterestModel not supplied.';
       }
 
       _itemsOfInterestModel = itemsOfInterestModel;
@@ -6670,7 +6723,7 @@ window.wizerati = {
 
     function init() {
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'ItemsOfInterestPanelModeController::init itemsOfInterestModel not supplied.';
       }
 
       _itemsOfInterestModel = itemsOfInterestModel;
@@ -6709,10 +6762,10 @@ window.wizerati = {
 
     function init() {
       if (!loginPanelModel) {
-        throw 'loginPanelModel not supplied.';
+        throw 'LoginController::init loginPanelModel not supplied.';
       }
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'LoginController::init uiRootModel not supplied.';
       }
 
       _loginPanelModel = loginPanelModel;
@@ -6769,11 +6822,11 @@ window.wizerati = {
 
     function init() {
       if (!purchasePanelModel) {
-        throw 'purchasePanelModel not supplied.';
+        throw 'PurchasePanelAccountsController::init purchasePanelModel not supplied.';
       }
 
       if (!accountService) {
-        throw 'accountService not supplied.';
+        throw 'PurchasePanelAccountsController:init accountService not supplied.';
       }
 
       _purchasePanelModel = purchasePanelModel;
@@ -6824,11 +6877,11 @@ window.wizerati = {
 
     function init() {
       if (!purchasePanelModel) {
-        throw 'purchasePanelModel not supplied.';
+        throw 'PurchasePanelController::init purchasePanelModel not supplied.';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'PurchasePanelController::init uiRootModel not supplied.';
       }
 
       _purchasePanelModel = purchasePanelModel;
@@ -6867,7 +6920,7 @@ window.wizerati = {
 
     function init() {
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'ResultListModeController::init resultListModel not supplied.';
       }
 
       _resultListModel = resultListModel;
@@ -6964,31 +7017,31 @@ window.wizerati = {
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'SearchController::init uiRootModel not supplied.';
       }
 
       if (!searchFormModel) {
-        throw 'searchFormModel not supplied.';
+        throw 'SearchController::init searchFormModel not supplied.';
       }
 
       if (!searchService) {
-        throw 'searchService not supplied.';
+        throw 'SearchController::init searchService not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'SearchController::init resultListModel not supplied.';
       }
 
       if (!guidFactory) {
-        throw 'guidFactory not supplied.';
+        throw 'SearchController::init guidFactory not supplied.';
       }
 
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'SearchController::init searchPanelModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'SearchController::init itemsOfInterestModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;
@@ -7020,26 +7073,32 @@ window.wizerati = {
     }
 
     var that = this,
-        _searchPanelModel = null;
+        _searchPanelModel = null,
+        _uiRootModel = null,
+        _tabEnum = app.mod('enum').Tab;
 
     this.update = function (dto) {
       try {
-
         if (_searchPanelModel.getMode() !== dto.mode) {
           _searchPanelModel.setMode(dto.mode);
         }
 
       } catch (err) {
-        console.log('error: SearchPanelController.update. ' + err);
+        console.log('SearchPanelController::update ' + err);
       }
     };
 
     function init() {
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'SearchPanelModeController::init searchPanelModel not supplied.';
       }
 
+//      if (!uiRootModel) {
+//        throw 'SearchPanelModeController::init uiRootModel not supplied.';
+//      }
+
       _searchPanelModel = searchPanelModel;
+//      _uiRootModel = uiRootModel;
 
       return that;
     }
@@ -7066,13 +7125,13 @@ window.wizerati = {
       try {
         _selectedCubeFaceModel.setSelectedCubeFaceId(dto.id);
       } catch (err) {
-        console.log('error: SelectedCubeFaceController.update. ' + err);
+        console.log('SelectedCubeFaceController::update ' + err);
       }
     };
 
     function init() {
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied.';
+        throw 'SelectedCubeFaceController:init selectedCubeFaceModel not supplied.';
       }
 
       _selectedCubeFaceModel = selectedCubeFaceModel;
@@ -7133,15 +7192,15 @@ window.wizerati = {
 
     function init() {
       if (!searchPanelModel) {
-        throw 'searchPanelModel not supplied.';
+        throw 'SelectedItemController::init searchPanelModel not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'SelectedItemController::init resultListModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'SelectedItemController::init itemsOfInterestModel not supplied.';
       }
 
       _searchPanelModel = searchPanelModel;
@@ -7155,6 +7214,46 @@ window.wizerati = {
   }
 
   app.SelectedItemController = SelectedItemController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function SelectedTabController(model) {
+
+    if (!(this instanceof app.SelectedTabController)) {
+      return new app.SelectedTabController(model);
+    }
+
+    var that = this,
+        _model = null,
+        _uiRootModel = null,
+        _tabEnum = app.mod('enum').Tab;
+
+    this.update = function (dto) {
+      try {
+        if (_model.getSelectedTab() !== dto.tab) {
+          _model.setSelectedTab(dto.tab);
+        }
+      } catch (err) {
+        console.log('SelectedTabController::update ' + err);
+      }
+    };
+
+    function init() {
+      if (!model) {
+        throw 'SelectedTabController::init model not supplied.';
+      }
+
+      _model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SelectedTabController = SelectedTabController;
 
 }(wizerati));
 ;(function (app) {
@@ -7180,11 +7279,11 @@ window.wizerati = {
 
     function init() {
       if (!loginPanelModel) {
-        throw 'loginPanelModel not supplied.';
+        throw 'SessionController::init loginPanelModel not supplied.';
       }
 
       if (!authenticationService) {
-        throw 'authenticationService not supplied.';
+        throw 'SessionController::init authenticationService not supplied.';
       }
 
       _loginPanelModel = loginPanelModel;
@@ -8171,6 +8270,12 @@ window.wizerati = {
       ActionContract: '5'
     };
 
+    mod.Tab = {
+      Search: '0',
+      Bookmark: '1',
+      ComparisonList: '2'
+    };
+
     mod.ResultListMode = {
       Default: '0',
       Minimized: '1'
@@ -8185,8 +8290,8 @@ window.wizerati = {
     mod.UIMode = {
       NotReady: '-1',
       GreenfieldSearch: '0',
-      Search: '1',
-      SingleItem: '2' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
+      Search: '1', /*rename to greenfield and brownfield*/
+      SingleItem: '4' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
     };
 
     mod.UserRole = {

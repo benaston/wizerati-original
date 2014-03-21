@@ -32,11 +32,11 @@
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'FavoriteGroupController::init favoritesCubeModel not supplied.';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'FavoriteGroupController::init uiRootModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;

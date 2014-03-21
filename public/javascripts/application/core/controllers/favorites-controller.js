@@ -37,11 +37,11 @@
 
     function init() {
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'FavoritesController::init favoritesCubeModel not supplied.';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied.';
+        throw 'FavoritesController:selectedCubeFaceModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;

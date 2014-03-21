@@ -21,11 +21,11 @@
 
     function init() {
       if (!loginPanelModel) {
-        throw 'loginPanelModel not supplied.';
+        throw 'SessionController::init loginPanelModel not supplied.';
       }
 
       if (!authenticationService) {
-        throw 'authenticationService not supplied.';
+        throw 'SessionController::init authenticationService not supplied.';
       }
 
       _loginPanelModel = loginPanelModel;

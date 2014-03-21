@@ -34,11 +34,11 @@
 
     function init() {
       if (!purchasePanelModel) {
-        throw 'purchasePanelModel not supplied.';
+        throw 'PurchasePanelController::init purchasePanelModel not supplied.';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'PurchasePanelController::init uiRootModel not supplied.';
       }
 
       _purchasePanelModel = purchasePanelModel;

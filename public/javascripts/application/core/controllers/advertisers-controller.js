@@ -21,7 +21,7 @@
 
     function init() {
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied.';
+        throw 'AdvertisersController::init uiRootModel not supplied.';
       }
 
       _uiRootModel = uiRootModel;

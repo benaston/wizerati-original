@@ -14,13 +14,13 @@
       try {
         _selectedCubeFaceModel.setSelectedCubeFaceId(dto.id);
       } catch (err) {
-        console.log('error: SelectedCubeFaceController.update. ' + err);
+        console.log('SelectedCubeFaceController::update ' + err);
       }
     };
 
     function init() {
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied.';
+        throw 'SelectedCubeFaceController:init selectedCubeFaceModel not supplied.';
       }
 
       _selectedCubeFaceModel = selectedCubeFaceModel;

@@ -37,6 +37,11 @@ body[data-ui-mode='1'] .logo-image2 {
     opacity: 0;
     pointer-events: none;
     transition: opacity .1s linear;
+    color: rgba(224, 231, 235, 1);
+}
+
+.navbar a, .navbar span {
+    color: rgba(224, 231, 235, 1);
 }
 
 body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
@@ -71,7 +76,8 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     margin: 0 0 0 20px;
     opacity: 0;
     pointer-events: none;
-    color: rgba(0, 109, 204, .95);
+    /*color: rgba(0, 109, 204, .95);*/
+    color: rgba(224, 231, 235, 1);
     z-index: 1;
     font-family: helvetica-bold;
 }

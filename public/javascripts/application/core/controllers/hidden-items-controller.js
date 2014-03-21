@@ -25,7 +25,7 @@
 
     function init() {
       if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied.';
+        throw 'HiddenItemsController::init hiddenItemsModel not supplied.';
       }
 
       _hiddenItemsModel = hiddenItemsModel;

@@ -22,7 +22,7 @@
 
     function init() {
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'ItemsOfInterestPanelModeController::init itemsOfInterestModel not supplied.';
       }
 
       _itemsOfInterestModel = itemsOfInterestModel;

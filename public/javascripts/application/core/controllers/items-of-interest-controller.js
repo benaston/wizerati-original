@@ -27,7 +27,7 @@
 
     function init() {
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+        throw 'ItemsOfInterestController::init itemsOfInterestModel not supplied.';
       }
 
       _itemsOfInterestModel = itemsOfInterestModel;

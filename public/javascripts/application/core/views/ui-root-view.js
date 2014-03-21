@@ -47,6 +47,10 @@
         that.$el.attr('data-ui-mode', uiMode);
     };
 
+    this.renderSetActiveTab = function(tab) {
+        that.$el.attr('data-active-tab', tab);
+    };
+
     function init() {
       if (!model) {
         throw 'model not supplied';
@@ -59,12 +63,14 @@
       _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
       _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
       _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+      _renderOptimizations[that.Model.eventUris.setActiveTab] = that.renderSetActiveTab;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
       $.subscribe(that.Model.eventUris.setModal, that.render);
       $.subscribe(that.Model.eventUris.setUIMode, that.render);
+      $.subscribe(that.Model.eventUris.setActiveTab, that.render);
 
       return that;
     }

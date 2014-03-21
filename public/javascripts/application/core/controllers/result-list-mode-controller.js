@@ -22,7 +22,7 @@
 
     function init() {
       if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+        throw 'ResultListModeController::init resultListModel not supplied.';
       }
 
       _resultListModel = resultListModel;

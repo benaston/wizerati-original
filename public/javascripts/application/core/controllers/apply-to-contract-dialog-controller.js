@@ -20,7 +20,7 @@
 
     function init() {
       if (!service) {
-        throw 'service not supplied.';
+        throw 'ApplyToContractDialogController::init service not supplied.';
       }
 
       _service = service;
