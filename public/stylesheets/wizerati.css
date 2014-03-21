@@ -1811,6 +1811,10 @@ body[data-ui-mode='1'] #nav-panel {
     bottom: 20px;
     width: 100%;
 }
+
+#nav-panel button:hover {
+    box-shadow: 0 0 8px 0px rgba(0,109,204,.95);
+}
 .search-panel {
     position: fixed;
     top: 0;
@@ -1974,7 +1978,7 @@ body[data-ui-mode='0'] .search-button-container {
 
 .search-form-title {
     display: none;
-    margin: 18px 0 10px 0;
+    margin: 8px 0 20px 0;
 }
 
 .search-filters input[type=radio]:not(:checked) + label:hover {

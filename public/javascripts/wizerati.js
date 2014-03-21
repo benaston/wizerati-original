@@ -3186,6 +3186,54 @@ window.wizerati = {
   invertebrate.Model.isExtendedBy(app.ApplyToContractDialogModel);
 
 }(wizerati, $, invertebrate));
+;(function (app, $) {
+  'use strict';
+
+  function BookmarkPanelModel() {
+
+    if (!(this instanceof app.BookmarkPanelModel)) {
+      return new app.BookmarkPanelModel();
+    }
+
+    var that = this,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _mode = _bookmarkPanelModeEnum.Default;
+
+    this.eventUris = {
+      default: 'update://bookmarkpanelmodel/',
+      setMode: 'update://bookmarkpanelmodel/setmode'
+    };
+
+    this.getMode = function () {
+      return _mode || _bookmarkPanelModeEnum.Default;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
+      }
+
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    function init() {
+      _mode = _bookmarkPanelModeEnum.Default;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPanelModel = BookmarkPanelModel;
+
+}(wizerati, $));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4327,6 +4375,69 @@ window.wizerati = {
 
   app.ApplyToContractDialogView = ApplyToContractDialogView;
   invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function BookmarkPanelView(model) {
+
+    if (!(this instanceof app.BookmarkPanelView)) {
+      return new app.BookmarkPanelView(model);
+    }
+
+    var that = this,
+        _el = '#bookmark-panel',
+        _modeEnum = app.mod('enum').BookmarkPanelMode,
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetMode();
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$navPanel = $('#nav-panel');
+    };
+
+    this.renderSetMode = function(mode) {
+      that.$el.attr('data-mode', that.Model.getMode());
+
+      var oppositeMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.Minimized : _modeEnum.Default;
+      that.$navPanel.find('.handle-bookmark-panel input[name="mode"]').attr('value', oppositeMode);
+      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'show bookmarks';
+      that.$navPanel.find('.handle-bookmark-panel label').html(label);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPanelView = BookmarkPanelView;
+  invertebrate.View.isExtendedBy(app.BookmarkPanelView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -8015,6 +8126,11 @@ window.wizerati = {
       SignInOrContinue: '1'
     };
 
+    mod.BookmarkPanelMode = {
+      Default: '0',
+      Minimized: '1'
+    };
+
     mod.FavoritesCubeMode = {
       Default: '0',
       Edit: '1'
@@ -8146,6 +8262,7 @@ window.wizerati = {
     mod.actionedItemsModel = new wizerati.ActionedItemsModel();
     mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
     mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
+    mod.bookmarkPanelModel = new wizerati.BookmarkPanelModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
     mod.purchasePanelModel = new wizerati.PurchasePanelModel();
@@ -8279,6 +8396,7 @@ window.wizerati = {
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
+    mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
     mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
     mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);

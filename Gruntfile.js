@@ -186,6 +186,10 @@ module.exports = function (grunt) {
             {
               match: 'nav-panel',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/nav-panel.html") %>'
+            },
+            {
+              match: 'bookmarks-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmarks-panel.html") %>'
             }
           ]
         },

@@ -9,6 +9,11 @@
       SignInOrContinue: '1'
     };
 
+    mod.BookmarkPanelMode = {
+      Default: '0',
+      Minimized: '1'
+    };
+
     mod.FavoritesCubeMode = {
       Default: '0',
       Edit: '1'
@@ -140,6 +145,7 @@
     mod.actionedItemsModel = new wizerati.ActionedItemsModel();
     mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
     mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
+    mod.bookmarkPanelModel = new wizerati.BookmarkPanelModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
     mod.purchasePanelModel = new wizerati.PurchasePanelModel();
@@ -273,6 +279,7 @@
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
+    mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
     mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
     mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
