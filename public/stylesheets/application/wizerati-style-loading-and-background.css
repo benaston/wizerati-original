@@ -94,7 +94,7 @@ body[data-ui-mode='0'] .background-container .background-image {
     /* top: 0; */
     /* left: 0; */
     /* -webkit-font-smoothing: subpixel-antialiased; */
-    background-size: 1000px 1000px;
+    background-size: 1500px 1500px;
     background-image: url('../images/logo.svg');
     background-position: center center;
     background-repeat: no-repeat;

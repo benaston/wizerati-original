@@ -1711,7 +1711,7 @@ body[data-ui-mode='0'] .background-container .background-image {
     /* top: 0; */
     /* left: 0; */
     /* -webkit-font-smoothing: subpixel-antialiased; */
-    background-size: 1000px 1000px;
+    background-size: 1500px 1500px;
     background-image: url('../images/logo.svg');
     background-position: center center;
     background-repeat: no-repeat;
@@ -1983,7 +1983,7 @@ body[data-ui-mode='0'] #search-form {
 }
 
 body[data-ui-mode='0'] form[name='search-form'] {
-    top: 49px;
+    top: 0;
     position: relative;
 }
 
@@ -2140,29 +2140,28 @@ body[data-ui-mode='1'] .logo-image2 {
 }
 
 .navbar {
-    left: 30px;
     bottom: 18px;
     position: absolute;
+    margin: auto;
     z-index: 4;
     opacity: 0;
+    width: 100%;
     pointer-events: none;
     transition: opacity .1s linear;
-    color: rgba(224, 231, 235, 1);
+    /*color: rgba(224, 231, 235, 1);*/
+    /*color: #333;*/
+    color: rgba(82, 110, 125, 1);
+    text-align: center;
 }
 
 .navbar a, .navbar span {
-    color: rgba(224, 231, 235, 1);
+    /*color: rgba(224, 231, 235, 1);*/
+    color: #333;
 }
 
 body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     opacity: 1;
     z-index: 2;
-}
-
-.logo {
-    font-size: 3.2em;
-    margin-top: 40px;
-    position: relative;
 }
 
 .legal {
@@ -2181,19 +2180,21 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 }
 
 .logo, .tag-line {
-    position: fixed;
     width: 100%;
-    margin: 0 0 0 20px;
+    margin: 0;
     opacity: 0;
     pointer-events: none;
     /*color: rgba(0, 109, 204, .95);*/
-    color: rgba(224, 231, 235, 1);
+    /*color: rgba(224, 231, 235, 1);*/
+    color: rgba(82, 110, 125, 1);
     z-index: 1;
     font-family: helvetica-bold;
 }
 
 .logo {
+    font-size: 3.2em;
     top: 30px;
+    margin: 22px 0 0 0;
 }
 
 .tag-line {

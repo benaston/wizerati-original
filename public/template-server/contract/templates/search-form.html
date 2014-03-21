@@ -1,7 +1,9 @@
 {{ try {
 var rate = model.getRate();
 var keywords = model.getKeywords();
-}}<form name="search-form" action="/search" method="GET">
+}}<h1 class="logo">wizerati</h1>
+<h2 class="tag-line">UK IT contract job search</h2>
+<form name="search-form" action="/search" method="GET">
     <div class="search-fields">
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="my skills (e.g. ruby) and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
