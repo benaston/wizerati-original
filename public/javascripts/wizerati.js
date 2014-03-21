@@ -3632,6 +3632,33 @@ window.wizerati = {
   app.ItemsOfInterestModel = ItemsOfInterestModel;
 
 }(wizerati, $));
+;(function (app) {
+  'use strict';
+
+  function NavPanelModel() {
+
+    if (!(this instanceof app.NavPanelModel)) {
+      return new app.NavPanelModel();
+    }
+
+    var that = this;
+
+    this.eventUris = {
+      default: 'update://navpanelmodel/'
+    };
+
+
+    function init() {
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.NavPanelModel = NavPanelModel;
+
+}(wizerati));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -5697,9 +5724,7 @@ window.wizerati = {
         return;
       }
 
-      that.$el.attr('data-mode', that.Model.getMode());
-      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
-      that.$el.find('.handle').attr('href', '/searchpanelmode/update?mode=' + oppositeMode);
+      that.renderSetMode();
     };
 
     this.onDomReady = function () {
@@ -5708,6 +5733,9 @@ window.wizerati = {
 
     this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
+
+      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
+      $('#nav-panel').find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
     };
 
     function init() {

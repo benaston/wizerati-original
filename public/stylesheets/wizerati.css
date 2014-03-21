@@ -120,7 +120,7 @@ h1 {
 h2 {
     font-size: 1.75rem;
     line-height: 2rem;
-    color: #5F7883;
+    color: #333;
     font-family: helvetica-pro-light, Arial, sans-serif;
 }
 
@@ -1769,9 +1769,16 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-visibi
     top: 0;
     height: 100%;
     width: 74px;
-    background-color: rgba(34,34,34, 1);
+    background-color: rgba(34, 34, 34, 1);
     z-index: 3;
     box-shadow: 1px 0 1px -1px #0c0917;
+    -webkit-filter: opacity(0%);
+    pointer-events: none;
+}
+
+body[data-ui-mode='1'] #nav-panel {
+    -webkit-filter: opacity(100%);
+    pointer-events:auto;
 }
 
 #nav-panel label {
@@ -1786,7 +1793,7 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-visibi
 .home-link:hover {
     text-decoration: none;
     cursor: pointer;
-    color:white;
+    color: white;
 }
 
 .home-link {
@@ -1796,7 +1803,7 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-visibi
     line-height: 50px;
     text-align: center;
     font-family: helvetica-bold;
-    color:white;
+    color: white;
 }
 
 .nav-item-sign-out {
