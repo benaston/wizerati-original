@@ -21,6 +21,7 @@ body[data-ui-mode='1'] #nav-panel {
 }
 
 #nav-panel button {
+    position: relative; /*for positioning of after*/
     color: rgba(0, 109, 204, .95);
     border-color: rgba(0, 109, 204, .95);
 }
@@ -49,4 +50,19 @@ body[data-ui-mode='1'] #nav-panel {
 
 #nav-panel button:hover {
     box-shadow: 0 0 8px 0px rgba(0,109,204,.95);
+}
+
+#nav-panel[data-selected-item='0'] .nav-item-search button:after,
+#nav-panel[data-selected-item='1'] .nav-item-bookmarks button:after,
+#nav-panel[data-selected-item='2'] .nav-item-comparison-list button:after {
+    display: inline-block;
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 10px;
+    /*box-shadow: 0 0 4px 0px rgba(255,255,255,.95);*/
+    left: -16px;
+    bottom: 21px;
 }

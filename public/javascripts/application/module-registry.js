@@ -54,6 +54,12 @@
       ActionContract: '5'
     };
 
+    mod.NavPanelItem = {
+      Search: '0',
+      Bookmarks: '1',
+      ComparisonList: '2'
+    };
+
     mod.ResultListMode = {
       Default: '0',
       Minimized: '1'

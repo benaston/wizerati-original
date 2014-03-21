@@ -34,7 +34,7 @@
 
       var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
       that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
-      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'show search';
+      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'search';
       that.$navPanel.find('.handle-search-panel label').html(label);
     };
 
