@@ -26,13 +26,16 @@
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.$navPanel = $('#nav-panel');
     };
 
     this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
 
       var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
-      $('#nav-panel').find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
+      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
+      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'show search';
+      that.$navPanel.find('.handle-search-panel label').html(label);
     };
 
     function init() {

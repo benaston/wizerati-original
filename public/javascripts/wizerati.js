@@ -5729,13 +5729,16 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.$navPanel = $('#nav-panel');
     };
 
     this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
 
       var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
-      $('#nav-panel').find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
+      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
+      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'show search';
+      that.$navPanel.find('.handle-search-panel label').html(label);
     };
 
     function init() {
@@ -7632,7 +7635,7 @@ window.wizerati = {
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 381, /*empirical to stop line-wrap of top menu*/
         _minWidthItemOfInterestSmallScreen = 310,
-        _effectiveWidthSearchPanelDefault = 340,
+        _effectiveWidthSearchPanelDefault = 340 + 75, /*search panel width plus the width of the navbar*/
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,

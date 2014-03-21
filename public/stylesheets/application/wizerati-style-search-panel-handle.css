@@ -5,7 +5,6 @@
     color: #333;
     text-decoration: none;
     z-index: 2;
-    box-shadow: 0px 1px 1px -1px #0c0917;
     -webkit-transform: scale(1);
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
