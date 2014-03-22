@@ -10,7 +10,7 @@
     box-sizing: border-box;
     border: 1px solid rgba(2, 86, 244, .1);
     display: inline-block;
-    transition: border-color 0.1s ease-out .2s, box-shadow .3s ease-out, border-left-width .2s ease-out;
+    transition: border-color 0.1s ease-out .2s, box-shadow .1s ease-out, border-left-width .2s ease-out;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /*removes dark active overlay when tapping buttons on ios*/
 }
 

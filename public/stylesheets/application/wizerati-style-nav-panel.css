@@ -4,7 +4,7 @@
     top: 0;
     height: 100%;
     width: 74px;
-    background-color: rgba(34, 34, 34, 1);
+    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
     z-index: 3;
     box-shadow: 1px 0 1px -1px #0c0917;
     -webkit-filter: opacity(0%);
@@ -13,7 +13,7 @@
 
 body[data-ui-mode='1'] #nav-panel {
     -webkit-filter: opacity(100%);
-    pointer-events:auto;
+    pointer-events: auto;
 }
 
 #nav-panel label {
@@ -22,8 +22,8 @@ body[data-ui-mode='1'] #nav-panel {
 
 #nav-panel button {
     position: relative; /*for positioning of after*/
-    color: rgba(0, 109, 204, .95);
-    border-color: rgba(0, 109, 204, .95);
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, .2);
 }
 
 .home-link:hover {
@@ -39,7 +39,7 @@ body[data-ui-mode='1'] #nav-panel {
     line-height: 50px;
     text-align: center;
     font-family: helvetica-bold;
-    color: white;
+    color: rgba(255, 255, 255, .95);
 }
 
 .nav-item-sign-out {
@@ -49,7 +49,7 @@ body[data-ui-mode='1'] #nav-panel {
 }
 
 #nav-panel button:hover {
-    box-shadow: 0 0 8px 0px rgba(0,109,204,.95);
+    box-shadow: rgb(245, 245, 245) 0px 0px 8px 0px;
 }
 
 #nav-panel[data-selected-item='0'] .nav-item-search button:after,
