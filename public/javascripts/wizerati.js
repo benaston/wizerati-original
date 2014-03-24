@@ -8744,12 +8744,14 @@ window.wizerati = {
 
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
 
-  $('#bookmark-panel').bind('ontouchstart' in window ? 'touchmove' : 'scroll', function(e){
-    window.stackHeads();
-  });
+  if(!!!('ontouchstart' in window)) {
+    $('#bookmark-panel').bind('scroll', function(e){
+      window.stackHeads();
+    });
+  }
+
 
   window.stackHeads=function(e){
-    setTimeout(function(){
       var fixedHeaders = document.getElementsByClassName('fixedheader');
       var panel = document.getElementById('bookmark-panel');
       for(var i = 0; i < fixedHeaders.length; i++){
@@ -8799,9 +8801,6 @@ window.wizerati = {
       }
 
       return true;
-    }, 'ontouchstart' in window ? 5000 : 0);
-
-    return true;
   };
   function getPrevNext(el){
     var els=document.getElementsByTagName('*');
