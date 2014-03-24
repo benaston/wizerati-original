@@ -13,7 +13,7 @@ $(function appStart() {
 
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
 
-  $('#bookmark-panel').bind('scroll', function(e){
+  $('#bookmark-panel').bind('ontouchstart' in window ? 'touchmove' : 'scroll', function(e){
     window.stackHeads();
   });
 
@@ -68,7 +68,7 @@ $(function appStart() {
       }
 
       return true;
-    }, 5000);
+    }, 'ontouchstart' in window ? 5000 : 0);
 
     return true;
   };

@@ -67,6 +67,7 @@ body[data-ui-mode='1'] #bookmark-panel-wrapper[data-mode='1'] #bookmark-panel {
     color: #333;
     font-family: helvetica-bold;
     width:100%;
+    z-index: 1; /*ensure remains over results*/
     /*height:*/
 }
 
