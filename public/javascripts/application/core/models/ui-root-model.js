@@ -10,7 +10,7 @@
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _modalEnum = app.mod('enum').Modal,
-        _tabEnum = app.mod('enum').Tab,
+        _tabEnum = app.mod('enum').NavbarItem,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,

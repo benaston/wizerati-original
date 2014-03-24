@@ -17,9 +17,8 @@
       that.routes[uri] = { action: action, options: options };
     };
 
-    this.redirect = function (uri) {
-//            history.pushState(null, null, uri);
-      that.route(uri);
+    this.redirect = function (uri, dto, options) {
+      that.route(uri, dto, options);
     };
 
     this.route = function (uri, dto, options) {
@@ -80,14 +79,14 @@
       if (action.slice(protocol.length) !== protocol) {
         evt.preventDefault();
 
-        that.route(action, createDtoFromForm($(this)));
+        that.route(action, that.createDtoFromForm($(this)));
       }
     }
 
-    function createDtoFromForm($form) {
+    this.createDtoFromForm = function ($form) {
       var dto = {};
-      var $textfields = $form.find('input[type=text],input[type=password],input[type=hidden]');
-      _.each($textfields, function ($t) {
+      var $textFields = $form.find('input[type=text],input[type=search],input[type=email],input[type=password],input[type=hidden]');
+      _.each($textFields, function ($t) {
         dto[$t.name] = $t.value;
       });
 
@@ -97,7 +96,7 @@
       });
 
       return dto;
-    }
+    };
 
     function extractQueryString(queryString, isExternal) {
       var dto = {};

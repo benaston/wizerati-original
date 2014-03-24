@@ -9,7 +9,7 @@
 
     var that = this,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _mode = _bookmarkPanelModeEnum.Default;
+        _mode = _bookmarkPanelModeEnum.Minimized;
 
     this.eventUris = {
       default: 'update://bookmarkpanelmodel/',

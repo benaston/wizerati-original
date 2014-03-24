@@ -39,6 +39,10 @@
           c.selectedItemController.update(dto);
         }, { silent: true });
 
+        router.registerRoute('/bookmarks', function (dto) {
+          c.bookmarkedItemsController.index(dto);
+        });
+
         router.registerRoute('/bookmarkeditems/create', function (dto) {
           c.bookmarkedItemsController.create(dto);
         }, { silent: true });
@@ -94,6 +98,10 @@
         router.registerRoute('/applytocontractdialog/destroy', function (dto) {
           c.applyToContractDialogController.destroy(dto);
         }, { silent: true });
+
+//        router.registerRoute('/selectednavbaritem/update', function (dto) {
+//          c.selectedNavbarItemController.update(dto);
+//        }, { silent: true });
 
 //        router.registerRoute('/purchasepanel', function (dto) {
 //          c.purchasePanelController.index(dto);

@@ -84,14 +84,14 @@ h4, h5, h6 {
 }
 
 hr {
-    margin: 20px 0;
     border: 0;
-    border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+    width: 70%;
+    height: 1px;
 }
 
 ol, ul {
-    padding: 0 0 0 1.3rem;
+    padding: 0 0 0 0;
 }
 
 ol li {

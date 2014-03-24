@@ -1,15 +1,19 @@
 (function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, selectedNavbarItemModel, bookmarkPanelModel) {
 
     if (!(this instanceof app.SearchController)) {
-      return new app.SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel);
+      return new app.SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, selectedNavbarItemModel, bookmarkPanelModel);
     }
 
     var that = this,
-        _uiModeEnum = wizerati.mod('enum').UIMode,
-        _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _navbarItemEnum = app.mod('enum').NavbarItem,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
         _uiRootModel = null,
         _searchFormModel = null,
@@ -17,12 +21,24 @@
         _resultListModel = null,
         _guidFactory = null,
         _searchPanelModel = null,
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _bookmarkPanelModel = null,
+        _selectedNavbarItemModel = null;
 
     this.urlTransforms = {};
 
     this.show = function (dto) {
       try {
+        //check if we are moving from another navbar item (in which case do not bother with the new search)
+        if(_selectedNavbarItemModel.getSelectedNavbarItem() !== _navbarItemEnum.Search) {
+          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+          _resultListModel.setMode(_resultListModeEnum.Default);
+          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+          _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+          return;
+        }
+
         if (dto.__isInvertebrateExternal__) {
           _searchFormModel.setKeywords(dto.keywords, {silent: true});
           _searchFormModel.setLocation(dto.location, {silent: true});
@@ -50,6 +66,12 @@
               setTimeout(function () {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
+
+                /*new*/
+                _resultListModel.setMode(_resultListModeEnum.Default);
+                _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+                _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+                _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
 
                 //this must occur *after the search panel mode is set* to its eventual value, to
                 //ensure the initial width rendering of items of interest is the correct one
@@ -108,6 +130,14 @@
         throw 'SearchController::init itemsOfInterestModel not supplied.';
       }
 
+      if (!selectedNavbarItemModel) {
+        throw 'SearchController::init selectedNavbarItemModel not supplied.';
+      }
+
+      if (!bookmarkPanelModel) {
+        throw 'SearchController::init bookmarkPanelModel not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
@@ -115,6 +145,8 @@
       _guidFactory = guidFactory;
       _searchPanelModel = searchPanelModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _selectedNavbarItemModel = selectedNavbarItemModel;
+      _bookmarkPanelModel = bookmarkPanelModel;
 
       that.urlTransforms['/search'] = uriTransformShow;
 

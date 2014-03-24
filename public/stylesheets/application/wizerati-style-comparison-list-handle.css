@@ -40,3 +40,15 @@
     top: 283px;
     right: 0;
 }
+
+.handle-comparison-list.selected button:after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    left: -7px;
+    top: 22px;
+    background-color: #fff;
+    width: 2px;
+    height: 10px;
+    box-shadow: 0 0 10px 0px white;
+}

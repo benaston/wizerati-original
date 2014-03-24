@@ -1,0 +1,85 @@
+#bookmark-panel-wrapper {
+    width: 0;
+    height: 100%;
+    overflow: visible;
+    position: relative;
+    display: inline-block;
+    z-index: 2; /*needs to be infront of result list*/
+}
+
+#bookmark-panel {
+    display: inline-block;
+    position: relative; /*required to ensure correct horizontal scrolling behavior*/
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 480px;
+    top: 0;
+    left: 0;
+    margin-left: 74px;
+    vertical-align: top;
+    pointer-events: none;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    /*z-index: 2; *//*ensure remains in-front of everything else*/
+    z-index: -1; /*fixes a webkit z-index bug I think*/
+    box-shadow: none;
+    background-color: white;
+    -webkit-filter: opacity(0%); /*attempt to avoid flash of visibility on greenfield*/
+    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+}
+
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-panel {
+    transition: -webkit-transform .2s ease-out, -webkit-filter .2s ease-out;
+}
+
+body[data-ui-mode='1'] #bookmark-panel {
+    pointer-events: auto;
+}
+
+body[data-ui-mode='1'] #bookmark-panel-wrapper[data-mode='0']  #bookmark-panel {
+    -webkit-filter: opacity(100%);
+    /*-webkit-transform: translate(0, 0);*/
+    box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
+}
+
+body[data-ui-mode='1'] #bookmark-panel-wrapper[data-mode='1'] #bookmark-panel {
+    -webkit-transform: translate(-480px, 0);
+}
+
+/*.bookmark-list-summary:before {*/
+    /*content: '\f162';*/
+    /*font-family: ionicons;*/
+/*}*/
+
+.bookmark-panel-summary {
+    padding: 15px 10px 14px 10px;
+    box-sizing: border-box; /*because we are applying padding*/
+    color:#999;
+}
+
+.bookmark-list-summary {
+    background-color: rgba(246,246,246,1);
+    padding: 15px 10px 14px 10px;
+    box-sizing: border-box; /*because we are applying padding*/
+    line-height: 1rem;
+    color: #333;
+    font-family: helvetica-bold;
+    width:100%;
+    /*height:*/
+}
+
+/*.bookmark-list:not(:last-child):after {*/
+    /*content: '';*/
+    /*display: block;*/
+    /*width: 70%;*/
+    /*height: 3px;*/
+    /*box-shadow: 0 1px 1px -1px #0c0917;*/
+    /*margin: 0 auto 10px auto;*/
+/*}*/
+
+/*"narrow-screen" devices like iphone*/
+@media only screen and (max-device-width: 568px) {
+
+}
+

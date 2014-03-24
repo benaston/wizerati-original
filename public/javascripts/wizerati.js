@@ -2019,9 +2019,8 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       that.routes[uri] = { action: action, options: options };
     };
 
-    this.redirect = function (uri) {
-//            history.pushState(null, null, uri);
-      that.route(uri);
+    this.redirect = function (uri, dto, options) {
+      that.route(uri, dto, options);
     };
 
     this.route = function (uri, dto, options) {
@@ -2082,14 +2081,14 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       if (action.slice(protocol.length) !== protocol) {
         evt.preventDefault();
 
-        that.route(action, createDtoFromForm($(this)));
+        that.route(action, that.createDtoFromForm($(this)));
       }
     }
 
-    function createDtoFromForm($form) {
+    this.createDtoFromForm = function ($form) {
       var dto = {};
-      var $textfields = $form.find('input[type=text],input[type=password],input[type=hidden]');
-      _.each($textfields, function ($t) {
+      var $textFields = $form.find('input[type=text],input[type=search],input[type=email],input[type=password],input[type=hidden]');
+      _.each($textFields, function ($t) {
         dto[$t.name] = $t.value;
       });
 
@@ -2099,7 +2098,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       });
 
       return dto;
-    }
+    };
 
     function extractQueryString(queryString, isExternal) {
       var dto = {};
@@ -3197,7 +3196,7 @@ window.wizerati = {
 
     var that = this,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _mode = _bookmarkPanelModeEnum.Default;
+        _mode = _bookmarkPanelModeEnum.Minimized;
 
     this.eventUris = {
       default: 'update://bookmarkpanelmodel/',
@@ -4064,23 +4063,24 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function SelectedTabModel() {
+  function SelectedNavbarItemModel() {
 
-    if (!(this instanceof app.SelectedTabModel)) {
-      return new app.SelectedTabModel();
+    if (!(this instanceof app.SelectedNavbarItemModel)) {
+      return new app.SelectedNavbarItemModel();
     }
 
     var that = this,
-        _selectedCubeFaceId = '0';
+        _navbarItemEnum = app.mod('enum').NavbarItem,
+        _selectedNavbarItem = _navbarItemEnum.Search;
 
-    this.updateEventUri = 'update://selectedtabmodel';
+    this.updateEventUri = 'update://selectednavbaritemmodel';
 
-    this.getSelectedTab = function () {
-      return _selectedCubeFaceId;
+    this.getSelectedNavbarItem = function () {
+      return _selectedNavbarItem;
     };
 
-    this.setSelectedTab = function (value) {
-      _selectedCubeFaceId = value;
+    this.setSelectedNavbarItem = function (value) {
+      _selectedNavbarItem = value;
       $.publish(that.updateEventUri);
     };
 
@@ -4091,8 +4091,8 @@ window.wizerati = {
     return init();
   }
 
-  app.SelectedTabModel = SelectedTabModel;
-  invertebrate.Model.isExtendedBy(app.SelectedTabModel);
+  app.SelectedNavbarItemModel = SelectedNavbarItemModel;
+  invertebrate.Model.isExtendedBy(app.SelectedNavbarItemModel);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -4215,7 +4215,7 @@ window.wizerati = {
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _modalEnum = app.mod('enum').Modal,
-        _tabEnum = app.mod('enum').Tab,
+        _tabEnum = app.mod('enum').NavbarItem,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
@@ -4434,7 +4434,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '#bookmark-panel',
+        _el = '#bookmark-panel-wrapper',
         _modeEnum = app.mod('enum').BookmarkPanelMode,
         _renderOptimizations = {};
 
@@ -4460,8 +4460,8 @@ window.wizerati = {
 
       var oppositeMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.Minimized : _modeEnum.Default;
       that.$navPanel.find('.handle-bookmark-panel input[name="mode"]').attr('value', oppositeMode);
-      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'show bookmarks';
-      that.$navPanel.find('.handle-bookmark-panel label').html(label);
+//      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'bookmarks';
+      that.$navPanel.find('.handle-bookmark-panel').addClass('selected');
     };
 
     function init() {
@@ -5895,8 +5895,8 @@ window.wizerati = {
 
       var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
       that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
-      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'search';
-      that.$navPanel.find('.handle-search-panel label').html(label);
+//      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'search';
+      that.$navPanel.find('.handle-search-panel').addClass('selected');
     };
 
     function init() {
@@ -6211,17 +6211,38 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService) {
+  //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
+  //refactor result list panel to be search panel
+  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
 
     if (!(this instanceof app.BookmarkedItemsController)) {
       return new app.BookmarkedItemsController(favoritesCubeModel,
-          selectedCubeFaceModel, bookmarkService);
+          selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel);
     }
 
     var that = this,
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _navbarItemEnum = app.mod('enum').NavbarItem,
         _favoritesCubeModel = null,
         _selectedCubeFaceModel = null,
-        _bookmarkService = null;
+        _bookmarkService = null,
+        _searchPanelModel = null,
+        _resultListModel = null,
+        _bookmarkPanelModel = null,
+        _itemsOfInterestModel = null,
+        _selectedNavbarItemModel = null;
+
+    //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
+    this.index = function (dto) {
+      _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+//      _resultListModel.setMode(_resultListModeEnum.Minimized); /*is this needed?*/
+      _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+      _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+      _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+    };
 
     this.create = function (dto) {
       if (!dto) {
@@ -6259,9 +6280,34 @@ window.wizerati = {
         throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
 
+      if (!searchPanelModel) {
+        throw 'BookmarkedItemsController::init searchPanelModel not supplied.';
+      }
+
+      if (!resultListModel) {
+        throw 'BookmarkedItemsController::init resultListModel not supplied.';
+      }
+
+      if (!bookmarkPanelModel) {
+        throw 'BookmarkedItemsController::init bookmarkPanelModel not supplied.';
+      }
+
+      if (!itemsOfInterestModel) {
+        throw 'BookmarkedItemsController::init itemsOfInterestModel not supplied.';
+      }
+
+      if (!selectedNavbarItemModel) {
+        throw 'BookmarkedItemsController::init selectedNavbarItemModel not supplied.';
+      }
+
       _favoritesCubeModel = favoritesCubeModel;
       _selectedCubeFaceModel = selectedCubeFaceModel;
       _bookmarkService = bookmarkService;
+      _searchPanelModel = searchPanelModel;
+      _resultListModel = resultListModel;
+      _bookmarkPanelModel = bookmarkPanelModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
+      _selectedNavbarItemModel = selectedNavbarItemModel;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -6937,15 +6983,19 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel) {
+  function SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, selectedNavbarItemModel, bookmarkPanelModel) {
 
     if (!(this instanceof app.SearchController)) {
-      return new app.SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel);
+      return new app.SearchController(uiRootModel, searchFormModel, searchService, resultListModel, guidFactory, searchPanelModel, itemsOfInterestModel, selectedNavbarItemModel, bookmarkPanelModel);
     }
 
     var that = this,
-        _uiModeEnum = wizerati.mod('enum').UIMode,
-        _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _navbarItemEnum = app.mod('enum').NavbarItem,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
         _uiRootModel = null,
         _searchFormModel = null,
@@ -6953,12 +7003,24 @@ window.wizerati = {
         _resultListModel = null,
         _guidFactory = null,
         _searchPanelModel = null,
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _bookmarkPanelModel = null,
+        _selectedNavbarItemModel = null;
 
     this.urlTransforms = {};
 
     this.show = function (dto) {
       try {
+        //check if we are moving from another navbar item (in which case do not bother with the new search)
+        if(_selectedNavbarItemModel.getSelectedNavbarItem() !== _navbarItemEnum.Search) {
+          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+          _resultListModel.setMode(_resultListModeEnum.Default);
+          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+          _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+          return;
+        }
+
         if (dto.__isInvertebrateExternal__) {
           _searchFormModel.setKeywords(dto.keywords, {silent: true});
           _searchFormModel.setLocation(dto.location, {silent: true});
@@ -6986,6 +7048,12 @@ window.wizerati = {
               setTimeout(function () {
                 _uiRootModel.setUIMode(_uiModeEnum.Search);
                 _searchPanelModel.setMode(_searchPanelModeEnum.Minimized); //triggers re-layout
+
+                /*new*/
+                _resultListModel.setMode(_resultListModeEnum.Default);
+                _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+                _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+                _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
 
                 //this must occur *after the search panel mode is set* to its eventual value, to
                 //ensure the initial width rendering of items of interest is the correct one
@@ -7044,6 +7112,14 @@ window.wizerati = {
         throw 'SearchController::init itemsOfInterestModel not supplied.';
       }
 
+      if (!selectedNavbarItemModel) {
+        throw 'SearchController::init selectedNavbarItemModel not supplied.';
+      }
+
+      if (!bookmarkPanelModel) {
+        throw 'SearchController::init bookmarkPanelModel not supplied.';
+      }
+
       _uiRootModel = uiRootModel;
       _searchFormModel = searchFormModel;
       _searchService = searchService;
@@ -7051,6 +7127,8 @@ window.wizerati = {
       _guidFactory = guidFactory;
       _searchPanelModel = searchPanelModel;
       _itemsOfInterestModel = itemsOfInterestModel;
+      _selectedNavbarItemModel = selectedNavbarItemModel;
+      _bookmarkPanelModel = bookmarkPanelModel;
 
       that.urlTransforms['/search'] = uriTransformShow;
 
@@ -7075,14 +7153,13 @@ window.wizerati = {
     var that = this,
         _searchPanelModel = null,
         _uiRootModel = null,
-        _tabEnum = app.mod('enum').Tab;
+        _tabEnum = app.mod('enum').NavbarItem;
 
     this.update = function (dto) {
       try {
         if (_searchPanelModel.getMode() !== dto.mode) {
           _searchPanelModel.setMode(dto.mode);
         }
-
       } catch (err) {
         console.log('SearchPanelController::update ' + err);
       }
@@ -7219,33 +7296,78 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SelectedTabController(model) {
+  function SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel) {
 
-    if (!(this instanceof app.SelectedTabController)) {
-      return new app.SelectedTabController(model);
+    if (!(this instanceof app.SelectedNavbarItemController)) {
+      return new app.SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel);
     }
 
     var that = this,
         _model = null,
-        _uiRootModel = null,
-        _tabEnum = app.mod('enum').Tab;
+        _searchPanelModel = null,
+        _bookmarkPanelModel = null,
+        _itemsOfInterestModel = null,
+        _resultListPanelModel = null,
+        _tabEnum = app.mod('enum').NavbarItem,
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListPanelModeEnum = app.mod('enum').ResultListMode;
 
     this.update = function (dto) {
       try {
-        if (_model.getSelectedTab() !== dto.tab) {
-          _model.setSelectedTab(dto.tab);
+        if (_model.getSelectedNavbarItem() === dto.navbarItem) {
+          return;
+        }
+
+        _model.setSelectedNavbarItem(dto.navbarItem);
+
+        //move coordination of minimization etc into controllers redirected to
+        if (dto.navbarItem === _tabEnum.Search) {
+          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
+          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+
+          app.instance.router.redirect('/search', { keywords: _searchPanelModel.getKeywords(), r: _searchPanelModel.getRate() }); //consider avoiding the running of new search unnecessarily
+        } else if (dto.navbarItem === _tabEnum.Bookmark) {
+          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
+          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+          app.instance.router.redirect('/bookmarks');
+        } else if (dto.navbarItem === _tabEnum.ComparisonList) {
+          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+          app.instance.router.redirect('/comparisonlist');
         }
       } catch (err) {
-        console.log('SelectedTabController::update ' + err);
+        console.log('SelectedNavbarItemController::update ' + err);
       }
     };
 
     function init() {
       if (!model) {
-        throw 'SelectedTabController::init model not supplied.';
+        throw 'SelectedNavbarItemController::init model not supplied.';
+      }
+
+      if (!searchPanelModel) {
+        throw 'SelectedNavbarItemController::init searchPanelModel not supplied.';
+      }
+
+      if (!bookmarkPanelModel) {
+        throw 'SelectedNavbarItemController::init bookmarkPanelModel not supplied.';
+      }
+
+      if (!itemsOfInterestModel) {
+        throw 'SelectedNavbarItemController::init itemsOfInterestModel not supplied.';
       }
 
       _model = model;
+      _searchPanelModel = searchPanelModel;
+      _bookmarkPanelModel = bookmarkPanelModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
 
       return that;
     }
@@ -7253,7 +7375,7 @@ window.wizerati = {
     return init();
   }
 
-  app.SelectedTabController = SelectedTabController;
+  app.SelectedNavbarItemController = SelectedNavbarItemController;
 
 }(wizerati));
 ;(function (app) {
@@ -8092,6 +8214,10 @@ window.wizerati = {
           c.selectedItemController.update(dto);
         }, { silent: true });
 
+        router.registerRoute('/bookmarks', function (dto) {
+          c.bookmarkedItemsController.index(dto);
+        });
+
         router.registerRoute('/bookmarkeditems/create', function (dto) {
           c.bookmarkedItemsController.create(dto);
         }, { silent: true });
@@ -8147,6 +8273,10 @@ window.wizerati = {
         router.registerRoute('/applytocontractdialog/destroy', function (dto) {
           c.applyToContractDialogController.destroy(dto);
         }, { silent: true });
+
+//        router.registerRoute('/selectednavbaritem/update', function (dto) {
+//          c.selectedNavbarItemController.update(dto);
+//        }, { silent: true });
 
 //        router.registerRoute('/purchasepanel', function (dto) {
 //          c.purchasePanelController.index(dto);
@@ -8270,7 +8400,7 @@ window.wizerati = {
       ActionContract: '5'
     };
 
-    mod.Tab = {
+    mod.NavbarItem = {
       Search: '0',
       Bookmark: '1',
       ComparisonList: '2'
@@ -8375,6 +8505,7 @@ window.wizerati = {
     mod.searchFormModel = new wizerati.SearchFormModel();
     mod.searchPanelModel = new wizerati.SearchPanelModel();
     mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
+    mod.selectedNavbarItemModel = new wizerati.SelectedNavbarItemModel();
     mod.signInPanelModel = new wizerati.SignInPanelModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
@@ -8523,14 +8654,15 @@ window.wizerati = {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
 //    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
-    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService);
+    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.selectedNavbarItemModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, l.layoutCoordinator);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.selectedNavbarItemModel, m.bookmarkPanelModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
+    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.selectedNavbarItemModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;
@@ -8609,4 +8741,85 @@ window.wizerati = {
   });
 
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
+
+  $('#bookmark-panel').bind('scroll', function(){
+    window.stackHeads();
+  });
+
+  window.stackHeads=function(){
+    var fixedHeaders = document.getElementsByClassName('fixedheader');
+    var panel = document.getElementById('bookmark-panel');
+    for(var i = 0; i < fixedHeaders.length; i++){
+      var currentHeader = fixedHeaders[i];
+      var nextHeader = fixedHeaders[i+1];
+      var placeholder = getPrevNext(currentHeader)[0];
+      var currentScrollPosY = panel.scrollTop;
+      var placeholderPosY = findPosY(placeholder);
+      console.log('currentScrollPosY: %s. findPosY(placeholder): %s', currentScrollPosY, findPosY(placeholder));
+
+      if(currentScrollPosY > placeholderPosY) {
+        //if our scroll position in the panel is father than the placeholder of the current header's position in the DOM...
+        if(typeof nextHeader != 'undefined') {
+          //If this isn't the last header.
+          var distanceToNextHeader = findPosY(nextHeader) - currentScrollPosY;
+          console.log('findPosY(nextHeader): %s', findPosY(nextHeader));
+          console.log('distanceToNextHeader: %s', distanceToNextHeader);
+          //the difference between our scroll position and the header's placeholder's position
+          if(distanceToNextHeader < currentHeader.offsetHeight) { //offsetHeight ===  height of element inc padding, border
+            //if we have less distance between the placeholder of the next element and the top of of the page than the height of the current header, we push the header up so it doesn't overlap.
+            currentHeader.style.position="fixed";
+            currentHeader.style.top='-'+(currentHeader.offsetHeight-distanceToNextHeader)+'px';
+
+          }
+          else{
+            //if there is another header, but we have room
+            //console.log(header
+            placeholder.style.height=currentHeader.offsetHeight+'px';
+            currentHeader.style.position="fixed";
+            currentHeader.style.top="0px";
+          }
+        } else {
+
+          placeholder.style.height=currentHeader.offsetHeight+'px';
+          //if there isn't another header
+          currentHeader.style.position="fixed";
+          currentHeader.style.top="0px";
+        }
+
+
+      } else {
+        placeholder.style.height='0px';
+        //if we haven't gotten to the header yet
+        currentHeader.style.position='static';
+        currentHeader.style.removeProperty('top');
+      }
+    }
+  };
+  function getPrevNext(el){
+    var els=document.getElementsByTagName('*');
+    for(var j=0;j<els.length;j++){
+      if(els[j]==el){
+        return [els[j-1],els[j+1]];
+      }
+    }
+    return false;
+  }
+
+  function findPosY(element)
+  {
+    var posY = 0;
+    if(element.offsetParent) {//offsetParent is the closest parent that has position:relative or position:absolute or the body of the page
+      while(1)
+      {
+        posY += element.offsetTop;
+        if(!element.offsetParent)
+          break;
+        element = element.offsetParent;
+      }
+    } else if(element.y) {
+      posY += element.y;
+    }
+
+    return posY;
+  }
 });

@@ -10,14 +10,13 @@
     var that = this,
         _searchPanelModel = null,
         _uiRootModel = null,
-        _tabEnum = app.mod('enum').Tab;
+        _tabEnum = app.mod('enum').NavbarItem;
 
     this.update = function (dto) {
       try {
         if (_searchPanelModel.getMode() !== dto.mode) {
           _searchPanelModel.setMode(dto.mode);
         }
-
       } catch (err) {
         console.log('SearchPanelController::update ' + err);
       }

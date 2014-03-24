@@ -66,7 +66,8 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',
-          'public/stylesheets/application/wizerati-style-bookmarks-panel-handle.css',
+          'public/stylesheets/application/wizerati-style-bookmark-panel.css',
+          'public/stylesheets/application/wizerati-style-bookmark-panel-handle.css',
           'public/stylesheets/application/wizerati-style-navbar-and-logo-and-build.css',
           'public/stylesheets/application/wizerati-style-result-list-panel.css'
         ],
@@ -189,7 +190,7 @@ module.exports = function (grunt) {
             },
             {
               match: 'bookmarks-panel',
-              replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmarks-panel.html") %>'
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmark-panel.html") %>'
             }
           ]
         },
@@ -208,7 +209,8 @@ module.exports = function (grunt) {
         files: [
           {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
         ]
-      },injectFavoriteCube: {
+      },
+      injectFavoriteCube: {
         options: {
           patterns: [
             {
@@ -307,7 +309,7 @@ module.exports = function (grunt) {
     'replace:injectInPageTemplates',
     'replace:injectBuildNumber',
     'replace:injectDialogs',
-    'replace:injectFavoriteCube',
+//    'replace:injectFavoriteCube',
     'replace:injectScriptTagForDebugging',
     'replace:injectJavaScriptIntoBody',
     'replace:correctForReplaceTaskBug'
