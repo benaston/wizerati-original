@@ -15,7 +15,9 @@
     overflow-x: hidden;
     overflow-y: scroll;
     opacity: 0;
-    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /*-webkit-backface-visibility: hidden;*/
 }
 
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] .result-list-panel {
