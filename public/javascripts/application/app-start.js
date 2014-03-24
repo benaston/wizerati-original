@@ -13,11 +13,11 @@ $(function appStart() {
 
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
 
-  if(!!!('ontouchstart' in window)) {
+//  if(!!!('ontouchstart' in window)) {
     $('#bookmark-panel').bind('scroll', function(e){
       window.stackHeads();
     });
-  }
+//  }
 
 
   window.stackHeads=function(e){

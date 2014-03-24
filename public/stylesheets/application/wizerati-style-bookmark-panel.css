@@ -21,6 +21,7 @@
     pointer-events: none;
     overflow-x: hidden;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     /*z-index: 2; *//*ensure remains in-front of everything else*/
     z-index: -1; /*fixes a webkit z-index bug I think*/
     box-shadow: none;
