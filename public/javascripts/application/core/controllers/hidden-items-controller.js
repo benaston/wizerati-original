@@ -15,6 +15,8 @@
         throw 'dto not supplied.';
       }
 
+      //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
+      //this avoids massive memory use when rendering (which crashes ios safari)
       _hiddenItemsModel.addHiddenItemId(dto.id);
     };
 
