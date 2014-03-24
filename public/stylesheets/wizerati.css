@@ -2426,6 +2426,7 @@ body[data-ui-mode='1'] .result-list-panel {
     padding: 0;
     position: relative;
     left: 0; /*required for transition*/
+    -webkit-backface-visibility: hidden;
     transition: left .3s ease-in-out;
 }
 
@@ -2594,7 +2595,7 @@ body[data-ui-mode='1'] .result-list-panel {
     display: inline-block;
     vertical-align: top;
     overflow: hidden;
-    -webkit-backface-visibility: hidden;
+
 }
 
 .t.hidden a {
