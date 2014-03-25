@@ -230,17 +230,16 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .contact {
-    font-size: .95rem;
-    text-align: right;
-    margin-bottom: 7px;
+    /*font-size: .95rem;*/
+    /*margin-bottom: 7px;*/
 }
 
 .id {
-    text-align: right;
+    /*text-align: right;*/
 }
 
 .item-metadata {
-    text-align: left;
+    text-align: right;
     margin-top: 27px;
 }
 
@@ -381,10 +380,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 
 .updatedDateTime {
     font-size: .8rem;
-}
-
-.id {
-    font-size: .7rem;
 }
 
 /*"narrow screen" devices like iphone*/

@@ -46,16 +46,16 @@
             <p class="tld">{{= model.tld }}</p>
             <section class="item-metadata">
                 <p>{{= model.jobTitle }}, {{= model.location }}, {{= model.country }}</p>
-                <p>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day, {{= model.industry }} &nbsp;<a href="/itemofinterestmetadata/update?mode=1">more...</a></p>
-                <p>{{= model.organization }}, {{= moment(model.updatedDateTime).fromNow() }}</p>
+                <p>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day, {{= model.industry }}</p>
+                <p>{{= model.organization }}</p>
+                <p>Posted {{= moment(model.updatedDateTime).fromNow() }}</p>
                 <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }}</div>
-                <!--<div class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</div>-->
                 <div class="id"> Job ID: {{= model.id }}</div>
             </section>
-            <h4 style="clear:none;">Job Description</h4>
-            {{= model.summary }}
             <h4 style="clear:none;">Skills</h4>
             <p>{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
+            <h4 style="clear:none;">Job Description</h4>
+            {{= model.summary }}
             <h4 style="clear:none;">About</h4>
             {{= model.aboutOrganization }}
             <hr>
