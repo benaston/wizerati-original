@@ -41,16 +41,17 @@
     </section>
     <div class="flex-item">
         <article class="item-of-interest-content {{=model.isHidden ? 'hidden' : '' }}">
-            <section class="item-metadata" style="margin-left:16px;margin-top: 7px; text-align: left;">
-            <p>{{= model.jobTitle }}, {{= model.location }}, {{= model.country }}</p>
-            <p>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day, {{= model.industry }} &nbsp;<a href="/itemofinterestmetadata/update?mode=1">more...</a></p>
-            <!--<p>{{= model.organization }}, {{= moment(model.updatedDateTime).fromNow() }}</p>-->
-            <!--<div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }}</div>-->
-            <!--<div class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</div>-->
-            <!--<div class="id"> Job ID: {{= model.id }}</div>-->
-            </section>
+
             <h3 style="clear:none; min-width: 250px; display: inline-block;">{{= model.title }}</h3>
             <p class="tld">{{= model.tld }}</p>
+            <section class="item-metadata">
+                <p>{{= model.jobTitle }}, {{= model.location }}, {{= model.country }}</p>
+                <p>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day, {{= model.industry }} &nbsp;<a href="/itemofinterestmetadata/update?mode=1">more...</a></p>
+                <p>{{= model.organization }}, {{= moment(model.updatedDateTime).fromNow() }}</p>
+                <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }}</div>
+                <!--<div class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</div>-->
+                <div class="id"> Job ID: {{= model.id }}</div>
+            </section>
             <h4 style="clear:none;">Job Description</h4>
             {{= model.summary }}
             <h4 style="clear:none;">Skills</h4>
