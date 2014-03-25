@@ -15,7 +15,7 @@
 }
 
 .btn-40 ~ .label {
-    margin-top: 7px;
+    margin-top: 4px;
     font-size: .8rem;
     color: rgba(0, 109, 204, 0.95);
 }

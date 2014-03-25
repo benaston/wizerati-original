@@ -256,7 +256,7 @@ button:disabled + label {
 }
 
 .btn-40 ~ .label {
-    margin-top: 7px;
+    margin-top: 4px;
     font-size: .8rem;
     color: rgba(0, 109, 204, 0.95);
 }
@@ -1212,6 +1212,32 @@ figure {
     opacity: 0;
 }
 
+.menu .btn-40.checked {
+    background: white;
+    color: rgba(126,157,173,1);
+}
+
+.menu .btn-40 {
+    position: relative; /*ensure focus indicator works as expected*/
+    color: rgba(255,255,255,1);
+    border-color: rgba(255,255,255,.2);
+}
+
+.menu .btn-40:hover {
+    box-shadow: #f5f5f5 0 0 8px 0;
+}
+
+.menu .btn-40 ~ .label {
+    color: whitesmoke;
+
+    /*vertical space minimization styles*/
+    -webkit-transform: rotate(-40deg);
+    position: relative;
+    top: 0;
+    top: -44px;
+    left: -48px;
+}
+
 body[data-ui-mode='1'] .items-of-interest-panel {
     opacity: 1;
 }
@@ -1255,7 +1281,7 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
 
 .selected-item .item-of-interest-content > :not(.menu-and-metadata-container),
 .pinned-item .item-of-interest-content > :not(.menu-and-metadata-container),
-.pinned-item .item-of-interest-content .itemMetadata {
+.pinned-item .item-of-interest-content .item-metadata {
     -webkit-filter: opacity(100%);
     transition: -webkit-filter .2s ease-out;
     /*-webkit-transform: scale(1);*/
@@ -1265,8 +1291,8 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
 
 .selected-item.hidden .item-of-interest-content > :not(.menu-and-metadata-container),
 .pinned-item.hidden .item-of-interest-content > :not(.menu-and-metadata-container),
-.selected-item.hidden .item-of-interest-content .itemMetadata,
-.pinned-item.hidden .item-of-interest-content .itemMetadata {
+.selected-item.hidden .item-of-interest-content .item-metadata,
+.pinned-item.hidden .item-of-interest-content .item-metadata {
     -webkit-filter: opacity(10%);
     transition: -webkit-filter .2s ease-out;
 }
@@ -1404,7 +1430,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     padding-right: 31px;
 }
 
-.itemMetadata, .itemMetadata code {
+.item-metadata, .item-metadata code {
     color: #999;
 }
 
@@ -1418,7 +1444,8 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     text-align: right;
 }
 
-.itemMetadata {
+.item-metadata {
+    float:right;
     margin: 5px 0 8px 0;
 }
 
@@ -1445,17 +1472,17 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .menu-item {
-    width: 76px;
+    /*width: 76px;*/
+    width: 92px;
     display: inline-block;
     text-align: center;
     vertical-align: top;
 }
 
 .item-of-interest-content {
-    margin-left: 25px;
-    margin-right: 25px;
-    margin-bottom: 30px;
-    margin-top: 5px;
+    /*overflow-y: scroll;*/
+    margin: 15px 25px 30px;
+    position: absolute;
 }
 
 .selected-top {
@@ -1510,26 +1537,29 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
 
 
 .menu-and-metadata-container {
-    float: right;
-    margin-left: 15px;
-    margin-bottom: 10px;
+    /*float: right;*/
+    /*margin-left: 15px;*/
+    /*margin-bottom: 10px;*/
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
     /*-webkit-transform: scale(1);*/
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
+    background: -webkit-linear-gradient(top, rgba(110,143,160,1) 0%,rgba(117,149,166,1) 61%,rgba(126,157,173,1) 100%);
+    box-sizing: border-box;
+    box-shadow: 1px 0 0px 1px rgba(12, 9, 23, 0.37);
 }
 
 #selected-item-container-2 {
     background: blue;
 }
 
-.itemMetadata h1 {
+.item-metadata h1 {
     margin-bottom: 18px;
 }
 
-.itemMetadata h3 {
+.item-metadata h3 {
     text-align: right;
 }
 
@@ -1550,7 +1580,7 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     margin-bottom: 20px;
 }
 
-.itemMetadata h3, .itemContact h3 {
+.item-metadata h3, .itemContact h3 {
     line-height: .8rem;
 }
 
@@ -1572,6 +1602,30 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     .menu-item {
         width: 82px; /*force two up/two down for aesthetic*/
     }
+}
+
+/*safari does not yet support prefix-less flexbox styles*/
+.flex-container {
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    -webkit-justify-content: flex-start;
+    -webkit-align-content: stretch;
+    -webkit-align-items: stretch;
+}
+
+.flex-item:nth-child(1) {
+    -webkit-order: 0;
+    -webkit-flex: 0 0 67px; /*height of the menu on items of interest*/
+    -webkit-align-self: auto;
+}
+
+.flex-item:nth-child(2) {
+    -webkit-order: 0;
+    -webkit-flex: 1 0 auto;
+    -webkit-align-self: auto;
+    overflow-y:scroll; /*enables the scroll-bars beneath the menu*/
+    position: relative; /*to enable correct positioning of child absolute positioned container*/
 }
 
 .items-of-interest-panel[data-pinned-item-count='2'] .handle-pinned-items,
@@ -1767,6 +1821,7 @@ body[data-ui-mode='0'] .main-container {
     pointer-events: none;
     transition: -webkit-filter .2s ease-out;
     visibility: hidden; /*enables click through for inspector in webkit*/
+    overflow: hidden; /*important to prevent vertical scroll-bars from appearing at small vertical heights*/
 }
 
 .apply-to-contract-dialog-content-panel-container {
@@ -1806,8 +1861,8 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-visibi
     top: 0;
     height: 100%;
     width: 74px;
-    /*background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);*/
-    background: black;
+    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
+    /*background: #1e1e1e;*/ /*'hired' color scheme - menu is #aaa text and this bg. white bg is #fafafa*/
     z-index: 3;
     box-shadow: 1px 0 1px -1px #0c0917;
     -webkit-filter: opacity(0%);
@@ -2455,7 +2510,8 @@ body[data-ui-mode='1'] .result-list-panel {
     display: inline-block;
     width: 14px;
     height: 14px;
-    background-color: rgba(0, 109, 204, .95);
+    /*background-color: rgba(0, 109, 204, .95);*/
+    background-color: rgba(126, 157, 173, 1);
     border-radius: 14px;
     content: '';
 }
@@ -2626,14 +2682,14 @@ body[data-ui-mode='1'] .result-list-panel {
 
 /*.t .c, .t .icon-container {*/
 /*.t .c {*/
-    /*-webkit-filter: opacity(100%);*/
-    /*-webkit-backface-visibility: hidden; *//*comment to attempt to stop crash in iOS*/
-    /*transition: -webkit-filter .2s ease-out;*/
+/*-webkit-filter: opacity(100%);*/
+/*-webkit-backface-visibility: hidden; *//*comment to attempt to stop crash in iOS*/
+/*transition: -webkit-filter .2s ease-out;*/
 /*}*/
 
 /*.t.hidden .c, .t.hidden .icon-container {*/
 /*.t.hidden .c {*/
-    /*-webkit-filter: opacity(10%);*/
+/*-webkit-filter: opacity(10%);*/
 /*}*/
 
 .t.hidden h3 {

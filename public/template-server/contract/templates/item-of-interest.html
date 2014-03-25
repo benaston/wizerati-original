@@ -1,15 +1,13 @@
-{{ try {  }}<div class="{{= model.isSelected ? 'selected-item-content' : 'pinned-item-content' }} pink" style="width: {{=model.width}}px;">
-    <div id="top1" class="in-page-anchor-target"></div>
-
-    <article class="item-of-interest-content {{=model.isHidden ? 'hidden' : '' }}">
-        <section class="menu-and-metadata-container" style="">
+{{ try {  }}<div class="flex-container {{= model.isSelected ? 'selected-item-content' : 'pinned-item-content' }}" style="width: {{=model.width}}px;">
+    <!--<div id="top1" class="in-page-anchor-target"></div>-->
+    <section class="menu-and-metadata-container flex-item">
         <section class="menu" >
 
             <form class="frm-favorite" method="POST" action="/bookmarkeditems/{{=model.isFavorite ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="menu-item">
-                    <button type="submit" id="btn-favorite-{{= model.id}}" class="btn btn-40 btn-primary {{=model.isFavoritable || model.isFavorite ? '' : 'disabled' }} {{ if(model.isFavorite) {}}checked{{} }} btn-favorite"
-                        title="{{=model.isFavoritable ? 'Favorite' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
+                    <button type="submit" id="btn-favorite-{{= model.id}}" class="btn btn-40 {{=model.isFavoritable || model.isFavorite ? '' : 'disabled' }} {{ if(model.isFavorite) {}}checked{{} }} btn-favorite"
+                            title="{{=model.isFavoritable ? 'Favorite' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
                     <label class="label" for="btn-favorite-{{= model.id}}">{{= model.isFavorite ? 'remove bookmark' : 'bookmark' }}</label>
                 </div>
             </form>
@@ -17,8 +15,8 @@
             <form class="frm-hide" method="POST" action="/hiddenitems/{{=model.isHidden ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="menu-item">
-                    <button id="btn-hide-{{= model.id}}" class="btn btn-40 btn-primary {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
-                        title="{{=model.isHideable ? 'Hide this from future results' : '' }}">&#xf30f;</button>
+                    <button id="btn-hide-{{= model.id}}" class="btn btn-40 {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
+                            title="{{=model.isHideable ? 'Hide this from future results' : '' }}">&#xf30f;</button>
                     <label class="label" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'un-hide' : 'hide' }}</label>
                 </div>
             </form>
@@ -26,7 +24,7 @@
             <form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="menu-item">
-                    <button id="btn-action-{{= model.id}}" class="btn btn-40 btn-primary {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
+                    <button id="btn-action-{{= model.id}}" class="btn btn-40 {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
                             title="{{=model.isActionable ? 'Apply to this job' : '' }}">&#xf16c;</button>
                     <label class="label" for="btn-action-{{= model.id}}">apply</label>
                 </div>
@@ -34,26 +32,25 @@
 
             <form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isPinned ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="menu-item">
-                    <button id="btn-pin-{{= model.id}}" class="btn btn-40 btn-primary {{=model.isPinnable || model.isPinned ? '' : 'disabled' }} {{ if(model.isPinned) {}}checked{{} }} btn-pin"
-            title="{{=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already pinned / You have the maximum number of permitted pinned items / You cannot pin hidden items' }}">{{= model.isPinned ? '&#xf30e;' : '&#xf30e;' }}</button>
-                    <label class="label" for="btn-pin-{{= model.id}}">{{= model.isPinned ? 'remove from comparison list' : 'add to comparison list' }}</label>
+                    <button id="btn-pin-{{= model.id}}" class="btn btn-40 {{=model.isPinnable || model.isPinned ? '' : 'disabled' }} {{ if(model.isPinned) {}}checked{{} }} btn-pin"
+                            title="{{=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already pinned / You have the maximum number of permitted pinned items / You cannot pin hidden items' }}">{{= model.isPinned ? '&#xf30e;' : '&#xf30e;' }}</button>
+                    <label class="label" for="btn-pin-{{= model.id}}">{{= model.isPinned ? 'compare' : 'compare' }}</label>
                 </div>
             </form>
-
         </section>
-        <section class="itemMetadata" style="margin-left:16px;margin-top: 7px; text-align: left;">
+    </section>
+    <div class="flex-item">
+        <article class="item-of-interest-content {{=model.isHidden ? 'hidden' : '' }}">
+            <section class="item-metadata" style="margin-left:16px;margin-top: 7px; text-align: left;">
             <p>{{= model.jobTitle }}, {{= model.location }}, {{= model.country }}</p>
             <p>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day, {{= model.industry }} &nbsp;<a href="/itemofinterestmetadata/update?mode=1">more...</a></p>
             <!--<p>{{= model.organization }}, {{= moment(model.updatedDateTime).fromNow() }}</p>-->
             <!--<div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }}</div>-->
             <!--<div class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</div>-->
             <!--<div class="id"> Job ID: {{= model.id }}</div>-->
-        </section>
-        </section>
-        <!--{{= model.isSelected ? '<div class="selected-top">' : '' }}-->
+            </section>
             <h3 style="clear:none; min-width: 250px; display: inline-block;">{{= model.title }}</h3>
             <p class="tld">{{= model.tld }}</p>
-        <!--{{= model.isSelected ? '</div>' : '' }}-->
             <h4 style="clear:none;">Job Description</h4>
             {{= model.summary }}
             <h4 style="clear:none;">Skills</h4>
@@ -62,9 +59,13 @@
             {{= model.aboutOrganization }}
             <hr>
             <a href="#top1" data-bypass-router="true" class="back-to-top">Back to top</a>
-    </article>
+        </article>
+    </div>
+
 </div>{{
 } catch(e) {
 throw "template exception: item-of-interest. " + e;
 }
 }}
+
+

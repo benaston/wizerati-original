@@ -4,6 +4,7 @@
     pointer-events: none;
     transition: -webkit-filter .2s ease-out;
     visibility: hidden; /*enables click through for inspector in webkit*/
+    overflow: hidden; /*important to prevent vertical scroll-bars from appearing at small vertical heights*/
 }
 
 .apply-to-contract-dialog-content-panel-container {

@@ -97,7 +97,8 @@ body[data-ui-mode='1'] .result-list-panel {
     display: inline-block;
     width: 14px;
     height: 14px;
-    background-color: rgba(0, 109, 204, .95);
+    /*background-color: rgba(0, 109, 204, .95);*/
+    background-color: rgba(126, 157, 173, 1);
     border-radius: 14px;
     content: '';
 }
@@ -268,14 +269,14 @@ body[data-ui-mode='1'] .result-list-panel {
 
 /*.t .c, .t .icon-container {*/
 /*.t .c {*/
-    /*-webkit-filter: opacity(100%);*/
-    /*-webkit-backface-visibility: hidden; *//*comment to attempt to stop crash in iOS*/
-    /*transition: -webkit-filter .2s ease-out;*/
+/*-webkit-filter: opacity(100%);*/
+/*-webkit-backface-visibility: hidden; *//*comment to attempt to stop crash in iOS*/
+/*transition: -webkit-filter .2s ease-out;*/
 /*}*/
 
 /*.t.hidden .c, .t.hidden .icon-container {*/
 /*.t.hidden .c {*/
-    /*-webkit-filter: opacity(10%);*/
+/*-webkit-filter: opacity(10%);*/
 /*}*/
 
 .t.hidden h3 {
