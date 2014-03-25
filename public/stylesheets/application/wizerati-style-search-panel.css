@@ -9,9 +9,13 @@
 }
 
 body[data-ui-mode='0'] .search-panel {
-    width: 100%;
-    box-shadow: none;
+    /*width: 100%;*/
+    /*box-shadow: none;*/
+    display: none;
+
 }
+
+
 
 body[data-ui-mode='0'][data-are-transitions-enabled='true'] .search-panel {
     transition: none;
@@ -32,10 +36,10 @@ body[data-ui-mode='1'] .search-panel {
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
 }
 
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] #search-form,
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] .handle-search-panel {
-    transition: -webkit-filter .1s ease-out; /*covers fading of contents and handle when mode changes*/
-}
+/*body[data-ui-mode='1'][data-are-transitions-enabled='true'] #search-form,*/
+/*body[data-ui-mode='1'][data-are-transitions-enabled='true'] .handle-search-panel {*/
+    /*transition: -webkit-filter .1s ease-out; *//*covers fading of contents and handle when mode changes*/
+/*}*/
 
 body[data-ui-mode='1'] .search-panel[data-mode='1'] {
     opacity: 1;

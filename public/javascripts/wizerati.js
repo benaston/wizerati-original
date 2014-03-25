@@ -4063,10 +4063,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function SelectedNavbarItemModel() {
+  function TabBarModel() {
 
-    if (!(this instanceof app.SelectedNavbarItemModel)) {
-      return new app.SelectedNavbarItemModel();
+    if (!(this instanceof app.TabBarModel)) {
+      return new app.TabBarModel();
     }
 
     var that = this,
@@ -4091,8 +4091,8 @@ window.wizerati = {
     return init();
   }
 
-  app.SelectedNavbarItemModel = SelectedNavbarItemModel;
-  invertebrate.Model.isExtendedBy(app.SelectedNavbarItemModel);
+  app.TabBarModel = TabBarModel;
+  invertebrate.Model.isExtendedBy(app.TabBarModel);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -6213,10 +6213,10 @@ window.wizerati = {
 
   //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
   //refactor result list panel to be search panel
-  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
+  function BookmarksController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
 
-    if (!(this instanceof app.BookmarkedItemsController)) {
-      return new app.BookmarkedItemsController(favoritesCubeModel,
+    if (!(this instanceof app.BookmarksController)) {
+      return new app.BookmarksController(favoritesCubeModel,
           selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel);
     }
 
@@ -6297,7 +6297,7 @@ window.wizerati = {
       }
 
       if (!selectedNavbarItemModel) {
-        throw 'BookmarkedItemsController::init selectedNavbarItemModel not supplied.';
+        throw 'BookmarkedItemsController::init tabBarModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;
@@ -6317,7 +6317,7 @@ window.wizerati = {
     return init();
   }
 
-  app.BookmarkedItemsController = BookmarkedItemsController;
+  app.BookmarksController = BookmarksController;
 
 }(wizerati));
 ;(function (app) {
@@ -7115,7 +7115,7 @@ window.wizerati = {
       }
 
       if (!selectedNavbarItemModel) {
-        throw 'SearchController::init selectedNavbarItemModel not supplied.';
+        throw 'SearchController::init tabBarModel not supplied.';
       }
 
       if (!bookmarkPanelModel) {
@@ -8217,15 +8217,15 @@ window.wizerati = {
         }, { silent: true });
 
         router.registerRoute('/bookmarks', function (dto) {
-          c.bookmarkedItemsController.index(dto);
+          c.bookmarksController.index(dto);
         });
 
         router.registerRoute('/bookmarkeditems/create', function (dto) {
-          c.bookmarkedItemsController.create(dto);
+          c.bookmarksController.create(dto);
         }, { silent: true });
 
         router.registerRoute('/bookmarkeditems/destroy', function (dto) {
-          c.bookmarkedItemsController.destroy(dto);
+          c.bookmarksController.destroy(dto);
         }, { silent: true });
 
         router.registerRoute('/favorites/create', function (dto) {
@@ -8411,6 +8411,12 @@ window.wizerati = {
     mod.ResultListMode = {
       Default: '0',
       Minimized: '1'
+//      SearchFormExpanded: '2' /*refactor into a two-state implementation - the result list will become the search panel and will not be able to  be minimized - although viewing the comparison list will make it invisible*/
+    };
+
+    mod.SearchFormMode = { /*the actual form used for searching*/
+      Default: '0',
+      Minimized: '1'
     };
 
     mod.SearchPanelMode = {
@@ -8507,7 +8513,7 @@ window.wizerati = {
     mod.searchFormModel = new wizerati.SearchFormModel();
     mod.searchPanelModel = new wizerati.SearchPanelModel();
     mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
-    mod.selectedNavbarItemModel = new wizerati.SelectedNavbarItemModel();
+    mod.tabBarModel = new wizerati.TabBarModel();
     mod.signInPanelModel = new wizerati.SignInPanelModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
@@ -8655,16 +8661,15 @@ window.wizerati = {
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-//    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
-    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.selectedNavbarItemModel);
+    mod.bookmarksController = new wizerati.BookmarksController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.selectedNavbarItemModel, m.bookmarkPanelModel);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.selectedNavbarItemModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.tabBarModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

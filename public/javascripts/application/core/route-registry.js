@@ -40,15 +40,15 @@
         }, { silent: true });
 
         router.registerRoute('/bookmarks', function (dto) {
-          c.bookmarkedItemsController.index(dto);
+          c.bookmarksController.index(dto);
         });
 
         router.registerRoute('/bookmarkeditems/create', function (dto) {
-          c.bookmarkedItemsController.create(dto);
+          c.bookmarksController.create(dto);
         }, { silent: true });
 
         router.registerRoute('/bookmarkeditems/destroy', function (dto) {
-          c.bookmarkedItemsController.destroy(dto);
+          c.bookmarksController.destroy(dto);
         }, { silent: true });
 
         router.registerRoute('/favorites/create', function (dto) {

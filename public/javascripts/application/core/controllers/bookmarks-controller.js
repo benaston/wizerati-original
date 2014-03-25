@@ -3,10 +3,10 @@
 
   //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
   //refactor result list panel to be search panel
-  function BookmarkedItemsController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
+  function BookmarksController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
 
-    if (!(this instanceof app.BookmarkedItemsController)) {
-      return new app.BookmarkedItemsController(favoritesCubeModel,
+    if (!(this instanceof app.BookmarksController)) {
+      return new app.BookmarksController(favoritesCubeModel,
           selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel);
     }
 
@@ -87,7 +87,7 @@
       }
 
       if (!selectedNavbarItemModel) {
-        throw 'BookmarkedItemsController::init selectedNavbarItemModel not supplied.';
+        throw 'BookmarkedItemsController::init tabBarModel not supplied.';
       }
 
       _favoritesCubeModel = favoritesCubeModel;
@@ -107,6 +107,6 @@
     return init();
   }
 
-  app.BookmarkedItemsController = BookmarkedItemsController;
+  app.BookmarksController = BookmarksController;
 
 }(wizerati));

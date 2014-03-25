@@ -131,7 +131,7 @@
       }
 
       if (!selectedNavbarItemModel) {
-        throw 'SearchController::init selectedNavbarItemModel not supplied.';
+        throw 'SearchController::init tabBarModel not supplied.';
       }
 
       if (!bookmarkPanelModel) {

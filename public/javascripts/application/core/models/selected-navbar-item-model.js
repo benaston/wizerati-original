@@ -1,10 +1,10 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function SelectedNavbarItemModel() {
+  function TabBarModel() {
 
-    if (!(this instanceof app.SelectedNavbarItemModel)) {
-      return new app.SelectedNavbarItemModel();
+    if (!(this instanceof app.TabBarModel)) {
+      return new app.TabBarModel();
     }
 
     var that = this,
@@ -29,7 +29,7 @@
     return init();
   }
 
-  app.SelectedNavbarItemModel = SelectedNavbarItemModel;
-  invertebrate.Model.isExtendedBy(app.SelectedNavbarItemModel);
+  app.TabBarModel = TabBarModel;
+  invertebrate.Model.isExtendedBy(app.TabBarModel);
 
 }(wizerati, $, invertebrate));

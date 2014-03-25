@@ -7,20 +7,32 @@
     left: 0;
     height: 100%;
     width: 480px;
-    margin-left: 414px;
+    margin-left: 74px;
     vertical-align: top;
     z-index: 1;
     background-color: white; /*avoids visibilty of items sliding in from behind panel*/
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
     overflow-x: hidden;
     overflow-y: scroll;
-    opacity: 0;
+    /*opacity: 0;*/
     /*-webkit-transform: translateZ(0);*/
     /*transform: translateZ(0);*/
 
     /*-webkit-transform: translate3d(0,0,0);*/
     /*transform: translate3d(0,0,0);*/
     /*-webkit-backface-visibility: hidden;*/
+}
+
+body[data-ui-mode='0'] .result-list-panel {
+    width: 100%;
+    box-shadow: none;
+    background: none;
+    margin: 0; /*cancels out the massive margin left we currently have on this*/
+}
+
+body[data-ui-mode='0'] .result-list-search-summary-container,
+body[data-ui-mode='0'] .result-list {
+    display: none;
 }
 
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] .result-list-panel {

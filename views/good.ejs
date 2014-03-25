@@ -3552,9 +3552,9 @@ var Zepto=function(){function a(a){return null==a?String(a):U[V.call(a)]||"objec
                     }, {title: "Wizerati Search", uriTransform: b.searchController.urlTransforms["/search"]}), a.registerRoute("/selecteditem/update", function (a) {
                         b.selectedItemController.update(a)
                     }, {silent: !0}), a.registerRoute("/bookmarkeditems/create", function (a) {
-                        b.bookmarkedItemsController.create(a)
+                        b.bookmarksController.create(a)
                     }, {silent: !0}), a.registerRoute("/bookmarkeditems/destroy", function (a) {
-                        b.bookmarkedItemsController.destroy(a)
+                        b.bookmarksController.destroy(a)
                     }, {silent: !0}), a.registerRoute("/favorites/create", function (a) {
                         b.favoritesController.create(a)
                     }, {silent: !0}), a.registerRoute("/favorites/destroy", function (a) {
@@ -3687,7 +3687,7 @@ var Zepto=function(){function a(a){return null==a?String(a):U[V.call(a)]||"objec
     }(wizerati.mod("views"), wizerati.mod("factories"), wizerati.mod("layout"), wizerati.mod("models"), wizerati.mod("services")), function (a, b, c, d, e) {
         "use strict";
         try {
-            a.actionedItemsController = new wizerati.ActionedItemsController(d.actionedItemsModel), a.applyToContractDialogController = new wizerati.ApplyToContractDialogController(e.applyToContractDialogService), a.bookmarkedItemsController = new wizerati.BookmarkedItemsController(d.favoritesCubeModel, d.selectedCubeFaceModel, e.bookmarkService), a.hiddenItemsController = new wizerati.HiddenItemsController(d.hiddenItemsModel), a.homeController = new wizerati.HomeController(d.uiRootModel, d.searchPanelModel, d.resultListModel, d.searchFormModel), a.itemsOfInterestController = new wizerati.ItemsOfInterestController(d.itemsOfInterestModel), a.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(d.itemsOfInterestModel), a.searchController = new wizerati.SearchController(d.uiRootModel, d.searchFormModel, e.searchService, d.resultListModel, b.guidFactory, d.searchPanelModel, d.itemsOfInterestModel, c.layoutCoordinator), a.searchPanelModeController = new wizerati.SearchPanelModeController(d.searchPanelModel), a.selectedItemController = new wizerati.SelectedItemController(d.searchPanelModel, d.resultListModel, d.itemsOfInterestModel)
+            a.actionedItemsController = new wizerati.ActionedItemsController(d.actionedItemsModel), a.applyToContractDialogController = new wizerati.ApplyToContractDialogController(e.applyToContractDialogService), a.bookmarksController = new wizerati.BookmarkedItemsController(d.favoritesCubeModel, d.selectedCubeFaceModel, e.bookmarkService), a.hiddenItemsController = new wizerati.HiddenItemsController(d.hiddenItemsModel), a.homeController = new wizerati.HomeController(d.uiRootModel, d.searchPanelModel, d.resultListModel, d.searchFormModel), a.itemsOfInterestController = new wizerati.ItemsOfInterestController(d.itemsOfInterestModel), a.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(d.itemsOfInterestModel), a.searchController = new wizerati.SearchController(d.uiRootModel, d.searchFormModel, e.searchService, d.resultListModel, b.guidFactory, d.searchPanelModel, d.itemsOfInterestModel, c.layoutCoordinator), a.searchPanelModeController = new wizerati.SearchPanelModeController(d.searchPanelModel), a.selectedItemController = new wizerati.SelectedItemController(d.searchPanelModel, d.resultListModel, d.itemsOfInterestModel)
         } catch (f) {
             throw"problem registering controllers module. " + f
         }

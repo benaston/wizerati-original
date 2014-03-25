@@ -63,6 +63,12 @@
     mod.ResultListMode = {
       Default: '0',
       Minimized: '1'
+//      SearchFormExpanded: '2' /*refactor into a two-state implementation - the result list will become the search panel and will not be able to  be minimized - although viewing the comparison list will make it invisible*/
+    };
+
+    mod.SearchFormMode = { /*the actual form used for searching*/
+      Default: '0',
+      Minimized: '1'
     };
 
     mod.SearchPanelMode = {
@@ -159,7 +165,7 @@
     mod.searchFormModel = new wizerati.SearchFormModel();
     mod.searchPanelModel = new wizerati.SearchPanelModel();
     mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
-    mod.selectedNavbarItemModel = new wizerati.SelectedNavbarItemModel();
+    mod.tabBarModel = new wizerati.TabBarModel();
     mod.signInPanelModel = new wizerati.SignInPanelModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
@@ -307,16 +313,15 @@
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-//    mod.favoritesController = new wizerati.FavoritesController(m.favoritesCubeModel, m.selectedCubeFaceModel);
-    mod.bookmarkedItemsController = new wizerati.BookmarkedItemsController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.selectedNavbarItemModel);
+    mod.bookmarksController = new wizerati.BookmarksController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.selectedNavbarItemModel, m.bookmarkPanelModel);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.selectedNavbarItemModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.tabBarModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;
