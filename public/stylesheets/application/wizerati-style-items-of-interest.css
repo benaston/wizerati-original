@@ -29,8 +29,8 @@
     -webkit-transform: rotate(-40deg);
     position: relative;
     top: 0;
-    top: -44px;
-    left: -47px;
+    top: -35px;
+    left: -41px;
 }
 
 body[data-ui-mode='1'] .items-of-interest-panel {
@@ -176,7 +176,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .menu {
-    margin-right: 0;
+    margin-right: 10px;
     margin-top: 0;
     padding-top: 6px;
 }
@@ -269,7 +269,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     /*width: 76px;*/
     width: 97px;
     display: inline-block;
-    text-align: center;
+    text-align: right;
     vertical-align: top;
 }
 
