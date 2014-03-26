@@ -183,7 +183,7 @@ body[data-ui-mode='1'] .result-list-panel {
 .location-and-posted {
     text-align: right;
     font-style: italic;
-    padding-right: 1px; /*avoid overflowing to the right (which is clipped when backface visibility is set*/
+    padding-right: 1px; /*avoid overflowing to the right (which is clipped when back-face visibility is set*/
 }
 
 .rate {
@@ -201,7 +201,7 @@ body[data-ui-mode='1'] .result-list-panel {
     color: #333;
 }
 
-.thumbnail a:hover, .t a:hover {
+body[data-hover-is-enabled='true'] .t a:hover {
     text-decoration: none;
     color: #333;
 }

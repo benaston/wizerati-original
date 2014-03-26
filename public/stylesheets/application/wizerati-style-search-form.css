@@ -160,7 +160,7 @@ body[data-ui-mode='0'] .search-button-container {
     margin: 8px 0 20px 0;
 }
 
-.search-filters input[type=radio]:not(:checked) + label:hover {
+body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checked) + label:hover {
     border-color: rgba(255, 200, 0, 0.3);
 }
 

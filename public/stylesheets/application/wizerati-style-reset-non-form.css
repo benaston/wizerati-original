@@ -3,7 +3,7 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+body[data-hover-is-enabled='true'] a:hover {
     outline: 0;
     color: #005580;
     text-decoration: underline;

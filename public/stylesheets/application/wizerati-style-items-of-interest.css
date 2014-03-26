@@ -18,15 +18,15 @@
     border-color: rgba(255, 255, 255, .2);
 }
 
-.menu .btn-40:hover {
+body[data-hover-is-enabled='true'] .menu .btn-40:hover {
     box-shadow: #f5f5f5 0 0 8px 0;
 }
 
 .menu .btn-40 ~ .label {
     color: whitesmoke;
-    position: relative;
-    top: -60px;
-    left: -45px;
+    position: absolute;
+    top: -5px;
+    right: 45px;
 }
 
 body[data-ui-mode='1'] .items-of-interest-panel {
@@ -257,6 +257,7 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     display: inline-block;
     text-align: right;
     vertical-align: top;
+    position: relative; /*to enable absolute positioning of label such that box does not overlap other items*/
 }
 
 .item-of-interest-content {

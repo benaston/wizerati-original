@@ -48,13 +48,13 @@ body[data-ui-mode='1'] #tab-bar {
     color: rgba(255, 255, 255, .95);
 }
 
-.h:hover {
+body[data-hover-is-enabled='true'] .h:hover {
     text-decoration: none;
     cursor: pointer;
     color: white;
 }
 
-#tab-bar button:hover {
+body[data-hover-is-enabled='true'] #tab-bar button:hover {
     box-shadow: rgb(245, 245, 245) 0 0 8px 0;
 }
 

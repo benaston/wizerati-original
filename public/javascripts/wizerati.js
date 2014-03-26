@@ -8722,7 +8722,11 @@ window.wizerati = {
 
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
 
-//  if(!!!('ontouchstart' in window)) {
+  //disable hover states in touch devices
+  if('ontouchstart' in window) {
+    $('body').attr('data-hover-is-enabled', 'false');
+  }
+
     $('#bookmark-panel').bind('scroll', function(e){
       window.stackHeads();
     });

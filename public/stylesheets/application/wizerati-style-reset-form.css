@@ -38,7 +38,7 @@ label {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-input[type="radio"]:not(:checked) + label:hover {
+body[data-hover-is-enabled='true'] input[type="radio"]:not(:checked) + label:hover {
     border-color: rgba(255, 200, 0, 0.3);
 }
 
