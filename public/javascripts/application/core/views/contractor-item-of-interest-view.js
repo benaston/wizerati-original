@@ -35,7 +35,7 @@
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractorItemOfInterestView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);

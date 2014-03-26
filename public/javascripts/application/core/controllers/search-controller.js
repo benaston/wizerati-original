@@ -13,7 +13,7 @@
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
-        _navbarItemEnum = app.mod('enum').NavbarItem,
+        _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
         _uiRootModel = null,
         _searchFormModel = null,
@@ -30,12 +30,12 @@
     this.show = function (dto) {
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
-        if(_selectedNavbarItemModel.getSelectedNavbarItem() !== _navbarItemEnum.Search) {
+        if(_selectedNavbarItemModel.getSelectedTab() !== _navbarItemEnum.Search) {
           _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
           _resultListModel.setMode(_resultListModeEnum.Default);
           _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
           _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-          _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+          _selectedNavbarItemModel.setSelectedTab(_navbarItemEnum.Search);
           return;
         }
 
@@ -71,7 +71,7 @@
                 _resultListModel.setMode(_resultListModeEnum.Default);
                 _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
                 _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-                _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+                _selectedNavbarItemModel.setSelectedTab(_navbarItemEnum.Search);
 
                 //this must occur *after the search panel mode is set* to its eventual value, to
                 //ensure the initial width rendering of items of interest is the correct one

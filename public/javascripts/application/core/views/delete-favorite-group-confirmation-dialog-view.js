@@ -39,11 +39,11 @@
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
       }
 
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied';
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);

@@ -1,10 +1,10 @@
 (function (app, $, invertebrate, _) {
   'use strict';
 
-  function FavoritesCubeModel(resultListModel) {
+  function BookmarkBookModel() {
 
-    if (!(this instanceof app.FavoritesCubeModel)) {
-      return new app.FavoritesCubeModel(resultListModel);
+    if (!(this instanceof app.BookmarkBookModel)) {
+      return new app.BookmarkBookModel();
     }
 
     var that = this,
@@ -163,19 +163,13 @@
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
-      }
-
-      _resultListModel = resultListModel;
-
       return that;
     }
 
     return init();
   }
 
-  app.FavoritesCubeModel = FavoritesCubeModel;
-  invertebrate.Model.isExtendedBy(app.FavoritesCubeModel);
+  app.BookmarkBookModel = BookmarkBookModel;
+  invertebrate.Model.isExtendedBy(app.BookmarkBookModel);
 
 }(wizerati, $, invertebrate, _));

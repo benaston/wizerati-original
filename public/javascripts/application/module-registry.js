@@ -54,7 +54,7 @@
       ActionContract: '5'
     };
 
-    mod.NavbarItem = {
+    mod.Tab = {
       Search: '0',
       Bookmark: '1',
       ComparisonList: '2'
@@ -158,6 +158,7 @@
     mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
     mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
     mod.bookmarkPanelModel = new wizerati.BookmarkPanelModel();
+    mod.bookmarkBookModel = new wizerati.BookmarkBookModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
     mod.purchasePanelModel = new wizerati.PurchasePanelModel();
@@ -170,7 +171,6 @@
     mod.uiRootModel = new wizerati.UIRootModel();
 
     //TODO: extract the functionality requiring the repo into a service
-    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(mod.resultListModel);
     mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
@@ -230,7 +230,7 @@
   try {
     mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new wizerati.AuthenticationService();
-    mod.bookmarkService = new wizerati.BookmarkService(m.favoritesCubeModel, r.itemRepository);
+    mod.bookmarkService = new wizerati.BookmarkService(m.bookmarkBookModel, r.itemRepository);
 
     mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
@@ -249,8 +249,8 @@
   try {
     mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
@@ -293,12 +293,11 @@
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
-    mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
-    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.favoritesCubeModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.bookmarkBookModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
@@ -313,7 +312,7 @@
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new wizerati.BookmarksController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
+    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);

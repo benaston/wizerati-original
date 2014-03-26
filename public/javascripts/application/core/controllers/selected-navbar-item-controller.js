@@ -13,7 +13,7 @@
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
         _resultListPanelModel = null,
-        _tabEnum = app.mod('enum').NavbarItem,
+        _tabEnum = app.mod('enum').Tab,
         _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
@@ -21,11 +21,11 @@
 
     this.update = function (dto) {
       try {
-        if (_model.getSelectedNavbarItem() === dto.navbarItem) {
+        if (_model.getSelectedTab() === dto.navbarItem) {
           return;
         }
 
-        _model.setSelectedNavbarItem(dto.navbarItem);
+        _model.setSelectedTab(dto.navbarItem);
 
         //move coordination of minimization etc into controllers redirected to
         if (dto.navbarItem === _tabEnum.Search) {

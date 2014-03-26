@@ -72,31 +72,31 @@
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'FavoritesCubeView::init model not supplied';
       }
 
       if (!favoriteViewFactory) {
-        throw 'favoriteViewFactory not supplied';
+        throw 'FavoritesCubeView::init favoriteViewFactory not supplied';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied';
+        throw 'FavoritesCubeView::init selectedCubeFaceModel not supplied';
       }
 
       if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied';
+        throw 'FavoritesCubeView::init hiddenItemsModel not supplied';
       }
 
       if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied';
+        throw 'FavoritesCubeView::init actionedItemsModel not supplied';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied';
+        throw 'FavoritesCubeView::init itemsOfInterestModel not supplied';
       }
 
       if (!bookmarkService) {
-        throw 'bookmarkService not supplied';
+        throw 'FavoritesCubeView::init bookmarkService not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);

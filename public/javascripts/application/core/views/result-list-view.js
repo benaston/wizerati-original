@@ -134,35 +134,35 @@
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ResultListView::init model not supplied';
       }
 
       if (!resultViewFactory) {
-        throw 'resultViewFactory not supplied';
+        throw 'ResultListView::init resultViewFactory not supplied';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied';
+        throw 'ResultListView::init selectedCubeFaceModel not supplied';
       }
 
       if (!favoritesCubeModel) {
-        throw 'selectedItemModel not supplied';
+        throw 'ResultListView::init favoritesCubeModel not supplied';
       }
 
       if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied';
+        throw 'ResultListView::init hiddenItemsModel not supplied';
       }
 
       if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied';
+        throw 'ResultListView::init actionedItemsModel not supplied';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied';
+        throw 'ResultListView::init itemsOfInterestModel not supplied';
       }
 
       if (!bookmarkService) {
-        throw 'bookmarkService not supplied';
+        throw 'ResultListView::init bookmarkService not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);

@@ -3,19 +3,16 @@
 
   //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
   //refactor result list panel to be search panel
-  function BookmarksController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
+  function BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(favoritesCubeModel,
-          selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel);
+      return new app.BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel);
     }
 
     var that = this,
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _navbarItemEnum = app.mod('enum').NavbarItem,
+        _navbarItemEnum = app.mod('enum').Tab,
         _favoritesCubeModel = null,
         _selectedCubeFaceModel = null,
         _bookmarkService = null,
@@ -23,15 +20,13 @@
         _resultListModel = null,
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
-        _selectedNavbarItemModel = null;
+        _tabBarModel = null;
 
     //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
     this.index = function (dto) {
-      _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-//      _resultListModel.setMode(_resultListModeEnum.Minimized); /*is this needed?*/
       _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
       _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+      _tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
     };
 
     this.create = function (dto) {
@@ -58,14 +53,6 @@
     };
 
     function init() {
-      if (!favoritesCubeModel) {
-        throw 'BookmarkedItemsController::init favoritesCubeModel not supplied.';
-      }
-
-      if (!selectedCubeFaceModel) {
-        throw 'BookmarkedItemsController::init selectedCubeFaceModel not supplied.';
-      }
-
       if (!bookmarkService) {
         throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
@@ -86,18 +73,16 @@
         throw 'BookmarkedItemsController::init itemsOfInterestModel not supplied.';
       }
 
-      if (!selectedNavbarItemModel) {
+      if (!tabBarModel) {
         throw 'BookmarkedItemsController::init tabBarModel not supplied.';
       }
 
-      _favoritesCubeModel = favoritesCubeModel;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
       _bookmarkService = bookmarkService;
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _bookmarkPanelModel = bookmarkPanelModel;
       _itemsOfInterestModel = itemsOfInterestModel;
-      _selectedNavbarItemModel = selectedNavbarItemModel;
+      _tabBarModel = tabBarModel;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 

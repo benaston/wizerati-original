@@ -95,7 +95,7 @@
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'SearchFormView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);

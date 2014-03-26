@@ -10,7 +10,7 @@
     var that = this,
         _searchPanelModel = null,
         _uiRootModel = null,
-        _tabEnum = app.mod('enum').NavbarItem;
+        _tabEnum = app.mod('enum').Tab;
 
     this.update = function (dto) {
       try {

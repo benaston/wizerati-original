@@ -2506,10 +2506,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarkService(bookModel, itemRepository) {
+  function BookmarkService(bookmarkBookModel, itemRepository) {
 
     if (!(this instanceof app.BookmarkService)) {
-      return new app.BookmarkService(bookModel, itemRepository);
+      return new app.BookmarkService(bookmarkBookModel, itemRepository);
     }
 
     var that = this,
@@ -2580,7 +2580,7 @@ window.wizerati = {
     };
 
     function init() {
-      if (!bookModel) {
+      if (!bookmarkBookModel) {
         throw 'bookModel not supplied';
       }
 
@@ -2590,7 +2590,7 @@ window.wizerati = {
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
-      _bookModel = bookModel;
+      _bookModel = bookmarkBookModel;
       _itemRepository = itemRepository;
 
       return that;
@@ -3185,124 +3185,13 @@ window.wizerati = {
   invertebrate.Model.isExtendedBy(app.ApplyToContractDialogModel);
 
 }(wizerati, $, invertebrate));
-;(function (app, $) {
-  'use strict';
-
-  function BookmarkPanelModel() {
-
-    if (!(this instanceof app.BookmarkPanelModel)) {
-      return new app.BookmarkPanelModel();
-    }
-
-    var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _mode = _bookmarkPanelModeEnum.Minimized;
-
-    this.eventUris = {
-      default: 'update://bookmarkpanelmodel/',
-      setMode: 'update://bookmarkpanelmodel/setmode'
-    };
-
-    this.getMode = function () {
-      return _mode || _bookmarkPanelModeEnum.Default;
-    };
-
-    this.setMode = function (value, options) {
-      if (_mode === value) {
-        return;
-      }
-
-      options = options || { silent: false };
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, _mode);
-      }
-    };
-
-    function init() {
-      _mode = _bookmarkPanelModeEnum.Default;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkPanelModel = BookmarkPanelModel;
-
-}(wizerati, $));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogModel() {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogModel)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogModel();
-    }
-
-    var that = this,
-        _favoriteGroupId = null,
-        _isWaiting = '', //should identify the dom element to indicate waiting
-        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
-
-    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
-
-    this.getFavoriteGroupId = function () {
-      return _favoriteGroupId;
-    };
-
-    this.setFavoriteGroupId = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _favoriteGroupId = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    this.getIsWaiting = function () {
-      return _isWaiting;
-    };
-
-    this.setIsWaiting = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _isWaiting = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    function init() {
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogModel = DeleteFavoriteGroupConfirmationDialogModel;
-  invertebrate.Model.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogModel);
-
-}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate, _) {
   'use strict';
 
-  function FavoritesCubeModel(resultListModel) {
+  function BookmarkBookModel() {
 
-    if (!(this instanceof app.FavoritesCubeModel)) {
-      return new app.FavoritesCubeModel(resultListModel);
+    if (!(this instanceof app.BookmarkBookModel)) {
+      return new app.BookmarkBookModel();
     }
 
     var that = this,
@@ -3461,11 +3350,54 @@ window.wizerati = {
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkBookModel = BookmarkBookModel;
+  invertebrate.Model.isExtendedBy(app.BookmarkBookModel);
+
+}(wizerati, $, invertebrate, _));
+;(function (app, $) {
+  'use strict';
+
+  function BookmarkPanelModel() {
+
+    if (!(this instanceof app.BookmarkPanelModel)) {
+      return new app.BookmarkPanelModel();
+    }
+
+    var that = this,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _mode = _bookmarkPanelModeEnum.Minimized;
+
+    this.eventUris = {
+      default: 'update://bookmarkpanelmodel/',
+      setMode: 'update://bookmarkpanelmodel/setmode'
+    };
+
+    this.getMode = function () {
+      return _mode || _bookmarkPanelModeEnum.Default;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
       }
 
-      _resultListModel = resultListModel;
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    function init() {
+      _mode = _bookmarkPanelModeEnum.Default;
 
       return that;
     }
@@ -3473,10 +3405,72 @@ window.wizerati = {
     return init();
   }
 
-  app.FavoritesCubeModel = FavoritesCubeModel;
-  invertebrate.Model.isExtendedBy(app.FavoritesCubeModel);
+  app.BookmarkPanelModel = BookmarkPanelModel;
 
-}(wizerati, $, invertebrate, _));
+}(wizerati, $));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function DeleteFavoriteGroupConfirmationDialogModel() {
+
+    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogModel)) {
+      return new app.DeleteFavoriteGroupConfirmationDialogModel();
+    }
+
+    var that = this,
+        _favoriteGroupId = null,
+        _isWaiting = '', //should identify the dom element to indicate waiting
+        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
+
+    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
+
+    this.getFavoriteGroupId = function () {
+      return _favoriteGroupId;
+    };
+
+    this.setFavoriteGroupId = function (value, options) {
+      options = options || { silent: false };
+
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _favoriteGroupId = value;
+
+      if (!options.silent) {
+        $.publish(that.updateEventUri);
+      }
+    };
+
+    this.getIsWaiting = function () {
+      return _isWaiting;
+    };
+
+    this.setIsWaiting = function (value, options) {
+      options = options || { silent: false };
+
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _isWaiting = value;
+
+      if (!options.silent) {
+        $.publish(that.updateEventUri);
+      }
+    };
+
+    function init() {
+      return that;
+    }
+
+    return init();
+  }
+
+  app.DeleteFavoriteGroupConfirmationDialogModel = DeleteFavoriteGroupConfirmationDialogModel;
+  invertebrate.Model.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogModel);
+
+}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4063,41 +4057,6 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function TabBarModel() {
-
-    if (!(this instanceof app.TabBarModel)) {
-      return new app.TabBarModel();
-    }
-
-    var that = this,
-        _navbarItemEnum = app.mod('enum').NavbarItem,
-        _selectedNavbarItem = _navbarItemEnum.Search;
-
-    this.updateEventUri = 'update://selectednavbaritemmodel';
-
-    this.getSelectedNavbarItem = function () {
-      return _selectedNavbarItem;
-    };
-
-    this.setSelectedNavbarItem = function (value) {
-      _selectedNavbarItem = value;
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      return that;
-    }
-
-    return init();
-  }
-
-  app.TabBarModel = TabBarModel;
-  invertebrate.Model.isExtendedBy(app.TabBarModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
   function SignInPanelModel() {
 
     if (!(this instanceof app.SignInPanelModel)) {
@@ -4206,6 +4165,41 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
+  function TabBarModel() {
+
+    if (!(this instanceof app.TabBarModel)) {
+      return new app.TabBarModel();
+    }
+
+    var that = this,
+        _tabEnum = app.mod('enum').Tab,
+        _selectedTab = _tabEnum.Search;
+
+    this.updateEventUri = 'update://tabbarmodel';
+
+    this.getSelectedTab = function () {
+      return _selectedTab;
+    };
+
+    this.setSelectedTab = function (value) {
+      _selectedTab = value;
+      $.publish(that.updateEventUri);
+    };
+
+    function init() {
+      return that;
+    }
+
+    return init();
+  }
+
+  app.TabBarModel = TabBarModel;
+  invertebrate.Model.isExtendedBy(app.TabBarModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
   function UIRootModel() {
 
     if (!(this instanceof app.UIRootModel)) {
@@ -4215,7 +4209,7 @@ window.wizerati = {
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _modalEnum = app.mod('enum').Modal,
-        _tabEnum = app.mod('enum').NavbarItem,
+        _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
@@ -4361,7 +4355,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'AccountActivationView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4406,7 +4400,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ApplyToContractDialogView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4466,7 +4460,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'BookmarkPanelView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4520,7 +4514,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractFavoriteView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4581,7 +4575,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractItemOfInterestView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4643,7 +4637,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractResultView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4685,7 +4679,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractorFavoriteView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4739,7 +4733,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractorItemOfInterestView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4781,7 +4775,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ContractorResultView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4838,11 +4832,11 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
       }
 
       if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied';
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -4935,31 +4929,31 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'FavoritesCubeView::init model not supplied';
       }
 
       if (!favoriteViewFactory) {
-        throw 'favoriteViewFactory not supplied';
+        throw 'FavoritesCubeView::init favoriteViewFactory not supplied';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied';
+        throw 'FavoritesCubeView::init selectedCubeFaceModel not supplied';
       }
 
       if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied';
+        throw 'FavoritesCubeView::init hiddenItemsModel not supplied';
       }
 
       if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied';
+        throw 'FavoritesCubeView::init actionedItemsModel not supplied';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied';
+        throw 'FavoritesCubeView::init itemsOfInterestModel not supplied';
       }
 
       if (!bookmarkService) {
-        throw 'bookmarkService not supplied';
+        throw 'FavoritesCubeView::init bookmarkService not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5314,41 +5308,40 @@ window.wizerati = {
     };
 
     function init() {
-
       if (!model) {
-        throw 'model not supplied';
+        throw 'ItemsOfInterestView::init model not supplied';
       }
 
       if (!itemOfInterestViewFactory) {
-        throw 'itemOfInterestViewFactory not supplied';
+        throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied';
+        throw 'ItemsOfInterestView::init selectedCubeFaceModel not supplied';
       }
 
       if (!favoritesCubeModel) {
-        throw 'selectedItemModel not supplied';
+        throw 'ItemsOfInterestView::init favoritesCubeModel not supplied';
       }
 
-      if (!bookmarkService) {
-        throw 'bookmarkService not supplied';
+      if (!hiddenItemsModel) {
+        throw 'ItemsOfInterestView::init hiddenItemsModel not supplied';
+      }
+
+      if (!actionedItemsModel) {
+        throw 'ItemsOfInterestView::init actionedItemsModel not supplied';
       }
 
       if (!layoutCoordinator) {
-        throw 'layoutCoordinator not supplied';
+        throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied';
+        throw 'ItemsOfInterestView::init uiRootModel not supplied';
+      }
+
+      if (!bookmarkService) {
+        throw 'ItemsOfInterestView::init bookmarkService not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5469,7 +5462,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'LoginPanelView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5516,7 +5509,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'PurchasePanelView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5670,35 +5663,35 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'ResultListView::init model not supplied';
       }
 
       if (!resultViewFactory) {
-        throw 'resultViewFactory not supplied';
+        throw 'ResultListView::init resultViewFactory not supplied';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied';
+        throw 'ResultListView::init selectedCubeFaceModel not supplied';
       }
 
       if (!favoritesCubeModel) {
-        throw 'selectedItemModel not supplied';
+        throw 'ResultListView::init favoritesCubeModel not supplied';
       }
 
       if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied';
+        throw 'ResultListView::init hiddenItemsModel not supplied';
       }
 
       if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied';
+        throw 'ResultListView::init actionedItemsModel not supplied';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied';
+        throw 'ResultListView::init itemsOfInterestModel not supplied';
       }
 
       if (!bookmarkService) {
-        throw 'bookmarkService not supplied';
+        throw 'ResultListView::init bookmarkService not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5836,7 +5829,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'SearchFormView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5901,7 +5894,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'SearchPanelView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -5977,7 +5970,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'model not supplied';
+        throw 'UIRootView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -6213,19 +6206,16 @@ window.wizerati = {
 
   //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
   //refactor result list panel to be search panel
-  function BookmarksController(favoritesCubeModel, selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel) {
+  function BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(favoritesCubeModel,
-          selectedCubeFaceModel, bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, selectedNavbarItemModel);
+      return new app.BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel);
     }
 
     var that = this,
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _navbarItemEnum = app.mod('enum').NavbarItem,
+        _navbarItemEnum = app.mod('enum').Tab,
         _favoritesCubeModel = null,
         _selectedCubeFaceModel = null,
         _bookmarkService = null,
@@ -6233,15 +6223,13 @@ window.wizerati = {
         _resultListModel = null,
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
-        _selectedNavbarItemModel = null;
+        _tabBarModel = null;
 
     //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
     this.index = function (dto) {
-      _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-//      _resultListModel.setMode(_resultListModeEnum.Minimized); /*is this needed?*/
       _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
       _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+      _tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
     };
 
     this.create = function (dto) {
@@ -6268,14 +6256,6 @@ window.wizerati = {
     };
 
     function init() {
-      if (!favoritesCubeModel) {
-        throw 'BookmarkedItemsController::init favoritesCubeModel not supplied.';
-      }
-
-      if (!selectedCubeFaceModel) {
-        throw 'BookmarkedItemsController::init selectedCubeFaceModel not supplied.';
-      }
-
       if (!bookmarkService) {
         throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
@@ -6296,18 +6276,16 @@ window.wizerati = {
         throw 'BookmarkedItemsController::init itemsOfInterestModel not supplied.';
       }
 
-      if (!selectedNavbarItemModel) {
+      if (!tabBarModel) {
         throw 'BookmarkedItemsController::init tabBarModel not supplied.';
       }
 
-      _favoritesCubeModel = favoritesCubeModel;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
       _bookmarkService = bookmarkService;
       _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _bookmarkPanelModel = bookmarkPanelModel;
       _itemsOfInterestModel = itemsOfInterestModel;
-      _selectedNavbarItemModel = selectedNavbarItemModel;
+      _tabBarModel = tabBarModel;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -6997,7 +6975,7 @@ window.wizerati = {
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
-        _navbarItemEnum = app.mod('enum').NavbarItem,
+        _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
         _uiRootModel = null,
         _searchFormModel = null,
@@ -7014,12 +6992,12 @@ window.wizerati = {
     this.show = function (dto) {
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
-        if(_selectedNavbarItemModel.getSelectedNavbarItem() !== _navbarItemEnum.Search) {
+        if(_selectedNavbarItemModel.getSelectedTab() !== _navbarItemEnum.Search) {
           _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
           _resultListModel.setMode(_resultListModeEnum.Default);
           _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
           _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-          _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+          _selectedNavbarItemModel.setSelectedTab(_navbarItemEnum.Search);
           return;
         }
 
@@ -7055,7 +7033,7 @@ window.wizerati = {
                 _resultListModel.setMode(_resultListModeEnum.Default);
                 _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
                 _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-                _selectedNavbarItemModel.setSelectedNavbarItem(_navbarItemEnum.Search);
+                _selectedNavbarItemModel.setSelectedTab(_navbarItemEnum.Search);
 
                 //this must occur *after the search panel mode is set* to its eventual value, to
                 //ensure the initial width rendering of items of interest is the correct one
@@ -7155,7 +7133,7 @@ window.wizerati = {
     var that = this,
         _searchPanelModel = null,
         _uiRootModel = null,
-        _tabEnum = app.mod('enum').NavbarItem;
+        _tabEnum = app.mod('enum').Tab;
 
     this.update = function (dto) {
       try {
@@ -7310,7 +7288,7 @@ window.wizerati = {
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
         _resultListPanelModel = null,
-        _tabEnum = app.mod('enum').NavbarItem,
+        _tabEnum = app.mod('enum').Tab,
         _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
@@ -7318,11 +7296,11 @@ window.wizerati = {
 
     this.update = function (dto) {
       try {
-        if (_model.getSelectedNavbarItem() === dto.navbarItem) {
+        if (_model.getSelectedTab() === dto.navbarItem) {
           return;
         }
 
-        _model.setSelectedNavbarItem(dto.navbarItem);
+        _model.setSelectedTab(dto.navbarItem);
 
         //move coordination of minimization etc into controllers redirected to
         if (dto.navbarItem === _tabEnum.Search) {
@@ -8402,7 +8380,7 @@ window.wizerati = {
       ActionContract: '5'
     };
 
-    mod.NavbarItem = {
+    mod.Tab = {
       Search: '0',
       Bookmark: '1',
       ComparisonList: '2'
@@ -8506,6 +8484,7 @@ window.wizerati = {
     mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
     mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
     mod.bookmarkPanelModel = new wizerati.BookmarkPanelModel();
+    mod.bookmarkBookModel = new wizerati.BookmarkBookModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new wizerati.HiddenItemsModel();
     mod.purchasePanelModel = new wizerati.PurchasePanelModel();
@@ -8518,7 +8497,6 @@ window.wizerati = {
     mod.uiRootModel = new wizerati.UIRootModel();
 
     //TODO: extract the functionality requiring the repo into a service
-    mod.favoritesCubeModel = new wizerati.FavoritesCubeModel(mod.resultListModel);
     mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
@@ -8578,7 +8556,7 @@ window.wizerati = {
   try {
     mod.accountService = new wizerati.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new wizerati.AuthenticationService();
-    mod.bookmarkService = new wizerati.BookmarkService(m.favoritesCubeModel, r.itemRepository);
+    mod.bookmarkService = new wizerati.BookmarkService(m.bookmarkBookModel, r.itemRepository);
 
     mod.authorizationService = new wizerati.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new wizerati.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
@@ -8597,8 +8575,8 @@ window.wizerati = {
   try {
     mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.favoritesCubeModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
@@ -8641,12 +8619,11 @@ window.wizerati = {
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.favoritesCubeModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
-    mod.searchPanelView = new wizerati.SearchPanelView(m.searchPanelModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
-    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.favoritesCubeModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.bookmarkBookModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
@@ -8661,7 +8638,7 @@ window.wizerati = {
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new wizerati.BookmarksController(m.favoritesCubeModel, m.selectedCubeFaceModel, s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
+    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);

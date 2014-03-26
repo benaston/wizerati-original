@@ -8,17 +8,17 @@
     }
 
     var that = this,
-        _navbarItemEnum = app.mod('enum').NavbarItem,
-        _selectedNavbarItem = _navbarItemEnum.Search;
+        _tabEnum = app.mod('enum').Tab,
+        _selectedTab = _tabEnum.Search;
 
-    this.updateEventUri = 'update://selectednavbaritemmodel';
+    this.updateEventUri = 'update://tabbarmodel';
 
-    this.getSelectedNavbarItem = function () {
-      return _selectedNavbarItem;
+    this.getSelectedTab = function () {
+      return _selectedTab;
     };
 
-    this.setSelectedNavbarItem = function (value) {
-      _selectedNavbarItem = value;
+    this.setSelectedTab = function (value) {
+      _selectedTab = value;
       $.publish(that.updateEventUri);
     };
 

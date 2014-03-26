@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function BookmarkService(bookModel, itemRepository) {
+  function BookmarkService(bookmarkBookModel, itemRepository) {
 
     if (!(this instanceof app.BookmarkService)) {
-      return new app.BookmarkService(bookModel, itemRepository);
+      return new app.BookmarkService(bookmarkBookModel, itemRepository);
     }
 
     var that = this,
@@ -75,7 +75,7 @@
     };
 
     function init() {
-      if (!bookModel) {
+      if (!bookmarkBookModel) {
         throw 'bookModel not supplied';
       }
 
@@ -85,7 +85,7 @@
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
-      _bookModel = bookModel;
+      _bookModel = bookmarkBookModel;
       _itemRepository = itemRepository;
 
       return that;

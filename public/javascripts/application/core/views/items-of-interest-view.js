@@ -322,41 +322,40 @@
     };
 
     function init() {
-
       if (!model) {
-        throw 'model not supplied';
+        throw 'ItemsOfInterestView::init model not supplied';
       }
 
       if (!itemOfInterestViewFactory) {
-        throw 'itemOfInterestViewFactory not supplied';
+        throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
       }
 
       if (!selectedCubeFaceModel) {
-        throw 'selectedCubeFaceModel not supplied';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied';
+        throw 'ItemsOfInterestView::init selectedCubeFaceModel not supplied';
       }
 
       if (!favoritesCubeModel) {
-        throw 'selectedItemModel not supplied';
+        throw 'ItemsOfInterestView::init favoritesCubeModel not supplied';
       }
 
-      if (!bookmarkService) {
-        throw 'bookmarkService not supplied';
+      if (!hiddenItemsModel) {
+        throw 'ItemsOfInterestView::init hiddenItemsModel not supplied';
+      }
+
+      if (!actionedItemsModel) {
+        throw 'ItemsOfInterestView::init actionedItemsModel not supplied';
       }
 
       if (!layoutCoordinator) {
-        throw 'layoutCoordinator not supplied';
+        throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
       }
 
       if (!uiRootModel) {
-        throw 'uiRootModel not supplied';
+        throw 'ItemsOfInterestView::init uiRootModel not supplied';
+      }
+
+      if (!bookmarkService) {
+        throw 'ItemsOfInterestView::init bookmarkService not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
