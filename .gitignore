@@ -1,2 +1,13 @@
 .idea
 *.log
+public/javascripts/wizerati.js
+public/javascripts/wizerati.min.broken-angle-bracket-percent.js
+public/javascripts/wizerati.min.js
+public/stylesheets/wizerati.css
+public/stylesheets/wizerati.encoded.css
+public/stylesheets/wizerati.min.css
+view-templates/_index-build-injected.ejs
+view-templates/_index-css-injected.ejs
+view-templates/_index-in-page-templates-injected.ejs
+view-templates/_index-javascript-injected.ejs
+view-templates/_index-warning-injected.ejs
