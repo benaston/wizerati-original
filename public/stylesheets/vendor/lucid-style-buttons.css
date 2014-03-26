@@ -208,12 +208,13 @@ a.btn-primary:not(.disabled):not(.checked):hover {
         box-shadow: none; /* touch start and end events take care of this*/
     }
 
-    .btn.halo:enabled:active {
-        box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
-        transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
-    }
+
 }
 
+.btn.halo:enabled:active {
+    box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
+    transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
+}
 
 
 
