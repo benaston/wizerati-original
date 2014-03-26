@@ -181,7 +181,7 @@ module.exports = function (grunt) {
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/tab-bar.html") %>'
             },
             {
-              match: 'bookmarks-panel',
+              match: 'bookmark-panel',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmark-panel.html") %>'
             }
           ]

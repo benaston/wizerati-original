@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '#bookmark-panel-wrapper',
+        _el = '#bookmark-panel-container',
         _modeEnum = app.mod('enum').BookmarkPanelMode,
         _renderOptimizations = {};
 
