@@ -1,24 +1,22 @@
 (function (invertebrate, $) {
   'use strict';
 
-  function SyncSvc(configSvc, serverUriSelectionFunc) {
+  function SyncService(configService, serverUrlSelectionFunc) {
 
-    if (!(this instanceof invertebrate.SyncSvc)) {
-      return new invertebrate.SyncSvc(configSvc, serverUriSelectionFunc);
+    if (!(this instanceof invertebrate.SyncService)) {
+      return new invertebrate.SyncService(configService, serverUrlSelectionFunc);
     }
 
     var that = this,
         _configSvc = null,
         _syncInterval = null;
 
-    this.serverUriSelectionFunc = function () {
+    this.serverUrlSelectionFunc = function () {
       return './example/templateServer/';
-    }; //see note 1
-
-    this.metadata = {}; //scripts register themselves in here
+    };
 
     this.sync = function (options) {
-      $.publish('sync://syncableModels/'); //review uri
+      //...
     };
 
     this.start = function () {
@@ -34,12 +32,12 @@
     };
 
     function init() {
-      if (!configSvc) {
+      if (!configService) {
         throw 'configSvc not supplied';
       }
 
-      _configSvc = configSvc;
-      that.serverUriSelectionFunc = serverUriSelectionFunc || that.serverUriSelectionFunc;
+      _configSvc = configService;
+      that.serverUrlSelectionFunc = serverUrlSelectionFunc || that.serverUrlSelectionFunc;
 
       return that;
     }
@@ -47,5 +45,5 @@
     return init();
   }
 
-  invertebrate.SyncSvc = SyncSvc;
+  invertebrate.SyncService = SyncService;
 }(invertebrate, $));

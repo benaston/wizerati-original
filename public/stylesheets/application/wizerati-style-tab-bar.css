@@ -1,61 +1,66 @@
-#nav-panel {
+#tab-bar {
     position: fixed;
     left: 0;
     top: 0;
     height: 100%;
     width: 74px;
     background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
-    /*background: #1e1e1e;*/ /*'hired' color scheme - menu is #aaa text and this bg. white bg is #fafafa*/
     z-index: 3;
     box-shadow: 1px 0 1px -1px #0c0917;
     -webkit-filter: opacity(0%);
     pointer-events: none;
 }
 
-body[data-ui-mode='1'] #nav-panel {
+body[data-ui-mode='1'] #tab-bar {
     -webkit-filter: opacity(100%);
     pointer-events: auto;
 }
 
-#nav-panel label {
+.i {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.i-sign-out {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+#tab-bar label {
     color: whitesmoke;
 }
 
-#nav-panel button {
+#tab-bar button {
     position: relative; /*for positioning of after*/
     color: rgba(255, 255, 255, 1);
     border-color: rgba(255, 255, 255, .2);
 }
 
-.home-link:hover {
-    text-decoration: none;
-    cursor: pointer;
-    color: white;
-}
-
-.home-link {
+.h {
     display: inline-block;
     width: 74px;
     height: 50px;
     line-height: 50px;
     text-align: center;
-    font-family: helvetica-bold;
+    font-family: helvetica-bold, Arial, sans-serif;
     color: rgba(255, 255, 255, .95);
 }
 
-.nav-item-sign-out {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+.h:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
 }
 
-#nav-panel button:hover {
-    box-shadow: rgb(245, 245, 245) 0px 0px 8px 0px;
+#tab-bar button:hover {
+    box-shadow: rgb(245, 245, 245) 0 0 8px 0;
 }
 
-#nav-panel[data-selected-item='0'] .nav-item-search button:after,
-#nav-panel[data-selected-item='1'] .nav-item-bookmarks button:after,
-#nav-panel[data-selected-item='2'] .nav-item-comparison-list button:after {
+#tab-bar[data-selected-item='0'] .nav-item-search button:after,
+#tab-bar[data-selected-item='1'] .nav-item-bookmarks button:after,
+#tab-bar[data-selected-item='2'] .nav-item-comparison-list button:after {
     display: inline-block;
     position: absolute;
     content: '';
@@ -63,7 +68,6 @@ body[data-ui-mode='1'] #nav-panel {
     height: 10px;
     background: white;
     border-radius: 10px;
-    /*box-shadow: 0 0 4px 0px rgba(255,255,255,.95);*/
     left: -16px;
     bottom: 21px;
 }

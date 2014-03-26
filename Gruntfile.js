@@ -54,20 +54,17 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-animation.css',
           'public/stylesheets/application/wizerati-style-body.css',
           'public/stylesheets/application/wizerati-style-cube.css',
-          'public/stylesheets/application/wizerati-style-dialogs.css',
           'public/stylesheets/application/wizerati-style-faces.css',
           'public/stylesheets/application/wizerati-style-items-of-interest.css',
-          'public/stylesheets/application/wizerati-style-comparison-list-handle.css',
           'public/stylesheets/application/wizerati-style-loading-and-background.css',
           'public/stylesheets/application/wizerati-style-main-container.css',
           'public/stylesheets/application/wizerati-style-modal-container.css',
           'public/stylesheets/application/wizerati-style-apply-to-contract-dialog.css',
-          'public/stylesheets/application/wizerati-style-nav-panel.css',
+          'public/stylesheets/application/wizerati-style-tab-bar.css',
           'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',
           'public/stylesheets/application/wizerati-style-bookmark-panel.css',
-          'public/stylesheets/application/wizerati-style-bookmark-panel-handle.css',
           'public/stylesheets/application/wizerati-style-navbar-and-logo-and-build.css',
           'public/stylesheets/application/wizerati-style-result-list-panel.css'
         ],
@@ -80,7 +77,6 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-//          'public/javascripts/<%= pkg.name %>.min.broken-angle-bracket-percent.js': ['<%= concat.dist.dest %>']
           'public/javascripts/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
         }
       }
@@ -173,10 +169,6 @@ module.exports = function (grunt) {
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/no-script.html") %>'
             },
             {
-              match: 'search-panel',
-              replacement: '<%= grunt.file.read("public/template-server/shared/templates/search-panel.html") %>'
-            },
-            {
               match: 'result-list-panel',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/result-list-panel.html") %>'
             },
@@ -186,7 +178,7 @@ module.exports = function (grunt) {
             },
             {
               match: 'nav-panel',
-              replacement: '<%= grunt.file.read("public/template-server/shared/templates/nav-panel.html") %>'
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/tab-bar.html") %>'
             },
             {
               match: 'bookmarks-panel',

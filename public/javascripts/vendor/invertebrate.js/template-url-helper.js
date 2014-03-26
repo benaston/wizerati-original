@@ -10,7 +10,7 @@
     var that = this,
         _configSvc = null;
 
-    this.serverUriSelectionFunc = function () {
+    this.serverUrlSelectionFunc = function () {
       return './template-server/';
     }; //see note 1
 
@@ -23,7 +23,7 @@
       if (!templatesUriPart) {
         throw 'templatesUriPart empty.';
       }
-      var serverUri = that.serverUriSelectionFunc();
+      var serverUri = that.serverUrlSelectionFunc();
       if (!serverUri) {
         throw 'serverUri empty.';
       }
@@ -40,7 +40,7 @@
       if (!postRenderScriptsUriPart) {
         throw 'postRenderScriptsUriPart empty.';
       }
-      var serverUri = that.serverUriSelectionFunc();
+      var serverUri = that.serverUrlSelectionFunc();
       if (!serverUri) {
         throw 'serverUri empty.';
       }
@@ -54,7 +54,7 @@
       }
 
       _configSvc = configSvc;
-      that.serverUriSelectionFunc = serverUriSelectionFunc || that.serverUriSelectionFunc;
+      that.serverUrlSelectionFunc = serverUriSelectionFunc || that.serverUrlSelectionFunc;
 
       return that;
     }

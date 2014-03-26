@@ -12,7 +12,7 @@
     this.prodConfig = {};
     this.sharedConfig = {};
 
-    //should be called from types implementing this prototype
+    //Should be called from types implementing this prototype.
     this.collateConfiguration = function () {
       this.envEnum = envEnum || invertebrate.env;
 

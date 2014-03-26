@@ -43,6 +43,7 @@
           _searchFormModel.setKeywords(dto.keywords, {silent: true});
           _searchFormModel.setLocation(dto.location, {silent: true});
           _searchFormModel.setRate(dto.r, {silent: true});
+
         }
 
         _searchFormModel.setIsWaiting('true');
@@ -81,7 +82,7 @@
                 }
 
                 setTimeout(function () {
-                  _uiRootModel.setAreTransitionsEnabled('true');
+                  _uiRootModel.setAreTransitionsEnabled(true  );
                 }, 0);
                 /*attempt to ensure that UI rendered before re-enabling transitions*/
 

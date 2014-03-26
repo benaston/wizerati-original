@@ -7,7 +7,7 @@
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="menu-item">
                     <button type="submit" id="btn-favorite-{{= model.id}}" class="btn btn-40 {{=model.isFavoritable || model.isFavorite ? '' : 'disabled' }} {{ if(model.isFavorite) {}}checked{{} }} btn-favorite"
-                            title="{{=model.isFavoritable ? 'Favorite' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
+                            title="{{=model.isFavoritable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
                     <label class="label" for="btn-favorite-{{= model.id}}">{{= model.isFavorite ? 'remove bookmark' : 'bookmark' }}</label>
                 </div>
             </form>

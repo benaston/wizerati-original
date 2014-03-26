@@ -37,15 +37,16 @@
       options = _.extend({}, defaultOptions, options);
 
       //attempt to solve issue of sending off many requests for the same template before first request has returned
+      var cacheCheckingInterval = 20; //ms
       if (_inFlightRequests[uri]) {
         setTimeout(function checkCacheForTemplate() {
           if (_templates[uri]) {
             return options.done(_templates[uri]);
           } else {
-            setTimeout(checkCacheForTemplate, 20);
+            setTimeout(checkCacheForTemplate, cacheCheckingInterval);
           }
-        }, 20);
-        /*impact on framerate is currently unknown*/
+        }, cacheCheckingInterval);
+        /*impact on frame-rate is currently unknown*/
 
         return;
         /*critical*/
@@ -59,8 +60,7 @@
       return $.ajax({ url: uri, cache: false })
           .done(function (data) {
             delete _inFlightRequests[uri];
-            var t = _.template(data);
-            /*Templatization step.*/
+            var t = _.template(data); //Templatization step.
             _templates[uri] = t;
             options.done(t);
           })

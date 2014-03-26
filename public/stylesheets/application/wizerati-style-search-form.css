@@ -196,7 +196,7 @@ body[data-ui-mode='0'] .search-button-container {
         display: none;
     }
 
-    .background-container {
+    #background-container {
         display: none;
     }
 

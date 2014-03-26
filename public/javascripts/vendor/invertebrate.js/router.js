@@ -126,10 +126,6 @@
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
 
-//      var interactionEvent = (navigator.userAgent.match(/iPad/i)) ? "touchend" : "click";
-      //Improves perceived responsiveness on iOS
-      //event.preventDefault()
-//      document.addEventListener("touchstart", function() {},false);
       $(document).on('touchstart', 'button', function(){ $(this).addClass('halo'); });
       $(document).on('touchend', 'button', function(){ $(this).removeClass('halo'); });
       $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);

@@ -9,13 +9,13 @@
 
 .menu .btn-40.checked {
     background: rgba(14, 17, 19, 1);
-    color: rgba(126,157,173,1);
+    color: rgba(126, 157, 173, 1);
 }
 
 .menu .btn-40 {
     position: relative; /*ensure focus indicator works as expected*/
-    color: rgba(255,255,255,1);
-    border-color: rgba(255,255,255,.2);
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, .2);
 }
 
 .menu .btn-40:hover {
@@ -24,9 +24,6 @@
 
 .menu .btn-40 ~ .label {
     color: whitesmoke;
-
-    /*vertical space minimization styles*/
-    /*-webkit-transform: rotate(-40deg);*/
     position: relative;
     top: -60px;
     left: -45px;
@@ -228,15 +225,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     color: #999;
 }
 
-.contact {
-    /*font-size: .95rem;*/
-    /*margin-bottom: 7px;*/
-}
-
-.id {
-    /*text-align: right;*/
-}
-
 .item-metadata {
     text-align: right;
     margin-top: 27px;
@@ -265,7 +253,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .menu-item {
-    /*width: 76px;*/
     width: 97px;
     display: inline-block;
     text-align: right;
@@ -282,33 +269,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     background: rgba(0, 0, 0, .1);
     box-shadow: 0px -15px 0 25px rgba(0, 0, 0, .1);
 }
-
-.ios-scroll-enable {
-    -webkit-overflow-scrolling: touch;
-}
-
-/*.t .is-favorite {*/
-/*color: silver;*/
-/*font-size: 1.5rem;*/
-/*}*/
-
-/*.t.hidden {*/
-/*opacity: .3;*/
-/*}*/
-
-/*.t.hidden:before {*/
-/*opacity: 1;*/
-/*position: absolute;*/
-/*left: 75px;*/
-/*top: 19px;*/
-/*display: block;*/
-/*font-family: glyph;*/
-/*content: '\e802';*/
-/*font-size: 4rem;*/
-/*font-weight: 700;*/
-/*color: rgba(0, 0, 0, .2);*/
-/*-webkit-transform: rotate(-45deg);*/
-/*}*/
 
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .pinned-item-content,
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .selected-item-content,
@@ -328,18 +288,13 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     padding-right: 69px; /*enable blur to spread out to the right, avoiding hard cut-off*/
 }
 
-
 .menu-and-metadata-container {
-    /*float: right;*/
-    /*margin-left: 15px;*/
-    /*margin-bottom: 10px;*/
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    /*-webkit-transform: scale(1);*/
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
-    background: -webkit-linear-gradient(top, rgba(110,143,160,1) 0%,rgba(117,149,166,1) 61%,rgba(126,157,173,1) 100%);
+    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);
     box-sizing: border-box;
     box-shadow: 1px 0 0px 1px rgba(12, 9, 23, 0.37);
 }
@@ -413,6 +368,6 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     -webkit-order: 0;
     -webkit-flex: 1 0 auto;
     -webkit-align-self: auto;
-    overflow-y:scroll; /*enables the scroll-bars beneath the menu*/
+    overflow-y: scroll; /*enables the scroll-bars beneath the menu*/
     position: relative; /*to enable correct positioning of child absolute positioned container*/
 }

@@ -664,9 +664,6 @@ body {
     position: absolute;
     width: 100%; /*width and height of 100% required to ensure modal blur covers viewport*/
     height: 100%;
-}
-
-body {
     background-color: white;
 }
 
@@ -1178,10 +1175,6 @@ figure {
 .cube p {
     font-size:.8rem;
 }
-.modal-container {
-    height: 100%;
-}
-
 @font-face {
     font-family: ionicons;
     src: url('../fonts/ionicons.woff');
@@ -1214,13 +1207,13 @@ figure {
 
 .menu .btn-40.checked {
     background: rgba(14, 17, 19, 1);
-    color: rgba(126,157,173,1);
+    color: rgba(126, 157, 173, 1);
 }
 
 .menu .btn-40 {
     position: relative; /*ensure focus indicator works as expected*/
-    color: rgba(255,255,255,1);
-    border-color: rgba(255,255,255,.2);
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, .2);
 }
 
 .menu .btn-40:hover {
@@ -1229,9 +1222,6 @@ figure {
 
 .menu .btn-40 ~ .label {
     color: whitesmoke;
-
-    /*vertical space minimization styles*/
-    /*-webkit-transform: rotate(-40deg);*/
     position: relative;
     top: -60px;
     left: -45px;
@@ -1433,15 +1423,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     color: #999;
 }
 
-.contact {
-    /*font-size: .95rem;*/
-    /*margin-bottom: 7px;*/
-}
-
-.id {
-    /*text-align: right;*/
-}
-
 .item-metadata {
     text-align: right;
     margin-top: 27px;
@@ -1470,7 +1451,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
 }
 
 .menu-item {
-    /*width: 76px;*/
     width: 97px;
     display: inline-block;
     text-align: right;
@@ -1487,33 +1467,6 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     background: rgba(0, 0, 0, .1);
     box-shadow: 0px -15px 0 25px rgba(0, 0, 0, .1);
 }
-
-.ios-scroll-enable {
-    -webkit-overflow-scrolling: touch;
-}
-
-/*.t .is-favorite {*/
-/*color: silver;*/
-/*font-size: 1.5rem;*/
-/*}*/
-
-/*.t.hidden {*/
-/*opacity: .3;*/
-/*}*/
-
-/*.t.hidden:before {*/
-/*opacity: 1;*/
-/*position: absolute;*/
-/*left: 75px;*/
-/*top: 19px;*/
-/*display: block;*/
-/*font-family: glyph;*/
-/*content: '\e802';*/
-/*font-size: 4rem;*/
-/*font-weight: 700;*/
-/*color: rgba(0, 0, 0, .2);*/
-/*-webkit-transform: rotate(-45deg);*/
-/*}*/
 
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .pinned-item-content,
 body[data-items-of-interest-mode='0'] .items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .selected-item-content,
@@ -1533,18 +1486,13 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     padding-right: 69px; /*enable blur to spread out to the right, avoiding hard cut-off*/
 }
 
-
 .menu-and-metadata-container {
-    /*float: right;*/
-    /*margin-left: 15px;*/
-    /*margin-bottom: 10px;*/
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    /*-webkit-transform: scale(1);*/
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
-    background: -webkit-linear-gradient(top, rgba(110,143,160,1) 0%,rgba(117,149,166,1) 61%,rgba(126,157,173,1) 100%);
+    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);
     box-sizing: border-box;
     box-shadow: 1px 0 0px 1px rgba(12, 9, 23, 0.37);
 }
@@ -1618,85 +1566,31 @@ body[data-items-of-interest-mode='1'] .pinned-item:last-child .pinned-item-conte
     -webkit-order: 0;
     -webkit-flex: 1 0 auto;
     -webkit-align-self: auto;
-    overflow-y:scroll; /*enables the scroll-bars beneath the menu*/
+    overflow-y: scroll; /*enables the scroll-bars beneath the menu*/
     position: relative; /*to enable correct positioning of child absolute positioned container*/
 }
-
-.items-of-interest-panel[data-pinned-item-count='2'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='3'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='4'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='5'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='6'] .handle-pinned-items,
-.items-of-interest-panel[data-pinned-item-count='7'] .handle-pinned-items,
-.items-of-interest-panel[data-selected-item-count='1'][data-pinned-item-count='1'] .handle-pinned-items {
-    opacity: 1;
-}
-
-.btn-hide {
-    /*-webkit-transform: rotate(-45deg);*/
-}
-
-.handle-pinned-items .btn {
-    color: rgba(0, 109, 204, 0.95);
-}
-
-.handle-pinned-items {
-    position: absolute;
-    display: inline-block;
-    top: 0;
-    left: 0;
-    width: 69px;
-    text-align: center;
-    color: #333;
-    text-decoration: none;
-    opacity: 0;
-    cursor: pointer;
-    overflow: visible;
-    margin: 5px 0 0 0;
-    z-index: 99999; /*ensure in-front of all pinned items*/
-
-}
-
-.handle-comparison-list {
-    display: inline-block;
-    margin: 20px 0 20px 0;
-    top: 283px;
-    right: 0;
-}
-
-.handle-comparison-list.selected button:after {
-    position: absolute;
-    display: inline-block;
-    content: '';
-    left: -7px;
-    top: 22px;
-    background-color: #fff;
-    width: 2px;
-    height: 10px;
-    box-shadow: 0 0 10px 0px white;
-}
 /*Background visible during loading and search screen.*/
-.main-container[data-visibility-mode='0'] ~ .background-container,
-.main-container[data-visibility-mode='0'] ~ .loading-container {
+#main-container[data-visibility-mode='0'] ~ #background-container,
+#main-container[data-visibility-mode='0'] ~ .loading-container {
     -webkit-filter: opacity(100%);
 }
 
-.main-container[data-visibility-mode='1'] ~ .background-container,
-.main-container[data-visibility-mode='1'] ~ .loading-container {
+#main-container[data-visibility-mode='1'] ~ #background-container,
+#main-container[data-visibility-mode='1'] ~ .loading-container {
     -webkit-filter: opacity(0%);
 }
 
-.main-container[data-visibility-mode='2'] ~ .background-container,
-.main-container[data-visibility-mode='2'] ~ .loading-container {
+#main-container[data-visibility-mode='2'] ~ #background-container,
+#main-container[data-visibility-mode='2'] ~ .loading-container {
     -webkit-filter: opacity(0%);
 }
 
 /*We want the background visible on the search screen.*/
-body[data-ui-mode='0'] .main-container[data-visibility-mode='2'] ~ .background-container {
+body[data-ui-mode='0'] #main-container[data-visibility-mode='2'] ~ #background-container {
     -webkit-filter: opacity(100%);
 }
 
-.background-container,
+#background-container,
 .loading-container {
     width: 100%;
     height: 100%;
@@ -1710,13 +1604,12 @@ body[data-ui-mode='0'] .main-container[data-visibility-mode='2'] ~ .background-c
 }
 
 /*Loading indicator should rotate while rendering the search page.*/
-body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .loading-container .loading {
+body[data-ui-mode='-1'] .loading, #main-container[data-visibility-mode='0'] ~ .loading-container .loading {
     -webkit-animation-duration: 2.5s;
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: 1;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
-
     -moz-animation-duration: 2.5s;
     -moz-animation-name: rotate;
     -moz-animation-iteration-count: 1;
@@ -1735,42 +1628,16 @@ body[data-ui-mode='-1'] .loading, .main-container[data-visibility-mode='0'] ~ .l
     top: 50%;
     margin-top: -25px;
     margin-left: -25px;
-
 }
 
-.background-container {
+#background-container {
     pointer-events: none;
     display: inline-block;
-    /*background-size: 1000px 1000px;*/
-    /*background-image: ;*/
-    /*background-position: center center;*/
-    /*background-repeat: no-repeat;*/
-    /*-webkit-backface-visibility: hidden;*/
-
     background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
-    /*background-image: url('../images/logo.svg');*/
 }
 
-body[data-ui-mode='-1'] .background-container .background-image,
-body[data-ui-mode='0'] .background-container .background-image {
-    /*color: rgba(250, 250, 250, 1);*/
-    /*font-family: ionicons;*/
-    /*pointer-events: none;*/
-    /*display: inline-block;*/
-    /*content: '\f30c';*/
-    /*font-size: 77rem;*/
-    /*line-height: 48rem;*/
-    /*position: absolute;*/
-    /*top: 50%;*/
-    /*left: 50%;*/
-    /*margin-left: -370px;*/
-    /*margin-top: -376px;*/
-    /*-webkit-font-smoothing: subpixel-antialiased;*/
-
-    /* position: absolute; */
-    /* top: 0; */
-    /* left: 0; */
-    /* -webkit-font-smoothing: subpixel-antialiased; */
+body[data-ui-mode='-1'] #background-container .background-image,
+body[data-ui-mode='0'] #background-container .background-image {
     background-size: 1500px 1500px;
     background-image: url('../images/logo.svg');
     background-position: center center;
@@ -1780,32 +1647,33 @@ body[data-ui-mode='0'] .background-container .background-image {
     -webkit-backface-visibility: hidden; /*fix webkit blurry bug on svgs*/
 }
 
-body[data-ui-mode='-1'] .main-container {
+body[data-ui-mode='-1'] #main-container {
     -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
     transition: none;
 }
 
-.main-container[data-visibility-mode='0'], .main-container[data-visibility-mode='1'] {
+#main-container[data-visibility-mode='0'], #main-container[data-visibility-mode='1'] {
     -webkit-filter: opacity(0%); /*we use a filter because the normal opacity transition is janky*/
     transition: -webkit-filter .1s ease-out;
 }
 
-body:not([data-ui-mode='-1']) .main-container[data-visibility-mode='2'] {
+body:not([data-ui-mode='-1']) #main-container[data-visibility-mode='2'] {
     -webkit-filter: opacity(100%); /*we use a filter because the normal opacity transition is janky*/
     transition: -webkit-filter .1s ease-out;
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
 /*This prevents the inline-block layout elements from wrapping on narrow screens.*/
-.main-container {
+#main-container {
     white-space: nowrap;
+    height: 100%;
 }
 
-*:not(.main-container) {
+*:not(#main-container) {
     white-space: normal;
 }
 
-body[data-ui-mode='0'] .main-container {
+body[data-ui-mode='0'] #main-container {
     overflow: hidden; /*prevents scrollbars from being shown on greenfield state*/
 }
 
@@ -1844,69 +1712,74 @@ body[data-modal='5'] #apply-to-contract-dialog {
     width: 100%;
 }
 
-body:not([data-ui-mode='-1']):not([data-modal='-1']) .main-container[data-visibility-mode='2'] {
+body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibility-mode='2'] {
     -webkit-filter: opacity(100%) blur(20px);
     transition: -webkit-filter .1s ease-out;
 }
 
-#nav-panel {
+#tab-bar {
     position: fixed;
     left: 0;
     top: 0;
     height: 100%;
     width: 74px;
     background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
-    /*background: #1e1e1e;*/ /*'hired' color scheme - menu is #aaa text and this bg. white bg is #fafafa*/
     z-index: 3;
     box-shadow: 1px 0 1px -1px #0c0917;
     -webkit-filter: opacity(0%);
     pointer-events: none;
 }
 
-body[data-ui-mode='1'] #nav-panel {
+body[data-ui-mode='1'] #tab-bar {
     -webkit-filter: opacity(100%);
     pointer-events: auto;
 }
 
-#nav-panel label {
+.i {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.i-sign-out {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+#tab-bar label {
     color: whitesmoke;
 }
 
-#nav-panel button {
+#tab-bar button {
     position: relative; /*for positioning of after*/
     color: rgba(255, 255, 255, 1);
     border-color: rgba(255, 255, 255, .2);
 }
 
-.home-link:hover {
-    text-decoration: none;
-    cursor: pointer;
-    color: white;
-}
-
-.home-link {
+.h {
     display: inline-block;
     width: 74px;
     height: 50px;
     line-height: 50px;
     text-align: center;
-    font-family: helvetica-bold;
+    font-family: helvetica-bold, Arial, sans-serif;
     color: rgba(255, 255, 255, .95);
 }
 
-.nav-item-sign-out {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+.h:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
 }
 
-#nav-panel button:hover {
-    box-shadow: rgb(245, 245, 245) 0px 0px 8px 0px;
+#tab-bar button:hover {
+    box-shadow: rgb(245, 245, 245) 0 0 8px 0;
 }
 
-#nav-panel[data-selected-item='0'] .nav-item-search button:after,
-#nav-panel[data-selected-item='1'] .nav-item-bookmarks button:after,
-#nav-panel[data-selected-item='2'] .nav-item-comparison-list button:after {
+#tab-bar[data-selected-item='0'] .nav-item-search button:after,
+#tab-bar[data-selected-item='1'] .nav-item-bookmarks button:after,
+#tab-bar[data-selected-item='2'] .nav-item-comparison-list button:after {
     display: inline-block;
     position: absolute;
     content: '';
@@ -1914,7 +1787,6 @@ body[data-ui-mode='1'] #nav-panel {
     height: 10px;
     background: white;
     border-radius: 10px;
-    /*box-shadow: 0 0 4px 0px rgba(255,255,255,.95);*/
     left: -16px;
     bottom: 21px;
 }
@@ -1985,7 +1857,7 @@ body[data-ui-mode='1'] #bookmark-panel[data-mode='0'] + .search-panel[data-mode=
         display: none;
     }
 
-    .background-container {
+    #background-container {
         display: none;
     }
 
@@ -2197,7 +2069,7 @@ body[data-ui-mode='0'] .search-button-container {
         display: none;
     }
 
-    .background-container {
+    #background-container {
         display: none;
     }
 
@@ -2263,28 +2135,30 @@ body[data-ui-mode='0'] .search-button-container {
     display: inline-block;
     position: relative; /*required to ensure correct horizontal scrolling behavior*/
     top: 0;
-    left: 0;
+    left: -480px; /*avoid scroll events falling onto this element*/
     height: 100%;
     width: 480px;
-    top: 0;
-    left: 0;
     margin-left: 74px;
     vertical-align: top;
-    pointer-events: none;
     overflow-x: hidden;
     overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    /*z-index: 2; *//*ensure remains in-front of everything else*/
     z-index: -1; /*fixes a webkit z-index bug I think*/
     box-shadow: none;
     background-color: white;
     -webkit-filter: opacity(0%); /*attempt to avoid flash of visibility on greenfield*/
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
 }
 
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-panel {
-    /*transition: -webkit-transform .2s ease-out, -webkit-filter .2s ease-out;*/
+/*We avoid the translate because it screws with the fixed position headers*/
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-panel-wrapper[data-mode='0'] #bookmark-panel {
     transition: -webkit-filter .2s ease-out;
+}
+
+
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-panel-wrapper[data-mode='1'] #bookmark-panel {
+    transition: -webkit-filter .2s ease-out, left 0 linear .2s;
 }
 
 body[data-ui-mode='1'] #bookmark-panel {
@@ -2293,89 +2167,34 @@ body[data-ui-mode='1'] #bookmark-panel {
 
 body[data-ui-mode='1'] #bookmark-panel-wrapper[data-mode='0']  #bookmark-panel {
     -webkit-filter: opacity(100%);
-    /*-webkit-transform: translate(0, 0);*/
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
+    left: 0;
 }
 
-body[data-ui-mode='1'] #bookmark-panel-wrapper[data-mode='1'] #bookmark-panel {
-    -webkit-transform: translate(-480px, 0);
-}
-
-/*.bookmark-list-summary:before {*/
-    /*content: '\f162';*/
-    /*font-family: ionicons;*/
+/*body[data-ui-mode='1'] #bookmark-panel-wrapper[data-mode='0']  #bookmark-panel {*/
+/*left:*/
 /*}*/
 
 .bookmark-panel-summary {
     padding: 15px 10px 14px 10px;
     box-sizing: border-box; /*because we are applying padding*/
-    color:#999;
+    color: #999;
 }
 
 .bookmark-list-summary {
-    background-color: rgba(246,246,246,1);
+    background-color: rgba(246, 246, 246, 1);
     padding: 15px 10px 14px 10px;
     box-sizing: border-box; /*because we are applying padding*/
     line-height: 1rem;
     color: #333;
     font-family: helvetica-bold;
-    width:100%;
+    width: 100%;
     z-index: 1; /*ensure remains over results*/
-    /*height:*/
 }
-
-/*.bookmark-list:not(:last-child):after {*/
-    /*content: '';*/
-    /*display: block;*/
-    /*width: 70%;*/
-    /*height: 3px;*/
-    /*box-shadow: 0 1px 1px -1px #0c0917;*/
-    /*margin: 0 auto 10px auto;*/
-/*}*/
 
 /*"narrow-screen" devices like iphone*/
 @media only screen and (max-device-width: 568px) {
 
-}
-
-
-.handle-bookmarks-panel {
-    position: relative; /*for after pseudo element*/
-    display: inline-block;
-    margin: 20px 0 20px 0;
-    width: 74px;
-    color: #333;
-    text-decoration: none;
-    z-index: 2;
-    -webkit-transform: scale(1);
-    -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
-}
-
-.handle-bookmarks-panel.selected button:after {
-    position: absolute;
-    display: inline-block;
-    content: '';
-    left: -7px;
-    top: 22px;
-    background-color: #fff;
-    width: 2px;
-    height: 10px;
-    box-shadow: 0 0 10px 0px white;
-}
-
-.search-panel[data-mode='0'] .handle-bookmarks-panel {
-    -webkit-filter: opacity(0%);
-    pointer-events: none;
-}
-
-.search-panel[data-mode='1'] .handle-bookmarks-panel {
-    /*opacity: 1;*/
-    -webkit-filter: opacity(100%);
-    pointer-events: auto;
-}
-
-.handle-bookmarks-panel-label {
-    padding: 0 1px 0 1px;
 }
 
 body[data-ui-mode='0'] .navbar, body[data-ui-mode='1'] .navbar {
@@ -2422,14 +2241,11 @@ body[data-ui-mode='1'] .navbar {
     width: 100%;
     pointer-events: none;
     transition: opacity .1s linear;
-    /*color: rgba(224, 231, 235, 1);*/
-    /*color: #333;*/
     color: rgba(82, 110, 125, 1);
     text-align: center;
 }
 
 .navbar a, .navbar span {
-    /*color: rgba(224, 231, 235, 1);*/
     color: #333;
 }
 
@@ -2458,8 +2274,6 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     margin: 0;
     opacity: 0;
     pointer-events: none;
-    /*color: rgba(0, 109, 204, .95);*/
-    /*color: rgba(224, 231, 235, 1);*/
     color: rgba(82, 110, 125, 1);
     z-index: 1;
     font-family: helvetica-bold;
@@ -2478,22 +2292,7 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
 
 body[data-ui-mode='1'] .logo,
 body[data-ui-mode='1'] .tag-line {
-    z-index: -1;
     display: none;
-}
-
-.build {
-    position: fixed;
-    top: 40%;
-    width: 300px;
-    display: none;
-    left: 50%;
-    margin-left: -150px;
-    z-index: 9999999;
-    font-weight: bold;
-    text-align: center;
-    background-color: rgba(255, 255, 255, .4);
-    box-shadow: 0 0 10px 10px rgba(255, 255, 255, .4);
 }
 
 /* Result List Panel */
@@ -2512,6 +2311,8 @@ body[data-ui-mode='1'] .tag-line {
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
     overflow-x: hidden;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
     /*opacity: 0;*/
     /*-webkit-transform: translateZ(0);*/
     /*transform: translateZ(0);*/
