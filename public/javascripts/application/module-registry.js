@@ -306,7 +306,33 @@
 }(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
 
 
-(function (mod, f, l, m, s) {
+(function (mod, m) {
+  'use strict';
+
+  try {
+    mod.uiModelPack = new wizerati.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
+  }
+  catch (e) {
+    throw 'problem registering packs module. ' + e;
+  }
+
+}(wizerati.mod('packs'), wizerati.mod('models')));
+
+
+(function (mod, p, f, l) {
+  'use strict';
+
+  try {
+    mod.searchControllerHelper = new wizerati.SearchControllerHelper(p.uiModelPack, f.guidFactory, l.layoutCoordinator);
+  }
+  catch (e) {
+    throw 'problem registering helpers module. ' + e;
+  }
+
+}(wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout')));
+
+
+(function (mod, f, l, m, s, p, h) {
   'use strict';
 
   try {
@@ -317,7 +343,7 @@
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel, l.layoutCoordinator);
+    mod.searchController = new wizerati.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
     mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
@@ -327,7 +353,7 @@
     throw 'problem registering controllers module. ' + e;
   }
 
-}(wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
+}(wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs'), wizerati.mod('helpers')));
 
 
 (function (mod) {

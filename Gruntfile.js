@@ -26,6 +26,8 @@ module.exports = function (grunt) {
           'public/javascripts/application/core/config.js',
           'public/javascripts/application/core/models/**/*.js',
           'public/javascripts/application/core/views/**/*.js',
+          'public/javascripts/application/core/helpers/**/*.js',
+          'public/javascripts/application/core/packs/**/*.js',
           'public/javascripts/application/core/controllers/**/*.js',
           'public/javascripts/application/core/factories/**/*.js',
           'public/javascripts/application/core/caches/**/*.js',
