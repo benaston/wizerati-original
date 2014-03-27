@@ -47,7 +47,8 @@
       if(_itemsOfInterestModel.getPinnedItemCount() > 1
           || (_itemsOfInterestModel.getSelectedItemCount() > 0
                 && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
-        effectiveWidthPinnedItemsHandle = _effectiveWidthPinnedItemsHandleDefault;
+//        effectiveWidthPinnedItemsHandle = _effectiveWidthPinnedItemsHandleDefault;
+        effectiveWidthPinnedItemsHandle = 0;
       }
 
       var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;

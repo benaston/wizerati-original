@@ -18,6 +18,14 @@ body[data-ui-mode='1'] #search-form {
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
+.search-panel[data-mode='1'] #search-form {
+    -webkit-filter: opacity(0%);
+}
+
+.search-panel[data-mode='0'] #search-form {
+    -webkit-filter: opacity(100%);
+}
+
 body[data-ui-mode='1'] .result-list-panel[data-search-form-mode='0'] {
     overflow: hidden; /*prevent scrolling through results when search form is expanded*/
 }
@@ -33,6 +41,7 @@ body[data-ui-mode='1'] [data-search-form-mode='0'] #search-form {
 }
 
 body[data-ui-mode='1'] [data-search-form-mode='1'] #search-form {
+    -webkit-filter: opacity(0%); /*prevent it from being visible when users pull down to scroll on iOS*/
     -webkit-transform: translateY(-318px); /* to base of the search buttons*/
 }
 
@@ -69,13 +78,7 @@ body[data-ui-mode='1'] .search-button-container {
     width: 88px;
 }
 
-.search-panel[data-mode='1'] #search-form {
-    -webkit-filter: opacity(0%);
-}
 
-.search-panel[data-mode='0'] #search-form {
-    -webkit-filter: opacity(100%);
-}
 
 body[data-ui-mode='0'] #search-form .search-filters {
     text-align: left;

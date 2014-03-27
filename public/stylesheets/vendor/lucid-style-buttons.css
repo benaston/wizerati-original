@@ -27,10 +27,13 @@
 }
 
 .btn-40 {
-    width: 55px;
+    /*width: 55px;*/
+    width: 67px; /*chosen to match ipad pass entry size, plus centered on left*/
     border-radius: 85px;
-    line-height: 55px;
-    height: 55px;
+    line-height: 67px;
+    /*line-height: 55px;*/
+    height: 67px;
+    /*height: 55px;*/
     font-size: 2rem;
     color: rgba(0, 109, 204, 0.95);
 }
