@@ -99,6 +99,10 @@
           c.applyToContractDialogController.destroy(dto);
         }, { silent: true });
 
+        router.registerRoute('/searchformmode/update', function (dto) {
+          c.searchFormModeController.update(dto);
+        }, { silent: true });
+
 //        router.registerRoute('/selectednavbaritem/update', function (dto) {
 //          c.selectedNavbarItemController.update(dto);
 //        }, { silent: true });
@@ -130,6 +134,10 @@
         router.registerRoute('/searchpanelmode/update', function (dto) {
           c.searchPanelModeController.update(dto);
         }, { silent: true });
+
+        router.registerRoute('/search/edit', function (dto) {
+          c.searchController.edit(dto);
+        });
 //
 //        router.registerRoute('/resultlistmode/update', function (dto) {
 //          c.resultListModeController.update(dto);

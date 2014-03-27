@@ -59,7 +59,7 @@ var keywords = model.getKeywords();
     </div>
     <div class="inline-block width-62 cancel-button-container centered-text">
         <div class="rotating-button-container centered-text">
-            <button type="submit" id="btn-cancel-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">cancel</span>
+            <button form="frm-cancel-search" type="submit" id="btn-cancel-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">cancel</span>
         </div>
     </div>
     <div class="inline-block width-62 search-button-container centered-text">
@@ -67,6 +67,9 @@ var keywords = model.getKeywords();
             <button type="submit" id="btn-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">search</span>
         </div>
     </div>
+</form>
+<form id="frm-cancel-search" action="/searchformmode/update" method="POST">
+    <input type="hidden" name="mode" value="1">
 </form>
 {{
 } catch(e) {

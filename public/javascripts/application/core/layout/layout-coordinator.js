@@ -11,9 +11,7 @@
         _layoutCalculator = null;
 
     this.layOut = function () {
-//      setTimeout(function(){ //this works, but need to fix rendering of items of interest in 1st place
         that.applyLayout(_layoutCalculator.calculate());
-//      });
     };
 
     this.applyLayout = function (layout) {

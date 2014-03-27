@@ -26,9 +26,7 @@ body[data-ui-mode='1'] #search-form {
     -webkit-filter: opacity(100%);
 }
 
-body[data-ui-mode='1'] .result-list-panel[data-search-form-mode='0'] {
-    overflow: hidden; /*prevent scrolling through results when search form is expanded*/
-}
+
 
 body[data-ui-mode='1'] [data-search-form-mode='0'] .result-list,
 body[data-ui-mode='1'] [data-search-form-mode='0'] .result-list-search-summary-container {

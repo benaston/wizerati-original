@@ -14,6 +14,7 @@
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
 
     this.$el = null;
+    this.$resultListPanelEl = null;
     this.Model = null;
 
     this.render = function (e) {
@@ -24,8 +25,8 @@
         return;
       }
 
-      return app.instance.renderTemplate(that.$el,
-          _templateName, that.Model, options);
+      that.renderSetMode(that.Model.getMode());
+      return app.instance.renderTemplate(that.$el, _templateName, that.Model, options);
     };
 
     this.bindEvents = function () {
@@ -73,6 +74,10 @@
       }
     };
 
+    this.renderSetMode = function (mode) {
+      that.$resultListPanelEl.attr('data-search-form-mode', mode);
+    };
+
     function monitorWaitState() {
       _waitStateIsBeingMonitored = true;
 
@@ -90,6 +95,7 @@
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.$resultListPanelEl = $('#result-list-panel'); /*to be renamed to search panel*/
       that.render(); //this introduces the wait on initial visit
     };
 
@@ -103,10 +109,12 @@
 
       _renderOptimizations[that.Model.eventUris.setIsVisible] = that.renderSetIsVisible;
       _renderOptimizations[that.Model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setIsVisible, that.render);
       $.subscribe(that.Model.eventUris.setIsWaiting, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
 
       return that;
     }

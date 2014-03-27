@@ -1,6 +1,6 @@
 /* Result List Panel */
 
-.result-list-panel {
+#result-list-panel {
     display: inline-block;
     position: relative;
     top: 0;
@@ -15,17 +15,13 @@
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-
-    /*opacity: 0;*/
-    /*-webkit-transform: translateZ(0);*/
-    /*transform: translateZ(0);*/
-
-    /*-webkit-transform: translate3d(0,0,0);*/
-    /*transform: translate3d(0,0,0);*/
-    /*-webkit-backface-visibility: hidden;*/
 }
 
-body[data-ui-mode='0'] .result-list-panel {
+body[data-ui-mode='1'] .result-list-panel[data-search-form-mode='0'] {
+    overflow: hidden; /*prevent scrolling through results when search form is expanded*/
+}
+
+body[data-ui-mode='0'] #result-list-panel {
     width: 100%;
     box-shadow: none;
     background: none;
@@ -37,17 +33,17 @@ body[data-ui-mode='0'] .result-list {
     display: none;
 }
 
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] .result-list-panel {
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #result-list-panel {
     transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;
 }
 
-body[data-ui-mode='1'] .result-list-panel {
+body[data-ui-mode='1'] #result-list-panel {
     opacity: 1;
     -webkit-transform: translate(0, 0);
     /*transition: opacity .1s ease-out 0s, -webkit-transform .2s ease-out;*/
 }
 
-.result-list-panel[data-mode='1'] .result-list {
+#result-list-panel[data-mode='1'] .result-list {
     opacity: 0.2;
     pointer-events: none;
     /*left: -420px;*/
@@ -66,19 +62,19 @@ body[data-ui-mode='1'] .result-list-panel {
     color: #999;
 }
 
-.search-panel[data-mode='1'] ~ .result-list-panel {
+.search-panel[data-mode='1'] ~ #result-list-panel {
     /*-webkit-transform: translate(-266px, 0);*/
     -webkit-transform: translate(-340px, 0);
     /*transition: -webkit-transform .2s ease-out;*/
 }
 
-.search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] {
+.search-panel[data-mode='0'] ~ #result-list-panel[data-mode='1'] {
     /*-webkit-transform: translate(-420px, 0); *//*420 (result list effective width)*/
     -webkit-transform: translate(-494px, 0); /*420 (result list effective width)*/
     /*transition: -webkit-transform .2s ease-out;*/
 }
 
-.search-panel[data-mode='1'] ~ .result-list-panel[data-mode='1'] {
+.search-panel[data-mode='1'] ~ #result-list-panel[data-mode='1'] {
     /*-webkit-transform: translate(-686px, 0); *//*420 (result list effective width) +274 (search panel effective width)*/
     -webkit-transform: translate(-760px, 0); /*420 (result list effective width) +274 (search panel effective width)*/
     /*transition: -webkit-transform .2s ease-out;*/
@@ -239,13 +235,13 @@ body[data-hover-is-enabled='true'] .t a:hover {
     width: 50px;
 }
 
-.result-list-panel[data-mode='0'] ~ .handle-result-list {
+#result-list-panel[data-mode='0'] ~ .handle-result-list {
     opacity: 0;
     pointer-events: none;
     transition: opacity .2s linear 0;
 }
 
-.result-list-panel[data-mode='1'] ~ .handle-result-list {
+#result-list-panel[data-mode='1'] ~ .handle-result-list {
     opacity: 1;
     pointer-events: auto;
     transition: opacity .2s linear .2s;
@@ -280,18 +276,6 @@ body[data-hover-is-enabled='true'] .t a:hover {
 .c {
     display: inline-block; /*required to ensure opacity takes effect on children*/
 }
-
-/*.t .c, .t .icon-container {*/
-/*.t .c {*/
-/*-webkit-filter: opacity(100%);*/
-/*-webkit-backface-visibility: hidden; *//*comment to attempt to stop crash in iOS*/
-/*transition: -webkit-filter .2s ease-out;*/
-/*}*/
-
-/*.t.hidden .c, .t.hidden .icon-container {*/
-/*.t.hidden .c {*/
-/*-webkit-filter: opacity(10%);*/
-/*}*/
 
 .t.hidden h3 {
     white-space: nowrap;
@@ -380,10 +364,14 @@ body[data-hover-is-enabled='true'] .t a:hover {
     pointer-events: none;
 }
 
+#frm-edit-search {
+    float: right;
+}
+
 /*"narrow-screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
-    .result-list-panel {
+    #result-list-panel {
         width: 200px;
     }
 }

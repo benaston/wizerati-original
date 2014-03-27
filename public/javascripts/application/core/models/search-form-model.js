@@ -8,6 +8,8 @@
     }
 
     var that = this,
+        _modeEnum = app.mod('enum').SearchFormMode,
+        _mode = _modeEnum.Minimized,
         _keywords = null,
         _location = null,
         _isWaiting = 'false',
@@ -18,13 +20,14 @@
 //    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = {
       default: 'update://searchformmodel',
+      setMode: 'update://searchformmodel/setmode',
       setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
     //needed?
-    this.getIsVisible = function () {
-      return _isVisible;
-    };
+//    this.getIsVisible = function () {
+//      return _isVisible;
+//    };
 
     this.getFirstRenderCompleteFlag = function () {
       return _firstRenderCompleteFlag;
@@ -32,6 +35,20 @@
 
     this.setFirstRenderCompleteFlag = function () {
       _firstRenderCompleteFlag = true;
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value) {
+      if(_mode === value) {
+        return;
+      }
+
+      _mode = value;
+
+      $.publish(that.eventUris.setMode, value);
     };
 
     this.setIsVisible = function (value) {

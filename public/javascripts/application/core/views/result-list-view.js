@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '.result-list-panel',
+        _el = '#result-list-panel',
         _elResultList = '.result-list',
         _resultViewFactory = null,
         _selectedCubeFaceModel = null,

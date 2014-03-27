@@ -317,7 +317,8 @@
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
+    mod.searchController = new wizerati.SearchController(m.uiRootModel, m.searchFormModel, s.searchService, m.resultListModel, f.guidFactory, m.searchPanelModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel, l.layoutCoordinator);
+    mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
     mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.tabBarModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);

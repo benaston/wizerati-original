@@ -220,7 +220,7 @@ module.exports = function (grunt) {
           patterns: [
             {
               match: 'javascript',
-              replacement: '<script src="javascripts/<%= pkg.name %>.js"></script>'
+              replacement: '<script src="/javascripts/<%= pkg.name %>.js"></script>'
             }
           ]
         },
@@ -232,7 +232,6 @@ module.exports = function (grunt) {
           patterns: [
             {
               match: 'javascript',
-//              replacement: '<script><%= grunt.file.read("public/javascripts/' + grunt.file.readJSON('package.json').name + '.min.js") %></script>'
               replacement: '<script><%= grunt.file.read("public/javascripts/' + grunt.file.readJSON('package.json').name + '.min.js") %></script>'
             }
           ]

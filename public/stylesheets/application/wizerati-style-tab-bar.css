@@ -58,16 +58,16 @@ body[data-hover-is-enabled='true'] #tab-bar button:hover {
     box-shadow: rgb(245, 245, 245) 0 0 8px 0;
 }
 
-#tab-bar[data-selected-item='0'] .nav-item-search button:after,
-#tab-bar[data-selected-item='1'] .nav-item-bookmarks button:after,
-#tab-bar[data-selected-item='2'] .nav-item-comparison-list button:after {
+#tab-bar[data-selected-item='0'] .i:nth-of-type(1) button:after,
+#tab-bar[data-selected-item='1'] .i:nth-of-type(2) button:after,
+#tab-bar[data-selected-item='2'] .i:nth-of-type(3) button:after {
     display: inline-block;
     position: absolute;
     content: '';
-    width: 10px;
-    height: 10px;
-    background: white;
-    border-radius: 10px;
-    left: -16px;
-    bottom: 21px;
+    width: 2px;
+    height: 17px;
+    background: #fff;
+    left: -5px;
+    bottom: 24px;
+    box-shadow: 0 0 2px 0px white;
 }
