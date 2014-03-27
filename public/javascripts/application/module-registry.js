@@ -63,7 +63,6 @@
     mod.ResultListMode = {
       Default: '0',
       Minimized: '1'
-//      SearchFormExpanded: '2' /*refactor into a two-state implementation - the result list will become the search panel and will not be able to  be minimized - although viewing the comparison list will make it invisible*/
     };
 
     mod.SearchFormMode = { /*the actual form used for searching*/
@@ -165,12 +164,10 @@
     mod.resultListModel = new wizerati.ResultListModel();
     mod.searchFormModel = new wizerati.SearchFormModel();
     mod.searchPanelModel = new wizerati.SearchPanelModel();
-    mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
-    mod.tabBarModel = new wizerati.TabBarModel();
     mod.signInPanelModel = new wizerati.SignInPanelModel();
+    mod.tabBarModel = new wizerati.TabBarModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
-    //TODO: extract the functionality requiring the repo into a service
     mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
@@ -179,6 +176,18 @@
 
 }(wizerati.mod('models')));
 
+(function (mod, m) {
+  'use strict';
+
+  try {
+    mod.itemModelPack = new wizerati.ItemModelPack(m.resultListModel, m.bookmarkBookModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+    mod.uiModelPack = new wizerati.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
+  }
+  catch (e) {
+    throw 'problem registering packs module. ' + e;
+  }
+
+}(wizerati.mod('packs'), wizerati.mod('models')));
 
 //infrastructure services are services that are sufficiently
 // de-coupled from the domain logic that they can be initialized
@@ -243,21 +252,21 @@
 }(wizerati.mod('services'), wizerati.mod('clients'), wizerati.mod('caches'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
 
 
-(function (mod, i, m, r) {
+(function (mod, i, m, r, p) {
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+//    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
     throw 'problem registering factories module. ' + e;
   }
 
-}(wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
+}(wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories'), wizerati.mod('packs')));
 
 
 (function (mod, c, f) {
@@ -287,36 +296,23 @@
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (mod, f, l, m, s) {
+(function (mod, f, l, m, s, p) {
   'use strict';
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
-    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.bookmarkBookModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+//    mod.bookmarkBookView = new wizerati.FavoritesCubeView(m.bookmarkBookModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
-
-
-(function (mod, m) {
-  'use strict';
-
-  try {
-    mod.uiModelPack = new wizerati.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
-  }
-  catch (e) {
-    throw 'problem registering packs module. ' + e;
-  }
-
-}(wizerati.mod('packs'), wizerati.mod('models')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs')));
 
 
 (function (mod, p, f, l) {
@@ -338,7 +334,7 @@
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
+    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
@@ -347,7 +343,7 @@
     mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.tabBarModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+//    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(p.uiModelPack);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

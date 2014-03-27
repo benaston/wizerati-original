@@ -11,7 +11,7 @@
 
     this.createForGet = function (entityId) {
       if (!entityId) {
-        throw 'entity not supplied.'
+        throw 'WizeratiRequestFactory::createForGet entity not supplied.';
       }
 
       return { uri: '/foo', method: 'PUT', data: 'bar' };
@@ -19,7 +19,7 @@
 
     this.createForPut = function (entity) {
       if (!entity) {
-        throw 'entity not supplied.'
+        throw 'WizeratiRequestFactory::createForPut entity not supplied.';
       }
 
       return { uri: '/foo', method: 'PUT', data: 'bar' };
@@ -27,7 +27,7 @@
 
     this.createForPost = function (entity) {
       if (!entity) {
-        throw 'entity not supplied.'
+        throw 'WizeratiRequestFactory::createForPost entity not supplied.';
       }
 
       return { uri: '/foo', method: 'PUT', data: 'bar' };

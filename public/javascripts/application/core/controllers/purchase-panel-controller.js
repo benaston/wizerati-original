@@ -20,7 +20,7 @@
 
         _purchasePanelModel.setActiveTab(dto.tab);
       } catch (err) {
-        console.log('error: PurchasePanelController.show. ' + err);
+        console.log('PurchasePanelController::index error.' + err);
       }
     };
 
@@ -28,7 +28,7 @@
       try {
         _uiRootModel.setModal(null);
       } catch (err) {
-        console.log('error: PurchasePanelController.destroy. ' + err);
+        console.log('PurchasePanelController::destroy error.' + err);
       }
     };
 

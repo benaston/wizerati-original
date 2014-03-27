@@ -43,32 +43,32 @@
         $.publish(that.eventUris.default);
       }
     };
-
-    this.getResult = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      return _.find(_results, function (r) {
-        return r.id === id;
-      });
-    };
-
-    this.setSelectedResultId = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      _.each(_results, function (r) {
-        if (r.id === id) {
-          r.isSelected = true;
-        } else {
-          r.isSelected = false;
-        }
-      });
-
-      $.publish(that.eventUris.default);
-    };
+//
+//    this.getResult = function (id) {
+//      if (!id) {
+//        throw 'id not supplied';
+//      }
+//
+//      return _.find(_results, function (r) {
+//        return r.id === id;
+//      });
+//    };
+//
+//    this.setSelectedResultId = function (id) {
+//      if (!id) {
+//        throw 'id not supplied';
+//      }
+//
+//      _.each(_results, function (r) {
+//        if (r.id === id) {
+//          r.isSelected = true;
+//        } else {
+//          r.isSelected = false;
+//        }
+//      });
+//
+//      $.publish(that.eventUris.default);
+//    };
 
     function init() {
 

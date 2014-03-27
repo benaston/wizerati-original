@@ -3811,32 +3811,32 @@ window.wizerati = {
         $.publish(that.eventUris.default);
       }
     };
-
-    this.getResult = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      return _.find(_results, function (r) {
-        return r.id === id;
-      });
-    };
-
-    this.setSelectedResultId = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      _.each(_results, function (r) {
-        if (r.id === id) {
-          r.isSelected = true;
-        } else {
-          r.isSelected = false;
-        }
-      });
-
-      $.publish(that.eventUris.default);
-    };
+//
+//    this.getResult = function (id) {
+//      if (!id) {
+//        throw 'id not supplied';
+//      }
+//
+//      return _.find(_results, function (r) {
+//        return r.id === id;
+//      });
+//    };
+//
+//    this.setSelectedResultId = function (id) {
+//      if (!id) {
+//        throw 'id not supplied';
+//      }
+//
+//      _.each(_results, function (r) {
+//        if (r.id === id) {
+//          r.isSelected = true;
+//        } else {
+//          r.isSelected = false;
+//        }
+//      });
+//
+//      $.publish(that.eventUris.default);
+//    };
 
     function init() {
 
@@ -4250,7 +4250,7 @@ window.wizerati = {
 
       _visibilityMode = value;
 
-      $.publish(that.eventUris.setVisibilityMode, _visibilityMode);
+      $.publish(that.eventUris.setVisibilityMode, value);
     };
 
     this.getAreTransitionsEnabled = function () {
@@ -4430,6 +4430,113 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
 
 }(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, _) {
+  'use strict';
+
+  function BookmarkBookView(model) {
+
+    if (!(this instanceof app.BookmarkBookView)) {
+      return new app.BookmarkBookView(model);
+    }
+
+    var that = this,
+        _el = '#favorites-cube',
+        _favoriteViewFactory = null,
+        _selectedCubeFaceModel = null,
+        _actionedItemsModel = null,
+        _hiddenItemsModel = null,
+        _itemsOfInterestModel = null,
+        _bookmarkService = null,
+        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
+          '.cube-face-labels li:nth-child(2)',   //left
+          '.cube-face-labels li:nth-child(3)',   //front
+          '.cube-face-labels li:nth-child(4)',   //right
+          '.cube-face-labels li:nth-child(5)',   //bottom
+          '.cube-face-labels li:nth-child(6)' ], //back
+        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
+        _modeEnum = app.mod('enum').FavoritesCubeMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      var mode = that.Model.getMode();
+      that.$el.attr('data-mode', mode);
+      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
+      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
+      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
+        return previousValue + (currentValue ? '1' : '0');
+      }, ''));
+
+      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
+        that.$el.addClass('hide');
+        return;
+      } else {
+        that.$el.removeClass('hide');
+      }
+
+      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
+        var $face = that.$el.find(_faceEls[index1]);
+        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
+        $face.find('*').not('.face-empty-message').remove();
+        $faceSelectorSpots.removeClass('filled');
+        $.each(faceFavorites, function (index2, f) {
+          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
+            $face.append($v);
+            $($faceSelectorSpots[index2]).addClass('filled');
+          });
+        });
+      });
+
+      that.$el.attr('data-selected-face-id',
+          _selectedCubeFaceModel.getSelectedCubeFaceId());
+
+      var faceLabels = that.Model.getFaceLabels();
+      $.each(_labelEls, function (index, el) {
+        $(el).text(faceLabels[index]);
+      });
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.render();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'FavoritesCubeView::init model not supplied';
+      }
+
+
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _favoriteViewFactory = favoriteViewFactory;
+      _selectedCubeFaceModel = selectedCubeFaceModel;
+      _hiddenItemsModel = hiddenItemsModel;
+      _actionedItemsModel = actionedItemsModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
+
+      $.subscribe(that.Model.updateEventUriPrivate, that.render);
+      $.subscribe(that.Model.updateEventUri, that.render);
+      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkBookView = BookmarkBookView;
+  invertebrate.View.isExtendedBy(app.BookmarkBookView);
+
+}(wizerati, $, invertebrate, _));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4867,148 +4974,19 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogView);
 
 }(wizerati, $, invertebrate, document));
-;(function (app, $, invertebrate, _) {
-  'use strict';
-
-  function FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
-
-    if (!(this instanceof app.FavoritesCubeView)) {
-      return new app.FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
-    }
-
-    var that = this,
-        _el = '#favorites-cube',
-        _favoriteViewFactory = null,
-        _selectedCubeFaceModel = null,
-        _actionedItemsModel = null,
-        _hiddenItemsModel = null,
-        _itemsOfInterestModel = null,
-        _bookmarkService = null,
-        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
-          '.cube-face-labels li:nth-child(2)',   //left
-          '.cube-face-labels li:nth-child(3)',   //front
-          '.cube-face-labels li:nth-child(4)',   //right
-          '.cube-face-labels li:nth-child(5)',   //bottom
-          '.cube-face-labels li:nth-child(6)' ], //back
-        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
-        _modeEnum = app.mod('enum').FavoritesCubeMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var mode = that.Model.getMode();
-      that.$el.attr('data-mode', mode);
-      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
-      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
-      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
-        return previousValue + (currentValue ? '1' : '0');
-      }, ''));
-
-      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
-        that.$el.addClass('hide');
-        return;
-      } else {
-        that.$el.removeClass('hide');
-      }
-
-      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
-        var $face = that.$el.find(_faceEls[index1]);
-        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
-        $face.find('*').not('.face-empty-message').remove();
-        $faceSelectorSpots.removeClass('filled');
-        $.each(faceFavorites, function (index2, f) {
-          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
-            $face.append($v);
-            $($faceSelectorSpots[index2]).addClass('filled');
-          });
-        });
-      });
-
-      that.$el.attr('data-selected-face-id',
-          _selectedCubeFaceModel.getSelectedCubeFaceId());
-
-      var faceLabels = that.Model.getFaceLabels();
-      $.each(_labelEls, function (index, el) {
-        $(el).text(faceLabels[index]);
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.render();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'FavoritesCubeView::init model not supplied';
-      }
-
-      if (!favoriteViewFactory) {
-        throw 'FavoritesCubeView::init favoriteViewFactory not supplied';
-      }
-
-      if (!selectedCubeFaceModel) {
-        throw 'FavoritesCubeView::init selectedCubeFaceModel not supplied';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'FavoritesCubeView::init hiddenItemsModel not supplied';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'FavoritesCubeView::init actionedItemsModel not supplied';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'FavoritesCubeView::init itemsOfInterestModel not supplied';
-      }
-
-      if (!bookmarkService) {
-        throw 'FavoritesCubeView::init bookmarkService not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoriteViewFactory = favoriteViewFactory;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _bookmarkService = bookmarkService;
-
-      $.subscribe(that.Model.updateEventUriPrivate, that.render);
-      $.subscribe(that.Model.updateEventUri, that.render);
-      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.FavoritesCubeView = FavoritesCubeView;
-  invertebrate.View.isExtendedBy(app.FavoritesCubeView);
-
-}(wizerati, $, invertebrate, _));
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel, bookmarkService) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel, bookmarkService) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, layoutCoordinator, uiRootModel, bookmarkService);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel, bookmarkService);
     }
 
     var that = this,
         _el = '.items-of-interest-panel',
+        _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _elHandlePinnedItems = '.handle-pinned-items',
-        _elSelectedItemContent = '.selected-item-content',
         _elSelectedItemContainerCurrent = null,
         _elSelectedItemContainer1 = '#selected-item-container-1',
         _elSelectedItemContainer2 = '#selected-item-container-2',
@@ -5018,56 +4996,17 @@ window.wizerati = {
         _elPinnedItem2 = '.pinned-item:nth-child(3)',
         _elPinnedItem3 = '.pinned-item:nth-child(4)',
         _elPinnedItem4 = '.pinned-item:nth-child(5)',
-        _elPinnedItem5 = '.pinned-item:nth-child(6)',
-        _elPinnedItem6 = '.pinned-item:nth-child(7)',
-        _modeEnum = app.mod('enum').ItemsOfInterestMode,
+        _itemModelPack = null,
         _itemOfInterestViewFactory = null,
-        _selectedCubeFaceModel = null,
-        _favoritesCubeModel = null,
         _bookmarkService = null,
-        _hiddenItemsModel = null,
-        _actionedItemsModel = null,
         _layoutCoordinator = null,
         _renderOptimizations = {},
         _scrollTopValues = {},
         _scrollLeft = 0,
-        _uiModeEnum = app.mod('enum').UIMode,
         _uiRootModel = null;
 
     this.$el = null;
     this.Model = null;
-
-//    this.render = function (e) {
-//      e = e || { eventType: that.eventType.Default, args: [] };
-//
-//      if (_renderOptimizations[e.eventType]) {
-//        _renderOptimizations[e.eventType].apply(this, e.args);
-//        return;
-//      }
-//
-//      var mode = that.Model.getMode();
-//
-//      if (mode === _modeEnum.Default) {
-//        that.$elSelectedItem.children().width(that.Model.getItemWidth() - 40);
-//        that.$elPinnedItems.children().width(that.Model.getItemWidth() - 40);
-//        that.$el.width(10);
-//      } else if (mode === _modeEnum.PinnedItemsExpanded) {
-//        that.$el.children().width(that.Model.getItemWidth() - 40);
-//        that.$el.width(that.Model.getItemWidth());
-//      }
-//
-//      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
-//    };
-
-    //e = e || { eventType: that.eventType.Default, args: [] };
-//    if (_renderOptimizations[e.eventType]) {
-//      _renderOptimizations[e.eventType].apply(this, e.args);
-//      return;
-//    }
-
-    this.renderWithSelectedItemAnimation = function () {
-      renderPrivate();
-    };
 
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
@@ -5075,17 +5014,11 @@ window.wizerati = {
         return;
       }
 
-//      var args = Array.prototype.slice.call(arguments);
-//      var options = args.length > 1 ? args[1] : {};
-//      renderPrivate({ animateSelectedItem: false, removedItemId: options.removedItemId });
       renderPrivate({ animateSelectedItem: false, removedItemId: null });
     };
 
     function renderPrivate(options) {
-      options = options || {animateSelectedItem: true};
 
-//      that.$el.children().not('.handle-pinned-items').remove();
-//      that.$el.empty('.selected-item, .pinned-item');
       var mode = that.Model.getMode();
       var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
       $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
@@ -5107,13 +5040,6 @@ window.wizerati = {
       storeScrollLeftValue();
 
       that.$el.find('.selected-item, .pinned-item').remove();
-
-//      $elSelectedItem
-//      var $prevEl = that.$currentEl || that.$el2;
-      //perform double buffering in memory - we cannot wrap the items of interest in a container in a convenient manner unfort
-//      var _$el = $('<div></div>'); //$prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
-//      that.$currentEl.empty();
-//      that.$currentEl.children().not('.handle-pinned-items').remove();
 
       var items = that.Model.getItemsOfInterest();
       if (items.selectedItem) {
@@ -5233,16 +5159,13 @@ window.wizerati = {
       if (items.selectedItem) {
         _itemOfInterestViewFactory.create(items.selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            _selectedCubeFaceModel.getSelectedCubeFaceId(),
             true,
-            false, //should animate - hard code false for now
             function done($view) {
               $currentEl.html($view);
               $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
               $('body').scrollLeft(_scrollLeft);
               $prevEl.addClass('buffer');
               $currentEl.removeClass('buffer');
-//              _layoutCoordinator.layOut();
 
               setTimeout(function () {
                 $prevEl.empty();
@@ -5264,7 +5187,6 @@ window.wizerati = {
         $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
         $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
       }
-
 
       $('body').attr('data-items-of-interest-mode', mode)
     };
@@ -5289,10 +5211,7 @@ window.wizerati = {
             });
       });
 
-//      setTimeout(function(){ //temp
       done();
-//      }, 2000);
-
     }
 
     function storeScrollTopValues() {
@@ -5328,20 +5247,8 @@ window.wizerati = {
         throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
       }
 
-      if (!selectedCubeFaceModel) {
-        throw 'ItemsOfInterestView::init selectedCubeFaceModel not supplied';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'ItemsOfInterestView::init favoritesCubeModel not supplied';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'ItemsOfInterestView::init hiddenItemsModel not supplied';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'ItemsOfInterestView::init actionedItemsModel not supplied';
+      if (!itemModelPack) {
+        throw 'ItemsOfInterestView::init itemModelPack not supplied';
       }
 
       if (!layoutCoordinator) {
@@ -5358,12 +5265,9 @@ window.wizerati = {
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
+      _itemModelPack = itemModelPack;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-      _favoritesCubeModel = favoritesCubeModel;
       _bookmarkService = bookmarkService;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
       _layoutCoordinator = layoutCoordinator;
       _uiRootModel = uiRootModel;
 
@@ -5372,22 +5276,21 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
-      _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
-      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
-      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
 
       that.Model = model;
 
@@ -5542,22 +5445,16 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
+  function ResultListView(model, resultViewFactory, itemModelPack, bookmarkService) {
 
     if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model, resultViewFactory, selectedCubeFaceModel, favoritesCubeModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
+      return new app.ResultListView(model, resultViewFactory, itemModelPack, bookmarkService);
     }
 
     var that = this,
         _el = '#result-list-panel',
         _elResultList = '.result-list',
         _resultViewFactory = null,
-        _selectedCubeFaceModel = null,
-        _favoritesCubeModel = null,
-        _actionedItemsModel = null,
-        _hiddenItemsModel = null,
-        _itemsOfInterestModel = null,
-        _bookmarkService = null,
         _scrollTopValue = 0,
         _lastKnownSearchId = null,
         _renderOptimizations = {};
@@ -5581,92 +5478,50 @@ window.wizerati = {
         return;
       }
 
-//      var $prevEl = that.$currentEl || that.$el2;
       var searchId = that.Model.getSearchId();
 //      var isFreshSearch = _lastKnownSearchId !== searchId;
       calculateScrollTopValueToMaintain(that.$elResultList, searchId);
-//      that.$currentEl = $prevEl === that.$el ? that.$el2 : that.$el; //Double buffering to ensure the user sees no 'flicker' as the results are rendered.
       that.$elResultList.empty();
       that.$elResultList.addClass('ios-scroll-enable');
 
-      var selectedCubeFaceId = _selectedCubeFaceModel.getSelectedCubeFaceId();
       that.Model.getResults().forEach(function (id) {
-        _resultViewFactory.create(id, selectedCubeFaceId, function ($v) {
+        _resultViewFactory.create(id, function ($v) {
           that.$elResultList.append($v);
         });
       });
 
       that.$elResultList.scrollTop(_scrollTopValue);
       that.$el.attr('data-mode', that.Model.getMode());
-
-//      setTimeout(function () {
-//        $prevEl.addClass('buffer');
-//      }, 0); //reduces jank on iOS (yes really)
-
-//      var mode = that.Model.getMode();
-//      if (isFreshSearch) {
-//        setTimeout(function () { //this avoids the user seeing the appending of results to the DOM as an 'animation'
-//          that.$currentEl.removeClass('buffer');
-//          that.$elContainer.attr('data-mode', mode);
-//        }, 350);
-//      } else {
-//        setTimeout(function () {
-//          that.$currentEl.removeClass('buffer');
-//          that.$elContainer.attr('data-mode', mode);
-//        }, 0); //reduces jank on iOS (yes really)
-//      }
-
-//      setTimeout(function () {
-//        //Circumvent iOS bug whereby scrolling is applied to the hidden 'buffer' list.
-//        $prevEl.empty();
-//        $prevEl.removeClass('ios-scroll-enable');
-//      }, 300); //This timeout must be longer than the css transition to avoid interrupting it with a flicker.
     };
 
-    this.renderSetSelectedItemId = function(selectedItemId) {
+    this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
       var selectorNew = '.t[data-id="' + selectedItemId + '"]';
       $(_el).find(selectorNew).addClass('selected');
     };
 
-    this.renderAddHiddenItem = function(itemId) {
+    this.renderAddHiddenItem = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
 
       var $selector = $(_el).find(selector);
       $selector.addClass('hidden');
     };
 
-    this.renderRemoveHiddenItem = function(itemId) {
+    this.renderRemoveHiddenItem = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
       var $selector = $(_el).find(selector);
       $selector.removeClass('hidden');
     };
 
-    this.renderAddFavorite = function(itemId) {
+    this.renderAddFavorite = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
       $(_el).find(selector).attr('data-is-favorite', 'true');
     };
 
-    this.renderRemoveFavorite = function(itemId) {
+    this.renderRemoveFavorite = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
       $(_el).find(selector).attr('data-is-favorite', 'false');
     };
-
-//        function renderResults(results, index) {
-//            index = index === undefined ? 0 : index;
-//
-//            if (index === results.length) {
-//                return;
-//            }
-//
-//            _resultViewFactory.create(results[index], _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
-//                that.$el1.append($v);
-//            });
-//
-//            setTimeout(function () {
-//                renderResults(results, ++index)
-//            }, 950);
-//        }
 
     this.onDomReady = function () {
       that.$el = $(_el);
@@ -5682,24 +5537,8 @@ window.wizerati = {
         throw 'ResultListView::init resultViewFactory not supplied';
       }
 
-      if (!selectedCubeFaceModel) {
-        throw 'ResultListView::init selectedCubeFaceModel not supplied';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'ResultListView::init favoritesCubeModel not supplied';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'ResultListView::init hiddenItemsModel not supplied';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'ResultListView::init actionedItemsModel not supplied';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'ResultListView::init itemsOfInterestModel not supplied';
+      if (!itemModelPack) {
+        throw 'ResultListView::init itemModelPack not supplied';
       }
 
       if (!bookmarkService) {
@@ -5709,30 +5548,23 @@ window.wizerati = {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _resultViewFactory = resultViewFactory;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-      _favoritesCubeModel = favoritesCubeModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _bookmarkService = bookmarkService;
 
-      _renderOptimizations[_itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
-      _renderOptimizations[_hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[_hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
+      _renderOptimizations[bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_favoritesCubeModel.updateEventUri, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
-      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(_hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(_hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
+      $.subscribe(bookmarkService.eventUris.addFavorite, that.render);
+      $.subscribe(bookmarkService.eventUris.removeFavorite, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
 
       return that;
     }
@@ -5946,7 +5778,7 @@ window.wizerati = {
 
     var that = this,
         _el = 'body',
-        _mainContainer = '.main-container',
+        _mainContainer = '#main-container',
         _renderOptimizations = {};
 
     this.$el = null;
@@ -6109,6 +5941,59 @@ window.wizerati = {
   }
 
   app.SearchControllerHelper = SearchControllerHelper;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
+
+    if (!(this instanceof app.ItemModelPack)) {
+      return new app.ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
+    }
+
+    var that = this;
+
+    this.resultListModel = null;
+    this.bookmarkBookModel = null;
+    this.itemsOfInterestModel = null;
+    this.hiddenItemsModel = null;
+    this.actionedItemsModel = null;
+
+    function init() {
+      if (!resultListModel) {
+        throw 'SearchControllerHelper::init resultListModel not supplied.';
+      }
+
+      if (!bookmarkBookModel) {
+        throw 'SearchControllerHelper::init bookmarkBookModel not supplied.';
+      }
+
+      if (!itemsOfInterestModel) {
+        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
+      }
+
+      if (!hiddenItemsModel) {
+        throw 'SearchControllerHelper::init hiddenItemsModel not supplied.';
+      }
+
+      if (!actionedItemsModel) {
+        throw 'SearchControllerHelper::init actionedItemsModel not supplied.';
+      }
+
+      that.resultListModel = resultListModel;
+      that.bookmarkBookModel = bookmarkBookModel;
+      that.itemsOfInterestModel = itemsOfInterestModel;
+      that.hiddenItemsModel = hiddenItemsModel;
+      that.actionedItemsModel = actionedItemsModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemModelPack = ItemModelPack;
 
 }(wizerati));
 ;(function (app) {
@@ -6375,12 +6260,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
-  //refactor result list panel to be search panel
-  function BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel) {
+  function BookmarksController(bookmarkService, uiModelPack) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel);
+      return new app.BookmarksController(bookmarkService, uiModelPack);
     }
 
     var that = this,
@@ -6390,17 +6273,12 @@ window.wizerati = {
         _favoritesCubeModel = null,
         _selectedCubeFaceModel = null,
         _bookmarkService = null,
-        _searchPanelModel = null,
-        _resultListModel = null,
-        _bookmarkPanelModel = null,
-        _itemsOfInterestModel = null,
-        _tabBarModel = null;
+        _uiModelPack = null;
 
-    //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
     this.index = function (dto) {
-      _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-      _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
     };
 
     this.create = function (dto) {
@@ -6431,32 +6309,12 @@ window.wizerati = {
         throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
 
-      if (!searchPanelModel) {
-        throw 'BookmarkedItemsController::init searchPanelModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'BookmarkedItemsController::init resultListModel not supplied.';
-      }
-
-      if (!bookmarkPanelModel) {
-        throw 'BookmarkedItemsController::init bookmarkPanelModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'BookmarkedItemsController::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!tabBarModel) {
-        throw 'BookmarkedItemsController::init tabBarModel not supplied.';
+      if (!uiModelPack) {
+        throw 'BookmarkedItemsController::init uiModelPack not supplied.';
       }
 
       _bookmarkService = bookmarkService;
-      _searchPanelModel = searchPanelModel;
-      _resultListModel = resultListModel;
-      _bookmarkPanelModel = bookmarkPanelModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _tabBarModel = tabBarModel;
+      _uiModelPack = uiModelPack;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -6737,6 +6595,7 @@ window.wizerati = {
         _searchPanelModel.setMode(_searchPanelModeEnum.Default);
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
+        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
 
         //uirootview should listen to the searchform model for the rendered flag
         //and then render the change to the visibility mode to avoid expensieve polling?
@@ -7060,7 +6919,7 @@ window.wizerati = {
 
         _purchasePanelModel.setActiveTab(dto.tab);
       } catch (err) {
-        console.log('error: PurchasePanelController.show. ' + err);
+        console.log('PurchasePanelController::index error.' + err);
       }
     };
 
@@ -7068,7 +6927,7 @@ window.wizerati = {
       try {
         _uiRootModel.setModal(null);
       } catch (err) {
-        console.log('error: PurchasePanelController.destroy. ' + err);
+        console.log('PurchasePanelController::destroy error.' + err);
       }
     };
 
@@ -7143,6 +7002,7 @@ window.wizerati = {
     var that = this,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
+        _tabEnum = wizerati.mod('enum').Tab,
         _uiModelPack = null,
         _searchService = null,
         _helper = null;
@@ -7153,12 +7013,7 @@ window.wizerati = {
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
         //refactor to be based on dirty checking
-//        if(_tabBarModel.getSelectedTab() !== _navbarItemEnum.Search) {
-//          resetUIForSearch();
-//          return;
-//        }
-
-        if(dto.shouldSuppressSearch) {
+        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
           _helper.resetUIForSearch();
           return;
         }
@@ -7187,52 +7042,6 @@ window.wizerati = {
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       }
     };
-
-//    function resetUIForSearch() {
-//      _resultListModel.setMode(_resultListModeEnum.Default);
-//      _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-//      _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-//      _tabBarModel.setSelectedTab(_navbarItemEnum.Search);
-//
-//      _uiRootModel.setUIMode(_uiModeEnum.Search);
-//      _searchFormModel.setMode(_searchFormModeEnum.Minimized);
-//
-//    }
-
-//    function searchSuccess(results) {
-//      _resultListModel.setResults(_.map(results, function (r) {
-//        return r.id;
-//      }), _guidFactory.create());
-//      _searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-//
-//      var delayToRender = 0;
-//      if (_uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-//        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundAndLoadingIndicator);
-//        _uiRootModel.setAreTransitionsEnabled(false);
-//        delayToRender = 100; //wait for the opacity fade to complete
-//      }
-//
-//      setTimeout(function () {
-//        _layoutCoordinator.layOut();
-//        resetUIForSearch();
-//
-//        //this must occur *after the search panel mode is set* to its eventual value, to
-//        //ensure the initial width rendering of items of interest is the correct one
-//        // (avoiding a repaint)
-//        if (!_itemsOfInterestModel.getSelectedItemId()) {
-//          _itemsOfInterestModel.setSelectedItemId(results[0].id);
-//        }
-//
-//        setTimeout(function () {
-//          _uiRootModel.setAreTransitionsEnabled(true  );
-//        }, 0);
-//        /*attempt to ensure that UI rendered before re-enabling transitions*/
-//
-//        setTimeout(function () {
-//          _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-//        }, 0);
-//      }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
-//    }
 
     function uriTransformShow(uri, dto) {
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
@@ -7398,10 +7207,7 @@ window.wizerati = {
     var that = this,
         _searchPanelModel = null,
         _resultListModel = null,
-        _itemsOfInterestModel = null,
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _itemSelectionSourceEnum = app.mod('enum').ItemSelectionSource;
+        _itemsOfInterestModel = null;
 
     this.update = function (dto) {
       try {
@@ -7415,17 +7221,7 @@ window.wizerati = {
         }
 
         //this has to be set before the mode change to ensure correct layout calculation
-        _itemsOfInterestModel.setSelectedItemId(dto.id); //do not want to trigger repaint the items of interest here
-
-        if (dto.source === _itemSelectionSourceEnum.Results) {
-          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-        } else if (dto.source === _itemSelectionSourceEnum.Favorites) {
-          _resultListModel.setMode(_resultListModeEnum.Minimized, {silent: true});
-        } else {
-          throw "invalid source.";
-        }
-
-//        _itemsOfInterestModel.setSelectedItemId(dto.id); //trigger the repaint of the items of interest view
+        _itemsOfInterestModel.setSelectedItemId(dto.id);
       } catch (err) {
         console.log('SelectedItemController::update exception: ' + err);
       }
@@ -7457,91 +7253,91 @@ window.wizerati = {
   app.SelectedItemController = SelectedItemController;
 
 }(wizerati));
-;(function (app) {
-  'use strict';
-
-  function SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel) {
-
-    if (!(this instanceof app.SelectedNavbarItemController)) {
-      return new app.SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel);
-    }
-
-    var that = this,
-        _model = null,
-        _searchPanelModel = null,
-        _bookmarkPanelModel = null,
-        _itemsOfInterestModel = null,
-        _resultListPanelModel = null,
-        _tabEnum = app.mod('enum').Tab,
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListPanelModeEnum = app.mod('enum').ResultListMode;
-
-    this.update = function (dto) {
-      try {
-        if (_model.getSelectedTab() === dto.navbarItem) {
-          return;
-        }
-
-        _model.setSelectedTab(dto.navbarItem);
-
-        //move coordination of minimization etc into controllers redirected to
-        if (dto.navbarItem === _tabEnum.Search) {
-          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
-          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-
-          app.instance.router.redirect('/search', { keywords: _searchPanelModel.getKeywords(), r: _searchPanelModel.getRate() }); //consider avoiding the running of new search unnecessarily
-        } else if (dto.navbarItem === _tabEnum.Bookmark) {
-          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
-          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-          app.instance.router.redirect('/bookmarks');
-        } else if (dto.navbarItem === _tabEnum.ComparisonList) {
-          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-          app.instance.router.redirect('/comparisonlist');
-        }
-      } catch (err) {
-        console.log('SelectedNavbarItemController::update ' + err);
-      }
-    };
-
-    function init() {
-      if (!model) {
-        throw 'SelectedNavbarItemController::init model not supplied.';
-      }
-
-      if (!searchPanelModel) {
-        throw 'SelectedNavbarItemController::init searchPanelModel not supplied.';
-      }
-
-      if (!bookmarkPanelModel) {
-        throw 'SelectedNavbarItemController::init bookmarkPanelModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'SelectedNavbarItemController::init itemsOfInterestModel not supplied.';
-      }
-
-      _model = model;
-      _searchPanelModel = searchPanelModel;
-      _bookmarkPanelModel = bookmarkPanelModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SelectedNavbarItemController = SelectedNavbarItemController;
-
-}(wizerati));
+;//(function (app) {
+//  'use strict';
+//
+//  function SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel) {
+//
+//    if (!(this instanceof app.SelectedNavbarItemController)) {
+//      return new app.SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel);
+//    }
+//
+//    var that = this,
+//        _model = null,
+//        _searchPanelModel = null,
+//        _bookmarkPanelModel = null,
+//        _itemsOfInterestModel = null,
+//        _resultListPanelModel = null,
+//        _tabEnum = app.mod('enum').Tab,
+//        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+//        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+//        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+//        _resultListPanelModeEnum = app.mod('enum').ResultListMode;
+//
+//    this.update = function (dto) {
+//      try {
+//        if (_model.getSelectedTab() === dto.navbarItem) {
+//          return;
+//        }
+//
+//        _model.setSelectedTab(dto.navbarItem);
+//
+//        //move coordination of minimization etc into controllers redirected to
+//        if (dto.navbarItem === _tabEnum.Search) {
+//          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+//          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
+//          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+//          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+//
+//          app.instance.router.redirect('/search', { keywords: _searchPanelModel.getKeywords(), r: _searchPanelModel.getRate() }); //consider avoiding the running of new search unnecessarily
+//        } else if (dto.navbarItem === _tabEnum.Bookmark) {
+//          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+//          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
+//          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+//          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+//          app.instance.router.redirect('/bookmarks');
+//        } else if (dto.navbarItem === _tabEnum.ComparisonList) {
+//          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
+//          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+//          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+//          app.instance.router.redirect('/comparisonlist');
+//        }
+//      } catch (err) {
+//        console.log('SelectedNavbarItemController::update ' + err);
+//      }
+//    };
+//
+//    function init() {
+//      if (!model) {
+//        throw 'SelectedNavbarItemController::init model not supplied.';
+//      }
+//
+//      if (!searchPanelModel) {
+//        throw 'SelectedNavbarItemController::init searchPanelModel not supplied.';
+//      }
+//
+//      if (!bookmarkPanelModel) {
+//        throw 'SelectedNavbarItemController::init bookmarkPanelModel not supplied.';
+//      }
+//
+//      if (!itemsOfInterestModel) {
+//        throw 'SelectedNavbarItemController::init itemsOfInterestModel not supplied.';
+//      }
+//
+//      _model = model;
+//      _searchPanelModel = searchPanelModel;
+//      _bookmarkPanelModel = bookmarkPanelModel;
+//      _itemsOfInterestModel = itemsOfInterestModel;
+//
+//      return that;
+//    }
+//
+//    return init();
+//  }
+//
+//  app.SelectedNavbarItemController = SelectedNavbarItemController;
+//
+//}(wizerati));
 ;(function (app) {
   'use strict';
 
@@ -7587,93 +7383,6 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function FavoriteViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
-
-    if (!(this instanceof app.FavoriteViewFactory)) {
-      return new app.FavoriteViewFactory(signInIService,
-          itemRepository,
-          hiddenItemsModel,
-          actionedItemsModel,
-          itemsOfInterestModel);
-    }
-
-    var that = this,
-        _signInIService = null,
-        _itemRepository = null,
-        _hiddenItemsModel = null,
-        _actionedItemsModel = null,
-        _itemsOfInterestModel = null,
-        _roleEnum = app.mod('enum').UserRole;
-
-    this.create = function (id, currentCubeFace, done) {
-      var role = _signInIService.getCurrentRole();
-      switch (role) {
-        case _roleEnum.Employer:
-        case _roleEnum.EmployerStranger:
-          _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
-            item.isItemOfInterest = _itemsOfInterestModel.isItemOfInterest(item.id);
-            done(new app.ContractorFavoriteView(item).render().$el);
-          });
-          break;
-        case _roleEnum.Contractor:
-        case _roleEnum.ContractorStranger:
-          _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
-            item.isItemOfInterest = _itemsOfInterestModel.isItemOfInterest(item.id);
-            done(new app.ContractFavoriteView(item).render().$el);
-          });
-          break;
-        default:
-          throw 'invalid user role "' + role + '"';
-      }
-    };
-
-    function init() {
-      if (!signInIService) {
-        throw 'loginService not supplied.';
-      }
-
-      if (!itemRepository) {
-        throw 'itemRepository not supplied.';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
-      }
-
-      _signInIService = signInIService;
-      _itemRepository = itemRepository;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.FavoriteViewFactory = FavoriteViewFactory;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
   function GuidFactory() {
 
     if (!(this instanceof app.GuidFactory)) {
@@ -7704,54 +7413,35 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function  ItemOfInterestViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel, favoritesCubeModel) {
+  function ItemOfInterestViewFactory(signInIService, itemRepository, itemModelPack) {
 
     if (!(this instanceof app.ItemOfInterestViewFactory)) {
       return new app.ItemOfInterestViewFactory(signInIService,
           itemRepository,
-          itemsOfInterestModel,
-          hiddenItemsModel,
-          actionedItemsModel,
-          favoritesCubeModel);
+          itemModelPack);
     }
 
     var that = this,
         _signInIService = null,
         _itemRepository = null,
-        _itemsOfInterestModel = null,
-        _hiddenItemsModel = null,
-        _actionedItemsModel = null,
-        _favoritesCubeModel = null,
+        _itemModelPack = null,
         _roleEnum = app.mod('enum').UserRole;
 
-    this.create = function (id, width, currentCubeFace, isSelectedItem, animateSelectedItem, done) {
+    this.create = function (id, width, isSelectedItem, done) {
       if (!id) {
-        throw 'id not supplied.';
+        throw 'ItemOfInterestViewFactory::create id not supplied.';
       }
 
       if (!width) {
-        throw 'id not supplied.';
+        throw 'ItemOfInterestViewFactory::create width not supplied.';
       }
-
-      if (!currentCubeFace) {
-        throw 'currentCubeFace not supplied.';
-      }
-
 
       if (isSelectedItem === undefined || isSelectedItem === null) {
-        throw 'isSelectedItem not supplied.';
-      }
-
-      if (animateSelectedItem === undefined || animateSelectedItem === null) {
-        throw 'animateSelectedItem not supplied.';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+        throw 'ItemOfInterestViewFactory::create isSelectedItem not supplied.';
       }
 
       if (!done) {
-        throw 'done not supplied.';
+        throw 'ItemOfInterestViewFactory::create done not supplied.';
       }
 
       var role = _signInIService.getCurrentRole();
@@ -7759,18 +7449,17 @@ window.wizerati = {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavoritable = _favoritesCubeModel.getFavorites()[currentCubeFace].length < 6 && !_hiddenItemsModel.isHidden(item.id);
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
+            item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isFavorite = item['isFavoriteOnFace'];
+            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isPinned = !isSelectedItem;
-            item.pinnedItemCount = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.isPinnable = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && !_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
-              i === id;
+            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
+            item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+              return i === id;
             });
-            item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_itemsOfInterestModel.getPreviouslySelectedItemId();
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id));
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
+            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isFavoriteOnAnyFace(item.id));
+            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             item.width = width;
             var $e = new app.ContractorItemOfInterestView(item).render().$el;
             done($e);
@@ -7779,61 +7468,45 @@ window.wizerati = {
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavoritable = _favoritesCubeModel.getFavorites()[currentCubeFace].length < 6 && !_hiddenItemsModel.isHidden(item.id);
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
+            item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isFavorite = item['isFavoriteOnFace'];
             item.isSelected = isSelectedItem;
-            item.isPinned = !!(_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+            item.isPinned = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             }));
-            item.pinnedItemCount = _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.isPinnable = !_hiddenItemsModel.isHidden(item.id) && (_itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
+            item.isPinnable = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             })));
-            item.shouldAnimateIn = animateSelectedItem && isSelectedItem && _itemsOfInterestModel.getItemsOfInterest().pinnedItems.length > 0 && !_itemsOfInterestModel.getPreviouslySelectedItemId();
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_favoritesCubeModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_actionedItemsModel.isActioned(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
-            item.isActionable = !_hiddenItemsModel.isHidden(item.id);
+            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.width = width;
             done(new app.ContractItemOfInterestView(item).render().$el);
           });
           break;
         default:
-          throw 'invalid user role "' + role + '"';
+          throw 'ItemOfInterestViewFactory::create invalid user role "' + role + '"';
       }
     };
 
     function init() {
       if (!signInIService) {
-        throw 'loginService not supplied.';
+        throw 'ItemOfInterestViewFactory::init loginService not supplied.';
       }
 
       if (!itemRepository) {
-        throw 'itemRepository not supplied.';
+        throw 'ItemOfInterestViewFactory::init itemRepository not supplied.';
       }
 
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied.';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'favoritesCubeModel not supplied.';
+      if (!itemModelPack) {
+        throw 'ItemOfInterestViewFactory::init itemModelPack not supplied.';
       }
 
       _signInIService = signInIService;
       _itemRepository = itemRepository;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _favoritesCubeModel = favoritesCubeModel;
+      _itemModelPack = itemModelPack;
 
       return that;
     }
@@ -7847,35 +7520,27 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ResultViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function ResultViewFactory(signInIService, itemRepository, itemModelPack) {
 
     if (!(this instanceof app.ResultViewFactory)) {
       return new app.ResultViewFactory(signInIService,
           itemRepository,
-          itemsOfInterestModel,
-          hiddenItemsModel,
-          actionedItemsModel);
+          itemModelPack);
     }
 
     var that = this,
         _signInIService = null,
         _itemRepository = null,
-        _itemsOfInterestModel = null,
-        _hiddenItemsModel = null,
-        _actionedItemsModel = null,
+        _itemModelPack = null,
         _roleEnum = app.mod('enum').UserRole;
 
-    this.create = function (id, currentCubeFace, done) {
+    this.create = function (id, done) {
       if (!id) {
-        throw 'id not supplied.';
-      }
-
-      if (!currentCubeFace) {
-        throw 'currentCubeFace not supplied.';
+        throw 'ResultViewFactory::create id not supplied.';
       }
 
       if (!done) {
-        throw 'done not supplied.';
+        throw 'ResultViewFactory::create done not supplied.';
       }
 
       var role = _signInIService.getCurrentRole();
@@ -7883,55 +7548,45 @@ window.wizerati = {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
+            item.isFavorite = item['isFavoriteOnFace'];
+            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             done(new app.ContractorResultView(item).render().$el);
           });
           break;
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
-            item.isPinned = _itemsOfInterestModel.isPinned(item.id);
+            item.isFavorite = item['isFavoriteOnFace'];
+            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
             done(new app.ContractResultView(item).render().$el);
           });
           break;
         default:
-          throw 'invalid user role "' + role + '"';
+          throw 'ResultViewFactory::create invalid user role "' + role + '"';
       }
     };
 
     function init() {
       if (!signInIService) {
-        throw 'loginService not supplied.';
+        throw 'ResultViewFactory::init loginService not supplied.';
       }
 
       if (!itemRepository) {
-        throw 'itemRepository not supplied.';
+        throw 'ResultViewFactory::init itemRepository not supplied.';
       }
 
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied.';
+      if (!itemModelPack) {
+        throw 'ResultViewFactory::init itemModelPack not supplied.';
       }
 
       _signInIService = signInIService;
       _itemRepository = itemRepository;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
+      _itemModelPack = itemModelPack;
 
       return that;
     }
@@ -7955,7 +7610,7 @@ window.wizerati = {
 
     this.createForGet = function (entityId) {
       if (!entityId) {
-        throw 'entity not supplied.'
+        throw 'WizeratiRequestFactory::createForGet entity not supplied.';
       }
 
       return { uri: '/foo', method: 'PUT', data: 'bar' };
@@ -7963,7 +7618,7 @@ window.wizerati = {
 
     this.createForPut = function (entity) {
       if (!entity) {
-        throw 'entity not supplied.'
+        throw 'WizeratiRequestFactory::createForPut entity not supplied.';
       }
 
       return { uri: '/foo', method: 'PUT', data: 'bar' };
@@ -7971,7 +7626,7 @@ window.wizerati = {
 
     this.createForPost = function (entity) {
       if (!entity) {
-        throw 'entity not supplied.'
+        throw 'WizeratiRequestFactory::createForPost entity not supplied.';
       }
 
       return { uri: '/foo', method: 'PUT', data: 'bar' };
@@ -8580,7 +8235,6 @@ window.wizerati = {
     mod.ResultListMode = {
       Default: '0',
       Minimized: '1'
-//      SearchFormExpanded: '2' /*refactor into a two-state implementation - the result list will become the search panel and will not be able to  be minimized - although viewing the comparison list will make it invisible*/
     };
 
     mod.SearchFormMode = { /*the actual form used for searching*/
@@ -8682,12 +8336,10 @@ window.wizerati = {
     mod.resultListModel = new wizerati.ResultListModel();
     mod.searchFormModel = new wizerati.SearchFormModel();
     mod.searchPanelModel = new wizerati.SearchPanelModel();
-    mod.selectedCubeFaceModel = new wizerati.SelectedCubeFaceModel();
-    mod.tabBarModel = new wizerati.TabBarModel();
     mod.signInPanelModel = new wizerati.SignInPanelModel();
+    mod.tabBarModel = new wizerati.TabBarModel();
     mod.uiRootModel = new wizerati.UIRootModel();
 
-    //TODO: extract the functionality requiring the repo into a service
     mod.itemsOfInterestModel = new wizerati.ItemsOfInterestModel(mod.resultListModel);
   }
   catch (e) {
@@ -8696,6 +8348,18 @@ window.wizerati = {
 
 }(wizerati.mod('models')));
 
+(function (mod, m) {
+  'use strict';
+
+  try {
+    mod.itemModelPack = new wizerati.ItemModelPack(m.resultListModel, m.bookmarkBookModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+    mod.uiModelPack = new wizerati.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
+  }
+  catch (e) {
+    throw 'problem registering packs module. ' + e;
+  }
+
+}(wizerati.mod('packs'), wizerati.mod('models')));
 
 //infrastructure services are services that are sufficiently
 // de-coupled from the domain logic that they can be initialized
@@ -8760,21 +8424,21 @@ window.wizerati = {
 }(wizerati.mod('services'), wizerati.mod('clients'), wizerati.mod('caches'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
 
 
-(function (mod, i, m, r) {
+(function (mod, i, m, r, p) {
   'use strict';
 
   try {
-    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+//    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
-    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
-    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel, m.bookmarkBookModel);
+    mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
+    mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
     mod.wizeratiRequestFactory = new wizerati.WizeratiRequestFactory();
   }
   catch (e) {
     throw 'problem registering factories module. ' + e;
   }
 
-}(wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
+}(wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories'), wizerati.mod('packs')));
 
 
 (function (mod, c, f) {
@@ -8804,36 +8468,23 @@ window.wizerati = {
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (mod, f, l, m, s) {
+(function (mod, f, l, m, s, p) {
   'use strict';
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, m.selectedCubeFaceModel, m.bookmarkBookModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, s.bookmarkService);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
-    mod.favoritesCubeView = new wizerati.FavoritesCubeView(m.bookmarkBookModel, f.favoriteViewFactory, m.selectedCubeFaceModel, m.hiddenItemsModel, m.actionedItemsModel, m.itemsOfInterestModel, s.bookmarkService);
+//    mod.bookmarkBookView = new wizerati.FavoritesCubeView(m.bookmarkBookModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
-
-
-(function (mod, m) {
-  'use strict';
-
-  try {
-    mod.uiModelPack = new wizerati.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
-  }
-  catch (e) {
-    throw 'problem registering packs module. ' + e;
-  }
-
-}(wizerati.mod('packs'), wizerati.mod('models')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs')));
 
 
 (function (mod, p, f, l) {
@@ -8855,7 +8506,7 @@ window.wizerati = {
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, m.searchPanelModel, m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel, m.tabBarModel);
+    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
@@ -8864,7 +8515,7 @@ window.wizerati = {
     mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
     mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(m.tabBarModel, m.searchPanelModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+//    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(p.uiModelPack);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

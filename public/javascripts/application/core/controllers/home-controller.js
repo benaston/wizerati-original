@@ -24,6 +24,7 @@
         _searchPanelModel.setMode(_searchPanelModeEnum.Default);
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
+        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
 
         //uirootview should listen to the searchform model for the rendered flag
         //and then render the change to the visibility mode to avoid expensieve polling?

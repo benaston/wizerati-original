@@ -1,10 +1,10 @@
 (function (app, $, invertebrate, _) {
   'use strict';
 
-  function FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService) {
+  function BookmarkBookView(model) {
 
-    if (!(this instanceof app.FavoritesCubeView)) {
-      return new app.FavoritesCubeView(model, favoriteViewFactory, selectedCubeFaceModel, hiddenItemsModel, actionedItemsModel, itemsOfInterestModel, bookmarkService);
+    if (!(this instanceof app.BookmarkBookView)) {
+      return new app.BookmarkBookView(model);
     }
 
     var that = this,
@@ -75,29 +75,7 @@
         throw 'FavoritesCubeView::init model not supplied';
       }
 
-      if (!favoriteViewFactory) {
-        throw 'FavoritesCubeView::init favoriteViewFactory not supplied';
-      }
 
-      if (!selectedCubeFaceModel) {
-        throw 'FavoritesCubeView::init selectedCubeFaceModel not supplied';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'FavoritesCubeView::init hiddenItemsModel not supplied';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'FavoritesCubeView::init actionedItemsModel not supplied';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'FavoritesCubeView::init itemsOfInterestModel not supplied';
-      }
-
-      if (!bookmarkService) {
-        throw 'FavoritesCubeView::init bookmarkService not supplied';
-      }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
@@ -123,7 +101,7 @@
     return init();
   }
 
-  app.FavoritesCubeView = FavoritesCubeView;
-  invertebrate.View.isExtendedBy(app.FavoritesCubeView);
+  app.BookmarkBookView = BookmarkBookView;
+  invertebrate.View.isExtendedBy(app.BookmarkBookView);
 
 }(wizerati, $, invertebrate, _));

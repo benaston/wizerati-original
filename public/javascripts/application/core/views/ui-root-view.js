@@ -9,7 +9,7 @@
 
     var that = this,
         _el = 'body',
-        _mainContainer = '.main-container',
+        _mainContainer = '#main-container',
         _renderOptimizations = {};
 
     this.$el = null;

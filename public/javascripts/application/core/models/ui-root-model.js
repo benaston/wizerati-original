@@ -39,7 +39,7 @@
 
       _visibilityMode = value;
 
-      $.publish(that.eventUris.setVisibilityMode, _visibilityMode);
+      $.publish(that.eventUris.setVisibilityMode, value);
     };
 
     this.getAreTransitionsEnabled = function () {

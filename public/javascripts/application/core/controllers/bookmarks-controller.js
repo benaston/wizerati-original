@@ -1,12 +1,10 @@
 (function (app) {
   'use strict';
 
-  //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
-  //refactor result list panel to be search panel
-  function BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel) {
+  function BookmarksController(bookmarkService, uiModelPack) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, searchPanelModel, resultListModel, bookmarkPanelModel, itemsOfInterestModel, tabBarModel);
+      return new app.BookmarksController(bookmarkService, uiModelPack);
     }
 
     var that = this,
@@ -16,17 +14,12 @@
         _favoritesCubeModel = null,
         _selectedCubeFaceModel = null,
         _bookmarkService = null,
-        _searchPanelModel = null,
-        _resultListModel = null,
-        _bookmarkPanelModel = null,
-        _itemsOfInterestModel = null,
-        _tabBarModel = null;
+        _uiModelPack = null;
 
-    //refactor to extract a PanelConfigurationService::configureForNavbarItem(item) to reduce no. of injected dependencies.
     this.index = function (dto) {
-      _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-      _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
     };
 
     this.create = function (dto) {
@@ -57,32 +50,12 @@
         throw 'BookmarkedItemsController::init bookmarkService not supplied.';
       }
 
-      if (!searchPanelModel) {
-        throw 'BookmarkedItemsController::init searchPanelModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'BookmarkedItemsController::init resultListModel not supplied.';
-      }
-
-      if (!bookmarkPanelModel) {
-        throw 'BookmarkedItemsController::init bookmarkPanelModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'BookmarkedItemsController::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!tabBarModel) {
-        throw 'BookmarkedItemsController::init tabBarModel not supplied.';
+      if (!uiModelPack) {
+        throw 'BookmarkedItemsController::init uiModelPack not supplied.';
       }
 
       _bookmarkService = bookmarkService;
-      _searchPanelModel = searchPanelModel;
-      _resultListModel = resultListModel;
-      _bookmarkPanelModel = bookmarkPanelModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _tabBarModel = tabBarModel;
+      _uiModelPack = uiModelPack;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 

@@ -18,24 +18,16 @@ button.checked, a.btn.checked {
     box-shadow: none;
 }
 
-.field {
-    height: 35px;
-}
 .form-button-container {
     display: block;
-    text-align:right;
+    text-align: right;
     padding-top: 40px;
 }
 
 .form-button-container > * {
-    margin-left:10px;
-    margin-right:10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
-/*.form-button-container {*/
-    /*list-style: none;*/
-    /*float: right;*/
-    /*padding-top: 40px;*/
-/*}*/
 
 .form-button-container-item {
     display: inline-block;
@@ -49,8 +41,6 @@ button.checked, a.btn.checked {
     line-height: 0px;
     visibility: hidden;
 }
-
-
 
 .meta-info {
     visibility: hidden;
@@ -118,8 +108,6 @@ label.radio-inverted:active {
     box-shadow: 0 0 19px 12px rgba(200, 200, 200, .3);
 }
 
-
-
 .form-button-container:after {
     content: ".";
     height: 0;
@@ -131,15 +119,3 @@ label.radio-inverted:active {
 .field-and-metadata-container {
     position: relative;
 }
-
-/*@media only screen*/
-/*and (min-device-width: 768px)*/
-/*and (max-device-width: 1024px) {*/
-    /*.rotating-button-container > .btn[data-is-waiting='false'] {*/
-        /*transition: border-left-width .2s ease-out, border-color 2s ease-out, box-shadow .5s ease-out;*/
-    /*}*/
-
-    /*.rotating-button-container > .btn[data-is-waiting='false']:active {*/
-        /*transition: border-left-width .2s ease-out, border-color 2s ease-out;*/
-    /*}*/
-/*}*/

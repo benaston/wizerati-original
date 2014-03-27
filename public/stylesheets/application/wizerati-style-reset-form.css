@@ -18,6 +18,9 @@ html input[type="tel"] {
     transition: border linear 0.2s;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-appearance: none; /*Prevent iOS styling (e.g. rounded corners on search input)*/
+    color: #333;
+    font-size: 1rem;
+    line-height: 35px;
 }
 
 input[type="search"] {

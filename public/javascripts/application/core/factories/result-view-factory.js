@@ -1,35 +1,27 @@
 (function (app) {
   'use strict';
 
-  function ResultViewFactory(signInIService, itemRepository, itemsOfInterestModel, hiddenItemsModel, actionedItemsModel) {
+  function ResultViewFactory(signInIService, itemRepository, itemModelPack) {
 
     if (!(this instanceof app.ResultViewFactory)) {
       return new app.ResultViewFactory(signInIService,
           itemRepository,
-          itemsOfInterestModel,
-          hiddenItemsModel,
-          actionedItemsModel);
+          itemModelPack);
     }
 
     var that = this,
         _signInIService = null,
         _itemRepository = null,
-        _itemsOfInterestModel = null,
-        _hiddenItemsModel = null,
-        _actionedItemsModel = null,
+        _itemModelPack = null,
         _roleEnum = app.mod('enum').UserRole;
 
-    this.create = function (id, currentCubeFace, done) {
+    this.create = function (id, done) {
       if (!id) {
-        throw 'id not supplied.';
-      }
-
-      if (!currentCubeFace) {
-        throw 'currentCubeFace not supplied.';
+        throw 'ResultViewFactory::create id not supplied.';
       }
 
       if (!done) {
-        throw 'done not supplied.';
+        throw 'ResultViewFactory::create done not supplied.';
       }
 
       var role = _signInIService.getCurrentRole();
@@ -37,55 +29,45 @@
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
+            item.isFavorite = item['isFavoriteOnFace'];
+            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             done(new app.ContractorResultView(item).render().$el);
           });
           break;
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace' + currentCubeFace];
-            item.isSelected = _itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _actionedItemsModel.isActioned(item.id);
-            item.isPinned = _itemsOfInterestModel.isPinned(item.id);
+            item.isFavorite = item['isFavoriteOnFace'];
+            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
             done(new app.ContractResultView(item).render().$el);
           });
           break;
         default:
-          throw 'invalid user role "' + role + '"';
+          throw 'ResultViewFactory::create invalid user role "' + role + '"';
       }
     };
 
     function init() {
       if (!signInIService) {
-        throw 'loginService not supplied.';
+        throw 'ResultViewFactory::init loginService not supplied.';
       }
 
       if (!itemRepository) {
-        throw 'itemRepository not supplied.';
+        throw 'ResultViewFactory::init itemRepository not supplied.';
       }
 
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'hiddenItemsModel not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'actionedItemsModel not supplied.';
+      if (!itemModelPack) {
+        throw 'ResultViewFactory::init itemModelPack not supplied.';
       }
 
       _signInIService = signInIService;
       _itemRepository = itemRepository;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
+      _itemModelPack = itemModelPack;
 
       return that;
     }

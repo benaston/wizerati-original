@@ -10,10 +10,7 @@
     var that = this,
         _searchPanelModel = null,
         _resultListModel = null,
-        _itemsOfInterestModel = null,
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _itemSelectionSourceEnum = app.mod('enum').ItemSelectionSource;
+        _itemsOfInterestModel = null;
 
     this.update = function (dto) {
       try {
@@ -27,17 +24,7 @@
         }
 
         //this has to be set before the mode change to ensure correct layout calculation
-        _itemsOfInterestModel.setSelectedItemId(dto.id); //do not want to trigger repaint the items of interest here
-
-        if (dto.source === _itemSelectionSourceEnum.Results) {
-          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-        } else if (dto.source === _itemSelectionSourceEnum.Favorites) {
-          _resultListModel.setMode(_resultListModeEnum.Minimized, {silent: true});
-        } else {
-          throw "invalid source.";
-        }
-
-//        _itemsOfInterestModel.setSelectedItemId(dto.id); //trigger the repaint of the items of interest view
+        _itemsOfInterestModel.setSelectedItemId(dto.id);
       } catch (err) {
         console.log('SelectedItemController::update exception: ' + err);
       }
