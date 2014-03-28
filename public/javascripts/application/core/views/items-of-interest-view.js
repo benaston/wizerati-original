@@ -89,7 +89,7 @@
     this.renderAddHiddenItem = function (itemId) {
       var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
       var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
+      $frm.attr('action', '/hiddenitems/destroy');
       $frm.find('.btn').addClass('checked');
       $items.addClass('hidden');
       $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
@@ -98,7 +98,7 @@
     this.renderRemoveHiddenItem = function (itemId) {
       var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
       var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/create?id=' + itemId);
+      $frm.attr('action', '/hiddenitems/create');
       $frm.find('.btn').removeClass('checked');
       $items.removeClass('hidden');
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
@@ -106,13 +106,13 @@
 
     this.renderAddFavorite = function (itemId) {
       var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/destroy?id=' + itemId);
+      $frm.attr('action', '/bookmarkeditems/destroy');
       $frm.find('.btn').addClass('checked');
     };
 
     this.renderRemoveFavorite = function (itemId) {
       var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/create?id=' + itemId);
+      $frm.attr('action', '/bookmarkeditems/create');
       $frm.find('.btn').removeClass('checked');
     };
 
@@ -185,6 +185,15 @@
 
       done();
     }
+
+    this.renderRemoveItemOfInterest = function(id) {
+      var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
+      $frm.attr('action', '/itemsofinterest/create');
+      $frm.find('.btn').removeClass('checked');
+
+      $('.pinned-item[data-id="' + id + '"]').remove();
+      _layoutCoordinator.layOut();
+    };
 
     this.renderAddItemOfInterest = function (id) {
       var frm = that.$elSelectedItemContainer.find('.frm-pin')
@@ -262,17 +271,18 @@
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+      _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
       _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
+      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);

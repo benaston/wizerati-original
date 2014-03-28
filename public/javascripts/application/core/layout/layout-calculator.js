@@ -19,7 +19,7 @@
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,
-        _effectiveWidthResultListPanelMinimized = 2;
+        _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {
       var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices sometimes don't have innerWidth apparently*/

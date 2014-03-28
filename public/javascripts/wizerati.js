@@ -3637,11 +3637,11 @@ window.wizerati = {
     this.setMode = function (value) {
       _mode = value;
 
-      if (_mode === _modeEnum.PinnedItemsExpanded) {
-        _resultListModel.setMode(_resultListModeEnum.Minimized)
-      } else if (_mode === _modeEnum.Default) {
-        _resultListModel.setMode(_resultListModeEnum.Default)
-      }
+//      if (_mode === _modeEnum.PinnedItemsExpanded) {
+//        _resultListModel.setMode(_resultListModeEnum.Minimized)
+//      } else if (_mode === _modeEnum.Default) {
+//        _resultListModel.setMode(_resultListModeEnum.Default)
+//      }
 
       $.publish(that.eventUris.setMode);
     };
@@ -5057,7 +5057,7 @@ window.wizerati = {
     this.renderAddHiddenItem = function (itemId) {
       var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
       var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
+      $frm.attr('action', '/hiddenitems/destroy');
       $frm.find('.btn').addClass('checked');
       $items.addClass('hidden');
       $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
@@ -5066,7 +5066,7 @@ window.wizerati = {
     this.renderRemoveHiddenItem = function (itemId) {
       var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
       var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/create?id=' + itemId);
+      $frm.attr('action', '/hiddenitems/create');
       $frm.find('.btn').removeClass('checked');
       $items.removeClass('hidden');
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
@@ -5074,13 +5074,13 @@ window.wizerati = {
 
     this.renderAddFavorite = function (itemId) {
       var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/destroy?id=' + itemId);
+      $frm.attr('action', '/bookmarkeditems/destroy');
       $frm.find('.btn').addClass('checked');
     };
 
     this.renderRemoveFavorite = function (itemId) {
       var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/create?id=' + itemId);
+      $frm.attr('action', '/bookmarkeditems/create');
       $frm.find('.btn').removeClass('checked');
     };
 
@@ -5153,6 +5153,15 @@ window.wizerati = {
 
       done();
     }
+
+    this.renderRemoveItemOfInterest = function(id) {
+      var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
+      $frm.attr('action', '/itemsofinterest/create');
+      $frm.find('.btn').removeClass('checked');
+
+      $('.pinned-item[data-id="' + id + '"]').remove();
+      _layoutCoordinator.layOut();
+    };
 
     this.renderAddItemOfInterest = function (id) {
       var frm = that.$elSelectedItemContainer.find('.frm-pin')
@@ -5230,17 +5239,18 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+      _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
       _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
+      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
@@ -6318,7 +6328,7 @@ window.wizerati = {
 
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-//      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized); //done by ioimodel.setmode
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized); //done by ioimodel.setmode
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
 //      _layoutCoordinator.layOut(); //i think this is taken care of by setting the mode of the ioimodel
@@ -7774,7 +7784,7 @@ window.wizerati = {
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,
-        _effectiveWidthResultListPanelMinimized = 2;
+        _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {
       var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices sometimes don't have innerWidth apparently*/
@@ -7910,7 +7920,6 @@ window.wizerati = {
       _itemsOfInterestModel = itemsOfInterestModel;
       _layoutCalculator = layoutCalculator;
 
-      $.subscribe(searchPanelModel.eventUris.setMode, that.layOut);
       $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
 
       return that;

@@ -35,7 +35,6 @@
       _itemsOfInterestModel = itemsOfInterestModel;
       _layoutCalculator = layoutCalculator;
 
-      $.subscribe(searchPanelModel.eventUris.setMode, that.layOut);
       $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
 
       return that;
