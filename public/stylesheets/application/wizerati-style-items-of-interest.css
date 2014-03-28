@@ -5,7 +5,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-p
 
 .selected-item-content, .pinned-item-content {
     /*transition: -webkit-transform 2s ease-out, width 2s ease-out 2s; *//*DELAY - reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
-    transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9), width 2s cubic-bezier(0.2,0.3,0.25,0.9) 2s; /*DELAY - reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
+    transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9), width 1s cubic-bezier(0.2,0.3,0.25,0.9) 2s; /*DELAY - reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
 }
 
 .items-of-interest-panel {
@@ -366,7 +366,7 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
 
 .empty-message-container {
     visibility: hidden;
-    width: 600px;
+    width: 300px; /*because we are maintaining this in the flow of the document, we need to make it narrow enough to ensure it never pushes pushes beyond a narrow selected item*/
     display: inline-block;
     position: absolute; /*avoid affecting pinned items*/
     top: 38%;

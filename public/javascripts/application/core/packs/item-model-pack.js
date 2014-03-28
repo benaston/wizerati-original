@@ -17,23 +17,23 @@
 
     function init() {
       if (!resultListModel) {
-        throw 'SearchControllerHelper::init resultListModel not supplied.';
+        throw 'ItemModelPack::init resultListModel not supplied.';
       }
 
       if (!bookmarkBookModel) {
-        throw 'SearchControllerHelper::init bookmarkBookModel not supplied.';
+        throw 'ItemModelPack::init bookmarkBookModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
+        throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
       }
 
       if (!hiddenItemsModel) {
-        throw 'SearchControllerHelper::init hiddenItemsModel not supplied.';
+        throw 'ItemModelPack::init hiddenItemsModel not supplied.';
       }
 
       if (!actionedItemsModel) {
-        throw 'SearchControllerHelper::init actionedItemsModel not supplied.';
+        throw 'ItemModelPack::init actionedItemsModel not supplied.';
       }
 
       that.resultListModel = resultListModel;

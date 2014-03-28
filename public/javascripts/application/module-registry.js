@@ -296,23 +296,22 @@
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (mod, f, l, m, s, p) {
+(function (mod, f, l, m, p) {
   'use strict';
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, s.bookmarkService);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
-//    mod.bookmarkBookView = new wizerati.FavoritesCubeView(m.bookmarkBookModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('packs')));
 
 
 (function (mod, p, f, l) {

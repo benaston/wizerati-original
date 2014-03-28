@@ -29,13 +29,6 @@
         that.$el.removeClass('hidden');
       }
 
-      if (that.Model.shouldAnimateIn) {
-//        that.$el.css({
-//          transition: '-webkit-transform .2s ease-out',
-//          '-webkit-transform': 'translate(' + model.width*-1 + ',0)'
-//        });
-      }
-
       app.instance.renderTemplate(that.$el, _templateName, that.Model);
 
       return that;

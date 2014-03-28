@@ -11,8 +11,6 @@
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _navbarItemEnum = app.mod('enum').Tab,
-        _favoritesCubeModel = null,
-        _selectedCubeFaceModel = null,
         _bookmarkService = null,
         _uiModelPack = null;
 
@@ -24,25 +22,18 @@
 
     this.create = function (dto) {
       if (!dto) {
-        throw 'dto not supplied.';
+        throw 'BookmarksController::create dto not supplied.';
       }
 
-      var currentCubeFace = _selectedCubeFaceModel.getSelectedCubeFaceId();
-      if (_.find(_favoritesCubeModel.getFavorites[currentCubeFace], function (id) {
-        return id === dto.id;
-      })) {
-        return;
-      }
-
-      _bookmarkService.addFavorite(dto.id, currentCubeFace);
+      _bookmarkService.addBookmark(dto.id);
     };
 
     this.destroy = function (dto) {
       if (!dto) {
-        throw 'dto not supplied.';
+        throw 'BookmarksController::destroy dto not supplied.';
       }
 
-      _bookmarkService.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
+      _bookmarkService.removeBookmark(dto.id);
     };
 
     function init() {

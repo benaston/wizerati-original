@@ -38,15 +38,15 @@
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
             item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isFavorite = item['isFavoriteOnFace'];
+            item.isBookmark = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isPinned = !isSelectedItem;
+            item.isInComparisonList = !isSelectedItem;
             item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
             item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === id;
             });
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isFavoriteOnAnyFace(item.id));
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id));
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             item.width = width;
             var $e = new app.ContractorItemOfInterestView(item).render().$el;
@@ -57,9 +57,9 @@
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
             item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isFavorite = item['isFavoriteOnFace'];
+            item.isBookmark = item['isBookmark'];
             item.isSelected = isSelectedItem;
-            item.isPinned = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+            item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             }));
             item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
@@ -67,7 +67,7 @@
               return i === item.id;
             })));
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && isSelectedItem && !_itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.width = width;

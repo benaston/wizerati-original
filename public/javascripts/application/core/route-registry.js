@@ -43,20 +43,12 @@
           c.bookmarksController.index(dto);
         });
 
-        router.registerRoute('/bookmarkeditems/create', function (dto) {
+        router.registerRoute('/bookmarks/create', function (dto) {
           c.bookmarksController.create(dto);
         }, { silent: true });
 
-        router.registerRoute('/bookmarkeditems/destroy', function (dto) {
+        router.registerRoute('/bookmarks/destroy', function (dto) {
           c.bookmarksController.destroy(dto);
-        }, { silent: true });
-
-        router.registerRoute('/favorites/create', function (dto) {
-          c.favoritesController.create(dto);
-        }, { silent: true });
-
-        router.registerRoute('/favorites/destroy', function (dto) {
-          c.favoritesController.destroy(dto);
         }, { silent: true });
 
         router.registerRoute('/comparisonlist', function (dto) {

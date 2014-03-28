@@ -2560,69 +2560,30 @@ window.wizerati = {
     }
 
     var that = this,
-        _bookModel = null,
+        _bookmarkBookModel = null,
         _itemRepository = null;
 
-    this.eventUris = {
-      addFavorite: 'update://bookmarkservice/addfavorite',
-      removeFavorite: 'update://bookmarkservice/removefavorite'
-    };
-    //needed? simply have empty page?
-//    this.deactivateFace = function (faceId) {
-//      if (faceId > 5) {
-//        throw 'faceId invalid.';
-//      }
-//
-//      _faceActiveStatuses[faceId] = false;
-//
-//      //update the client-side results collection
-//      for (var i = 0; i < _favorites[faceId].length; i++) {
-//        var id = _favorites[faceId][i];
-//        _itemRepository.getById(id, function (item) {
-//          item['isFavoriteOnFace' + faceId] = false;
-//        });
-//      }
-//
-//      _favorites[faceId] = [];
-//
-//      if (_faceActiveStatuses.indexOf(true) === -1) {
-//        _mode = _modeEnum.Default;
-//      }
-//      //ensure the items of interest and result list views are notified
-//      $.publish(that.updateEventUri);
-//    };
-
-    this.addFavorite = function (id, face) {
+    this.addBookmark = function (id) {
       if (!id) {
-        throw 'favorite not supplied';
+        throw 'BookmarkService::addBookmark id not supplied.';
       }
 
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      if (!_bookModel.isFavoriteOnFace(id, face)) {
-        _bookModel.addFavoriteToFace(id, face);
+      if (!_bookmarkBookModel.isBookmark(id)) {
         _itemRepository.getById(id, function (item) {
-          item['isFavoriteOnFace' + face] = true;
-          $.publish(that.eventUris.addFavorite, id);
+          item['isBookmark'] = true;
+          _bookmarkBookModel.addBookmark(id);
         });
       }
     };
 
-    this.removeFavorite = function (id, face) {
+    this.removeBookmark = function (id) {
       if (!id) {
-        throw 'id not supplied';
+        throw 'BookmarkService::addBookmark id not supplied.';
       }
 
-      if (!face) {
-        throw 'face not supplied';
-      }
-
-      _bookModel.removeFavoriteFromFace(id, face);
       _itemRepository.getById(id, function (item) {
-        item['isFavoriteOnFace' + face] = false;
-        $.publish(that.eventUris.removeFavorite, id);
+        item['isBookmark'] = false;
+        _bookmarkBookModel.removeBookmark(id);
       });
     };
 
@@ -2637,7 +2598,7 @@ window.wizerati = {
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
-      _bookModel = bookmarkBookModel;
+      _bookmarkBookModel = bookmarkBookModel;
       _itemRepository = itemRepository;
 
       return that;
@@ -3244,158 +3205,42 @@ window.wizerati = {
     }
 
     var that = this,
-        _favorites = [
-          [], //top
-          [], //left
-          [], //front
-          [], //right
-          [], //bottom
-          []  //back
-        ],
-        _faceLabels = ['bookmarks', 'bookmarks 2', 'bookmarks 3', 'bookmarks 4', 'bookmarks 5', 'bookmarks 6'],
-        _resultListModel = null,
-        _faceActiveStatuses = [true, false, false, false, false, false],
-        _modeEnum = app.mod('enum').FavoritesCubeMode,
-        _mode = _modeEnum.Default;
+        _bookmarks = [];
 
-    this.eventUris = {default: 'update://favoritescubemodel/',
-      addFavorite: 'update://favoritescubemodel/addfavorite',
-      removeFavorite: 'update://favoritescubemodel/removefavorite'
-    };
-    this.updateEventUri = 'update://favoritescubemodel/';
-    this.updateEventUriPrivate = 'update://favoritescubemodel/private'; //used when it is unneccessary to tell other UI elements of a change, saving re-painting.
-
-    this.getFaceLabels = function () {
-      return _faceLabels;
+    this.eventUris = {
+      default: 'update://bookmarkbookmodel',
+      addBookmark: 'update://bookmarkbookmodel/addbookmark',
+      removeBookmark: 'update://bookmarkbookmodel/removebookmark'
     };
 
-    this.getFavoriteGroupName = function (id) {
-      return _faceLabels[id];
+    this.getBookmarks = function () {
+      return _bookmarks;
     };
 
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value) {
-      if (!value) {
-        throw 'value not supplied';
+    //When adding a bookmark, the service should be used (which in-turn calls this).
+    this.addBookmark = function (id) {
+      if (that.isBookmark(id)) {
+        return;
       }
+      _bookmarks.push(id);
 
-      _mode = value;
-      $.publish(that.updateEventUriPrivate);
+      $.publish(that.eventUris.addBookmark, id);
     };
 
-//    this.deactivateFace = function (faceId) {
-//      if (faceId > 5) {
-//        throw 'faceId invalid.';
-//      }
-//
-//      _faceActiveStatuses[faceId] = false;
-//
-//      //update the client-side results collection
-//      for (var i = 0; i < _favorites[faceId].length; i++) {
-//        var id = _favorites[faceId][i];
-//        _itemRepository.getById(id, function (item) {
-//          item['isFavoriteOnFace' + faceId] = false;
-//        });
-//      }
-//
-//      _favorites[faceId] = [];
-//
-//      if (_faceActiveStatuses.indexOf(true) === -1) {
-//        _mode = _modeEnum.Default;
-//      }
-//      //ensure the items of interest and result list views are notified
-//      $.publish(that.updateEventUri);
-//    };
-
-    this.getFaceStatuses = function () {
-
-      return _faceActiveStatuses;
-    };
-
-    this.setFaceStatuses = function (value) {
-      if (!value) {
-        throw 'value not supplied';
+    //When removing a bookmark, the service should be used (which in-turn calls this).
+    this.removeBookmark = function (id) {
+      if (!that.isBookmark(id)) {
+        return;
       }
+      _bookmarks = _.reject(_bookmarks, function(b){ return b === id; });
 
-      _faceActiveStatuses = value;
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.removeBookmark, id);
     };
 
-    this.getFavorites = function () {
-
-      return _favorites;
-    };
-
-    this.isFavoriteOnFace = function (id, face) {
-      return _.find(_favorites[face], function (i) {
+    this.isBookmark = function (id) {
+      return _.find(_bookmarks, function (i) {
         return i === id;
       });
-    };
-
-    this.addFavoriteToFace = function (id, face) {
-        _favorites[face].push(id);
-    };
-
-    this.removeFavoriteFromFace = function (id, face) {
-      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
-        return idOnCubeFace === id;
-      });
-    };
-
-//    this.addFavorite = function (id, face) {
-//      if (!id) {
-//        throw 'favorite not supplied';
-//      }
-//
-//      if (!face) {
-//        throw 'face not supplied';
-//      }
-//
-//      if (!_.find(_favorites[face], function (i) {
-//        return i === id;
-//      })) {
-//        _favorites[face].push(id);
-//        _itemRepository.getById(id, function (item) {
-//          item['isFavoriteOnFace' + face] = true;
-//          $.publish(that.eventUris.addFavorite, id);
-//        });
-//      }
-//    };
-
-//    this.removeFavorite = function (id, face) {
-//      if (!id) {
-//        throw 'id not supplied';
-//      }
-//
-//      if (!face) {
-//        throw 'face not supplied';
-//      }
-//
-//      _favorites[parseInt(face)] = _.reject(_favorites[parseInt(face)], function (idOnCubeFace) {
-//        return idOnCubeFace === id;
-//      });
-//
-//      _itemRepository.getById(id, function (item) {
-//        item['isFavoriteOnFace' + face] = false;
-//        $.publish(that.eventUris.removeFavorite, id);
-//      });
-//    };
-
-    this.isFavoriteOnAnyFace = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      return _favorites.map(function (a) {
-        return _.any(a, function (i) {
-          return i === id;
-        });
-      }).reduce(function (prev, curr) {
-            return prev || curr;
-          });
     };
 
     function init() {
@@ -4672,13 +4517,6 @@ window.wizerati = {
         that.$el.removeClass('hidden');
       }
 
-      if (that.Model.shouldAnimateIn) {
-//        that.$el.css({
-//          transition: '-webkit-transform .2s ease-out',
-//          '-webkit-transform': 'translate(' + model.width*-1 + ',0)'
-//        });
-      }
-
       app.instance.renderTemplate(that.$el, _templateName, that.Model);
 
       return that;
@@ -4712,7 +4550,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '<li class="t t-219"></li>',
+        _el = '<li class="t"></li>',
         _templateName = 'result.html-local';
 
     this.$el = $(_el);
@@ -4733,10 +4571,22 @@ window.wizerati = {
         that.$el.removeClass('hidden');
       }
 
-      that.$el.attr('data-is-unread', !that.Model.isRead);
-      that.$el.attr('data-is-actioned', that.Model.isActioned);
-      that.$el.attr('data-is-favorite', that.Model.isFavorite);
-      that.$el.attr('data-is-pinned', that.Model.isPinned);
+      //only apply the attributes in the positive case to save clutter in the DOM
+      if(!that.Model.isRead) {
+        that.$el.attr('data-is-unread', !that.Model.isRead);
+      }
+
+      if(that.Model.isActioned) {
+        that.$el.attr('data-is-actioned', that.Model.isActioned);
+      }
+
+      if(that.Model.isBookmark) {
+        that.$el.attr('data-is-bookmark', that.Model.isBookmark);
+      }
+
+      if(that.Model.isPinned) {
+        that.$el.attr('data-is-in-comparison-list', that.Model.isInComparisonList);
+      }
 
       app.instance.renderTemplate(that.$el,
           _templateName,
@@ -4969,10 +4819,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel, bookmarkService) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel, bookmarkService);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel);
     }
 
     var that = this,
@@ -4990,7 +4840,6 @@ window.wizerati = {
         _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
-        _bookmarkService = null,
         _layoutCoordinator = null,
         _renderOptimizations = {},
         _scrollTopValues = {},
@@ -5072,15 +4921,15 @@ window.wizerati = {
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
     };
 
-    this.renderAddFavorite = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/destroy');
+    this.renderAddBookmark = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      $frm.attr('action', '/bookmarks/destroy');
       $frm.find('.btn').addClass('checked');
     };
 
-    this.renderRemoveFavorite = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/create');
+    this.renderRemoveBookmark = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      $frm.attr('action', '/bookmarks/create');
       $frm.find('.btn').removeClass('checked');
     };
 
@@ -5223,15 +5072,10 @@ window.wizerati = {
         throw 'ItemsOfInterestView::init uiRootModel not supplied';
       }
 
-      if (!bookmarkService) {
-        throw 'ItemsOfInterestView::init bookmarkService not supplied';
-      }
-
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemModelPack = itemModelPack;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
-      _bookmarkService = bookmarkService;
       _layoutCoordinator = layoutCoordinator;
       _uiRootModel = uiRootModel;
 
@@ -5240,8 +5084,8 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
@@ -5251,9 +5095,8 @@ window.wizerati = {
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
@@ -5412,10 +5255,10 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, itemModelPack, bookmarkService) {
+  function ResultListView(model, resultViewFactory, itemModelPack) {
 
     if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model, resultViewFactory, itemModelPack, bookmarkService);
+      return new app.ResultListView(model, resultViewFactory, itemModelPack);
     }
 
     var that = this,
@@ -5469,7 +5312,12 @@ window.wizerati = {
 
     this.renderAddItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-favorite', 'true');
+      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
+    };
+
+    this.renderRemoveItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
     };
 
     this.renderAddHiddenItem = function (itemId) {
@@ -5485,14 +5333,14 @@ window.wizerati = {
       $selector.removeClass('hidden');
     };
 
-    this.renderAddFavorite = function (itemId) {
+    this.renderAddBookmark = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-favorite', 'true');
+      $(_el).find(selector).attr('data-is-bookmark', 'true');
     };
 
-    this.renderRemoveFavorite = function (itemId) {
+    this.renderRemoveBookmark = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-favorite', 'false');
+      $(_el).find(selector).attr('data-is-bookmark', 'false');
     };
 
     this.renderSetMode = function (mode) {
@@ -5517,10 +5365,6 @@ window.wizerati = {
         throw 'ResultListView::init itemModelPack not supplied';
       }
 
-      if (!bookmarkService) {
-        throw 'ResultListView::init bookmarkService not supplied';
-      }
-
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _resultViewFactory = resultViewFactory;
@@ -5528,22 +5372,23 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
-      $.subscribe(bookmarkService.eventUris.addFavorite, that.render);
-      $.subscribe(bookmarkService.eventUris.removeFavorite, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
+//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
 
       return that;
     }
@@ -5940,23 +5785,23 @@ window.wizerati = {
 
     function init() {
       if (!resultListModel) {
-        throw 'SearchControllerHelper::init resultListModel not supplied.';
+        throw 'ItemModelPack::init resultListModel not supplied.';
       }
 
       if (!bookmarkBookModel) {
-        throw 'SearchControllerHelper::init bookmarkBookModel not supplied.';
+        throw 'ItemModelPack::init bookmarkBookModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
+        throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
       }
 
       if (!hiddenItemsModel) {
-        throw 'SearchControllerHelper::init hiddenItemsModel not supplied.';
+        throw 'ItemModelPack::init hiddenItemsModel not supplied.';
       }
 
       if (!actionedItemsModel) {
-        throw 'SearchControllerHelper::init actionedItemsModel not supplied.';
+        throw 'ItemModelPack::init actionedItemsModel not supplied.';
       }
 
       that.resultListModel = resultListModel;
@@ -6248,8 +6093,6 @@ window.wizerati = {
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _navbarItemEnum = app.mod('enum').Tab,
-        _favoritesCubeModel = null,
-        _selectedCubeFaceModel = null,
         _bookmarkService = null,
         _uiModelPack = null;
 
@@ -6261,25 +6104,18 @@ window.wizerati = {
 
     this.create = function (dto) {
       if (!dto) {
-        throw 'dto not supplied.';
+        throw 'BookmarksController::create dto not supplied.';
       }
 
-      var currentCubeFace = _selectedCubeFaceModel.getSelectedCubeFaceId();
-      if (_.find(_favoritesCubeModel.getFavorites[currentCubeFace], function (id) {
-        return id === dto.id;
-      })) {
-        return;
-      }
-
-      _bookmarkService.addFavorite(dto.id, currentCubeFace);
+      _bookmarkService.addBookmark(dto.id);
     };
 
     this.destroy = function (dto) {
       if (!dto) {
-        throw 'dto not supplied.';
+        throw 'BookmarksController::destroy dto not supplied.';
       }
 
-      _bookmarkService.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
+      _bookmarkService.removeBookmark(dto.id);
     };
 
     function init() {
@@ -7444,15 +7280,15 @@ window.wizerati = {
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
             item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isFavorite = item['isFavoriteOnFace'];
+            item.isBookmark = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isPinned = !isSelectedItem;
+            item.isInComparisonList = !isSelectedItem;
             item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
             item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === id;
             });
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isFavoriteOnAnyFace(item.id));
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id));
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             item.width = width;
             var $e = new app.ContractorItemOfInterestView(item).render().$el;
@@ -7463,9 +7299,9 @@ window.wizerati = {
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
             item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isFavorite = item['isFavoriteOnFace'];
+            item.isBookmark = item['isBookmark'];
             item.isSelected = isSelectedItem;
-            item.isPinned = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+            item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             }));
             item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
@@ -7473,7 +7309,7 @@ window.wizerati = {
               return i === item.id;
             })));
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isFavoriteOnAnyFace(item.id)) && isSelectedItem && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && isSelectedItem && !_itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.width = width;
@@ -7542,7 +7378,7 @@ window.wizerati = {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace'];
+            item.isFavorite = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
@@ -7552,7 +7388,7 @@ window.wizerati = {
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isFavoriteOnFace'];
+            item.isFavorite = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
@@ -8011,20 +7847,12 @@ window.wizerati = {
           c.bookmarksController.index(dto);
         });
 
-        router.registerRoute('/bookmarkeditems/create', function (dto) {
+        router.registerRoute('/bookmarks/create', function (dto) {
           c.bookmarksController.create(dto);
         }, { silent: true });
 
-        router.registerRoute('/bookmarkeditems/destroy', function (dto) {
+        router.registerRoute('/bookmarks/destroy', function (dto) {
           c.bookmarksController.destroy(dto);
-        }, { silent: true });
-
-        router.registerRoute('/favorites/create', function (dto) {
-          c.favoritesController.create(dto);
-        }, { silent: true });
-
-        router.registerRoute('/favorites/destroy', function (dto) {
-          c.favoritesController.destroy(dto);
         }, { silent: true });
 
         router.registerRoute('/comparisonlist', function (dto) {
@@ -8447,23 +8275,22 @@ window.wizerati = {
 }(wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (mod, f, l, m, s, p) {
+(function (mod, f, l, m, p) {
   'use strict';
 
   try {
     mod.applyToContractDialogView = new wizerati.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkPanelView = new wizerati.BookmarkPanelView(m.bookmarkPanelModel);
-    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel, s.bookmarkService);
-    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, s.bookmarkService);
+    mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
+    mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
-//    mod.bookmarkBookView = new wizerati.FavoritesCubeView(m.bookmarkBookModel);
   }
   catch (e) {
     throw 'problem registering views module. ' + e;
   }
 
-}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs')));
+}(wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('packs')));
 
 
 (function (mod, p, f, l) {

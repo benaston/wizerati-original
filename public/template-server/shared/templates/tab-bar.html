@@ -1,26 +1,29 @@
 <nav id="tab-bar" data-selected-item="0">
-    <a class="h">wizerati</a>
-    <div class="i">
-        <button id="btn-show-search-panel" class="btn btn-40 btn-primary" title="search" form="search-formm" >&#xf1da;</button>
-        <label class="label" for="btn-show-search-panel">search</label>
-    </div>
-    <div class="i">
-        <form method="GET" action="/bookmarks">
+    <ul>
+        <li>
+            <a class="h">wizerati</a>
+        </li>
+        <li class="i">
+            <button id="btn-show-search-panel" class="btn btn-40 btn-primary" title="search" form="search-formm" >&#xf1da;</button>
+            <label class="label" for="btn-show-search-panel">search</label>
+        </li>
+        <li class="i">
+            <form method="GET" action="/bookmarks">
             <button id="btn-show-bookmark-panel" class="btn btn-40 btn-primary" title="bookmarks">&#xf26b;</button>
             <label class="label" for="btn-show-bookmark-panel">bookmarks</label>
-        </form>
-    </div>
-    <div class="i">
-        <form method="GET" action="/comparisonlist">
-            <button type="submit" id="btn-update-items-of-interest-panel-mode" class="btn btn-40 btn-primary" title="comparison list">&#xf30e;</button>
-            <label class="label" for="btn-update-items-of-interest-panel-mode">comparison list</label>
-        </form>
-    </div>
-    <div class="i-sign-out">
-        <form method="POST" action="/session/destroy">
-            <input type="hidden" name="mode" value="0">
-            <button id="btn-sign-out" class="btn btn-40 btn-primary" title="sign out">&#xf315;</button>
-            <label class="label" for="btn-sign-out">sign out</label>
-        </form>
-    </div>
+        </form></li>
+        <li class="i">
+            <form method="GET" action="/comparisonlist">
+                <button type="submit" id="btn-update-items-of-interest-panel-mode" class="btn btn-40 btn-primary" title="comparison list">&#xf30e;</button>
+                <label class="label" for="btn-update-items-of-interest-panel-mode">comparison list</label>
+            </form>
+        </li>
+        <li class="i-sign-out">
+            <form method="POST" action="/session/destroy">
+                <input type="hidden" name="mode" value="0">
+                <button id="btn-sign-out" class="btn btn-40 btn-primary" title="sign out">&#xf315;</button>
+                <label class="label" for="btn-sign-out">sign out</label>
+            </form>
+        </li>
+    </ul>
 </nav>

@@ -1,10 +1,10 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel, bookmarkService) {
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel) {
 
     if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel, bookmarkService);
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel);
     }
 
     var that = this,
@@ -22,7 +22,6 @@
         _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
-        _bookmarkService = null,
         _layoutCoordinator = null,
         _renderOptimizations = {},
         _scrollTopValues = {},
@@ -104,15 +103,15 @@
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
     };
 
-    this.renderAddFavorite = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/destroy');
+    this.renderAddBookmark = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      $frm.attr('action', '/bookmarks/destroy');
       $frm.find('.btn').addClass('checked');
     };
 
-    this.renderRemoveFavorite = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-favorite');
-      $frm.attr('action', '/bookmarkeditems/create');
+    this.renderRemoveBookmark = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      $frm.attr('action', '/bookmarks/create');
       $frm.find('.btn').removeClass('checked');
     };
 
@@ -255,15 +254,10 @@
         throw 'ItemsOfInterestView::init uiRootModel not supplied';
       }
 
-      if (!bookmarkService) {
-        throw 'ItemsOfInterestView::init bookmarkService not supplied';
-      }
-
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _itemModelPack = itemModelPack;
       _itemOfInterestViewFactory = itemOfInterestViewFactory;
-      _bookmarkService = bookmarkService;
       _layoutCoordinator = layoutCoordinator;
       _uiRootModel = uiRootModel;
 
@@ -272,8 +266,8 @@
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
-      _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
@@ -283,9 +277,8 @@
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
       $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-      $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);

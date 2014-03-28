@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '<li class="t t-219"></li>',
+        _el = '<li class="t"></li>',
         _templateName = 'result.html-local';
 
     this.$el = $(_el);
@@ -29,10 +29,22 @@
         that.$el.removeClass('hidden');
       }
 
-      that.$el.attr('data-is-unread', !that.Model.isRead);
-      that.$el.attr('data-is-actioned', that.Model.isActioned);
-      that.$el.attr('data-is-favorite', that.Model.isFavorite);
-      that.$el.attr('data-is-pinned', that.Model.isPinned);
+      //only apply the attributes in the positive case to save clutter in the DOM
+      if(!that.Model.isRead) {
+        that.$el.attr('data-is-unread', !that.Model.isRead);
+      }
+
+      if(that.Model.isActioned) {
+        that.$el.attr('data-is-actioned', that.Model.isActioned);
+      }
+
+      if(that.Model.isBookmark) {
+        that.$el.attr('data-is-bookmark', that.Model.isBookmark);
+      }
+
+      if(that.Model.isPinned) {
+        that.$el.attr('data-is-in-comparison-list', that.Model.isInComparisonList);
+      }
 
       app.instance.renderTemplate(that.$el,
           _templateName,
