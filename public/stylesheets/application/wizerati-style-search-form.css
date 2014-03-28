@@ -13,13 +13,8 @@ body[data-ui-mode='0'] #search-form {
     -webkit-backface-visibility: hidden; /*needed?*/
 }
 
-/*body[data-ui-mode='0'] #search-form {*/
-    /*margin: auto;*/
-   /**/
-/*}*/
-
 #search-formm {
-    position: absolute; /*enables absolute positioning of buttons (given that the container is fixed position*/
+    position: relative; /*enables absolute positioning of buttons in brownfield mode (given that the container is fixed position*/
 }
 
 body[data-ui-mode='1'] #search-form {

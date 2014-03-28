@@ -71,7 +71,7 @@
       var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
+        var selectedItemIncrement =  0;//_itemsOfInterestModel.getSelectedItemCount();
         leftP1 = newWidth * (0 + selectedItemIncrement);
         leftP2 = newWidth * (1 + selectedItemIncrement);
         leftP3 = newWidth * (2 + selectedItemIncrement);

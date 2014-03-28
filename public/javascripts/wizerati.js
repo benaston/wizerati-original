@@ -4991,10 +4991,10 @@ window.wizerati = {
         _elSelectedItemContainer2 = '#selected-item-container-2',
         _elPinnedItemsContainer = '.pinned-items-container',
         _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(2)',
-        _elPinnedItem2 = '.pinned-item:nth-child(3)',
-        _elPinnedItem3 = '.pinned-item:nth-child(4)',
-        _elPinnedItem4 = '.pinned-item:nth-child(5)',
+        _elPinnedItem1 = '.pinned-item:nth-child(1) .pinned-item-content',
+        _elPinnedItem2 = '.pinned-item:nth-child(2) .pinned-item-content',
+        _elPinnedItem3 = '.pinned-item:nth-child(3) .pinned-item-content',
+        _elPinnedItem4 = '.pinned-item:nth-child(4) .pinned-item-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
         _bookmarkService = null,
@@ -5096,11 +5096,10 @@ window.wizerati = {
 
     this.renderLayout = function (layout) {
       var selectedItemContent = $('.selected-item-container').find('.selected-item-content');
-      $(_elHandlePinnedItems).css({left: layout.leftHandlePinnedItems });
-      $(_elPinnedItem1).css({left: layout.leftPinnedItem1 });
-      $(_elPinnedItem2).css({left: layout.leftPinnedItem2 });
-      $(_elPinnedItem3).css({left: layout.leftPinnedItem3 });
-      $(_elPinnedItem4).css({left: layout.leftPinnedItem4 });
+      $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
+      $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
+      $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
+      $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
       selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
       console.log('INFO: Setting ItemOfInterest width to %s.', layout.widthItemOfInterest);
@@ -7875,7 +7874,7 @@ window.wizerati = {
       var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        var selectedItemIncrement =  _itemsOfInterestModel.getSelectedItemCount();
+        var selectedItemIncrement =  0;//_itemsOfInterestModel.getSelectedItemCount();
         leftP1 = newWidth * (0 + selectedItemIncrement);
         leftP2 = newWidth * (1 + selectedItemIncrement);
         leftP3 = newWidth * (2 + selectedItemIncrement);
