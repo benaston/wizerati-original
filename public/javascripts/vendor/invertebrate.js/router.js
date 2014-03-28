@@ -57,6 +57,7 @@
     };
 
     function routeHyperlink(evt) {
+
       var href = $(this).attr('href');
       var protocol = 'http//';
 
@@ -68,8 +69,12 @@
 
       if (href.slice(protocol.length) !== protocol) {
         evt.preventDefault();
+
+//          $.debounce(100, true, function() {
         that.route(href);
+//          });
       }
+
     }
 
     function routeFormSubmission(evt) {
@@ -126,14 +131,26 @@
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
 
-      $(document).on('touchstart', 'button', function(){ $(this).addClass('halo'); });
-      $(document).on('touchend', 'button', function(){ $(this).removeClass('halo'); });
-      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);
+      $(document).on('touchstart', 'button', function () {
+        $(this).addClass('halo');
+      });
+      $(document).on('touchend', 'button', function () {
+        $(this).removeClass('halo');
+      });
+//      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink); //debounce attempt to prevent undesired interaction of double-click on results with double buffering
+      $(document).on('click', 'a:not([data-bypass-router])', $.debounce(routeHyperlink, 500, true,
+          function(evt){
+            evt.preventDefault();
+          })); //debounce to prevent undesired interaction of double-click on results with double buffering
       $(document).on('submit', 'form', routeFormSubmission);
     }
 
     init();
   }
 
+
+
   invertebrate.Router = Router;
 }(invertebrate, $, _));
+
+

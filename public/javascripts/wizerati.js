@@ -237,7 +237,39 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
   }
 
   $.Deferred = Deferred
-})(Zepto);//     Underscore.js 1.6.0
+})(Zepto);(function ($) {
+  'use strict';
+
+  $.debounce = function (func, threshold, execAsap, alwaysRun) {
+    alwaysRun = alwaysRun || function () {};
+
+    var timeout;
+
+    return function debounced() {
+      var obj = this, args = arguments;
+
+      alwaysRun.apply(obj, args);
+
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      else if (execAsap) {
+        func.apply(obj, args);
+      }
+
+      timeout = setTimeout(delayed, threshold || 100);
+
+      function delayed() {
+        if (!execAsap) {
+          func.apply(obj, args);
+        }
+        timeout = null;
+      }
+    };
+  };
+
+}($));
+;//     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
@@ -1656,7 +1688,6 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
 ;(function ($) {
   'use strict';
 
-  //`decorator` should be a function accepting arguments `context, done(err, result)`.
   $.decorate = function (decoratee, decorator) {
 
     var decorated = Object.create(decoratee);
@@ -1687,7 +1718,11 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
       timestamp: new Date().toISOString(),
       args: args.map(function (a) {
         if (typeof a === 'object') {
-          try { return JSON.stringify(a); } catch(e) { return '$.decorate::createContext: Unable to stringify arguments.'}
+          try {
+            return JSON.stringify(a);
+          } catch (e) {
+            return '$.decorate::createContext: Unable to stringify arguments.'
+          }
         }
 
         return a;
@@ -2060,6 +2095,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     };
 
     function routeHyperlink(evt) {
+
       var href = $(this).attr('href');
       var protocol = 'http//';
 
@@ -2071,8 +2107,12 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
       if (href.slice(protocol.length) !== protocol) {
         evt.preventDefault();
+
+//          $.debounce(100, true, function() {
         that.route(href);
+//          });
       }
+
     }
 
     function routeFormSubmission(evt) {
@@ -2129,17 +2169,29 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
 
-      $(document).on('touchstart', 'button', function(){ $(this).addClass('halo'); });
-      $(document).on('touchend', 'button', function(){ $(this).removeClass('halo'); });
-      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink);
+      $(document).on('touchstart', 'button', function () {
+        $(this).addClass('halo');
+      });
+      $(document).on('touchend', 'button', function () {
+        $(this).removeClass('halo');
+      });
+//      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink); //debounce attempt to prevent undesired interaction of double-click on results with double buffering
+      $(document).on('click', 'a:not([data-bypass-router])', $.debounce(routeHyperlink, 500, true,
+          function(evt){
+            evt.preventDefault();
+          })); //debounce to prevent undesired interaction of double-click on results with double buffering
       $(document).on('submit', 'form', routeFormSubmission);
     }
 
     init();
   }
 
+
+
   invertebrate.Router = Router;
 }(invertebrate, $, _));
+
+
 ;(function (invertebrate, $) {
   'use strict';
 
@@ -5017,20 +5069,6 @@ window.wizerati = {
     };
 
     function renderPrivate(options) {
-
-      var mode = that.Model.getMode();
-      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
-      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
-
-      if (mode === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
-      } else {
-        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
-      }
-
-
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
 
@@ -5050,15 +5088,6 @@ window.wizerati = {
               function addSelectedItem() {
                 $(_elSelectedItemContainer1).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-//                $view.css({
-////                  left: '0',
-//                  '-webkit-transform': 'translate(0,0)'
-//                });
-
-//                setTimeout(function () {
-//                  $view.removeClass('blur');
-//                }, 300); //unblur when slide from left is complete
-
                 $('body').scrollLeft(_scrollLeft);
                 _layoutCoordinator.layOut();
               }
@@ -5069,29 +5098,6 @@ window.wizerati = {
           _layoutCoordinator.layOut();
         });
       }
-//
-//      if (options.removedItemId) {
-//        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
-//        setTimeout(function () {
-//          $prevEl.addClass('buffer');
-//          that.$currentEl.removeClass('buffer');
-//          setTimeout(function () {
-////            $prevEl.empty();
-//            $prevEl.children().not('.handle-pinned-items').remove();
-//          }, 300);
-//        }, 200); //wait for removal animation to complete
-//
-//        return;
-//      }
-
-//      $prevEl.addClass('buffer');
-//      that.$currentEl.removeClass('buffer');
-//      debugger;
-//      that.$el.html(that.$currentEl);
-//      setTimeout(function () {
-//        $prevEl.empty();
-//        $prevEl.children().not('.handle-pinned-items').remove();
-//      }, 300);
     }
 
     this.renderLayout = function (layout) {

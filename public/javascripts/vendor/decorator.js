@@ -1,7 +1,6 @@
 (function ($) {
   'use strict';
 
-  //`decorator` should be a function accepting arguments `context, done(err, result)`.
   $.decorate = function (decoratee, decorator) {
 
     var decorated = Object.create(decoratee);
@@ -32,7 +31,11 @@
       timestamp: new Date().toISOString(),
       args: args.map(function (a) {
         if (typeof a === 'object') {
-          try { return JSON.stringify(a); } catch(e) { return '$.decorate::createContext: Unable to stringify arguments.'}
+          try {
+            return JSON.stringify(a);
+          } catch (e) {
+            return '$.decorate::createContext: Unable to stringify arguments.'
+          }
         }
 
         return a;

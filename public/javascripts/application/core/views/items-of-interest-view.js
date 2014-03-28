@@ -42,20 +42,6 @@
     };
 
     function renderPrivate(options) {
-
-      var mode = that.Model.getMode();
-      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
-      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
-
-      if (mode === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
-      } else {
-        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
-      }
-
-
       that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
       that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
 
@@ -75,15 +61,6 @@
               function addSelectedItem() {
                 $(_elSelectedItemContainer1).prepend($view);
                 $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-//                $view.css({
-////                  left: '0',
-//                  '-webkit-transform': 'translate(0,0)'
-//                });
-
-//                setTimeout(function () {
-//                  $view.removeClass('blur');
-//                }, 300); //unblur when slide from left is complete
-
                 $('body').scrollLeft(_scrollLeft);
                 _layoutCoordinator.layOut();
               }
@@ -94,29 +71,6 @@
           _layoutCoordinator.layOut();
         });
       }
-//
-//      if (options.removedItemId) {
-//        $prevEl.find('.item-of-interest[data-id=' + options.removedItemId + ']').addClass('collapsed');
-//        setTimeout(function () {
-//          $prevEl.addClass('buffer');
-//          that.$currentEl.removeClass('buffer');
-//          setTimeout(function () {
-////            $prevEl.empty();
-//            $prevEl.children().not('.handle-pinned-items').remove();
-//          }, 300);
-//        }, 200); //wait for removal animation to complete
-//
-//        return;
-//      }
-
-//      $prevEl.addClass('buffer');
-//      that.$currentEl.removeClass('buffer');
-//      debugger;
-//      that.$el.html(that.$currentEl);
-//      setTimeout(function () {
-//        $prevEl.empty();
-//        $prevEl.children().not('.handle-pinned-items').remove();
-//      }, 300);
     }
 
     this.renderLayout = function (layout) {
