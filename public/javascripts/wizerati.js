@@ -5449,7 +5449,7 @@ window.wizerati = {
 //      var isFreshSearch = _lastKnownSearchId !== searchId;
       calculateScrollTopValueToMaintain(that.$elResultList, searchId);
       that.$elResultList.empty();
-      that.$elResultList.addClass('ios-scroll-enable');
+//      that.$elResultList.addClass('ios-scroll-enable');
 
       that.Model.getResults().forEach(function (id) {
         _resultViewFactory.create(id, function ($v) {
