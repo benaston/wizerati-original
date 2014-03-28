@@ -8,16 +8,25 @@
     }
 
     var that = this,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _searchFormModel = null;
 
     this.update = function (dto) {
       try {
-        if (_searchFormModel.getMode() !== dto.mode) {
+        if (_searchFormModel.getMode() !== dto.mode) { //refactor off?
           _searchFormModel.setMode(dto.mode);
-          app.instance.router.redirect('/search/edit');
+
+          if (dto.mode === _searchFormModeEnum.Minimized) {
+            app.instance.router.redirect('/search', { keywords: _searchFormModel.keywords, r: _searchFormModel.r });
+          } else if (dto.mode === _searchFormModeEnum.Default) {
+            app.instance.router.redirect('/search/edit');
+          } else {
+            throw 'invalid mode.';
+          }
+
         }
       } catch (err) {
-        console.log('SearchPanelController::update ' + err);
+        console.log('SearchFormModeController::update ' + err);
       }
     };
 

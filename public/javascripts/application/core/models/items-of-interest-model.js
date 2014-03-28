@@ -7,12 +7,10 @@
     }
 
     var that = this,
-//        _selectedItemModel = null,
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _previouslySelectedItemId = null,
-        _itemWidth = 0,
         _mode = _modeEnum.Default,
         _layout = {
           widthItemOfInterest: 340,
@@ -28,6 +26,7 @@
     this.eventUris = {default: 'update://itemsofinterestmodel/',
       setMode: 'update://itemsofinterestmodel/setmode',
       setLayout: 'update://itemsofinterestmodel/setlayout',
+      addItemOfInterest: 'update://itemsofinterestmodel/additemofinterest',
       removeItemOfInterest: 'update://itemsofinterestmodel/removeitemofinterest',
       setSelectedItemId: 'update://itemsofinterestmodel/setselecteditemid' };
 
@@ -112,7 +111,7 @@
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
-      $.publish(that.eventUris.default);
+      $.publish(that.eventUris.addItemOfInterest, id);
     };
 
     this.removeItemOfInterest = function (id) {

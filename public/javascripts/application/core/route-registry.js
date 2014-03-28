@@ -59,6 +59,10 @@
           c.favoritesController.destroy(dto);
         }, { silent: true });
 
+        router.registerRoute('/comparisonlist', function (dto) {
+          c.comparisonListController.index(dto);
+        });
+
 //        router.registerRoute('/selectedcubeface/update', function (dto) {
 //          c.selectedCubeFaceController.update(dto);
 //        }, { silent: true });

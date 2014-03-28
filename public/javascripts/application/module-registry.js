@@ -40,7 +40,7 @@
 
     mod.MainContainerVisibilityMode = {
       Hidden: '0',
-      HiddenNoBackgroundAndLoadingIndicator: '1',
+      HiddenNoBackgroundOrLoadingIndicator: '1',
       Visible: '2'
     };
 
@@ -335,15 +335,14 @@
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
     mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
+    mod.comparisonListController = new wizerati.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
     mod.searchController = new wizerati.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
     mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
-    mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-//    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(p.uiModelPack);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

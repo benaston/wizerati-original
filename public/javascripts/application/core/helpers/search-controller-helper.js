@@ -36,7 +36,7 @@
 
       var delayToRender = 0;
       if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundAndLoadingIndicator);
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundOrLoadingIndicator);
         _uiModelPack.uiRootModel.setAreTransitionsEnabled(false);
         delayToRender = 100; //wait for the opacity fade to complete
       }
@@ -61,8 +61,7 @@
           _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
         }, 0);
       }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
-    }
-
+    };
 
     function init() {
       if (!uiModelPack) {

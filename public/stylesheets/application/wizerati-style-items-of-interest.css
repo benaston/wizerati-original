@@ -3,8 +3,16 @@
     display: inline-block;
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     z-index: 0;
-    -webkit-transform: translate(0, 0);
+    -webkit-transform: translate3d(554px,0,0); /*needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
     opacity: 0;
+}
+
+body[data-items-of-interest-mode='1'] .items-of-interest-panel {
+    -webkit-transform: translate3d(76px,0,0);
+}
+
+body[data-items-of-interest-mode='1'] .selected-item-content { /*must be applied to an element with a width - hence the content*/
+    -webkit-transform: translate3d(-98%,0,0);
 }
 
 .menu .btn-40.checked {
@@ -56,13 +64,17 @@ body[data-are-transitions-enabled='true'] .search-panel[data-mode='0'] ~ .result
     /*transition: -webkit-transform .2s ease-out;*/
 }
 
+ .selected-item-container {
+     z-index: 1; /*must remain infront of pinned items*/
+ }
+
 .pinned-items-container, .selected-item-container {
     position: relative;
     display: inline-block;
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     vertical-align: top; /*important*/
     -webkit-filter: opacity(100%);
-    /*transition: -webkit-filter .1s ease-out; *//* this adds a 100ms fade when the selected item changes*/
+    transition: -webkit-transform .2s ease-out; /*for any sliding*/
 }
 
 .pinned-items-container.buffer, .selected-item-container.buffer {
@@ -151,17 +163,6 @@ body[data-items-of-interest-mode='1'][data-are-transitions-enabled='true'] .sele
 
 .pinned-item:nth-of-type(6) {
     z-index: 0;
-}
-
-/*attempt to only blur out when a selected item is present*/
-body[data-items-of-interest-mode='0'] .selected-item-container:not(:empty) + .pinned-items-container .pinned-item:nth-child(2),
-body[data-items-of-interest-mode='0'] .pinned-item:nth-child(3),
-body[data-items-of-interest-mode='0'] .pinned-item:nth-child(4),
-body[data-items-of-interest-mode='0'] .pinned-item:nth-child(5),
-body[data-items-of-interest-mode='0'] .pinned-item:nth-child(6),
-body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
-    /*opacity: 0;*/
-    /*transition: opacity .3s ease-in-out;*/
 }
 
 .collapsed > .selected-item-content {
@@ -372,6 +373,9 @@ body[data-items-of-interest-mode='0'] .pinned-item:nth-child(7) {
     position: relative; /*to enable correct positioning of child absolute positioned container*/
 }
 
+.ioi-title {
+    clear:none; min-width: 250px; display: inline-block;
+}
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {

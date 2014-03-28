@@ -69,9 +69,7 @@
       if (items.selectedItem) {
         _itemOfInterestViewFactory.create(items.selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            _selectedCubeFaceModel.getSelectedCubeFaceId(),
             true,
-            options.animateSelectedItem,
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
               function addSelectedItem() {
@@ -142,7 +140,7 @@
       $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
       $frm.find('.btn').addClass('checked');
       $items.addClass('hidden');
-      $items.find('.btn:not(.btn-hide)').attr('disabled','disabled');
+      $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
     };
 
     this.renderRemoveHiddenItem = function (itemId) {
@@ -225,8 +223,6 @@
         }
         _itemOfInterestViewFactory.create(id,
             that.Model.getLayout().widthItemOfInterest,
-            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-            false,
             false,
             function ($view) {
               $(_elPinnedItemsContainer).append($view);
@@ -237,6 +233,21 @@
 
       done();
     }
+
+    this.renderAddItemOfInterest = function (id) {
+      var frm = that.$elSelectedItemContainer.find('.frm-pin')
+      frm.attr('action', '/itemsofinterest/destroy');
+      frm.find('button').addClass('checked');
+
+      _itemOfInterestViewFactory.create(id,
+          that.Model.getLayout().widthItemOfInterest,
+          false,
+          function ($view) {
+            $(_elPinnedItemsContainer).append($view);
+            $view.scrollTop(_scrollTopValues[id]);
+            that.renderLayout(that.Model.getLayout());
+          });
+    };
 
     function storeScrollTopValues() {
       var selectedItem = that.$el.find('.item-of-interest.selected');
@@ -298,6 +309,7 @@
       _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
@@ -308,6 +320,7 @@
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
+      $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);

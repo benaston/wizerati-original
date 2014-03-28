@@ -18,10 +18,14 @@ body[data-ui-mode='0'] #search-form {
    /**/
 /*}*/
 
+#search-formm {
+    position: absolute; /*enables absolute positioning of buttons (given that the container is fixed position*/
+}
+
 body[data-ui-mode='1'] #search-form {
-    position: absolute; /*it slides 'over' any results in the result list*/
+    position: fixed;
     top: 0;
-    left: 0;
+    left: 74px; /*width of tab bar*/
     width: 100%;
     height: 210px;
     text-align: left;

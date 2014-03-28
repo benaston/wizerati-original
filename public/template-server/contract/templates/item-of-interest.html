@@ -33,7 +33,7 @@
             <form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isPinned ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="menu-item">
                     <button id="btn-pin-{{= model.id}}" class="btn btn-40 {{=model.isPinnable || model.isPinned ? '' : 'disabled' }} {{ if(model.isPinned) {}}checked{{} }} btn-pin"
-                            title="{{=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already pinned / You have the maximum number of permitted pinned items / You cannot pin hidden items' }}">{{= model.isPinned ? '&#xf30e;' : '&#xf30e;' }}</button>
+                            title="{{=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already in your comparison list / You have the maximum number of permitted items in the comparison list / You cannot add hidden items to the comparison list' }}">{{= model.isPinned ? '&#xf30e;' : '&#xf30e;' }}</button>
                     <label class="label" for="btn-pin-{{= model.id}}">{{= model.isPinned ? 'compare' : 'compare' }}</label>
                 </div>
             </form>
@@ -41,35 +41,23 @@
     </section>
     <div class="flex-item">
         <article class="item-of-interest-content {{=model.isHidden ? 'hidden' : '' }}">
-
-            <h3 style="clear:none; min-width: 250px; display: inline-block;">{{= model.title }}</h3>
+            <h3 class="ioi-title">{{= model.title }}</h3>
             <ul class="info">
                 <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
-                <li><a href="">{{= model.organization }}</a></li>
+                <li><a href="#">{{= model.organization }}</a></li>
             </ul>
             <ul class="info">
                 <li>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day</li>
                 <li>{{= model.location }}, <span class="country">{{= model.country }}</span></li>
             </ul>
-            <!--<hr/>-->
-            <!--<p class="tld">{{= model.tld }}</p>-->
-            <!--<section class="item-metadata">-->
-                <!--<p>{{= model.jobTitle }}, {{= model.location }}, {{= model.country }}</p>-->
-                <!--<p>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day, {{= model.industry }}</p>-->
-                <!--<p>{{= model.organization }}</p>-->
-                <!--<p>Posted {{= moment(model.updatedDateTime).fromNow() }}</p>-->
-                <!--<div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }}</div>-->
-                <!--<div class="id"> Job ID: {{= model.id }}</div>-->
-            <!--</section>-->
-            <!--<h4 style="clear:none;">Skills</h4>-->
             <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
-            <h4 style="clear:none;">Job Description</h4>
+            <h4>Job Description</h4>
             {{= model.summary }}
-            <h4 style="clear:none;">About Us</h4>
+            <h4>About Us</h4>
             {{= model.aboutOrganization }}
-            <h4 style="clear:none;">About You</h4>
+            <h4>About You</h4>
             {{= model.aboutYou }}
-            <h4 style="clear:none;">Contact</h4>
+            <h4>Contact</h4>
             <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }} (ref. {{= model.ref }})</div>
             <hr>
         </article>

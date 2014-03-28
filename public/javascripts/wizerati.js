@@ -3521,12 +3521,10 @@ window.wizerati = {
     }
 
     var that = this,
-//        _selectedItemModel = null,
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _previouslySelectedItemId = null,
-        _itemWidth = 0,
         _mode = _modeEnum.Default,
         _layout = {
           widthItemOfInterest: 340,
@@ -3542,6 +3540,7 @@ window.wizerati = {
     this.eventUris = {default: 'update://itemsofinterestmodel/',
       setMode: 'update://itemsofinterestmodel/setmode',
       setLayout: 'update://itemsofinterestmodel/setlayout',
+      addItemOfInterest: 'update://itemsofinterestmodel/additemofinterest',
       removeItemOfInterest: 'update://itemsofinterestmodel/removeitemofinterest',
       setSelectedItemId: 'update://itemsofinterestmodel/setselecteditemid' };
 
@@ -3626,7 +3625,7 @@ window.wizerati = {
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
-      $.publish(that.eventUris.default);
+      $.publish(that.eventUris.addItemOfInterest, id);
     };
 
     this.removeItemOfInterest = function (id) {
@@ -5045,9 +5044,7 @@ window.wizerati = {
       if (items.selectedItem) {
         _itemOfInterestViewFactory.create(items.selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            _selectedCubeFaceModel.getSelectedCubeFaceId(),
             true,
-            options.animateSelectedItem,
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
               function addSelectedItem() {
@@ -5118,7 +5115,7 @@ window.wizerati = {
       $frm.attr('action', '/hiddenitems/destroy?id=' + itemId);
       $frm.find('.btn').addClass('checked');
       $items.addClass('hidden');
-      $items.find('.btn:not(.btn-hide)').attr('disabled','disabled');
+      $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
     };
 
     this.renderRemoveHiddenItem = function (itemId) {
@@ -5201,8 +5198,6 @@ window.wizerati = {
         }
         _itemOfInterestViewFactory.create(id,
             that.Model.getLayout().widthItemOfInterest,
-            _selectedCubeFaceModel.getSelectedCubeFaceId(),
-            false,
             false,
             function ($view) {
               $(_elPinnedItemsContainer).append($view);
@@ -5213,6 +5208,21 @@ window.wizerati = {
 
       done();
     }
+
+    this.renderAddItemOfInterest = function (id) {
+      var frm = that.$elSelectedItemContainer.find('.frm-pin')
+      frm.attr('action', '/itemsofinterest/destroy');
+      frm.find('button').addClass('checked');
+
+      _itemOfInterestViewFactory.create(id,
+          that.Model.getLayout().widthItemOfInterest,
+          false,
+          function ($view) {
+            $(_elPinnedItemsContainer).append($view);
+            $view.scrollTop(_scrollTopValues[id]);
+            that.renderLayout(that.Model.getLayout());
+          });
+    };
 
     function storeScrollTopValues() {
       var selectedItem = that.$el.find('.item-of-interest.selected');
@@ -5274,6 +5284,7 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[_bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[_bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
@@ -5284,6 +5295,7 @@ window.wizerati = {
       $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.setLayout, that.render);
       $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
+      $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(_bookmarkService.eventUris.removeFavorite, that.render);
@@ -5500,6 +5512,11 @@ window.wizerati = {
       $(_el).find(selectorNew).addClass('selected');
     };
 
+    this.renderAddItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-favorite', 'true');
+    };
+
     this.renderAddHiddenItem = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
 
@@ -5550,6 +5567,7 @@ window.wizerati = {
       _resultViewFactory = resultViewFactory;
 
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
@@ -5563,7 +5581,7 @@ window.wizerati = {
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
       $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
 
       return that;
@@ -5889,7 +5907,7 @@ window.wizerati = {
 
       var delayToRender = 0;
       if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundAndLoadingIndicator);
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundOrLoadingIndicator);
         _uiModelPack.uiRootModel.setAreTransitionsEnabled(false);
         delayToRender = 100; //wait for the opacity fade to complete
       }
@@ -5914,8 +5932,7 @@ window.wizerati = {
           _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
         }, 0);
       }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
-    }
-
+    };
 
     function init() {
       if (!uiModelPack) {
@@ -6325,6 +6342,58 @@ window.wizerati = {
   }
 
   app.BookmarksController = BookmarksController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ComparisonListController(uiModelPack, layoutCoordinator) {
+
+    if (!(this instanceof app.ComparisonListController)) {
+      return new app.ComparisonListController(uiModelPack, layoutCoordinator);
+    }
+
+    var that = this,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _navbarItemEnum = app.mod('enum').Tab,
+        _uiModelPack = null,
+        _layoutCoordinator = null;
+
+    this.index = function (dto) {
+       //if external get state from local storage...
+
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+      _layoutCoordinator.layOut();
+    };
+
+    function init() {
+      if (!uiModelPack) {
+        throw 'ComparisonListController::init uiModelPack not supplied.';
+      }
+
+      if (!layoutCoordinator) {
+        throw 'ComparisonListController::init layoutCoordinator not supplied.';
+      }
+
+      _uiModelPack = uiModelPack;
+      _layoutCoordinator = layoutCoordinator;
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ComparisonListController = ComparisonListController;
 
 }(wizerati));
 ;(function (app) {
@@ -7085,16 +7154,25 @@ window.wizerati = {
     }
 
     var that = this,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _searchFormModel = null;
 
     this.update = function (dto) {
       try {
-        if (_searchFormModel.getMode() !== dto.mode) {
+        if (_searchFormModel.getMode() !== dto.mode) { //refactor off?
           _searchFormModel.setMode(dto.mode);
-          app.instance.router.redirect('/search/edit');
+
+          if (dto.mode === _searchFormModeEnum.Minimized) {
+            app.instance.router.redirect('/search', { keywords: _searchFormModel.keywords, r: _searchFormModel.r });
+          } else if (dto.mode === _searchFormModeEnum.Default) {
+            app.instance.router.redirect('/search/edit');
+          } else {
+            throw 'invalid mode.';
+          }
+
         }
       } catch (err) {
-        console.log('SearchPanelController::update ' + err);
+        console.log('SearchFormModeController::update ' + err);
       }
     };
 
@@ -7112,51 +7190,6 @@ window.wizerati = {
   }
 
   app.SearchFormModeController = SearchFormModeController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function SearchPanelModeController(searchPanelModel) {
-
-    if (!(this instanceof app.SearchPanelModeController)) {
-      return new app.SearchPanelModeController(searchPanelModel);
-    }
-
-    var that = this,
-        _searchPanelModel = null,
-        _uiRootModel = null,
-        _tabEnum = app.mod('enum').Tab;
-
-    this.update = function (dto) {
-      try {
-        if (_searchPanelModel.getMode() !== dto.mode) {
-          _searchPanelModel.setMode(dto.mode);
-        }
-      } catch (err) {
-        console.log('SearchPanelController::update ' + err);
-      }
-    };
-
-    function init() {
-      if (!searchPanelModel) {
-        throw 'SearchPanelModeController::init searchPanelModel not supplied.';
-      }
-
-//      if (!uiRootModel) {
-//        throw 'SearchPanelModeController::init uiRootModel not supplied.';
-//      }
-
-      _searchPanelModel = searchPanelModel;
-//      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchPanelModeController = SearchPanelModeController;
 
 }(wizerati));
 ;(function (app) {
@@ -7790,8 +7823,7 @@ window.wizerati = {
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,
-        _effectiveWidthResultListPanelMinimized = 60,
-        _effectiveWidthPinnedItemsHandleDefault = 69;
+        _effectiveWidthResultListPanelMinimized = 2;
 
     this.calculate = function () {
       var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices sometimes don't have innerWidth apparently*/
@@ -7799,7 +7831,7 @@ window.wizerati = {
       var minWidthItemOfInterestForDevice = viewPortWidth <=568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
       var effectiveWidthResultListPanelForDevice = viewPortWidth <=568 ? _effectiveWidthResultListPanelSmallScreen : _effectiveWidthResultListPanel;
 
-      var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
+      var numberOfItemsOfInterest = _itemsOfInterestModel.getPinnedItemCount();
       var newWidth = minWidthItemOfInterestForDevice;
       var mode = itemsOfInterestModel.getMode();
 
@@ -7813,25 +7845,16 @@ window.wizerati = {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
-      var effectiveWidthPinnedItemsHandle = 0;
-
-      if(_itemsOfInterestModel.getPinnedItemCount() > 1
-          || (_itemsOfInterestModel.getSelectedItemCount() > 0
-                && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
-//        effectiveWidthPinnedItemsHandle = _effectiveWidthPinnedItemsHandleDefault;
-        effectiveWidthPinnedItemsHandle = 0;
-      }
-
-      var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
+      var widthTakenByTabBarAndResultListPanel = effectiveWidthSearchPanel + effectiveWidthResultListPanel;
 
 
       if (mode === _itemsOfInterestModeEnum.Default) {
-        newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
-        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s) + effectiveWidthPinnedItemsHandle (%s)));', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, effectiveWidthPinnedItemsHandle);
+        newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
+        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s)));', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        if ((widthTakenBySearchAndResultsAndPinnedHandle + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
-          newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle) / numberOfItemsOfInterest;
-          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s) + effectiveWidthPinnedItemsHandle (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, effectiveWidthPinnedItemsHandle, numberOfItemsOfInterest);
+        if ((widthTakenByTabBarAndResultListPanel + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
+          newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel) / numberOfItemsOfInterest;
+          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, numberOfItemsOfInterest);
         } else {
           console.log('no resize required.')
         }
@@ -8052,6 +8075,10 @@ window.wizerati = {
           c.favoritesController.destroy(dto);
         }, { silent: true });
 
+        router.registerRoute('/comparisonlist', function (dto) {
+          c.comparisonListController.index(dto);
+        });
+
 //        router.registerRoute('/selectedcubeface/update', function (dto) {
 //          c.selectedCubeFaceController.update(dto);
 //        }, { silent: true });
@@ -8212,7 +8239,7 @@ window.wizerati = {
 
     mod.MainContainerVisibilityMode = {
       Hidden: '0',
-      HiddenNoBackgroundAndLoadingIndicator: '1',
+      HiddenNoBackgroundOrLoadingIndicator: '1',
       Visible: '2'
     };
 
@@ -8507,15 +8534,14 @@ window.wizerati = {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
     mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
+    mod.comparisonListController = new wizerati.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
     mod.searchController = new wizerati.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
     mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
-    mod.searchPanelModeController = new wizerati.SearchPanelModeController(m.searchPanelModel);
     mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-//    mod.selectedNavbarItemController = new wizerati.SelectedNavbarItemController(p.uiModelPack);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

@@ -19,8 +19,7 @@
         _effectiveWidthResultListPanel = 480,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _effectiveWidthSearchPanelMinimized = 74,
-        _effectiveWidthResultListPanelMinimized = 60,
-        _effectiveWidthPinnedItemsHandleDefault = 69;
+        _effectiveWidthResultListPanelMinimized = 2;
 
     this.calculate = function () {
       var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices sometimes don't have innerWidth apparently*/
@@ -28,7 +27,7 @@
       var minWidthItemOfInterestForDevice = viewPortWidth <=568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
       var effectiveWidthResultListPanelForDevice = viewPortWidth <=568 ? _effectiveWidthResultListPanelSmallScreen : _effectiveWidthResultListPanel;
 
-      var numberOfItemsOfInterest = _itemsOfInterestModel.getCount();
+      var numberOfItemsOfInterest = _itemsOfInterestModel.getPinnedItemCount();
       var newWidth = minWidthItemOfInterestForDevice;
       var mode = itemsOfInterestModel.getMode();
 
@@ -42,25 +41,16 @@
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
-      var effectiveWidthPinnedItemsHandle = 0;
-
-      if(_itemsOfInterestModel.getPinnedItemCount() > 1
-          || (_itemsOfInterestModel.getSelectedItemCount() > 0
-                && _itemsOfInterestModel.getPinnedItemCount() === 1)) {
-//        effectiveWidthPinnedItemsHandle = _effectiveWidthPinnedItemsHandleDefault;
-        effectiveWidthPinnedItemsHandle = 0;
-      }
-
-      var widthTakenBySearchAndResultsAndPinnedHandle = effectiveWidthSearchPanel + effectiveWidthResultListPanel + effectiveWidthPinnedItemsHandle;
+      var widthTakenByTabBarAndResultListPanel = effectiveWidthSearchPanel + effectiveWidthResultListPanel;
 
 
       if (mode === _itemsOfInterestModeEnum.Default) {
-        newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle);
-        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s) + effectiveWidthPinnedItemsHandle (%s)));', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, effectiveWidthPinnedItemsHandle);
+        newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
+        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s)));', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        if ((widthTakenBySearchAndResultsAndPinnedHandle + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
-          newWidth = (viewPortWidth - widthTakenBySearchAndResultsAndPinnedHandle) / numberOfItemsOfInterest;
-          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s) + effectiveWidthPinnedItemsHandle (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, effectiveWidthPinnedItemsHandle, numberOfItemsOfInterest);
+        if ((widthTakenByTabBarAndResultListPanel + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
+          newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel) / numberOfItemsOfInterest;
+          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, effectiveWidthSearchPanel, effectiveWidthResultListPanel, numberOfItemsOfInterest);
         } else {
           console.log('no resize required.')
         }

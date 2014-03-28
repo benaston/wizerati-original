@@ -56,6 +56,11 @@
       $(_el).find(selectorNew).addClass('selected');
     };
 
+    this.renderAddItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-favorite', 'true');
+    };
+
     this.renderAddHiddenItem = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
 
@@ -106,6 +111,7 @@
       _resultViewFactory = resultViewFactory;
 
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
       _renderOptimizations[bookmarkService.eventUris.removeFavorite] = that.renderRemoveFavorite;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
@@ -119,7 +125,7 @@
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
       $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
 
       return that;
