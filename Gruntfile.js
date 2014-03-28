@@ -17,58 +17,27 @@ module.exports = function (grunt) {
           'public/javascripts/vendor/decorator.js',
           'public/javascripts/vendor/tiny-pub-sub.js',
           'public/javascripts/vendor/moment.min.js',
-          'public/javascripts/vendor/invertebrate.js/invertebrate.js',
-          'public/javascripts/vendor/invertebrate.js/**.js',
+          'public/javascripts/vendor/invertebrate/invertebrate.js',
+          'public/javascripts/vendor/invertebrate/**.js',
           'public/javascripts/application/wizerati.js',
-          'public/javascripts/application/core/services/**/*.js',
-          'public/javascripts/application/core/infrastructure-services/**/*.js',
-          'public/javascripts/application/core/clients/**/*.js',
-          'public/javascripts/application/core/connectors/**/*.js',
-          'public/javascripts/application/core/config.js',
-          'public/javascripts/application/core/models/**/*.js',
-          'public/javascripts/application/core/views/**/*.js',
-          'public/javascripts/application/core/helpers/**/*.js',
-          'public/javascripts/application/core/packs/**/*.js',
-          'public/javascripts/application/core/controllers/**/*.js',
-          'public/javascripts/application/core/factories/**/*.js',
-          'public/javascripts/application/core/caches/**/*.js',
-          'public/javascripts/application/core/entities/**/*.js',
-          'public/javascripts/application/core/repositories/**/*.js',
-          'public/javascripts/application/core/layout/**/*.js',
-          'public/javascripts/application/core/decorators/**/*.js',
-          'public/javascripts/application/core/route-registry.js',
+          'public/javascripts/application/core/**/*.js',
           'public/javascripts/application/module-registry.js',
           'public/javascripts/application/env.js',
-          'public/javascripts/application/core/app.js',
           'public/javascripts/application/app-start.js'
         ],
         dest: 'public/javascripts/<%= pkg.name %>.js'
       },
       css: {
         src: [
-          'public/stylesheets/vendor/third-party-reset.css',
-          'public/stylesheets/application/wizerati-style-reset-non-form.css',
-          'public/stylesheets/application/wizerati-style-reset-form.css',
+          'public/stylesheets/reset/third-party-reset.css',
+          'public/stylesheets/reset/wizerati-style-reset-form.css',
+          'public/stylesheets/reset/wizerati-style-reset-non-form.css',
 
           'public/stylesheets/vendor/lucid-style-buttons.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
 
-          'public/stylesheets/application/wizerati-style-animation.css',
-          'public/stylesheets/application/wizerati-style-body.css',
-          'public/stylesheets/application/wizerati-style-cube.css',
-          'public/stylesheets/application/wizerati-style-faces.css',
-          'public/stylesheets/application/wizerati-style-items-of-interest.css',
-          'public/stylesheets/application/wizerati-style-background.css',
-          'public/stylesheets/application/wizerati-style-main-container.css',
-          'public/stylesheets/application/wizerati-style-modal-container.css',
-          'public/stylesheets/application/wizerati-style-apply-to-contract-dialog.css',
-          'public/stylesheets/application/wizerati-style-tab-bar.css',
-          'public/stylesheets/application/wizerati-style-search-form.css',
-          'public/stylesheets/application/wizerati-style-search-panel-handle.css',
-          'public/stylesheets/application/wizerati-style-bookmark-panel.css',
-          'public/stylesheets/application/wizerati-style-navbar-and-logo-and-build.css',
-          'public/stylesheets/application/wizerati-style-result-list-panel.css'
+          'public/stylesheets/application/*.css',
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
       }
@@ -236,7 +205,6 @@ module.exports = function (grunt) {
           ]
         },
         files: [
-//          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-javascript-injected.ejs'}
           {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-javascript-injected.ejs'}
         ]
       },

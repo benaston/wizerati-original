@@ -12,9 +12,9 @@
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItemContainerCurrent = null,
-        _elSelectedItemContainer1 = '#selected-item-container-1',
-        _elSelectedItemContainer2 = '#selected-item-container-2',
-        _elPinnedItemsContainer = '.pinned-items-container',
+        _elSelectedItemContainer1 = '#s-i-c-1',
+        _elSelectedItemContainer2 = '#s-i-c-2',
+        _elPinnedItemsContainer = '.p-i-c',
         _elPinnedItems = '.pinned-item',
         _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
         _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
@@ -73,7 +73,7 @@
     }
 
     this.renderLayout = function (layout) {
-      var selectedItemContent = $('.selected-item-container').find('.selected-item-content');
+      var selectedItemContent = $('.s-i-c').find('.selected-item-content');
       $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
       $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
       $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
@@ -229,7 +229,7 @@
       that.$el = $(_el);
       that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
       that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
-      that.$elSelectedItemContainer = $('.selected-item-container');
+      that.$elSelectedItemContainer = $('.s-i-c');
       that.$elPinnedItems = $(_elPinnedItems);
     };
 
@@ -279,7 +279,6 @@
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);

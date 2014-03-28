@@ -2347,259 +2347,73 @@ window.wizerati = {
     };
   }()
 };
-;(function (app) {
+;(function (app, invertebrate, _) {
   'use strict';
 
-  //Possibly implement with a CreateCoordinator::create method, invoked from the controller, rather than the
-  //service implementation here.
-  function AccountService(wizeratiHttpClient) {
-
-    if (!(this instanceof app.AccountService)) {
-      return new app.AccountService(wizeratiHttpClient);
-    }
-
-    var that = this,
-        _httpClient = null;
-
-    this.create = function (name, email, options) {
-      if (!options) {
-        throw 'options not supplied.';
-      }
-
-      if (!options.success) {
-        throw 'options.success not supplied.';
-      }
-
-      if (!options.fail) {
-        throw 'options.fail not supplied.';
-      }
-
-      if (!options.wait) {
-        throw 'options.wait not supplied.';
-      }
-
-      var entity = new app.AccountEntity();
-      entity.name = name;
-      entity.email = email;
-      options.wait();
-      setTimeout(function () {
-        options.success();
-      }, 3000);
-      //_wizeratiClient.Put(entity, options);
-    };
-
-    function init() {
-      if (!wizeratiHttpClient) {
-        throw 'wizeratiHttpClient not supplied.';
-      }
-
-      _httpClient = wizeratiHttpClient;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AccountService = AccountService;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ApplyToContractDialogService(model, uiRootModel, authorizationService, itemRepository) {
-
-    if (!(this instanceof app.ApplyToContractDialogService)) {
-      return new app.ApplyToContractDialogService(model, uiRootModel, authorizationService, itemRepository);
-    }
-
-    var that = this,
-        _model = null,
-        _uiRootModel = null,
-        _authorizationService = null,
-        _itemRepository = null,
-        _roleEnum = app.mod('enum').UserRole,
-        _modalEnum = app.mod('enum').Modal,
-        _dialogPanelEnum = app.mod('enum').ApplyToContractDialogPanel;
-
-    this.show = function(itemId) {
-      if(_authorizationService.getCurrentRole() == _roleEnum.Contractor) {
-        _model.setCurrentDialogPanel(_dialogPanelEnum.CVSelection, {silent:true});
-      } else {
-        _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent:true});
-      }
-
-      _itemRepository.getById(itemId, function(item){
-        _model.setItem(item); //triggers render
-        _uiRootModel.setModal(_modalEnum.ActionContract);
-      })
-    };
-
-    this.hide = function() {
-      _model.reset();
-      _uiRootModel.setModal(_modalEnum.None);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'model not supplied';
-      }
-
-      if (!uiRootModel) {
-        throw 'uiRootModel not supplied';
-      }
-
-     if (!authorizationService) {
-        throw 'authorizationService not supplied';
-      }
-
-      if (!itemRepository) {
-        throw 'itemRepository not supplied';
-      }
-
-      _uiRootModel = uiRootModel;
-      _authorizationService = authorizationService;
-      _model = model;
-      _itemRepository = itemRepository;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ApplyToContractDialogService = ApplyToContractDialogService;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  //todo: split authorization and authentication?
-  function AuthenticationService() {
-
-    if (!(this instanceof app.AuthenticationService)) {
-      return new app.AuthenticationService();
+  function App(env, router) {
+    if (!(this instanceof app.App)) {
+      return new app.App(env, router);
     }
 
     var that = this;
 
-    this.authenticate = function (username, password) {
-
-//          $.ajax({ url: options.searchUri, success: success, cache: false });
-      return false;
-    };
-
     function init() {
+      if (!env) {
+        throw 'env not supplied';
+      }
 
-      return that;
+      if (!router) {
+        throw 'router not supplied';
+      }
+
+      that.env = env;
+      that.router = router;
+
+      return _.extend(that, new invertebrate.App(app.mod('templates').templateUrlHelper));
     }
 
     return init();
   }
 
-  app.AuthenticationService = AuthenticationService;
+  app.App = App;
 
-}(wizerati));
+}(wizerati, invertebrate, _));
 ;(function (app) {
   'use strict';
 
-  function AuthorizationService(cookieIService) {
+  function ItemCache() {
 
-    if (!(this instanceof app.AuthorizationService)) {
-      return new app.AuthorizationService(cookieIService);
+    if (!(this instanceof app.ItemCache)) {
+      return new app.ItemCache();
     }
 
-    var that = this,
-        _cookieIService = null,
-        _roleEnum = null;
+    var that = this;
 
+    this.items = {};
 
-    this.getCurrentRole = function () {
-      var cookie = _cookieIService.getAuthorizationCookie();
-
-      if (!cookie) {
-        return _roleEnum.ContractorStranger;
+    //note: if the item already exists then
+    // any additional metadata on the object
+    // is retained (e.g. whether it is
+    // currently selected)
+    this.insert = function (items) {
+      if (!items) {
+        throw 'items not supplied.';
       }
 
-      if (cookie !== _roleEnum.Contractor
-          && cookie !== _roleEnum.Employer
-          && cookie !== _roleEnum.ContractorStranger
-          && cookie !== _roleEnum.EmployerStranger) {
-
-        throw 'invalid role found in cookie "' + cookie + '"';
-      }
-
-      return cookie;
-    };
-
-    function init() {
-      if (!cookieIService) {
-        throw 'cookieService not supplied';
-      }
-
-      _roleEnum = app.mod('enum').UserRole;
-
-      _cookieIService = cookieIService;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AuthorizationService = AuthorizationService;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function BookmarkService(bookmarkBookModel, itemRepository) {
-
-    if (!(this instanceof app.BookmarkService)) {
-      return new app.BookmarkService(bookmarkBookModel, itemRepository);
-    }
-
-    var that = this,
-        _bookmarkBookModel = null,
-        _itemRepository = null;
-
-    this.addBookmark = function (id) {
-      if (!id) {
-        throw 'BookmarkService::addBookmark id not supplied.';
-      }
-
-      if (!_bookmarkBookModel.isBookmark(id)) {
-        _itemRepository.getById(id, function (item) {
-          item['isBookmark'] = true;
-          _bookmarkBookModel.addBookmark(id);
-        });
-      }
-    };
-
-    this.removeBookmark = function (id) {
-      if (!id) {
-        throw 'BookmarkService::addBookmark id not supplied.';
-      }
-
-      _itemRepository.getById(id, function (item) {
-        item['isBookmark'] = false;
-        _bookmarkBookModel.removeBookmark(id);
+      _.each(items, function (i) {
+        that.items[i.id] = _.extend({}, that.items[i.id], i);
       });
     };
 
+    this.exists = function (key) {
+      if (!key) {
+        throw 'key not supplied.';
+      }
+
+      return !!(that.items[key]);
+    };
+
     function init() {
-      if (!bookmarkBookModel) {
-        throw 'bookModel not supplied';
-      }
-
-      if (!itemRepository) {
-        throw 'itemRepository not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      _bookmarkBookModel = bookmarkBookModel;
-      _itemRepository = itemRepository;
 
       return that;
     }
@@ -2607,273 +2421,7 @@ window.wizerati = {
     return init();
   }
 
-  app.BookmarkService = BookmarkService;
-
-}(wizerati));
-;//try forcing service types to communicate with the UI only via routing and local storage?
-(function (app, $) {
-  'use strict';
-
-  function SearchService(croniclIService, itemCache) {
-
-    if (!(this instanceof app.SearchService)) {
-      return new app.SearchService(croniclIService, itemCache);
-    }
-
-    var that = this,
-        _croniclIService = null,
-        _itemCache = null;
-
-    //rename to success, plus add timeout argument and error
-    this.runSearch = function (keywords, location, rate, done) {
-        done = !done ? function (data) {
-        } : done;
-
-        $.ajax({
-          url: _croniclIService.getCroniclUri() + 'search',
-          success: success,
-          cache: false
-        });
-
-        function success(data) {
-          if (!data) {
-            throw 'data not supplied';
-          }
-
-          var results = $.parseJSON(data);
-          _itemCache.insert(results);
-          done(results);
-        }
-    };
-
-    function init() {
-      if (!croniclIService) {
-        throw 'croniclService not supplied.';
-      }
-
-      if (!itemCache) {
-        throw 'itemCache not supplied.';
-      }
-
-      _croniclIService = croniclIService;
-      _itemCache = itemCache;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchService = SearchService;
-
-}(wizerati, $));
-
-//throw 'next: use cronicl service to get the uri,
-// then pass it into done argument (which should update the relevant models - and hence the UI)';
-
-//use a factory for the search URI?
-//var defaults = {
-//    searchUri: './items?q=',
-//    keywords: null,
-//    filterModel: null,
-//    pre: function () {
-//    },
-//    success: function () {
-//    }, //function(data) - instantiate the relevant models from the json for use by the application
-//    error: function (e) {
-//        throw 'runSearch error: ' + e;
-//    }
-//};
-//
-//options = _.extend({}, defaults, options);
-//
-//if (!data) {
-//    throw 'data not supplied';
-//}
-
-//            console.log(data);
-//write the results to local storage, then return to the controller
-//the controller can then coordinate the updating of any views
-
-//var results = $.parseJSON(data);
-//console.log(data);
-//            var resultModels = [];
-//
-//            _.each(results, function (r) {
-//                resultModels.push(_modelFactory.create(r));
-//            });
-//
-//
-//            _resultListModel.setResults(resultModels);
-
-//                var resultModels = [];
-//
-//                _.each(results, function (r) {
-//                    resultModels.push(_resultModelFactory.create(r));
-//                });
-;(function (app, _) {
-  'use strict';
-
-  function CookieIService() {
-
-    if (!(this instanceof CookieIService)) {
-      return new CookieIService();
-    }
-
-    var that = this,
-        _cookieName = 'wizerati';
-
-    this.getAuthorizationCookie = function () {
-      return _.cookie(_cookieName);
-    };
-
-    this.setAuthorizationCookie = function (role) {
-      _.cookie(_cookieName, role, { expires: 7, path: '/' });
-    };
-
-    this.deleteAuthorizationCookie = function () {
-      _.cookie(_cookieName, null);
-    };
-
-    function init() {
-      return that;
-    }
-
-    return init();
-  }
-
-  app.CookieIService = CookieIService;
-
-}(wizerati, _));
-;(function (app) {
-  'use strict';
-
-  function CroniclIService(signInService, config) {
-
-    if (!(this instanceof app.CroniclIService)) {
-      return new app.CroniclIService(signInService, config);
-    }
-
-    var that = this,
-        _signInService = null,
-        _config = null;
-
-    this.getCroniclUri = function () {
-      return _config.config.templateServerUris[_signInService.getCurrentRole()];
-    };
-
-    function init() {
-      if (!signInService) {
-        throw 'signInService not supplied';
-      }
-      if (!config) {
-        throw 'config not supplied';
-      }
-
-      _signInService = signInService;
-      _config = config;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.CroniclIService = CroniclIService;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function SignInIService(cookieService) {
-
-    if (!(this instanceof app.SignInIService)) {
-      return new app.SignInIService(cookieService);
-    }
-
-    var that = this,
-        _cookieService = null,
-        _roleEnum = null;
-
-    this.signIn = function (options) {
-      if (!options.username && !options.role) {
-        throw 'username not supplied';
-      }
-      if (!options.password && !options.role) {
-        throw 'password not supplied';
-      }
-
-      if (options.role) {
-        _cookieService.setAuthorizationCookie(options.role);
-        initializeUI();
-
-        return;
-      } else {
-        if (authenticate(options.username, options.password)) {
-          _cookieService.setAuthorizationCookie(options.role);
-
-          return;
-        }
-      }
-
-      throw 'authentication failed.';
-    };
-
-    this.getCurrentRole = function () {
-      var cookie = _cookieService.getAuthorizationCookie();
-
-      if (!cookie) {
-        return _roleEnum.ContractorStranger;
-      }
-
-      if (cookie !== _roleEnum.Contractor
-          && cookie !== _roleEnum.Employer
-          && cookie !== _roleEnum.ContractorStranger
-          && cookie !== _roleEnum.EmployerStranger) {
-
-        throw 'invalid role found in cookie "' + cookie + '"';
-      }
-
-      return cookie;
-    };
-
-    function authenticate(username, password) {
-      return (username === 'ben' || username === 'sally');
-    }
-
-//    function authorize(username) {
-//      if (username == 'ben') {
-//        return _role = _roleEnum.Contractor;
-//      } else if (username == 'sally') {
-//        return _role = _roleEnum.Employer;
-//      }
-//
-//      throw 'unauthorized.';
-//    }
-
-    //gets the value of a cookie by name
-    //see: http://stackoverflow.com/questions/10730362/javascript-get-cookie-by-name
-//    function getCookieValue(name) {
-//      var parts = document.cookie.split(name + '=');
-//      if (parts.length == 2) return parts.pop().split(';').shift();
-//    }
-
-    function init() {
-      if (!cookieService) {
-        throw 'cookieService not supplied';
-      }
-
-      _roleEnum = app.mod('enum').UserRole;
-
-      _cookieService = cookieService;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SignInIService = SignInIService;
+  app.ItemCache = ItemCache;
 
 }(wizerati));
 ;(function (app) {
@@ -2920,6 +2468,55 @@ window.wizerati = {
   app.WizeratiHttpClient = WizeratiHttpClient;
 
 }(wizerati));
+;(function (app, invertebrate, _) {
+  'use strict';
+
+  function Config(env) {
+    if (!(this instanceof app.Config)) {
+      return new app.Config(env);
+    }
+
+    var that = this,
+        devConfig = {
+          wizeratiUri: '/',
+          templateServerUris: {
+            '1': './template-server/contract/',
+            '2': './template-server/contractor/',
+            '3': './template-server/contract/',
+            '4': './template-server/contractor/'
+          },
+          'enableTrace': 'true'
+        },
+        prodConfig = {
+          wizeratiUri: 'https://www.wizerati.com/',
+          templateServerUris: { Contractor: 'https://contract.croni.cl/',
+            Employer: 'https://contractor.croni.cl/' }
+        },
+        sharedConfig = {
+          templatesUriPart: 'templates/',
+          templatePostRenderScriptsUriPart: 'template-post-render-scripts/',
+          metadataUriPart: 'metadata'
+        };
+
+    function init() {
+      if (!env) {
+        throw 'env not supplied';
+      }
+
+      var config = _.extend(that, new invertebrate.Config(env));
+      config.devConfig = devConfig;
+      config.prodConfig = prodConfig;
+      config.sharedConfig = sharedConfig;
+      config.collateConfiguration();
+      return config;
+    }
+
+    return init();
+  }
+
+  app.Config = Config;
+
+}(wizerati, invertebrate, _));
 ;(function (app) {
   'use strict';
 
@@ -3003,2934 +2600,6 @@ window.wizerati = {
   }
 
   app.WizeratiConnector = WizeratiConnector;
-
-}(wizerati));
-;(function (app, invertebrate, _) {
-  'use strict';
-
-  function Config(env) {
-    if (!(this instanceof app.Config)) {
-      return new app.Config(env);
-    }
-
-    var that = this,
-        devConfig = {
-          wizeratiUri: '/',
-          templateServerUris: {
-            '1': './template-server/contract/',
-            '2': './template-server/contractor/',
-            '3': './template-server/contract/',
-            '4': './template-server/contractor/'
-          },
-          'enableTrace': 'true'
-        },
-        prodConfig = {
-          wizeratiUri: 'https://www.wizerati.com/',
-          templateServerUris: { Contractor: 'https://contract.croni.cl/',
-            Employer: 'https://contractor.croni.cl/' }
-        },
-        sharedConfig = {
-          templatesUriPart: 'templates/',
-          templatePostRenderScriptsUriPart: 'template-post-render-scripts/',
-          metadataUriPart: 'metadata'
-        };
-
-    function init() {
-      if (!env) {
-        throw 'env not supplied';
-      }
-
-      var config = _.extend(that, new invertebrate.Config(env));
-      config.devConfig = devConfig;
-      config.prodConfig = prodConfig;
-      config.sharedConfig = sharedConfig;
-      config.collateConfiguration();
-      return config;
-    }
-
-    return init();
-  }
-
-  app.Config = Config;
-
-}(wizerati, invertebrate, _));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ActionedItemsModel() {
-
-    if (!(this instanceof app.ActionedItemsModel)) {
-      return new app.ActionedItemsModel();
-    }
-
-    var that = this,
-        _actionedItems = {};
-
-    this.eventUris = { default: 'update://actioneditemsmodel' };
-
-    this.isActioned = function (id) {
-      return !!_actionedItems[id];
-    };
-
-    this.addActionedItemId = function (value) {
-      _actionedItems[value] = value;
-
-      $.publish(that.eventUris.default);
-    };
-
-    this.removeActionedItemId = function (value) {
-      delete _actionedItems[value];
-
-      $.publish(that.eventUris.default);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ActionedItemsModel = ActionedItemsModel;
-  invertebrate.Model.isExtendedBy(app.ActionedItemsModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function AdvertisersPanelModel() {
-
-    if (!(this instanceof app.AdvertisersPanelModel)) {
-      return new app.AdvertisersPanelModel();
-    }
-
-    var that = this,
-        _isVisible = false;
-
-    this.updateEventUri = 'update://advertiserspanelmodel';
-
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AdvertisersPanelModel = AdvertisersPanelModel;
-  invertebrate.Model.isExtendedBy(app.AdvertisersPanelModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ApplyToContractDialogModel() {
-
-    if (!(this instanceof app.ApplyToContractDialogModel)) {
-      return new app.ApplyToContractDialogModel();
-    }
-
-    var that = this,
-        _currentDialogPanel = null,
-        _item = null,
-        _actionContractDialogPanelEnum = app.mod('enum').ActionContractDialogPanel,
-        _isWaiting = '', //should identify the dom element to indicate waiting
-        _isVisible = false,
-        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
-
-    this.eventUris = {
-      default: 'update://actioncontractmodalmodel',
-      show: 'update://actioncontractmodalmodel/show' }
-
-    this.reset = function() {
-      _currentDialogPanel = null;
-      _item = null;
-    };
-
-    this.getCurrentDialogPanel = function() {
-      return _currentDialogPanel;
-    };
-
-    this.setCurrentDialogPanel = function(value, options) {
-      options = options || {silent:false};
-
-      _currentDialogPanel = value;
-
-      if(!options.silent) {
-        $.publish(that.eventUris.setCurrentDialogPanel, _currentDialogPanel);
-      }
-    };
-
-    this.getItem = function() {
-      return _item;
-    };
-
-    this.setItem = function(value, options) {
-      options = options || {silent:false};
-
-      _item = value;
-
-      if(!options.silent) {
-        $.publish(that.eventUris.default);
-      }
-    };
-
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ApplyToContractDialogModel = ApplyToContractDialogModel;
-  invertebrate.Model.isExtendedBy(app.ApplyToContractDialogModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, _) {
-  'use strict';
-
-  function BookmarkBookModel() {
-
-    if (!(this instanceof app.BookmarkBookModel)) {
-      return new app.BookmarkBookModel();
-    }
-
-    var that = this,
-        _bookmarks = [];
-
-    this.eventUris = {
-      default: 'update://bookmarkbookmodel',
-      addBookmark: 'update://bookmarkbookmodel/addbookmark',
-      removeBookmark: 'update://bookmarkbookmodel/removebookmark'
-    };
-
-    this.getBookmarks = function () {
-      return _bookmarks;
-    };
-
-    //When adding a bookmark, the service should be used (which in-turn calls this).
-    this.addBookmark = function (id) {
-      if (that.isBookmark(id)) {
-        return;
-      }
-      _bookmarks.push(id);
-
-      $.publish(that.eventUris.addBookmark, id);
-    };
-
-    //When removing a bookmark, the service should be used (which in-turn calls this).
-    this.removeBookmark = function (id) {
-      if (!that.isBookmark(id)) {
-        return;
-      }
-      _bookmarks = _.reject(_bookmarks, function(b){ return b === id; });
-
-      $.publish(that.eventUris.removeBookmark, id);
-    };
-
-    this.isBookmark = function (id) {
-      return _.find(_bookmarks, function (i) {
-        return i === id;
-      });
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkBookModel = BookmarkBookModel;
-  invertebrate.Model.isExtendedBy(app.BookmarkBookModel);
-
-}(wizerati, $, invertebrate, _));
-;(function (app, $) {
-  'use strict';
-
-  function BookmarkPanelModel() {
-
-    if (!(this instanceof app.BookmarkPanelModel)) {
-      return new app.BookmarkPanelModel();
-    }
-
-    var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _mode = _bookmarkPanelModeEnum.Minimized;
-
-    this.eventUris = {
-      default: 'update://bookmarkpanelmodel/',
-      setMode: 'update://bookmarkpanelmodel/setmode'
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value, options) {
-      if (_mode === value) {
-        return;
-      }
-
-      options = options || { silent: false };
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, _mode);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkPanelModel = BookmarkPanelModel;
-
-}(wizerati, $));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogModel() {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogModel)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogModel();
-    }
-
-    var that = this,
-        _favoriteGroupId = null,
-        _isWaiting = '', //should identify the dom element to indicate waiting
-        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
-
-    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
-
-    this.getFavoriteGroupId = function () {
-      return _favoriteGroupId;
-    };
-
-    this.setFavoriteGroupId = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _favoriteGroupId = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    this.getIsWaiting = function () {
-      return _isWaiting;
-    };
-
-    this.setIsWaiting = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _isWaiting = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogModel = DeleteFavoriteGroupConfirmationDialogModel;
-  invertebrate.Model.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function HiddenItemsModel() {
-
-    if (!(this instanceof app.HiddenItemsModel)) {
-      return new app.HiddenItemsModel();
-    }
-
-    var that = this,
-        _hiddenItems = {};
-
-    this.eventUris = { default: 'update://hiddenitemsmodel',
-                       addHiddenItemId: 'update://hiddenitemsmodel/addHiddenItemId',
-                       removeHiddenItemId: 'update://hiddenitemsmodel/removeHiddenItemId' };
-    this.updateEventUri = 'update://hiddenitemsmodel/';
-
-    this.isHidden = function (id) {
-
-      return !!_hiddenItems[id];
-    };
-
-    this.addHiddenItemId = function (value) {
-      _hiddenItems[value] = value;
-
-      $.publish(that.eventUris.addHiddenItemId, _hiddenItems[value]);
-    };
-
-    this.removeHiddenItemId = function (value) {
-      delete _hiddenItems[value];
-
-      $.publish(that.eventUris.removeHiddenItemId, value);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.HiddenItemsModel = HiddenItemsModel;
-  invertebrate.Model.isExtendedBy(app.HiddenItemsModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $) {
-  'use strict';
-
-  function ItemsOfInterestModel(resultListModel) {
-    if (!(this instanceof app.ItemsOfInterestModel)) {
-      return new app.ItemsOfInterestModel(resultListModel);
-    }
-
-    var that = this,
-        _resultListModel = null,
-        _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _previouslySelectedItemId = null,
-        _mode = _modeEnum.Default,
-        _layout = {
-          widthItemOfInterest: 340,
-          leftPinnedItem1: 0,
-          leftPinnedItem2: 0,
-          leftPinnedItem3: 0,
-          leftPinnedItem4: 0,
-          leftPinnedItem5: 0,
-          leftPinnedItem6: 0
-        },
-        _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
-
-    this.eventUris = {default: 'update://itemsofinterestmodel/',
-      setMode: 'update://itemsofinterestmodel/setmode',
-      setLayout: 'update://itemsofinterestmodel/setlayout',
-      addItemOfInterest: 'update://itemsofinterestmodel/additemofinterest',
-      removeItemOfInterest: 'update://itemsofinterestmodel/removeitemofinterest',
-      setSelectedItemId: 'update://itemsofinterestmodel/setselecteditemid' };
-
-    this.getSelectedItemId = function () {
-      return _itemsOfInterest.selectedItem;
-    };
-
-    this.getPreviouslySelectedItemId = function () {
-      return _previouslySelectedItemId;
-    };
-
-    this.setSelectedItemId = function (value, options) {
-      options = options || { silent:false };
-
-      _previouslySelectedItemId = _itemsOfInterest.selectedItem;
-      _itemsOfInterest.selectedItem = value;
-
-      if(!options.silent) {
-        $.publish(that.eventUris.setSelectedItemId, _itemsOfInterest.selectedItem, _previouslySelectedItemId);
-      }
-    };
-
-    this.getCount = function () {
-      return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
-    };
-
-    this.getSelectedItemCount = function () {
-      return _itemsOfInterest.selectedItem ? 1 : 0;
-    };
-
-    this.getPinnedItemCount = function () {
-      return _itemsOfInterest.pinnedItems.length;
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value) {
-      _mode = value;
-
-//      if (_mode === _modeEnum.PinnedItemsExpanded) {
-//        _resultListModel.setMode(_resultListModeEnum.Minimized)
-//      } else if (_mode === _modeEnum.Default) {
-//        _resultListModel.setMode(_resultListModeEnum.Default)
-//      }
-
-      $.publish(that.eventUris.setMode);
-    };
-
-    this.getLayout = function () {
-      return _layout;
-    };
-
-    this.setLayout = function (value) {
-      _layout = value;
-
-      $.publish(that.eventUris.setLayout, _layout);
-    };
-
-    this.isItemOfInterest = function (id) {
-      return (_itemsOfInterest.pinnedItems.indexOf(id)) !== -1;
-    };
-
-    this.getItemsOfInterest = function () {
-      return _itemsOfInterest;
-    };
-
-    this.addItemOfInterest = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      if (that.getItemsOfInterest().pinnedItems.indexOf(id) >= 0) {
-        return;
-      }
-
-//      if (_selectedItemModel.getSelectedItemId() === id) {
-//        _selectedItemModel.setSelectedItemId(null, { silent: true });
-//        _itemsOfInterest.selectedItem = null;
-//      }
-
-      _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
-
-      $.publish(that.eventUris.addItemOfInterest, id);
-    };
-
-    this.removeItemOfInterest = function (id) {
-      if (!id) {
-        throw 'id not supplied';
-      }
-
-      _itemsOfInterest.pinnedItems = _.reject(_itemsOfInterest.pinnedItems, function (idOfPinnedItem) {
-        return idOfPinnedItem === id;
-      });
-
-      $.publish(that.eventUris.removeItemOfInterest, id);
-    };
-
-    this.isPinned = function (id) {
-      return _.any(_itemsOfInterest.pinnedItems, function (i) {
-        return i === id;
-      });
-    };
-
-    function init() {
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
-      }
-
-      _resultListModel = resultListModel;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ItemsOfInterestModel = ItemsOfInterestModel;
-
-}(wizerati, $));
-;(function (app) {
-  'use strict';
-
-  function NavPanelModel() {
-
-    if (!(this instanceof app.NavPanelModel)) {
-      return new app.NavPanelModel();
-    }
-
-    var that = this;
-
-    this.eventUris = {
-      default: 'update://navpanelmodel/'
-    };
-
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.NavPanelModel = NavPanelModel;
-
-}(wizerati));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function PurchasePanelModel() {
-
-    if (!(this instanceof app.PurchasePanelModel)) {
-      return new app.PurchasePanelModel();
-    }
-
-    var that = this,
-        _activeTab = '0',
-        _isWaiting = '', //should identify the dom element to indicate waiting
-        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
-
-    this.updateEventUri = 'update://purchasepanelmodel/';
-
-    this.getNotifications = function () {
-      return _notifications;
-    };
-
-    this.setNotifications = function (value) {
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _notifications = value;
-      $.publish(that.updateEventUri);
-    };
-
-    this.getIsWaiting = function () {
-      return _isWaiting;
-    };
-
-    this.setIsWaiting = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _isWaiting = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    this.getActiveTab = function () {
-      return _activeTab;
-    };
-
-    this.setActiveTab = function (value) {
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _activeTab = value;
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.PurchasePanelModel = PurchasePanelModel;
-  invertebrate.Model.isExtendedBy(app.PurchasePanelModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $) {
-  'use strict';
-
-  function ResultListModel() {
-    if (!(this instanceof app.ResultListModel)) {
-      return new app.ResultListModel();
-    }
-
-    var that = this,
-        _searchId = 'initial-value',
-        _modeEnum = app.mod('enum').ResultListMode,
-        _mode = _modeEnum.Default,
-        _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
-
-    this.eventUris = {
-      default: 'update://resultlistmodel',
-      setMode: 'update://resultlistmodel/setmode'
-    };
-
-    this.getSearchId = function () {
-      return _searchId;
-    };
-
-    this.getResults = function () {
-      return _results;
-    };
-
-    this.setResults = function (value, searchId) {
-      _results = value;
-      _searchId = searchId;
-      _mode = _modeEnum.Default;
-
-      $.publish(that.eventUris.default);
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value, options) {
-      options = options || {silent: false};
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, value);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ResultListModel = ResultListModel;
-
-}(wizerati, $));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SearchFormModel() {
-
-    if (!(this instanceof app.SearchFormModel)) {
-      return new app.SearchFormModel();
-    }
-
-    var that = this,
-        _modeEnum = app.mod('enum').SearchFormMode,
-        _mode = _modeEnum.Minimized,
-        _keywords = null,
-        _location = null,
-        _isWaiting = 'false',
-        _rate = null,
-        _isVisible = 'true',
-        _firstRenderCompleteFlag = false;
-
-//    this.updateEventUri = 'update://SearchFormModel/';
-    this.eventUris = {
-      default: 'update://searchformmodel',
-      setMode: 'update://searchformmodel/setmode',
-      setIsWaiting: 'update://searchformmodel/setiswaiting',
-      setIsVisible: 'update://searchformmodel/setisvisible' };
-
-    //needed?
-//    this.getIsVisible = function () {
-//      return _isVisible;
-//    };
-
-    this.getFirstRenderCompleteFlag = function () {
-      return _firstRenderCompleteFlag;
-    };
-
-    this.setFirstRenderCompleteFlag = function () {
-      _firstRenderCompleteFlag = true;
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value) {
-      if(_mode === value) {
-        return;
-      }
-
-      _mode = value;
-
-      $.publish(that.eventUris.setMode, value);
-    };
-
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-
-      $.publish(that.eventUris.setIsVisible);
-    };
-
-    this.getKeywords = function () {
-      return _keywords;
-    };
-
-    this.setKeywords = function (value, options) {
-      options = options || { silent: false };
-
-      _keywords = value;
-
-      if (options.silent === false) {
-        $.publish(that.eventUris.default);
-      }
-    };
-
-    this.getLocation = function () {
-      return _location;
-    };
-
-    this.setLocation = function (value, options) {
-      options = options || { silent: false };
-      _location = value;
-
-      if (options.silent === false) {
-        $.publish(that.eventUris.default);
-      }
-    };
-
-    this.getRate = function () {
-      return _rate;
-    };
-
-    this.setRate = function (value, options) {
-      options = options || { silent: false };
-      _rate = value;
-
-      if (options.silent === false) {
-        $.publish(that.eventUris.default);
-      }
-    };
-
-    this.getIsWaiting = function () {
-      return _isWaiting;
-    };
-
-    this.setIsWaiting = function (value, options) {
-      options = options || { silent: false };
-
-      /*jshint -W116 */
-      if (value == null) {
-        throw 'value not supplied.';
-      }
-
-      if (value !== 'true' && value !== 'false') {
-        throw 'invalid argument (value).';
-      }
-
-      _isWaiting = value;
-
-      if (options.silent === false) {
-        $.publish(that.eventUris.setIsWaiting);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchFormModel = SearchFormModel;
-  invertebrate.Model.isExtendedBy(app.SearchFormModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $) {
-  'use strict';
-
-  function SearchPanelModel() {
-
-    if (!(this instanceof app.SearchPanelModel)) {
-      return new app.SearchPanelModel();
-    }
-
-    var that = this,
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _mode = _searchPanelModeEnum.Default;
-
-    this.eventUris = {
-      default: 'update://searchpanelmodel/',
-      setMode: 'update://searchpanelmodel/setmode'
-    };
-
-    this.getMode = function () {
-      return _mode || _searchPanelModeEnum.Default;
-    };
-
-    this.setMode = function (value, options) {
-      if (_mode === value) {
-        return;
-      }
-
-      options = options || { silent: false };
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, _mode);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchPanelModel = SearchPanelModel;
-
-}(wizerati, $));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SignInPanelModel() {
-
-    if (!(this instanceof app.SignInPanelModel)) {
-      return new app.SignInPanelModel();
-    }
-
-    var that = this,
-        _username = null,
-        _password = null,
-        _isLoginFailedMessageVisible = false,
-        _isVisible = false;
-
-    this.updateEventUri = 'update://signinpanelmodel/';
-
-    this.getUsername = function () {
-      return _username;
-    };
-
-    this.setUsername = function (value) {
-      _username = value;
-    };
-
-    this.getPassword = function () {
-      return _password;
-    };
-
-    this.setPassword = function (value) {
-      _password = value;
-    };
-
-    this.getIsLoginFailedMessageVisible = function () {
-      return _isLoginFailedMessageVisible;
-    };
-
-    this.setIsLoginFailedMessageVisible = function (value) {
-      _isLoginFailedMessageVisible = value;
-      $.publish(that.updateEventUri);
-    };
-
-    this.getIsVisible = function () {
-      return _isVisible;
-    };
-
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SignInPanelModel = SignInPanelModel;
-  invertebrate.Model.isExtendedBy(app.SignInPanelModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SingleItemModel() {
-
-    if (!(this instanceof app.SingleItemModel)) {
-      return new app.SingleItemModel();
-    }
-
-    var that = this,
-        _selectedResultId = null,
-        _previouslySelectedResultId = null;
-
-    this.updateEventUri = 'update://singleitemmodel/';
-
-    this.getSelectedItemId = function () {
-      return _selectedResultId;
-    };
-
-    this.getPreviouslySelectedItemId = function () {
-
-      return _previouslySelectedResultId;
-    };
-
-    this.setSelectedItemId = function (value, options) {
-      options = options || { silent: false };
-
-      _previouslySelectedResultId = _selectedResultId;
-      _selectedResultId = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SingleItemModel = SingleItemModel;
-  invertebrate.Model.isExtendedBy(app.SingleItemModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function TabBarModel() {
-
-    if (!(this instanceof app.TabBarModel)) {
-      return new app.TabBarModel();
-    }
-
-    var that = this,
-        _tabEnum = app.mod('enum').Tab,
-        _selectedTab = _tabEnum.Search;
-
-    this.eventUris = { setSelectedTab: 'update://tabbarmodel/setSelectedTab' };
-
-    this.getSelectedTab = function () {
-      return _selectedTab;
-    };
-
-    this.setSelectedTab = function (value) {
-      _selectedTab = value;
-      $.publish(that.eventUris.setSelectedTab, value);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.TabBarModel = TabBarModel;
-  invertebrate.Model.isExtendedBy(app.TabBarModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function UIRootModel() {
-
-    if (!(this instanceof app.UIRootModel)) {
-      return new app.UIRootModel();
-    }
-
-    var that = this,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _modalEnum = app.mod('enum').Modal,
-        _tabEnum = app.mod('enum').Tab,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
-        _uiMode = _uiModeEnum.NotReady,
-        _modal = _modalEnum.None,
-        _activeTab = _tabEnum.Search,
-        _bodyWidth = null,
-        _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
-        _areTransitionsEnabled = 'true';
-
-    this.eventUris = { default: 'update://uirootmodel',
-      setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
-      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
-      setModal: 'update://uirootmodel/setmodal',
-      setUIMode: 'update://uirootmodel/setuimode',
-      setActiveTab: 'update://uirootmodel/setactivetab'
-    };
-
-    this.getVisibilityMode = function () {
-      return _visibilityMode;
-    };
-
-    //useful to temporarily hide the entire UI
-    this.setVisibilityMode = function (value) {
-      if (value === _visibilityMode) {
-        return;
-      }
-
-      _visibilityMode = value;
-
-      $.publish(that.eventUris.setVisibilityMode, value);
-    };
-
-    this.getAreTransitionsEnabled = function () {
-      return _areTransitionsEnabled;
-    };
-
-    this.setAreTransitionsEnabled = function (value) {
-      if (value === _areTransitionsEnabled) {
-        return;
-      }
-
-      _areTransitionsEnabled = value;
-
-      $.publish(that.eventUris.setAreTransitionsEnabled);
-    };
-
-    this.setActiveTab = function (value) {
-      if (value === _activeTab) {
-        return;
-      }
-
-      _activeTab = value;
-
-      $.publish(that.eventUris.setActiveTab, _activeTab);
-    };
-
-//    this.getBodyWidth = function () {
-//      return _bodyWidth;
-//    };
-
-    this.getUIMode = function () {
-      return _uiMode || '';
-    };
-
-    this.setUIMode = function (value, options) {
-      options = options || {silent: false};
-
-      if (value === _uiMode) {
-        return;
-      }
-
-      _uiMode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setUIMode, _uiMode);
-      }
-    };
-
-    this.getModal = function () {
-      return _modal || '';
-    };
-
-    this.setModal = function (value, options) {
-      options = options || {silent: false};
-
-      _modal = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setModal, _modal);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.UIRootModel = UIRootModel;
-  invertebrate.Model.isExtendedBy(app.UIRootModel);
-
-}(wizerati, $, invertebrate));
-
-//wiz.mod('cronicl').CroniclSvc.getMyItemMetadata(function (metadata) {
-//    $('#searchField').attr('placeholder', metadata.searchFieldPlaceholderValue);
-//    $('#newItemLink').text('New ' + metadata.itemNameAlternative);
-//    $('#emptyMessageMyItems').text('My  ' + metadata.itemNameAlternativePlural + ' are shown here');
-//    metadata.prefetchTemplates();
-//    metadata.prefetchPostRenderActions();
-//});
-//wiz.mod('cronicl').CroniclSvc.getSearchItemMetadata(function (metadata) {
-//    metadata.prefetchTemplates();
-//    metadata.prefetchPostRenderActions();
-//});
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function AccountActivationView(model) {
-
-    if (!(this instanceof app.AccountActivationView)) {
-      return new app.AccountActivationView(model);
-    }
-
-    var that = this,
-        _el = '#activation-panel';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'AccountActivationView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AccountActivationView = AccountActivationView;
-  invertebrate.View.isExtendedBy(app.AccountActivationView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ApplyToContractDialogView(model) {
-
-    if (!(this instanceof app.ApplyToContractDialogView)) {
-      return new app.ApplyToContractDialogView(model);
-    }
-
-    var that = this,
-        _el = '#apply-to-contract-dialog',
-        _jobTitleEl = '.job-title',
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ApplyToContractDialogView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ApplyToContractDialogView = ApplyToContractDialogView;
-  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, _) {
-  'use strict';
-
-  function BookmarkBookView(model) {
-
-    if (!(this instanceof app.BookmarkBookView)) {
-      return new app.BookmarkBookView(model);
-    }
-
-    var that = this,
-        _el = '#favorites-cube',
-        _favoriteViewFactory = null,
-        _selectedCubeFaceModel = null,
-        _actionedItemsModel = null,
-        _hiddenItemsModel = null,
-        _itemsOfInterestModel = null,
-        _bookmarkService = null,
-        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
-          '.cube-face-labels li:nth-child(2)',   //left
-          '.cube-face-labels li:nth-child(3)',   //front
-          '.cube-face-labels li:nth-child(4)',   //right
-          '.cube-face-labels li:nth-child(5)',   //bottom
-          '.cube-face-labels li:nth-child(6)' ], //back
-        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
-        _modeEnum = app.mod('enum').FavoritesCubeMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var mode = that.Model.getMode();
-      that.$el.attr('data-mode', mode);
-      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
-      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
-      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
-        return previousValue + (currentValue ? '1' : '0');
-      }, ''));
-
-      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
-        that.$el.addClass('hide');
-        return;
-      } else {
-        that.$el.removeClass('hide');
-      }
-
-      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
-        var $face = that.$el.find(_faceEls[index1]);
-        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
-        $face.find('*').not('.face-empty-message').remove();
-        $faceSelectorSpots.removeClass('filled');
-        $.each(faceFavorites, function (index2, f) {
-          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
-            $face.append($v);
-            $($faceSelectorSpots[index2]).addClass('filled');
-          });
-        });
-      });
-
-      that.$el.attr('data-selected-face-id',
-          _selectedCubeFaceModel.getSelectedCubeFaceId());
-
-      var faceLabels = that.Model.getFaceLabels();
-      $.each(_labelEls, function (index, el) {
-        $(el).text(faceLabels[index]);
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.render();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'FavoritesCubeView::init model not supplied';
-      }
-
-
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoriteViewFactory = favoriteViewFactory;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _bookmarkService = bookmarkService;
-
-      $.subscribe(that.Model.updateEventUriPrivate, that.render);
-      $.subscribe(that.Model.updateEventUri, that.render);
-      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkBookView = BookmarkBookView;
-  invertebrate.View.isExtendedBy(app.BookmarkBookView);
-
-}(wizerati, $, invertebrate, _));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function BookmarkPanelView(model) {
-
-    if (!(this instanceof app.BookmarkPanelView)) {
-      return new app.BookmarkPanelView(model);
-    }
-
-    var that = this,
-        _el = '#bookmark-panel-container',
-        _modeEnum = app.mod('enum').BookmarkPanelMode,
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.renderSetMode();
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$navPanel = $('#nav-panel');
-    };
-
-    this.renderSetMode = function(mode) {
-      that.$el.attr('data-mode', that.Model.getMode());
-
-      var oppositeMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.Minimized : _modeEnum.Default;
-      that.$navPanel.find('.handle-bookmark-panel input[name="mode"]').attr('value', oppositeMode);
-//      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'bookmarks';
-      that.$navPanel.find('.handle-bookmark-panel').addClass('selected');
-    };
-
-    function init() {
-      if (!model) {
-        throw 'BookmarkPanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkPanelView = BookmarkPanelView;
-  invertebrate.View.isExtendedBy(app.BookmarkPanelView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractFavoriteView(model) {
-
-    if (!(this instanceof app.ContractFavoriteView)) {
-      return new app.ContractFavoriteView(model);
-    }
-
-    var that = this,
-        _el = '<div class="thumbnail thumbnail-108"></div>',
-        _templateName = 'favorite.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      } else {
-        that.$el.removeClass('selected');
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractFavoriteView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractFavoriteView = ContractFavoriteView;
-  invertebrate.View.isExtendedBy(app.ContractFavoriteView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractItemOfInterestView(model) {
-
-    if (!(this instanceof app.ContractItemOfInterestView)) {
-      return new app.ContractItemOfInterestView(model);
-    }
-
-    var that = this,
-        _el = '<article></article>',
-        _templateName = 'item-of-interest.html-local';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-id', that.Model.id);
-
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected-item');
-      } else {
-        that.$el.addClass('pinned-item');
-      }
-
-      if (that.Model.isHidden) {
-        that.$el.addClass('hidden');
-      } else {
-        that.$el.removeClass('hidden');
-      }
-
-      app.instance.renderTemplate(that.$el, _templateName, that.Model);
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractItemOfInterestView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractItemOfInterestView = ContractItemOfInterestView;
-  invertebrate.View.isExtendedBy(app.ContractItemOfInterestView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractResultView(model) {
-
-    if (!(this instanceof app.ContractResultView)) {
-      return new app.ContractResultView(model);
-    }
-
-    var that = this,
-        _el = '<li class="t"></li>',
-        _templateName = 'result.html-local';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-id', that.Model.id); //used for render optimization for when selected item changed
-
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      } else {
-        that.$el.removeClass('selected');
-      }
-
-      if (that.Model.isHidden) {
-        that.$el.addClass('hidden');
-      } else {
-        that.$el.removeClass('hidden');
-      }
-
-      //only apply the attributes in the positive case to save clutter in the DOM
-      if(!that.Model.isRead) {
-        that.$el.attr('data-is-unread', !that.Model.isRead);
-      }
-
-      if(that.Model.isActioned) {
-        that.$el.attr('data-is-actioned', that.Model.isActioned);
-      }
-
-      if(that.Model.isBookmark) {
-        that.$el.attr('data-is-bookmark', that.Model.isBookmark);
-      }
-
-      if(that.Model.isPinned) {
-        that.$el.attr('data-is-in-comparison-list', that.Model.isInComparisonList);
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractResultView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractResultView = ContractResultView;
-  invertebrate.View.isExtendedBy(app.ContractResultView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorFavoriteView(model) {
-
-    if (!(this instanceof app.ContractorFavoriteView)) {
-      return new app.ContractorFavoriteView(model);
-    }
-
-    var that = this,
-        _el = '<div class="thumbnail thumbnail-108"></div>',
-        _templateName = 'favorite.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorFavoriteView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      that.render();
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorFavoriteView = ContractorFavoriteView;
-  invertebrate.View.isExtendedBy(app.ContractorFavoriteView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorItemOfInterestView(model) {
-
-    if (!(this instanceof app.ContractorItemOfInterestView)) {
-      return new app.ContractorItemOfInterestView(model);
-    }
-
-    var that = this,
-        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
-        _templateName = 'item-of-interest.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-id', that.Model.id);
-
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      }
-
-      if (that.Model.shouldAnimateIn) {
-        that.$el.css({ left: '-' + model.width});
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorItemOfInterestView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
-  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorResultView(model) {
-
-    if (!(this instanceof app.ContractorResultView)) {
-      return new app.ContractorResultView(model);
-    }
-
-    var that = this,
-        _templateName = 'result.html';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (options) {
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorResultView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorResultView = ContractorResultView;
-  invertebrate.View.isExtendedBy(app.ContractorResultView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, document) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel) {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogView)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel);
-    }
-
-    var that = this,
-        _el = '#delete-favorite-group-confirmation-dialog',
-        _messageContainerEl = '.message-container',
-        _deleteButtonEl = '.btn-danger',
-        _favoritesCubeModel = null,
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var favoriteGroupId = that.Model.getFavoriteGroupId();
-      var favoriteGroupName = _favoritesCubeModel.getFavoriteGroupName(favoriteGroupId);
-      that.$el.find(_messageContainerEl).html('<p>You have chosen to delete the following group of favorites:</p><blockquote><em>' + favoriteGroupName + '</em></blockquote><p>This cannot be undone.</p><p>Are you sure you want to delete this group?</p>')
-      that.$el.find(_deleteButtonEl).attr('href', '/favoritegroup/destroy?id=' + favoriteGroupId);
-    };
-
-    this.bindEvents = function () {
-      $(document).keyup(function (e) {
-        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getModal() === _uiModeEnum.DeleteFavoriteGroupConfirmationDialog) {
-          that.Model.setIsVisible(false);
-        }
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.bindEvents();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoritesCubeModel = favoritesCubeModel;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogView = DeleteFavoriteGroupConfirmationDialogView;
-  invertebrate.View.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogView);
-
-}(wizerati, $, invertebrate, document));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel) {
-
-    if (!(this instanceof app.ItemsOfInterestView)) {
-      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel);
-    }
-
-    var that = this,
-        _el = '.items-of-interest-panel',
-        _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _elHandlePinnedItems = '.handle-pinned-items',
-        _elSelectedItemContainerCurrent = null,
-        _elSelectedItemContainer1 = '#selected-item-container-1',
-        _elSelectedItemContainer2 = '#selected-item-container-2',
-        _elPinnedItemsContainer = '.pinned-items-container',
-        _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
-        _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
-        _elPinnedItem3 = '.pinned-item:nth-child(4) .pinned-item-content',
-        _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
-        _itemModelPack = null,
-        _itemOfInterestViewFactory = null,
-        _layoutCoordinator = null,
-        _renderOptimizations = {},
-        _scrollTopValues = {},
-        _scrollLeft = 0,
-        _uiRootModel = null;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      renderPrivate({ animateSelectedItem: false, removedItemId: null });
-    };
-
-    function renderPrivate(options) {
-      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
-      that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
-
-      //these values should be stored before the modification of the DOM (hence before the removal below)
-      storeScrollTopValues();
-      storeScrollLeftValue();
-
-      that.$el.find('.selected-item, .pinned-item').remove();
-
-      var items = that.Model.getItemsOfInterest();
-      if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
-            that.Model.getLayout().widthItemOfInterest,
-            true,
-            function done($view) {
-              addPinnedItems(items.pinnedItems, addSelectedItem);
-              function addSelectedItem() {
-                $(_elSelectedItemContainer1).prepend($view);
-                $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                $('body').scrollLeft(_scrollLeft);
-                _layoutCoordinator.layOut();
-              }
-            });
-      } else {
-        addPinnedItems(items.pinnedItems, function () {
-          $('body').scrollLeft(_scrollLeft);
-          _layoutCoordinator.layOut();
-        });
-      }
-    }
-
-    this.renderLayout = function (layout) {
-      var selectedItemContent = $('.selected-item-container').find('.selected-item-content');
-      $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
-      $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
-      $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
-      $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
-
-      selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
-      $(_elPinnedItems).children().width(layout.widthItemOfInterest);
-
-      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
-    };
-
-    this.renderAddHiddenItem = function (itemId) {
-      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
-      var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/destroy');
-      $frm.find('.btn').addClass('checked');
-      $items.addClass('hidden');
-      $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
-    };
-
-    this.renderRemoveHiddenItem = function (itemId) {
-      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
-      var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/create');
-      $frm.find('.btn').removeClass('checked');
-      $items.removeClass('hidden');
-      $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
-    };
-
-    this.renderAddBookmark = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
-      $frm.attr('action', '/bookmarks/destroy');
-      $frm.find('.btn').addClass('checked');
-    };
-
-    this.renderRemoveBookmark = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
-      $frm.attr('action', '/bookmarks/create');
-      $frm.find('.btn').removeClass('checked');
-    };
-
-    this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
-      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
-
-      //these values should be stored before the modification of the DOM (hence before the removal below)
-      storeScrollTopValues();
-      storeScrollLeftValue();
-
-      var prevEl = _elSelectedItemContainerCurrent || _elSelectedItemContainer2;
-      var $prevEl = $(prevEl);
-      _elSelectedItemContainerCurrent = prevEl === _elSelectedItemContainer1 ? _elSelectedItemContainer2 : _elSelectedItemContainer1;
-      var $currentEl = $(_elSelectedItemContainerCurrent);
-      $currentEl.addClass('buffer');
-      var items = that.Model.getItemsOfInterest();
-
-      if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
-            that.Model.getLayout().widthItemOfInterest,
-            true,
-            function done($view) {
-              $currentEl.html($view);
-              $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-              $('body').scrollLeft(_scrollLeft);
-              $prevEl.addClass('buffer');
-              $currentEl.removeClass('buffer');
-
-              setTimeout(function () {
-                $prevEl.empty();
-              }, 300); //give time for fade effect to complete
-            });
-      }
-    };
-
-    this.renderSetMode = function () {
-      var mode = that.Model.getMode();
-      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
-      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
-
-
-      if (mode === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
-      } else {
-        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
-      }
-
-      $('body').attr('data-items-of-interest-mode', mode)
-    };
-
-    function addPinnedItems(items, done) {
-      done = done || function () {
-      };
-
-      items.forEach(function (id) {
-        if (id === null) {
-          return;
-        }
-        _itemOfInterestViewFactory.create(id,
-            that.Model.getLayout().widthItemOfInterest,
-            false,
-            function ($view) {
-              $(_elPinnedItemsContainer).append($view);
-              $view.scrollTop(_scrollTopValues[id]);
-              that.renderLayout(that.Model.getLayout());
-            });
-      });
-
-      done();
-    }
-
-    this.renderRemoveItemOfInterest = function(id) {
-      var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
-      $frm.attr('action', '/itemsofinterest/create');
-      $frm.find('.btn').removeClass('checked');
-
-      $('.pinned-item[data-id="' + id + '"]').remove();
-      _layoutCoordinator.layOut();
-    };
-
-    this.renderAddItemOfInterest = function (id) {
-      var frm = that.$elSelectedItemContainer.find('.frm-pin')
-      frm.attr('action', '/itemsofinterest/destroy');
-      frm.find('button').addClass('checked');
-
-      _itemOfInterestViewFactory.create(id,
-          that.Model.getLayout().widthItemOfInterest,
-          false,
-          function ($view) {
-            $(_elPinnedItemsContainer).append($view);
-            $view.scrollTop(_scrollTopValues[id]);
-            that.renderLayout(that.Model.getLayout());
-          });
-    };
-
-    function storeScrollTopValues() {
-      var selectedItem = that.$el.find('.item-of-interest.selected');
-
-      if (selectedItem) {
-        _scrollTopValues[selectedItem.attr('data-id') + 's'] = $(selectedItem).scrollTop();
-      }
-
-      _.each(that.$el.find('.item-of-interest:not(.selected)'), function (e) {
-        _scrollTopValues[$(e).attr('data-id')] = $(e).scrollTop();
-      });
-    }
-
-    function storeScrollLeftValue() {
-      _scrollLeft = $('body').scrollLeft();
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
-      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
-      that.$elSelectedItemContainer = $('.selected-item-container');
-      that.$elPinnedItems = $(_elPinnedItems);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ItemsOfInterestView::init model not supplied';
-      }
-
-      if (!itemOfInterestViewFactory) {
-        throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
-      }
-
-      if (!itemModelPack) {
-        throw 'ItemsOfInterestView::init itemModelPack not supplied';
-      }
-
-      if (!layoutCoordinator) {
-        throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
-      }
-
-      if (!uiRootModel) {
-        throw 'ItemsOfInterestView::init uiRootModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _itemModelPack = itemModelPack;
-      _itemOfInterestViewFactory = itemOfInterestViewFactory;
-      _layoutCoordinator = layoutCoordinator;
-      _uiRootModel = uiRootModel;
-
-      _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.setLayout, that.render);
-      $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
-      $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
-      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
-
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ItemsOfInterestView = ItemsOfInterestView;
-  invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, document) {
-  'use strict';
-
-  function LoginPanelView(model) {
-
-    if (!(this instanceof app.LoginPanelView)) {
-      return new app.LoginPanelView(model);
-    }
-
-    var that = this,
-        _el = '#log-in-panel',
-        _cancelButtonEl = '.btn-cancel',
-        _successButtonEl = '.log-in .btn-success',
-        _usernameEl = '.username',
-        _passwordEl = '.password',
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null,
-        this.$cancelButton = null,
-        this.$successButton = null,
-        this.$username = null,
-        this.$password = null,
-        this.Model = null;
-
-    this.render = function () {
-      if (that.Model.getIsVisible()) {
-        that.$el.removeClass('hide');
-      }
-
-      if (that.Model.getIsLoginFailedMessageVisible()) {
-        that.$el.addClass('login-error');
-      }
-    };
-
-    this.bindEvents = function () {
-      that.$username.on('change', function () {
-        that.Model.setUsername(that.$username.val());
-      });
-
-      that.$password.on('change', function () {
-        that.Model.setPassword(that.$password.val());
-      });
-
-      that.$cancelButton.on('click', function () {
-        cancel();
-      });
-
-      that.$successButton.on('click', function () {
-        app.instance.router.route('/session/create', { $parentDomNode: that.$el });
-      });
-
-      $(document).keyup(function (e) {
-        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getUIMode() === _uiModeEnum.LogIn) {
-          cancel();
-        }
-      });
-    };
-
-    function cancel() {
-      app.instance.router.route('/');
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$cancelButton = that.$el.find(_cancelButtonEl);
-      that.$password = that.$el.find(_passwordEl);
-      that.$username = that.$el.find(_usernameEl);
-      that.$successButton = that.$el.find(_successButtonEl);
-      that.bindEvents();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'LoginPanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.LoginPanelView = LoginPanelView;
-  invertebrate.View.isExtendedBy(app.LoginPanelView);
-
-}(wizerati, $, invertebrate, document));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function PurchasePanelView(model) {
-
-    if (!(this instanceof app.PurchasePanelView)) {
-      return new app.PurchasePanelView(model);
-    }
-
-    var that = this,
-        _el = '#purchase-panel';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-state', that.Model.getActiveTab());
-      that.$el.attr('data-is-waiting', that.Model.getIsWaiting());
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'PurchasePanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.PurchasePanelView = PurchasePanelView;
-  invertebrate.View.isExtendedBy(app.PurchasePanelView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ResultListView(model, resultViewFactory, itemModelPack) {
-
-    if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model, resultViewFactory, itemModelPack);
-    }
-
-    var that = this,
-        _el = '#result-list-panel',
-        _elResultList = '.result-list',
-        _resultViewFactory = null,
-        _scrollTopValue = 0,
-        _lastKnownSearchId = null,
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    function calculateScrollTopValueToMaintain($el, searchId) {
-      if (_lastKnownSearchId === searchId) {
-        _scrollTopValue = $el.scrollTop();
-      } else {
-        _scrollTopValue = 0;
-        _lastKnownSearchId = searchId;
-      }
-    }
-
-    this.render = function (e) {
-
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      var searchId = that.Model.getSearchId();
-//      var isFreshSearch = _lastKnownSearchId !== searchId;
-      calculateScrollTopValueToMaintain(that.$elResultList, searchId);
-      that.$elResultList.empty();
-//      that.$elResultList.addClass('ios-scroll-enable');
-
-      that.Model.getResults().forEach(function (id) {
-        _resultViewFactory.create(id, function ($v) {
-          that.$elResultList.append($v);
-        });
-      });
-
-      that.$elResultList.scrollTop(_scrollTopValue);
-      that.$el.attr('data-mode', that.Model.getMode());
-    };
-
-    this.renderSetSelectedItemId = function (selectedItemId) {
-      $(_el).find('.t.selected').removeClass('selected');
-      var selectorNew = '.t[data-id="' + selectedItemId + '"]';
-      $(_el).find(selectorNew).addClass('selected');
-    };
-
-    this.renderAddItemOfInterest = function (id) {
-      var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
-    };
-
-    this.renderRemoveItemOfInterest = function (id) {
-      var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
-    };
-
-    this.renderAddHiddenItem = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-
-      var $selector = $(_el).find(selector);
-      $selector.addClass('hidden');
-    };
-
-    this.renderRemoveHiddenItem = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      var $selector = $(_el).find(selector);
-      $selector.removeClass('hidden');
-    };
-
-    this.renderAddBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'true');
-    };
-
-    this.renderRemoveBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'false');
-    };
-
-    this.renderSetMode = function (mode) {
-      $(_el).attr('data-mode', mode);
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$elResultList = $(_elResultList);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ResultListView::init model not supplied';
-      }
-
-      if (!resultViewFactory) {
-        throw 'ResultListView::init resultViewFactory not supplied';
-      }
-
-      if (!itemModelPack) {
-        throw 'ResultListView::init itemModelPack not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _resultViewFactory = resultViewFactory;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ResultListView = ResultListView;
-  invertebrate.View.isExtendedBy(app.ResultListView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SearchFormView(model) {
-
-    if (!(this instanceof app.SearchFormView)) {
-      return new app.SearchFormView(model);
-    }
-
-    var that = this,
-        _el = '#search-form-container',
-        _templateName = 'search-form.html-local',
-        _renderOptimizations = {},
-        _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
-
-    this.$el = null;
-    this.$resultListPanelEl = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      var options = { done: that.postRender, postRenderScriptName: null };
-
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.renderSetMode(that.Model.getMode());
-      return app.instance.renderTemplate(that.$el, _templateName, that.Model, options);
-    };
-
-    this.bindEvents = function () {
-      var $keywords = that.$el.find('#keywords');
-      $keywords.on('change', function () {
-        that.Model.setKeywords($keywords.val(), { silent: true });
-      });
-
-      var $location = that.$el.find('#location');
-      $location.on('change', function () {
-        that.Model.setLocation($location.val(), { silent: true });
-      });
-
-      var $rate = that.$el.find('input[name="r"]');
-      $rate.on('change', function () {
-        that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
-      });
-
-      if (!_waitStateIsBeingMonitored) {
-        monitorWaitState();
-      }
-    };
-
-    this.postRender = function () {
-      that.bindEvents();
-      that.Model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
-    };
-
-    this.renderSetIsVisible = function () {
-      if (that.Model.getIsVisible() === 'true') {
-        that.$el.removeClass('hidden');
-      } else if (that.Model.getIsVisible() === 'false') {
-        that.$el.addClass('hidden');
-      }
-      else {
-        throw 'invalid visibility state.'
-      }
-    };
-
-    this.renderSetIsWaiting = function () {
-      that.$el.find('btn-search').attr('data-is-waiting', that.Model.getIsWaiting());
-
-      if (!_waitStateIsBeingMonitored) {
-        monitorWaitState();
-      }
-    };
-
-    this.renderSetMode = function (mode) {
-      that.$resultListPanelEl.attr('data-search-form-mode', mode);
-    };
-
-    function monitorWaitState() {
-      _waitStateIsBeingMonitored = true;
-
-      if (that.Model.getIsWaiting() === 'true') {
-        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
-        setTimeout(function () {
-          that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
-          setTimeout(monitorWaitState, 2500); //wait for animation to complete before checking
-        }, 0);
-      } else {
-        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
-        _waitStateIsBeingMonitored = false;
-      }
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$resultListPanelEl = $('#result-list-panel'); /*to be renamed to search panel*/
-      that.render(); //this introduces the wait on initial visit
-    };
-
-    function init() {
-      if (!model) {
-        throw 'SearchFormView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.renderSetIsVisible;
-      _renderOptimizations[that.Model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
-      $.subscribe(that.Model.eventUris.setIsWaiting, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchFormView = SearchFormView;
-  invertebrate.View.isExtendedBy(app.SearchFormView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SearchPanelView(model) {
-
-    if (!(this instanceof app.SearchPanelView)) {
-      return new app.SearchPanelView(model);
-    }
-
-    var that = this,
-        _el = '.search-panel',
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.renderSetMode();
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$navPanel = $('#nav-panel');
-    };
-
-    this.renderSetMode = function(mode) {
-      that.$el.attr('data-mode', that.Model.getMode());
-
-      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
-      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
-//      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'search';
-      that.$navPanel.find('.handle-search-panel').addClass('selected');
-    };
-
-    function init() {
-      if (!model) {
-        throw 'SearchPanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchPanelView = SearchPanelView;
-  invertebrate.View.isExtendedBy(app.SearchPanelView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function TabBarView(model) {
-
-    if (!(this instanceof app.TabBarView)) {
-      return new app.TabBarView(model);
-    }
-
-    var that = this,
-        _el = '#tab-bar',
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.renderSetSelectedTab(that.Model.getSelectedTab())
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    this.renderSetSelectedTab = function(tab) {
-      that.$el.attr('data-selected-tab', tab);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'UIRootView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
-
-      $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.TabBarView = TabBarView;
-  invertebrate.View.isExtendedBy(app.TabBarView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function UIRootView(model) {
-
-    if (!(this instanceof app.UIRootView)) {
-      return new app.UIRootView(model);
-    }
-
-    var that = this,
-        _el = 'body',
-        _mainContainer = '#main-container',
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
-      that.$el.attr('data-ui-mode', that.Model.getUIMode());
-      that.$el.attr('data-modal', that.Model.getModal());
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$mainContainer = $(_mainContainer);
-    };
-
-    this.renderSetVisibilityMode = function(mode) {
-      that.$mainContainer.attr('data-visibility-mode', mode);
-    };
-
-    this.renderSetAreTransitionsEnabled = function() {
-        that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
-    };
-
-    this.renderSetModal = function(modal) {
-        that.$el.attr('data-modal', modal);
-    };
-
-    this.renderSetUIMode = function(uiMode) {
-        that.$el.attr('data-ui-mode', uiMode);
-    };
-
-    this.renderSetActiveTab = function(tab) {
-        that.$el.attr('data-active-tab', tab);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'UIRootView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
-      _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
-      _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
-      _renderOptimizations[that.Model.eventUris.setActiveTab] = that.renderSetActiveTab;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
-      $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
-      $.subscribe(that.Model.eventUris.setModal, that.render);
-      $.subscribe(that.Model.eventUris.setUIMode, that.render);
-      $.subscribe(that.Model.eventUris.setActiveTab, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.UIRootView = UIRootView;
-  invertebrate.View.isExtendedBy(app.UIRootView);
-
-}(wizerati, $, invertebrate));
-;(function (app) {
-  'use strict';
-
-  function SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator) {
-
-    if (!(this instanceof app.SearchControllerHelper)) {
-      return new app.SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator);
-    }
-
-    var that = this,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _navbarItemEnum = app.mod('enum').Tab,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
-        _uiModelPack = null,
-        _guidFactory = null,
-        _layoutCoordinator = null;
-
-    this.resetUIForSearch = function () {
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
-      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-    };
-
-    this.searchSuccess = function (results) {
-      _uiModelPack.resultListModel.setResults(_.map(results, function (r) {
-        return r.id;
-      }), _guidFactory.create());
-      _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-
-      var delayToRender = 0;
-      if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundOrLoadingIndicator);
-        _uiModelPack.uiRootModel.setAreTransitionsEnabled(false);
-        delayToRender = 100; //wait for the opacity fade to complete
-      }
-
-      setTimeout(function () {
-        _layoutCoordinator.layOut();
-        that.resetUIForSearch();
-
-        //this must occur *after the search panel mode is set* to its eventual value, to
-        //ensure the initial width rendering of items of interest is the correct one
-        // (avoiding a repaint)
-        if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
-          _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
-        }
-
-        setTimeout(function () {
-          _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
-        }, 0);
-        /*attempt to ensure that UI rendered before re-enabling transitions*/
-
-        setTimeout(function () {
-          _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-        }, 0);
-      }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
-    };
-
-    function init() {
-      if (!uiModelPack) {
-        throw 'SearchControllerHelper::init uiModelPack not supplied.';
-      }
-
-      if (!guidFactory) {
-        throw 'SearchControllerHelper::init guidFactory not supplied.';
-      }
-
-      if (!layoutCoordinator) {
-        throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _guidFactory = guidFactory;
-      _layoutCoordinator = layoutCoordinator;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchControllerHelper = SearchControllerHelper;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
-
-    if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
-    }
-
-    var that = this;
-
-    this.resultListModel = null;
-    this.bookmarkBookModel = null;
-    this.itemsOfInterestModel = null;
-    this.hiddenItemsModel = null;
-    this.actionedItemsModel = null;
-
-    function init() {
-      if (!resultListModel) {
-        throw 'ItemModelPack::init resultListModel not supplied.';
-      }
-
-      if (!bookmarkBookModel) {
-        throw 'ItemModelPack::init bookmarkBookModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!hiddenItemsModel) {
-        throw 'ItemModelPack::init hiddenItemsModel not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'ItemModelPack::init actionedItemsModel not supplied.';
-      }
-
-      that.resultListModel = resultListModel;
-      that.bookmarkBookModel = bookmarkBookModel;
-      that.itemsOfInterestModel = itemsOfInterestModel;
-      that.hiddenItemsModel = hiddenItemsModel;
-      that.actionedItemsModel = actionedItemsModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ItemModelPack = ItemModelPack;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel) {
-
-    if (!(this instanceof app.UIModelPack)) {
-      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel);
-    }
-
-    var that = this;
-
-    this.uiRootModel = null;
-    this.searchFormModel = null;
-    this.resultListModel = null;
-    this.itemsOfInterestModel = null;
-    this.tabBarModel = null;
-    this.bookmarkPanelModel = null;
-
-    function init() {
-      if (!uiRootModel) {
-        throw 'SearchControllerHelper::init uiRootModel not supplied.';
-      }
-
-      if (!searchFormModel) {
-        throw 'SearchControllerHelper::init searchFormModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'SearchControllerHelper::init resultListModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!tabBarModel) {
-        throw 'SearchControllerHelper::init tabBarModel not supplied.';
-      }
-
-      if (!bookmarkPanelModel) {
-        throw 'SearchControllerHelper::init bookmarkPanelModel not supplied.';
-      }
-
-      that.uiRootModel = uiRootModel;
-      that.searchFormModel = searchFormModel;
-      that.resultListModel = resultListModel;
-      that.itemsOfInterestModel = itemsOfInterestModel;
-      that.tabBarModel = tabBarModel;
-      that.bookmarkPanelModel = bookmarkPanelModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.UIModelPack = UIModelPack;
 
 }(wizerati));
 ;(function (app) {
@@ -7268,6 +3937,61 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function Decorators(config) {
+    if (!(this instanceof Decorators)) {
+      return new Decorators(config);
+    }
+
+    var _config = null;
+
+    this.trace = function (context, done) {
+      if (config.enableTrace === 'true') {
+        console.log('%s: %s::%s %s', context.timestamp, context.ctor, context.methodName, context.args.length ? 'called with: ' + context.args : 'called with no arguments');
+      }
+      return done(null, null);
+    };
+
+    this.nop = function (context, done) {
+      return done(null, null);
+    };
+
+    function init() {
+      if (!config) {
+        throw 'config not supplied.';
+      }
+
+      _config = config;
+    }
+
+    init();
+  }
+
+  app.Decorators = Decorators;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function AccountEntity() {
+
+    if (!(this instanceof app.AccountEntity)) {
+      return new app.AccountEntity();
+    }
+
+    var that = this,
+        _loginService = null,
+        _config = null;
+
+    this.name = '';
+    this.email = '';
+  }
+
+  app.AccountEntity = AccountEntity;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function GuidFactory() {
 
     if (!(this instanceof app.GuidFactory)) {
@@ -7531,39 +4255,84 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ItemCache() {
+  function SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator) {
 
-    if (!(this instanceof app.ItemCache)) {
-      return new app.ItemCache();
+    if (!(this instanceof app.SearchControllerHelper)) {
+      return new app.SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator);
     }
 
-    var that = this;
+    var that = this,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _navbarItemEnum = app.mod('enum').Tab,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiModelPack = null,
+        _guidFactory = null,
+        _layoutCoordinator = null;
 
-    this.items = {};
-
-    //note: if the item already exists then
-    // any additional metadata on the object
-    // is retained (e.g. whether it is
-    // currently selected)
-    this.insert = function (items) {
-      if (!items) {
-        throw 'items not supplied.';
-      }
-
-      _.each(items, function (i) {
-        that.items[i.id] = _.extend({}, that.items[i.id], i);
-      });
+    this.resetUIForSearch = function () {
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 
-    this.exists = function (key) {
-      if (!key) {
-        throw 'key not supplied.';
+    this.searchSuccess = function (results) {
+      _uiModelPack.resultListModel.setResults(_.map(results, function (r) {
+        return r.id;
+      }), _guidFactory.create());
+      _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+      var delayToRender = 0;
+      if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundOrLoadingIndicator);
+        _uiModelPack.uiRootModel.setAreTransitionsEnabled(false);
+        delayToRender = 100; //wait for the opacity fade to complete
       }
 
-      return !!(that.items[key]);
+      setTimeout(function () {
+        _layoutCoordinator.layOut();
+        that.resetUIForSearch();
+
+        //this must occur *after the search panel mode is set* to its eventual value, to
+        //ensure the initial width rendering of items of interest is the correct one
+        // (avoiding a repaint)
+        if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
+          _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
+        }
+
+        setTimeout(function () {
+          _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
+        }, 0);
+        /*attempt to ensure that UI rendered before re-enabling transitions*/
+
+        setTimeout(function () {
+          _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+        }, 0);
+      }, delayToRender); //wait for the hide animation to complete before yanking the search panel to the left
     };
 
     function init() {
+      if (!uiModelPack) {
+        throw 'SearchControllerHelper::init uiModelPack not supplied.';
+      }
+
+      if (!guidFactory) {
+        throw 'SearchControllerHelper::init guidFactory not supplied.';
+      }
+
+      if (!layoutCoordinator) {
+        throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
+      }
+
+      _uiModelPack = uiModelPack;
+      _guidFactory = guidFactory;
+      _layoutCoordinator = layoutCoordinator;
 
       return that;
     }
@@ -7571,79 +4340,164 @@ window.wizerati = {
     return init();
   }
 
-  app.ItemCache = ItemCache;
+  app.SearchControllerHelper = SearchControllerHelper;
+
+}(wizerati));
+;(function (app, _) {
+  'use strict';
+
+  function CookieIService() {
+
+    if (!(this instanceof CookieIService)) {
+      return new CookieIService();
+    }
+
+    var that = this,
+        _cookieName = 'wizerati';
+
+    this.getAuthorizationCookie = function () {
+      return _.cookie(_cookieName);
+    };
+
+    this.setAuthorizationCookie = function (role) {
+      _.cookie(_cookieName, role, { expires: 7, path: '/' });
+    };
+
+    this.deleteAuthorizationCookie = function () {
+      _.cookie(_cookieName, null);
+    };
+
+    function init() {
+      return that;
+    }
+
+    return init();
+  }
+
+  app.CookieIService = CookieIService;
+
+}(wizerati, _));
+;(function (app) {
+  'use strict';
+
+  function CroniclIService(signInService, config) {
+
+    if (!(this instanceof app.CroniclIService)) {
+      return new app.CroniclIService(signInService, config);
+    }
+
+    var that = this,
+        _signInService = null,
+        _config = null;
+
+    this.getCroniclUri = function () {
+      return _config.config.templateServerUris[_signInService.getCurrentRole()];
+    };
+
+    function init() {
+      if (!signInService) {
+        throw 'signInService not supplied';
+      }
+      if (!config) {
+        throw 'config not supplied';
+      }
+
+      _signInService = signInService;
+      _config = config;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.CroniclIService = CroniclIService;
 
 }(wizerati));
 ;(function (app) {
   'use strict';
 
-  function AccountEntity() {
+  function SignInIService(cookieService) {
 
-    if (!(this instanceof app.AccountEntity)) {
-      return new app.AccountEntity();
+    if (!(this instanceof app.SignInIService)) {
+      return new app.SignInIService(cookieService);
     }
 
     var that = this,
-        _loginService = null,
-        _config = null;
+        _cookieService = null,
+        _roleEnum = null;
 
-    this.name = '';
-    this.email = '';
-  }
+    this.signIn = function (options) {
+      if (!options.username && !options.role) {
+        throw 'username not supplied';
+      }
+      if (!options.password && !options.role) {
+        throw 'password not supplied';
+      }
 
-  app.AccountEntity = AccountEntity;
+      if (options.role) {
+        _cookieService.setAuthorizationCookie(options.role);
+        initializeUI();
 
-}(wizerati));
-;(function (app, $) {
-  'use strict';
-
-  function ItemRepository(itemCache, croniclIService) {
-
-    if (!(this instanceof app.ItemRepository)) {
-      return new app.ItemRepository(itemCache,
-          croniclIService);
-    }
-
-    var that = this,
-        _itemCache = null,
-        _croniclIService = null;
-
-    this.getById = function (id, done) {
-      var cachedItem = _itemCache.items[id];
-      if (cachedItem) {
-        done(cachedItem);
         return;
-      }
+      } else {
+        if (authenticate(options.username, options.password)) {
+          _cookieService.setAuthorizationCookie(options.role);
 
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
+          return;
         }
-
-        var result = $.parseJSON(data);
-        _itemCache.insert([result]);
-
-        done(result);
       }
 
-//      setTimeout(function () {
-        $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
-          success: success,
-          cache: false });
-//      }, 2000);
+      throw 'authentication failed.';
     };
 
+    this.getCurrentRole = function () {
+      var cookie = _cookieService.getAuthorizationCookie();
+
+      if (!cookie) {
+        return _roleEnum.ContractorStranger;
+      }
+
+      if (cookie !== _roleEnum.Contractor
+          && cookie !== _roleEnum.Employer
+          && cookie !== _roleEnum.ContractorStranger
+          && cookie !== _roleEnum.EmployerStranger) {
+
+        throw 'invalid role found in cookie "' + cookie + '"';
+      }
+
+      return cookie;
+    };
+
+    function authenticate(username, password) {
+      return (username === 'ben' || username === 'sally');
+    }
+
+//    function authorize(username) {
+//      if (username == 'ben') {
+//        return _role = _roleEnum.Contractor;
+//      } else if (username == 'sally') {
+//        return _role = _roleEnum.Employer;
+//      }
+//
+//      throw 'unauthorized.';
+//    }
+
+    //gets the value of a cookie by name
+    //see: http://stackoverflow.com/questions/10730362/javascript-get-cookie-by-name
+//    function getCookieValue(name) {
+//      var parts = document.cookie.split(name + '=');
+//      if (parts.length == 2) return parts.pop().split(';').shift();
+//    }
+
     function init() {
-      if (!itemCache) {
-        throw 'itemCache not supplied.';
+      if (!cookieService) {
+        throw 'cookieService not supplied';
       }
 
-      if (!croniclIService) {
-        throw 'croniclIService not supplied.';
-      }
+      _roleEnum = app.mod('enum').UserRole;
 
-      _itemCache = itemCache;
-      _croniclIService = croniclIService;
+      _cookieService = cookieService;
 
       return that;
     }
@@ -7651,9 +4505,9 @@ window.wizerati = {
     return init();
   }
 
-  app.ItemRepository = ItemRepository;
+  app.SignInIService = SignInIService;
 
-}(wizerati, $));
+}(wizerati));
 ;(function (app) {
   'use strict';
 
@@ -7822,41 +4676,1301 @@ window.wizerati = {
   app.LayoutCoordinator = LayoutCoordinator;
 
 }(wizerati));
-;(function (app) {
+;(function (app, $, invertebrate) {
   'use strict';
 
-  function Decorators(config) {
-    if (!(this instanceof Decorators)) {
-      return new Decorators(config);
+  function ActionedItemsModel() {
+
+    if (!(this instanceof app.ActionedItemsModel)) {
+      return new app.ActionedItemsModel();
     }
 
-    var _config = null;
+    var that = this,
+        _actionedItems = {};
 
-    this.trace = function (context, done) {
-      if (config.enableTrace === 'true') {
-        console.log('%s: %s::%s %s', context.timestamp, context.ctor, context.methodName, context.args.length ? 'called with: ' + context.args : 'called with no arguments');
-      }
-      return done(null, null);
+    this.eventUris = { default: 'update://actioneditemsmodel' };
+
+    this.isActioned = function (id) {
+      return !!_actionedItems[id];
     };
 
-    this.nop = function (context, done) {
-      return done(null, null);
+    this.addActionedItemId = function (value) {
+      _actionedItems[value] = value;
+
+      $.publish(that.eventUris.default);
+    };
+
+    this.removeActionedItemId = function (value) {
+      delete _actionedItems[value];
+
+      $.publish(that.eventUris.default);
     };
 
     function init() {
-      if (!config) {
-        throw 'config not supplied.';
-      }
-
-      _config = config;
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
     }
 
-    init();
+    return init();
   }
 
-  app.Decorators = Decorators;
+  app.ActionedItemsModel = ActionedItemsModel;
+  invertebrate.Model.isExtendedBy(app.ActionedItemsModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function AdvertisersPanelModel() {
+
+    if (!(this instanceof app.AdvertisersPanelModel)) {
+      return new app.AdvertisersPanelModel();
+    }
+
+    var that = this,
+        _isVisible = false;
+
+    this.updateEventUri = 'update://advertiserspanelmodel';
+
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+
+      $.publish(that.updateEventUri);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AdvertisersPanelModel = AdvertisersPanelModel;
+  invertebrate.Model.isExtendedBy(app.AdvertisersPanelModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ApplyToContractDialogModel() {
+
+    if (!(this instanceof app.ApplyToContractDialogModel)) {
+      return new app.ApplyToContractDialogModel();
+    }
+
+    var that = this,
+        _currentDialogPanel = null,
+        _item = null,
+        _actionContractDialogPanelEnum = app.mod('enum').ActionContractDialogPanel,
+        _isWaiting = '', //should identify the dom element to indicate waiting
+        _isVisible = false,
+        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
+
+    this.eventUris = {
+      default: 'update://actioncontractmodalmodel',
+      show: 'update://actioncontractmodalmodel/show' }
+
+    this.reset = function() {
+      _currentDialogPanel = null;
+      _item = null;
+    };
+
+    this.getCurrentDialogPanel = function() {
+      return _currentDialogPanel;
+    };
+
+    this.setCurrentDialogPanel = function(value, options) {
+      options = options || {silent:false};
+
+      _currentDialogPanel = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.setCurrentDialogPanel, _currentDialogPanel);
+      }
+    };
+
+    this.getItem = function() {
+      return _item;
+    };
+
+    this.setItem = function(value, options) {
+      options = options || {silent:false};
+
+      _item = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.default);
+      }
+    };
+
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogModel = ApplyToContractDialogModel;
+  invertebrate.Model.isExtendedBy(app.ApplyToContractDialogModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, _) {
+  'use strict';
+
+  function BookmarkBookModel() {
+
+    if (!(this instanceof app.BookmarkBookModel)) {
+      return new app.BookmarkBookModel();
+    }
+
+    var that = this,
+        _bookmarks = [];
+
+    this.eventUris = {
+      default: 'update://bookmarkbookmodel',
+      addBookmark: 'update://bookmarkbookmodel/addbookmark',
+      removeBookmark: 'update://bookmarkbookmodel/removebookmark'
+    };
+
+    this.getBookmarks = function () {
+      return _bookmarks;
+    };
+
+    //When adding a bookmark, the service should be used (which in-turn calls this).
+    this.addBookmark = function (id) {
+      if (that.isBookmark(id)) {
+        return;
+      }
+      _bookmarks.push(id);
+
+      $.publish(that.eventUris.addBookmark, id);
+    };
+
+    //When removing a bookmark, the service should be used (which in-turn calls this).
+    this.removeBookmark = function (id) {
+      if (!that.isBookmark(id)) {
+        return;
+      }
+      _bookmarks = _.reject(_bookmarks, function(b){ return b === id; });
+
+      $.publish(that.eventUris.removeBookmark, id);
+    };
+
+    this.isBookmark = function (id) {
+      return _.find(_bookmarks, function (i) {
+        return i === id;
+      });
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkBookModel = BookmarkBookModel;
+  invertebrate.Model.isExtendedBy(app.BookmarkBookModel);
+
+}(wizerati, $, invertebrate, _));
+;(function (app, $) {
+  'use strict';
+
+  function BookmarkPanelModel() {
+
+    if (!(this instanceof app.BookmarkPanelModel)) {
+      return new app.BookmarkPanelModel();
+    }
+
+    var that = this,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _mode = _bookmarkPanelModeEnum.Minimized;
+
+    this.eventUris = {
+      default: 'update://bookmarkpanelmodel/',
+      setMode: 'update://bookmarkpanelmodel/setmode'
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
+      }
+
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPanelModel = BookmarkPanelModel;
+
+}(wizerati, $));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function DeleteFavoriteGroupConfirmationDialogModel() {
+
+    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogModel)) {
+      return new app.DeleteFavoriteGroupConfirmationDialogModel();
+    }
+
+    var that = this,
+        _favoriteGroupId = null,
+        _isWaiting = '', //should identify the dom element to indicate waiting
+        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
+
+    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
+
+    this.getFavoriteGroupId = function () {
+      return _favoriteGroupId;
+    };
+
+    this.setFavoriteGroupId = function (value, options) {
+      options = options || { silent: false };
+
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _favoriteGroupId = value;
+
+      if (!options.silent) {
+        $.publish(that.updateEventUri);
+      }
+    };
+
+    this.getIsWaiting = function () {
+      return _isWaiting;
+    };
+
+    this.setIsWaiting = function (value, options) {
+      options = options || { silent: false };
+
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _isWaiting = value;
+
+      if (!options.silent) {
+        $.publish(that.updateEventUri);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.DeleteFavoriteGroupConfirmationDialogModel = DeleteFavoriteGroupConfirmationDialogModel;
+  invertebrate.Model.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function HiddenItemsModel() {
+
+    if (!(this instanceof app.HiddenItemsModel)) {
+      return new app.HiddenItemsModel();
+    }
+
+    var that = this,
+        _hiddenItems = {};
+
+    this.eventUris = { default: 'update://hiddenitemsmodel',
+                       addHiddenItemId: 'update://hiddenitemsmodel/addHiddenItemId',
+                       removeHiddenItemId: 'update://hiddenitemsmodel/removeHiddenItemId' };
+    this.updateEventUri = 'update://hiddenitemsmodel/';
+
+    this.isHidden = function (id) {
+
+      return !!_hiddenItems[id];
+    };
+
+    this.addHiddenItemId = function (value) {
+      _hiddenItems[value] = value;
+
+      $.publish(that.eventUris.addHiddenItemId, _hiddenItems[value]);
+    };
+
+    this.removeHiddenItemId = function (value) {
+      delete _hiddenItems[value];
+
+      $.publish(that.eventUris.removeHiddenItemId, value);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.HiddenItemsModel = HiddenItemsModel;
+  invertebrate.Model.isExtendedBy(app.HiddenItemsModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $) {
+  'use strict';
+
+  function ItemsOfInterestModel(resultListModel) {
+    if (!(this instanceof app.ItemsOfInterestModel)) {
+      return new app.ItemsOfInterestModel(resultListModel);
+    }
+
+    var that = this,
+        _resultListModel = null,
+        _modeEnum = app.mod('enum').ItemsOfInterestMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _previouslySelectedItemId = null,
+        _mode = _modeEnum.Default,
+        _layout = {
+          widthItemOfInterest: 340,
+          leftPinnedItem1: 0,
+          leftPinnedItem2: 0,
+          leftPinnedItem3: 0,
+          leftPinnedItem4: 0,
+          leftPinnedItem5: 0,
+          leftPinnedItem6: 0
+        },
+        _itemsOfInterest = { selectedItem: null, pinnedItems: [] };
+
+    this.eventUris = {default: 'update://itemsofinterestmodel/',
+      setMode: 'update://itemsofinterestmodel/setmode',
+      setLayout: 'update://itemsofinterestmodel/setlayout',
+      addItemOfInterest: 'update://itemsofinterestmodel/additemofinterest',
+      removeItemOfInterest: 'update://itemsofinterestmodel/removeitemofinterest',
+      setSelectedItemId: 'update://itemsofinterestmodel/setselecteditemid' };
+
+    this.getSelectedItemId = function () {
+      return _itemsOfInterest.selectedItem;
+    };
+
+    this.getPreviouslySelectedItemId = function () {
+      return _previouslySelectedItemId;
+    };
+
+    this.setSelectedItemId = function (value, options) {
+      options = options || { silent:false };
+
+      _previouslySelectedItemId = _itemsOfInterest.selectedItem;
+      _itemsOfInterest.selectedItem = value;
+
+      if(!options.silent) {
+        $.publish(that.eventUris.setSelectedItemId, _itemsOfInterest.selectedItem, _previouslySelectedItemId);
+      }
+    };
+
+    this.getCount = function () {
+      return _itemsOfInterest.pinnedItems.length + (_itemsOfInterest.selectedItem ? 1 : 0);
+    };
+
+    this.getSelectedItemCount = function () {
+      return _itemsOfInterest.selectedItem ? 1 : 0;
+    };
+
+    this.getPinnedItemCount = function () {
+      return _itemsOfInterest.pinnedItems.length;
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value) {
+      _mode = value;
+
+//      if (_mode === _modeEnum.PinnedItemsExpanded) {
+//        _resultListModel.setMode(_resultListModeEnum.Minimized)
+//      } else if (_mode === _modeEnum.Default) {
+//        _resultListModel.setMode(_resultListModeEnum.Default)
+//      }
+
+      $.publish(that.eventUris.setMode);
+    };
+
+    this.getLayout = function () {
+      return _layout;
+    };
+
+    this.setLayout = function (value) {
+      _layout = value;
+
+      $.publish(that.eventUris.setLayout, _layout);
+    };
+
+    this.isItemOfInterest = function (id) {
+      return (_itemsOfInterest.pinnedItems.indexOf(id)) !== -1;
+    };
+
+    this.getItemsOfInterest = function () {
+      return _itemsOfInterest;
+    };
+
+    this.addItemOfInterest = function (id) {
+      if (!id) {
+        throw 'id not supplied';
+      }
+
+      if (that.getItemsOfInterest().pinnedItems.indexOf(id) >= 0) {
+        return;
+      }
+
+//      if (_selectedItemModel.getSelectedItemId() === id) {
+//        _selectedItemModel.setSelectedItemId(null, { silent: true });
+//        _itemsOfInterest.selectedItem = null;
+//      }
+
+      _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
+
+      $.publish(that.eventUris.addItemOfInterest, id);
+    };
+
+    this.removeItemOfInterest = function (id) {
+      if (!id) {
+        throw 'id not supplied';
+      }
+
+      _itemsOfInterest.pinnedItems = _.reject(_itemsOfInterest.pinnedItems, function (idOfPinnedItem) {
+        return idOfPinnedItem === id;
+      });
+
+      $.publish(that.eventUris.removeItemOfInterest, id);
+    };
+
+    this.isPinned = function (id) {
+      return _.any(_itemsOfInterest.pinnedItems, function (i) {
+        return i === id;
+      });
+    };
+
+    function init() {
+      if (!resultListModel) {
+        throw 'resultListModel not supplied.';
+      }
+
+      _resultListModel = resultListModel;
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemsOfInterestModel = ItemsOfInterestModel;
+
+}(wizerati, $));
+;(function (app) {
+  'use strict';
+
+  function NavPanelModel() {
+
+    if (!(this instanceof app.NavPanelModel)) {
+      return new app.NavPanelModel();
+    }
+
+    var that = this;
+
+    this.eventUris = {
+      default: 'update://navpanelmodel/'
+    };
+
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.NavPanelModel = NavPanelModel;
 
 }(wizerati));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function PurchasePanelModel() {
+
+    if (!(this instanceof app.PurchasePanelModel)) {
+      return new app.PurchasePanelModel();
+    }
+
+    var that = this,
+        _activeTab = '0',
+        _isWaiting = '', //should identify the dom element to indicate waiting
+        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
+
+    this.updateEventUri = 'update://purchasepanelmodel/';
+
+    this.getNotifications = function () {
+      return _notifications;
+    };
+
+    this.setNotifications = function (value) {
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _notifications = value;
+      $.publish(that.updateEventUri);
+    };
+
+    this.getIsWaiting = function () {
+      return _isWaiting;
+    };
+
+    this.setIsWaiting = function (value, options) {
+      options = options || { silent: false };
+
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _isWaiting = value;
+
+      if (!options.silent) {
+        $.publish(that.updateEventUri);
+      }
+    };
+
+    this.getActiveTab = function () {
+      return _activeTab;
+    };
+
+    this.setActiveTab = function (value) {
+      if (!value) {
+        throw 'value not supplied.';
+      }
+
+      _activeTab = value;
+      $.publish(that.updateEventUri);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.PurchasePanelModel = PurchasePanelModel;
+  invertebrate.Model.isExtendedBy(app.PurchasePanelModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $) {
+  'use strict';
+
+  function ResultListModel() {
+    if (!(this instanceof app.ResultListModel)) {
+      return new app.ResultListModel();
+    }
+
+    var that = this,
+        _searchId = 'initial-value',
+        _modeEnum = app.mod('enum').ResultListMode,
+        _mode = _modeEnum.Default,
+        _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
+
+    this.eventUris = {
+      default: 'update://resultlistmodel',
+      setMode: 'update://resultlistmodel/setmode'
+    };
+
+    this.getSearchId = function () {
+      return _searchId;
+    };
+
+    this.getResults = function () {
+      return _results;
+    };
+
+    this.setResults = function (value, searchId) {
+      _results = value;
+      _searchId = searchId;
+      _mode = _modeEnum.Default;
+
+      $.publish(that.eventUris.default);
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value, options) {
+      options = options || {silent: false};
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, value);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ResultListModel = ResultListModel;
+
+}(wizerati, $));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function SearchFormModel() {
+
+    if (!(this instanceof app.SearchFormModel)) {
+      return new app.SearchFormModel();
+    }
+
+    var that = this,
+        _modeEnum = app.mod('enum').SearchFormMode,
+        _mode = _modeEnum.Minimized,
+        _keywords = null,
+        _location = null,
+        _isWaiting = 'false',
+        _rate = null,
+        _isVisible = 'true',
+        _firstRenderCompleteFlag = false;
+
+//    this.updateEventUri = 'update://SearchFormModel/';
+    this.eventUris = {
+      default: 'update://searchformmodel',
+      setMode: 'update://searchformmodel/setmode',
+      setIsWaiting: 'update://searchformmodel/setiswaiting',
+      setIsVisible: 'update://searchformmodel/setisvisible' };
+
+    //needed?
+//    this.getIsVisible = function () {
+//      return _isVisible;
+//    };
+
+    this.getFirstRenderCompleteFlag = function () {
+      return _firstRenderCompleteFlag;
+    };
+
+    this.setFirstRenderCompleteFlag = function () {
+      _firstRenderCompleteFlag = true;
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value) {
+      if(_mode === value) {
+        return;
+      }
+
+      _mode = value;
+
+      $.publish(that.eventUris.setMode, value);
+    };
+
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+
+      $.publish(that.eventUris.setIsVisible);
+    };
+
+    this.getKeywords = function () {
+      return _keywords;
+    };
+
+    this.setKeywords = function (value, options) {
+      options = options || { silent: false };
+
+      _keywords = value;
+
+      if (options.silent === false) {
+        $.publish(that.eventUris.default);
+      }
+    };
+
+    this.getLocation = function () {
+      return _location;
+    };
+
+    this.setLocation = function (value, options) {
+      options = options || { silent: false };
+      _location = value;
+
+      if (options.silent === false) {
+        $.publish(that.eventUris.default);
+      }
+    };
+
+    this.getRate = function () {
+      return _rate;
+    };
+
+    this.setRate = function (value, options) {
+      options = options || { silent: false };
+      _rate = value;
+
+      if (options.silent === false) {
+        $.publish(that.eventUris.default);
+      }
+    };
+
+    this.getIsWaiting = function () {
+      return _isWaiting;
+    };
+
+    this.setIsWaiting = function (value, options) {
+      options = options || { silent: false };
+
+      /*jshint -W116 */
+      if (value == null) {
+        throw 'value not supplied.';
+      }
+
+      if (value !== 'true' && value !== 'false') {
+        throw 'invalid argument (value).';
+      }
+
+      _isWaiting = value;
+
+      if (options.silent === false) {
+        $.publish(that.eventUris.setIsWaiting);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SearchFormModel = SearchFormModel;
+  invertebrate.Model.isExtendedBy(app.SearchFormModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $) {
+  'use strict';
+
+  function SearchPanelModel() {
+
+    if (!(this instanceof app.SearchPanelModel)) {
+      return new app.SearchPanelModel();
+    }
+
+    var that = this,
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _mode = _searchPanelModeEnum.Default;
+
+    this.eventUris = {
+      default: 'update://searchpanelmodel/',
+      setMode: 'update://searchpanelmodel/setmode'
+    };
+
+    this.getMode = function () {
+      return _mode || _searchPanelModeEnum.Default;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
+      }
+
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SearchPanelModel = SearchPanelModel;
+
+}(wizerati, $));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function SignInPanelModel() {
+
+    if (!(this instanceof app.SignInPanelModel)) {
+      return new app.SignInPanelModel();
+    }
+
+    var that = this,
+        _username = null,
+        _password = null,
+        _isLoginFailedMessageVisible = false,
+        _isVisible = false;
+
+    this.updateEventUri = 'update://signinpanelmodel/';
+
+    this.getUsername = function () {
+      return _username;
+    };
+
+    this.setUsername = function (value) {
+      _username = value;
+    };
+
+    this.getPassword = function () {
+      return _password;
+    };
+
+    this.setPassword = function (value) {
+      _password = value;
+    };
+
+    this.getIsLoginFailedMessageVisible = function () {
+      return _isLoginFailedMessageVisible;
+    };
+
+    this.setIsLoginFailedMessageVisible = function (value) {
+      _isLoginFailedMessageVisible = value;
+      $.publish(that.updateEventUri);
+    };
+
+    this.getIsVisible = function () {
+      return _isVisible;
+    };
+
+    this.setIsVisible = function (value) {
+      _isVisible = value;
+      $.publish(that.updateEventUri);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SignInPanelModel = SignInPanelModel;
+  invertebrate.Model.isExtendedBy(app.SignInPanelModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function SingleItemModel() {
+
+    if (!(this instanceof app.SingleItemModel)) {
+      return new app.SingleItemModel();
+    }
+
+    var that = this,
+        _selectedResultId = null,
+        _previouslySelectedResultId = null;
+
+    this.updateEventUri = 'update://singleitemmodel/';
+
+    this.getSelectedItemId = function () {
+      return _selectedResultId;
+    };
+
+    this.getPreviouslySelectedItemId = function () {
+
+      return _previouslySelectedResultId;
+    };
+
+    this.setSelectedItemId = function (value, options) {
+      options = options || { silent: false };
+
+      _previouslySelectedResultId = _selectedResultId;
+      _selectedResultId = value;
+
+      if (!options.silent) {
+        $.publish(that.updateEventUri);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SingleItemModel = SingleItemModel;
+  invertebrate.Model.isExtendedBy(app.SingleItemModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function TabBarModel() {
+
+    if (!(this instanceof app.TabBarModel)) {
+      return new app.TabBarModel();
+    }
+
+    var that = this,
+        _tabEnum = app.mod('enum').Tab,
+        _selectedTab = _tabEnum.Search;
+
+    this.eventUris = { setSelectedTab: 'update://tabbarmodel/setSelectedTab' };
+
+    this.getSelectedTab = function () {
+      return _selectedTab;
+    };
+
+    this.setSelectedTab = function (value) {
+      _selectedTab = value;
+      $.publish(that.eventUris.setSelectedTab, value);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.TabBarModel = TabBarModel;
+  invertebrate.Model.isExtendedBy(app.TabBarModel);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function UIRootModel() {
+
+    if (!(this instanceof app.UIRootModel)) {
+      return new app.UIRootModel();
+    }
+
+    var that = this,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _modalEnum = app.mod('enum').Modal,
+        _tabEnum = app.mod('enum').Tab,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiMode = _uiModeEnum.NotReady,
+        _modal = _modalEnum.None,
+        _activeTab = _tabEnum.Search,
+        _bodyWidth = null,
+        _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
+        _areTransitionsEnabled = 'true';
+
+    this.eventUris = { default: 'update://uirootmodel',
+      setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
+      setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
+      setModal: 'update://uirootmodel/setmodal',
+      setUIMode: 'update://uirootmodel/setuimode',
+      setActiveTab: 'update://uirootmodel/setactivetab'
+    };
+
+    this.getVisibilityMode = function () {
+      return _visibilityMode;
+    };
+
+    //useful to temporarily hide the entire UI
+    this.setVisibilityMode = function (value) {
+      if (value === _visibilityMode) {
+        return;
+      }
+
+      _visibilityMode = value;
+
+      $.publish(that.eventUris.setVisibilityMode, value);
+    };
+
+    this.getAreTransitionsEnabled = function () {
+      return _areTransitionsEnabled;
+    };
+
+    this.setAreTransitionsEnabled = function (value) {
+      if (value === _areTransitionsEnabled) {
+        return;
+      }
+
+      _areTransitionsEnabled = value;
+
+      $.publish(that.eventUris.setAreTransitionsEnabled);
+    };
+
+    this.setActiveTab = function (value) {
+      if (value === _activeTab) {
+        return;
+      }
+
+      _activeTab = value;
+
+      $.publish(that.eventUris.setActiveTab, _activeTab);
+    };
+
+//    this.getBodyWidth = function () {
+//      return _bodyWidth;
+//    };
+
+    this.getUIMode = function () {
+      return _uiMode || '';
+    };
+
+    this.setUIMode = function (value, options) {
+      options = options || {silent: false};
+
+      if (value === _uiMode) {
+        return;
+      }
+
+      _uiMode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setUIMode, _uiMode);
+      }
+    };
+
+    this.getModal = function () {
+      return _modal || '';
+    };
+
+    this.setModal = function (value, options) {
+      options = options || {silent: false};
+
+      _modal = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setModal, _modal);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.UIRootModel = UIRootModel;
+  invertebrate.Model.isExtendedBy(app.UIRootModel);
+
+}(wizerati, $, invertebrate));
+
+//wiz.mod('cronicl').CroniclSvc.getMyItemMetadata(function (metadata) {
+//    $('#searchField').attr('placeholder', metadata.searchFieldPlaceholderValue);
+//    $('#newItemLink').text('New ' + metadata.itemNameAlternative);
+//    $('#emptyMessageMyItems').text('My  ' + metadata.itemNameAlternativePlural + ' are shown here');
+//    metadata.prefetchTemplates();
+//    metadata.prefetchPostRenderActions();
+//});
+//wiz.mod('cronicl').CroniclSvc.getSearchItemMetadata(function (metadata) {
+//    metadata.prefetchTemplates();
+//    metadata.prefetchPostRenderActions();
+//});
+;(function (app) {
+  'use strict';
+
+  function ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
+
+    if (!(this instanceof app.ItemModelPack)) {
+      return new app.ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
+    }
+
+    var that = this;
+
+    this.resultListModel = null;
+    this.bookmarkBookModel = null;
+    this.itemsOfInterestModel = null;
+    this.hiddenItemsModel = null;
+    this.actionedItemsModel = null;
+
+    function init() {
+      if (!resultListModel) {
+        throw 'ItemModelPack::init resultListModel not supplied.';
+      }
+
+      if (!bookmarkBookModel) {
+        throw 'ItemModelPack::init bookmarkBookModel not supplied.';
+      }
+
+      if (!itemsOfInterestModel) {
+        throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
+      }
+
+      if (!hiddenItemsModel) {
+        throw 'ItemModelPack::init hiddenItemsModel not supplied.';
+      }
+
+      if (!actionedItemsModel) {
+        throw 'ItemModelPack::init actionedItemsModel not supplied.';
+      }
+
+      that.resultListModel = resultListModel;
+      that.bookmarkBookModel = bookmarkBookModel;
+      that.itemsOfInterestModel = itemsOfInterestModel;
+      that.hiddenItemsModel = hiddenItemsModel;
+      that.actionedItemsModel = actionedItemsModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemModelPack = ItemModelPack;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel) {
+
+    if (!(this instanceof app.UIModelPack)) {
+      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel);
+    }
+
+    var that = this;
+
+    this.uiRootModel = null;
+    this.searchFormModel = null;
+    this.resultListModel = null;
+    this.itemsOfInterestModel = null;
+    this.tabBarModel = null;
+    this.bookmarkPanelModel = null;
+
+    function init() {
+      if (!uiRootModel) {
+        throw 'SearchControllerHelper::init uiRootModel not supplied.';
+      }
+
+      if (!searchFormModel) {
+        throw 'SearchControllerHelper::init searchFormModel not supplied.';
+      }
+
+      if (!resultListModel) {
+        throw 'SearchControllerHelper::init resultListModel not supplied.';
+      }
+
+      if (!itemsOfInterestModel) {
+        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
+      }
+
+      if (!tabBarModel) {
+        throw 'SearchControllerHelper::init tabBarModel not supplied.';
+      }
+
+      if (!bookmarkPanelModel) {
+        throw 'SearchControllerHelper::init bookmarkPanelModel not supplied.';
+      }
+
+      that.uiRootModel = uiRootModel;
+      that.searchFormModel = searchFormModel;
+      that.resultListModel = resultListModel;
+      that.itemsOfInterestModel = itemsOfInterestModel;
+      that.tabBarModel = tabBarModel;
+      that.bookmarkPanelModel = bookmarkPanelModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.UIModelPack = UIModelPack;
+
+}(wizerati));
+;(function (app, $) {
+  'use strict';
+
+  function ItemRepository(itemCache, croniclIService) {
+
+    if (!(this instanceof app.ItemRepository)) {
+      return new app.ItemRepository(itemCache,
+          croniclIService);
+    }
+
+    var that = this,
+        _itemCache = null,
+        _croniclIService = null;
+
+    this.getById = function (id, done) {
+      var cachedItem = _itemCache.items[id];
+      if (cachedItem) {
+        done(cachedItem);
+        return;
+      }
+
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
+        }
+
+        var result = $.parseJSON(data);
+        _itemCache.insert([result]);
+
+        done(result);
+      }
+
+//      setTimeout(function () {
+        $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
+          success: success,
+          cache: false });
+//      }, 2000);
+    };
+
+    function init() {
+      if (!itemCache) {
+        throw 'itemCache not supplied.';
+      }
+
+      if (!croniclIService) {
+        throw 'croniclIService not supplied.';
+      }
+
+      _itemCache = itemCache;
+      _croniclIService = croniclIService;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemRepository = ItemRepository;
+
+}(wizerati, $));
 ;(function (app, c) {
   'use strict';
 
@@ -8032,6 +6146,1922 @@ window.wizerati = {
 
   app.RouteRegistry = RouteRegistry;
 }(wizerati, wizerati.mod('controllers')));
+;(function (app) {
+  'use strict';
+
+  //Possibly implement with a CreateCoordinator::create method, invoked from the controller, rather than the
+  //service implementation here.
+  function AccountService(wizeratiHttpClient) {
+
+    if (!(this instanceof app.AccountService)) {
+      return new app.AccountService(wizeratiHttpClient);
+    }
+
+    var that = this,
+        _httpClient = null;
+
+    this.create = function (name, email, options) {
+      if (!options) {
+        throw 'options not supplied.';
+      }
+
+      if (!options.success) {
+        throw 'options.success not supplied.';
+      }
+
+      if (!options.fail) {
+        throw 'options.fail not supplied.';
+      }
+
+      if (!options.wait) {
+        throw 'options.wait not supplied.';
+      }
+
+      var entity = new app.AccountEntity();
+      entity.name = name;
+      entity.email = email;
+      options.wait();
+      setTimeout(function () {
+        options.success();
+      }, 3000);
+      //_wizeratiClient.Put(entity, options);
+    };
+
+    function init() {
+      if (!wizeratiHttpClient) {
+        throw 'wizeratiHttpClient not supplied.';
+      }
+
+      _httpClient = wizeratiHttpClient;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AccountService = AccountService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ApplyToContractDialogService(model, uiRootModel, authorizationService, itemRepository) {
+
+    if (!(this instanceof app.ApplyToContractDialogService)) {
+      return new app.ApplyToContractDialogService(model, uiRootModel, authorizationService, itemRepository);
+    }
+
+    var that = this,
+        _model = null,
+        _uiRootModel = null,
+        _authorizationService = null,
+        _itemRepository = null,
+        _roleEnum = app.mod('enum').UserRole,
+        _modalEnum = app.mod('enum').Modal,
+        _dialogPanelEnum = app.mod('enum').ApplyToContractDialogPanel;
+
+    this.show = function(itemId) {
+      if(_authorizationService.getCurrentRole() == _roleEnum.Contractor) {
+        _model.setCurrentDialogPanel(_dialogPanelEnum.CVSelection, {silent:true});
+      } else {
+        _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent:true});
+      }
+
+      _itemRepository.getById(itemId, function(item){
+        _model.setItem(item); //triggers render
+        _uiRootModel.setModal(_modalEnum.ActionContract);
+      })
+    };
+
+    this.hide = function() {
+      _model.reset();
+      _uiRootModel.setModal(_modalEnum.None);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'model not supplied';
+      }
+
+      if (!uiRootModel) {
+        throw 'uiRootModel not supplied';
+      }
+
+     if (!authorizationService) {
+        throw 'authorizationService not supplied';
+      }
+
+      if (!itemRepository) {
+        throw 'itemRepository not supplied';
+      }
+
+      _uiRootModel = uiRootModel;
+      _authorizationService = authorizationService;
+      _model = model;
+      _itemRepository = itemRepository;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogService = ApplyToContractDialogService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  //todo: split authorization and authentication?
+  function AuthenticationService() {
+
+    if (!(this instanceof app.AuthenticationService)) {
+      return new app.AuthenticationService();
+    }
+
+    var that = this;
+
+    this.authenticate = function (username, password) {
+
+//          $.ajax({ url: options.searchUri, success: success, cache: false });
+      return false;
+    };
+
+    function init() {
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AuthenticationService = AuthenticationService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function AuthorizationService(cookieIService) {
+
+    if (!(this instanceof app.AuthorizationService)) {
+      return new app.AuthorizationService(cookieIService);
+    }
+
+    var that = this,
+        _cookieIService = null,
+        _roleEnum = null;
+
+
+    this.getCurrentRole = function () {
+      var cookie = _cookieIService.getAuthorizationCookie();
+
+      if (!cookie) {
+        return _roleEnum.ContractorStranger;
+      }
+
+      if (cookie !== _roleEnum.Contractor
+          && cookie !== _roleEnum.Employer
+          && cookie !== _roleEnum.ContractorStranger
+          && cookie !== _roleEnum.EmployerStranger) {
+
+        throw 'invalid role found in cookie "' + cookie + '"';
+      }
+
+      return cookie;
+    };
+
+    function init() {
+      if (!cookieIService) {
+        throw 'cookieService not supplied';
+      }
+
+      _roleEnum = app.mod('enum').UserRole;
+
+      _cookieIService = cookieIService;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AuthorizationService = AuthorizationService;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function BookmarkService(bookmarkBookModel, itemRepository) {
+
+    if (!(this instanceof app.BookmarkService)) {
+      return new app.BookmarkService(bookmarkBookModel, itemRepository);
+    }
+
+    var that = this,
+        _bookmarkBookModel = null,
+        _itemRepository = null;
+
+    this.addBookmark = function (id) {
+      if (!id) {
+        throw 'BookmarkService::addBookmark id not supplied.';
+      }
+
+      if (!_bookmarkBookModel.isBookmark(id)) {
+        _itemRepository.getById(id, function (item) {
+          item['isBookmark'] = true;
+          _bookmarkBookModel.addBookmark(id);
+        });
+      }
+    };
+
+    this.removeBookmark = function (id) {
+      if (!id) {
+        throw 'BookmarkService::addBookmark id not supplied.';
+      }
+
+      _itemRepository.getById(id, function (item) {
+        item['isBookmark'] = false;
+        _bookmarkBookModel.removeBookmark(id);
+      });
+    };
+
+    function init() {
+      if (!bookmarkBookModel) {
+        throw 'bookModel not supplied';
+      }
+
+      if (!itemRepository) {
+        throw 'itemRepository not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+      _bookmarkBookModel = bookmarkBookModel;
+      _itemRepository = itemRepository;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkService = BookmarkService;
+
+}(wizerati));
+;//try forcing service types to communicate with the UI only via routing and local storage?
+(function (app, $) {
+  'use strict';
+
+  function SearchService(croniclIService, itemCache) {
+
+    if (!(this instanceof app.SearchService)) {
+      return new app.SearchService(croniclIService, itemCache);
+    }
+
+    var that = this,
+        _croniclIService = null,
+        _itemCache = null;
+
+    //rename to success, plus add timeout argument and error
+    this.runSearch = function (keywords, location, rate, done) {
+        done = !done ? function (data) {
+        } : done;
+
+        $.ajax({
+          url: _croniclIService.getCroniclUri() + 'search',
+          success: success,
+          cache: false
+        });
+
+        function success(data) {
+          if (!data) {
+            throw 'data not supplied';
+          }
+
+          var results = $.parseJSON(data);
+          _itemCache.insert(results);
+          done(results);
+        }
+    };
+
+    function init() {
+      if (!croniclIService) {
+        throw 'croniclService not supplied.';
+      }
+
+      if (!itemCache) {
+        throw 'itemCache not supplied.';
+      }
+
+      _croniclIService = croniclIService;
+      _itemCache = itemCache;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SearchService = SearchService;
+
+}(wizerati, $));
+
+//throw 'next: use cronicl service to get the uri,
+// then pass it into done argument (which should update the relevant models - and hence the UI)';
+
+//use a factory for the search URI?
+//var defaults = {
+//    searchUri: './items?q=',
+//    keywords: null,
+//    filterModel: null,
+//    pre: function () {
+//    },
+//    success: function () {
+//    }, //function(data) - instantiate the relevant models from the json for use by the application
+//    error: function (e) {
+//        throw 'runSearch error: ' + e;
+//    }
+//};
+//
+//options = _.extend({}, defaults, options);
+//
+//if (!data) {
+//    throw 'data not supplied';
+//}
+
+//            console.log(data);
+//write the results to local storage, then return to the controller
+//the controller can then coordinate the updating of any views
+
+//var results = $.parseJSON(data);
+//console.log(data);
+//            var resultModels = [];
+//
+//            _.each(results, function (r) {
+//                resultModels.push(_modelFactory.create(r));
+//            });
+//
+//
+//            _resultListModel.setResults(resultModels);
+
+//                var resultModels = [];
+//
+//                _.each(results, function (r) {
+//                    resultModels.push(_resultModelFactory.create(r));
+//                });
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function AccountActivationView(model) {
+
+    if (!(this instanceof app.AccountActivationView)) {
+      return new app.AccountActivationView(model);
+    }
+
+    var that = this,
+        _el = '#activation-panel';
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+    };
+
+    this.bindEvents = function () {
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'AccountActivationView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AccountActivationView = AccountActivationView;
+  invertebrate.View.isExtendedBy(app.AccountActivationView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ApplyToContractDialogView(model) {
+
+    if (!(this instanceof app.ApplyToContractDialogView)) {
+      return new app.ApplyToContractDialogView(model);
+    }
+
+    var that = this,
+        _el = '#apply-to-contract-dialog',
+        _jobTitleEl = '.job-title',
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ApplyToContractDialogView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogView = ApplyToContractDialogView;
+  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, _) {
+  'use strict';
+
+  function BookmarkBookView(model) {
+
+    if (!(this instanceof app.BookmarkBookView)) {
+      return new app.BookmarkBookView(model);
+    }
+
+    var that = this,
+        _el = '#favorites-cube',
+        _favoriteViewFactory = null,
+        _selectedCubeFaceModel = null,
+        _actionedItemsModel = null,
+        _hiddenItemsModel = null,
+        _itemsOfInterestModel = null,
+        _bookmarkService = null,
+        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
+          '.cube-face-labels li:nth-child(2)',   //left
+          '.cube-face-labels li:nth-child(3)',   //front
+          '.cube-face-labels li:nth-child(4)',   //right
+          '.cube-face-labels li:nth-child(5)',   //bottom
+          '.cube-face-labels li:nth-child(6)' ], //back
+        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
+        _modeEnum = app.mod('enum').FavoritesCubeMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      var mode = that.Model.getMode();
+      that.$el.attr('data-mode', mode);
+      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
+      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
+      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
+        return previousValue + (currentValue ? '1' : '0');
+      }, ''));
+
+      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
+        that.$el.addClass('hide');
+        return;
+      } else {
+        that.$el.removeClass('hide');
+      }
+
+      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
+        var $face = that.$el.find(_faceEls[index1]);
+        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
+        $face.find('*').not('.face-empty-message').remove();
+        $faceSelectorSpots.removeClass('filled');
+        $.each(faceFavorites, function (index2, f) {
+          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
+            $face.append($v);
+            $($faceSelectorSpots[index2]).addClass('filled');
+          });
+        });
+      });
+
+      that.$el.attr('data-selected-face-id',
+          _selectedCubeFaceModel.getSelectedCubeFaceId());
+
+      var faceLabels = that.Model.getFaceLabels();
+      $.each(_labelEls, function (index, el) {
+        $(el).text(faceLabels[index]);
+      });
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.render();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'FavoritesCubeView::init model not supplied';
+      }
+
+
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _favoriteViewFactory = favoriteViewFactory;
+      _selectedCubeFaceModel = selectedCubeFaceModel;
+      _hiddenItemsModel = hiddenItemsModel;
+      _actionedItemsModel = actionedItemsModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
+
+      $.subscribe(that.Model.updateEventUriPrivate, that.render);
+      $.subscribe(that.Model.updateEventUri, that.render);
+      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkBookView = BookmarkBookView;
+  invertebrate.View.isExtendedBy(app.BookmarkBookView);
+
+}(wizerati, $, invertebrate, _));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function BookmarkPanelView(model) {
+
+    if (!(this instanceof app.BookmarkPanelView)) {
+      return new app.BookmarkPanelView(model);
+    }
+
+    var that = this,
+        _el = '#bookmark-panel-container',
+        _modeEnum = app.mod('enum').BookmarkPanelMode,
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetMode();
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$navPanel = $('#nav-panel');
+    };
+
+    this.renderSetMode = function(mode) {
+      that.$el.attr('data-mode', that.Model.getMode());
+
+      var oppositeMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.Minimized : _modeEnum.Default;
+      that.$navPanel.find('.handle-bookmark-panel input[name="mode"]').attr('value', oppositeMode);
+//      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'bookmarks';
+      that.$navPanel.find('.handle-bookmark-panel').addClass('selected');
+    };
+
+    function init() {
+      if (!model) {
+        throw 'BookmarkPanelView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPanelView = BookmarkPanelView;
+  invertebrate.View.isExtendedBy(app.BookmarkPanelView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractFavoriteView(model) {
+
+    if (!(this instanceof app.ContractFavoriteView)) {
+      return new app.ContractFavoriteView(model);
+    }
+
+    var that = this,
+        _el = '<div class="thumbnail thumbnail-108"></div>',
+        _templateName = 'favorite.html';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      if (that.Model.isSelected) {
+        that.$el.addClass('selected');
+      } else {
+        that.$el.removeClass('selected');
+      }
+
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractFavoriteView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractFavoriteView = ContractFavoriteView;
+  invertebrate.View.isExtendedBy(app.ContractFavoriteView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractItemOfInterestView(model) {
+
+    if (!(this instanceof app.ContractItemOfInterestView)) {
+      return new app.ContractItemOfInterestView(model);
+    }
+
+    var that = this,
+        _el = '<article></article>',
+        _templateName = 'item-of-interest.html-local';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.attr('data-id', that.Model.id);
+
+      if (that.Model.isSelected) {
+        that.$el.addClass('selected-item');
+      } else {
+        that.$el.addClass('pinned-item');
+      }
+
+      if (that.Model.isHidden) {
+        that.$el.addClass('hidden');
+      } else {
+        that.$el.removeClass('hidden');
+      }
+
+      app.instance.renderTemplate(that.$el, _templateName, that.Model);
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractItemOfInterestView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractItemOfInterestView = ContractItemOfInterestView;
+  invertebrate.View.isExtendedBy(app.ContractItemOfInterestView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractResultView(model) {
+
+    if (!(this instanceof app.ContractResultView)) {
+      return new app.ContractResultView(model);
+    }
+
+    var that = this,
+        _el = '<li class="t"></li>',
+        _templateName = 'result.html-local';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.attr('data-id', that.Model.id); //used for render optimization for when selected item changed
+
+      if (that.Model.isSelected) {
+        that.$el.addClass('selected');
+      } else {
+        that.$el.removeClass('selected');
+      }
+
+      if (that.Model.isHidden) {
+        that.$el.addClass('hidden');
+      } else {
+        that.$el.removeClass('hidden');
+      }
+
+      //only apply the attributes in the positive case to save clutter in the DOM
+      if(!that.Model.isRead) {
+        that.$el.attr('data-is-unread', !that.Model.isRead);
+      }
+
+      if(that.Model.isActioned) {
+        that.$el.attr('data-is-actioned', that.Model.isActioned);
+      }
+
+      if(that.Model.isBookmark) {
+        that.$el.attr('data-is-bookmark', that.Model.isBookmark);
+      }
+
+      if(that.Model.isPinned) {
+        that.$el.attr('data-is-in-comparison-list', that.Model.isInComparisonList);
+      }
+
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractResultView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractResultView = ContractResultView;
+  invertebrate.View.isExtendedBy(app.ContractResultView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractorFavoriteView(model) {
+
+    if (!(this instanceof app.ContractorFavoriteView)) {
+      return new app.ContractorFavoriteView(model);
+    }
+
+    var that = this,
+        _el = '<div class="thumbnail thumbnail-108"></div>',
+        _templateName = 'favorite.html';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractorFavoriteView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      that.render();
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractorFavoriteView = ContractorFavoriteView;
+  invertebrate.View.isExtendedBy(app.ContractorFavoriteView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractorItemOfInterestView(model) {
+
+    if (!(this instanceof app.ContractorItemOfInterestView)) {
+      return new app.ContractorItemOfInterestView(model);
+    }
+
+    var that = this,
+        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
+        _templateName = 'item-of-interest.html';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.attr('data-id', that.Model.id);
+
+      if (that.Model.isSelected) {
+        that.$el.addClass('selected');
+      }
+
+      if (that.Model.shouldAnimateIn) {
+        that.$el.css({ left: '-' + model.width});
+      }
+
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractorItemOfInterestView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
+  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractorResultView(model) {
+
+    if (!(this instanceof app.ContractorResultView)) {
+      return new app.ContractorResultView(model);
+    }
+
+    var that = this,
+        _templateName = 'result.html';
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (options) {
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractorResultView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractorResultView = ContractorResultView;
+  invertebrate.View.isExtendedBy(app.ContractorResultView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, document) {
+  'use strict';
+
+  function DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel) {
+
+    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogView)) {
+      return new app.DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel);
+    }
+
+    var that = this,
+        _el = '#delete-favorite-group-confirmation-dialog',
+        _messageContainerEl = '.message-container',
+        _deleteButtonEl = '.btn-danger',
+        _favoritesCubeModel = null,
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      var favoriteGroupId = that.Model.getFavoriteGroupId();
+      var favoriteGroupName = _favoritesCubeModel.getFavoriteGroupName(favoriteGroupId);
+      that.$el.find(_messageContainerEl).html('<p>You have chosen to delete the following group of favorites:</p><blockquote><em>' + favoriteGroupName + '</em></blockquote><p>This cannot be undone.</p><p>Are you sure you want to delete this group?</p>')
+      that.$el.find(_deleteButtonEl).attr('href', '/favoritegroup/destroy?id=' + favoriteGroupId);
+    };
+
+    this.bindEvents = function () {
+      $(document).keyup(function (e) {
+        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getModal() === _uiModeEnum.DeleteFavoriteGroupConfirmationDialog) {
+          that.Model.setIsVisible(false);
+        }
+      });
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.bindEvents();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
+      }
+
+      if (!favoritesCubeModel) {
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _favoritesCubeModel = favoritesCubeModel;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.DeleteFavoriteGroupConfirmationDialogView = DeleteFavoriteGroupConfirmationDialogView;
+  invertebrate.View.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogView);
+
+}(wizerati, $, invertebrate, document));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel) {
+
+    if (!(this instanceof app.ItemsOfInterestView)) {
+      return new app.ItemsOfInterestView(model, itemOfInterestViewFactory, itemModelPack, layoutCoordinator, uiRootModel);
+    }
+
+    var that = this,
+        _el = '.items-of-interest-panel',
+        _modeEnum = app.mod('enum').ItemsOfInterestMode,
+        _elHandlePinnedItems = '.handle-pinned-items',
+        _elSelectedItemContainerCurrent = null,
+        _elSelectedItemContainer1 = '#s-i-c-1',
+        _elSelectedItemContainer2 = '#s-i-c-2',
+        _elPinnedItemsContainer = '.p-i-c',
+        _elPinnedItems = '.pinned-item',
+        _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
+        _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
+        _elPinnedItem3 = '.pinned-item:nth-child(4) .pinned-item-content',
+        _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
+        _itemModelPack = null,
+        _itemOfInterestViewFactory = null,
+        _layoutCoordinator = null,
+        _renderOptimizations = {},
+        _scrollTopValues = {},
+        _scrollLeft = 0,
+        _uiRootModel = null;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      renderPrivate({ animateSelectedItem: false, removedItemId: null });
+    };
+
+    function renderPrivate(options) {
+      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
+      that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
+
+      //these values should be stored before the modification of the DOM (hence before the removal below)
+      storeScrollTopValues();
+      storeScrollLeftValue();
+
+      that.$el.find('.selected-item, .pinned-item').remove();
+
+      var items = that.Model.getItemsOfInterest();
+      if (items.selectedItem) {
+        _itemOfInterestViewFactory.create(items.selectedItem,
+            that.Model.getLayout().widthItemOfInterest,
+            true,
+            function done($view) {
+              addPinnedItems(items.pinnedItems, addSelectedItem);
+              function addSelectedItem() {
+                $(_elSelectedItemContainer1).prepend($view);
+                $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+                $('body').scrollLeft(_scrollLeft);
+                _layoutCoordinator.layOut();
+              }
+            });
+      } else {
+        addPinnedItems(items.pinnedItems, function () {
+          $('body').scrollLeft(_scrollLeft);
+          _layoutCoordinator.layOut();
+        });
+      }
+    }
+
+    this.renderLayout = function (layout) {
+      var selectedItemContent = $('.s-i-c').find('.selected-item-content');
+      $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
+      $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
+      $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
+      $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
+
+      selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      $(_elPinnedItems).children().width(layout.widthItemOfInterest);
+
+      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
+    };
+
+    this.renderAddHiddenItem = function (itemId) {
+      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
+      var $frm = $items.find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/destroy');
+      $frm.find('.btn').addClass('checked');
+      $items.addClass('hidden');
+      $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
+    };
+
+    this.renderRemoveHiddenItem = function (itemId) {
+      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
+      var $frm = $items.find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/create');
+      $frm.find('.btn').removeClass('checked');
+      $items.removeClass('hidden');
+      $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
+    };
+
+    this.renderAddBookmark = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      $frm.attr('action', '/bookmarks/destroy');
+      $frm.find('.btn').addClass('checked');
+    };
+
+    this.renderRemoveBookmark = function (itemId) {
+      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      $frm.attr('action', '/bookmarks/create');
+      $frm.find('.btn').removeClass('checked');
+    };
+
+    this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
+      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
+
+      //these values should be stored before the modification of the DOM (hence before the removal below)
+      storeScrollTopValues();
+      storeScrollLeftValue();
+
+      var prevEl = _elSelectedItemContainerCurrent || _elSelectedItemContainer2;
+      var $prevEl = $(prevEl);
+      _elSelectedItemContainerCurrent = prevEl === _elSelectedItemContainer1 ? _elSelectedItemContainer2 : _elSelectedItemContainer1;
+      var $currentEl = $(_elSelectedItemContainerCurrent);
+      $currentEl.addClass('buffer');
+      var items = that.Model.getItemsOfInterest();
+
+      if (items.selectedItem) {
+        _itemOfInterestViewFactory.create(items.selectedItem,
+            that.Model.getLayout().widthItemOfInterest,
+            true,
+            function done($view) {
+              $currentEl.html($view);
+              $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+              $('body').scrollLeft(_scrollLeft);
+              $prevEl.addClass('buffer');
+              $currentEl.removeClass('buffer');
+
+              setTimeout(function () {
+                $prevEl.empty();
+              }, 300); //give time for fade effect to complete
+            });
+      }
+    };
+
+    this.renderSetMode = function () {
+      var mode = that.Model.getMode();
+      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
+      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
+
+
+      if (mode === _modeEnum.Default) {
+        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
+      } else {
+        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
+        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
+      }
+
+      $('body').attr('data-items-of-interest-mode', mode)
+    };
+
+    function addPinnedItems(items, done) {
+      done = done || function () {
+      };
+
+      items.forEach(function (id) {
+        if (id === null) {
+          return;
+        }
+        _itemOfInterestViewFactory.create(id,
+            that.Model.getLayout().widthItemOfInterest,
+            false,
+            function ($view) {
+              $(_elPinnedItemsContainer).append($view);
+              $view.scrollTop(_scrollTopValues[id]);
+              that.renderLayout(that.Model.getLayout());
+            });
+      });
+
+      done();
+    }
+
+    this.renderRemoveItemOfInterest = function(id) {
+      var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
+      $frm.attr('action', '/itemsofinterest/create');
+      $frm.find('.btn').removeClass('checked');
+
+      $('.pinned-item[data-id="' + id + '"]').remove();
+      _layoutCoordinator.layOut();
+    };
+
+    this.renderAddItemOfInterest = function (id) {
+      var frm = that.$elSelectedItemContainer.find('.frm-pin')
+      frm.attr('action', '/itemsofinterest/destroy');
+      frm.find('button').addClass('checked');
+
+      _itemOfInterestViewFactory.create(id,
+          that.Model.getLayout().widthItemOfInterest,
+          false,
+          function ($view) {
+            $(_elPinnedItemsContainer).append($view);
+            $view.scrollTop(_scrollTopValues[id]);
+            that.renderLayout(that.Model.getLayout());
+          });
+    };
+
+    function storeScrollTopValues() {
+      var selectedItem = that.$el.find('.item-of-interest.selected');
+
+      if (selectedItem) {
+        _scrollTopValues[selectedItem.attr('data-id') + 's'] = $(selectedItem).scrollTop();
+      }
+
+      _.each(that.$el.find('.item-of-interest:not(.selected)'), function (e) {
+        _scrollTopValues[$(e).attr('data-id')] = $(e).scrollTop();
+      });
+    }
+
+    function storeScrollLeftValue() {
+      _scrollLeft = $('body').scrollLeft();
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
+      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
+      that.$elSelectedItemContainer = $('.s-i-c');
+      that.$elPinnedItems = $(_elPinnedItems);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ItemsOfInterestView::init model not supplied';
+      }
+
+      if (!itemOfInterestViewFactory) {
+        throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
+      }
+
+      if (!itemModelPack) {
+        throw 'ItemsOfInterestView::init itemModelPack not supplied';
+      }
+
+      if (!layoutCoordinator) {
+        throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
+      }
+
+      if (!uiRootModel) {
+        throw 'ItemsOfInterestView::init uiRootModel not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _itemModelPack = itemModelPack;
+      _itemOfInterestViewFactory = itemOfInterestViewFactory;
+      _layoutCoordinator = layoutCoordinator;
+      _uiRootModel = uiRootModel;
+
+      _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+      _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.setLayout, that.render);
+      $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
+      $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
+      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemsOfInterestView = ItemsOfInterestView;
+  invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, document) {
+  'use strict';
+
+  function LoginPanelView(model) {
+
+    if (!(this instanceof app.LoginPanelView)) {
+      return new app.LoginPanelView(model);
+    }
+
+    var that = this,
+        _el = '#log-in-panel',
+        _cancelButtonEl = '.btn-cancel',
+        _successButtonEl = '.log-in .btn-success',
+        _usernameEl = '.username',
+        _passwordEl = '.password',
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null,
+        this.$cancelButton = null,
+        this.$successButton = null,
+        this.$username = null,
+        this.$password = null,
+        this.Model = null;
+
+    this.render = function () {
+      if (that.Model.getIsVisible()) {
+        that.$el.removeClass('hide');
+      }
+
+      if (that.Model.getIsLoginFailedMessageVisible()) {
+        that.$el.addClass('login-error');
+      }
+    };
+
+    this.bindEvents = function () {
+      that.$username.on('change', function () {
+        that.Model.setUsername(that.$username.val());
+      });
+
+      that.$password.on('change', function () {
+        that.Model.setPassword(that.$password.val());
+      });
+
+      that.$cancelButton.on('click', function () {
+        cancel();
+      });
+
+      that.$successButton.on('click', function () {
+        app.instance.router.route('/session/create', { $parentDomNode: that.$el });
+      });
+
+      $(document).keyup(function (e) {
+        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getUIMode() === _uiModeEnum.LogIn) {
+          cancel();
+        }
+      });
+    };
+
+    function cancel() {
+      app.instance.router.route('/');
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$cancelButton = that.$el.find(_cancelButtonEl);
+      that.$password = that.$el.find(_passwordEl);
+      that.$username = that.$el.find(_usernameEl);
+      that.$successButton = that.$el.find(_successButtonEl);
+      that.bindEvents();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'LoginPanelView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.LoginPanelView = LoginPanelView;
+  invertebrate.View.isExtendedBy(app.LoginPanelView);
+
+}(wizerati, $, invertebrate, document));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function PurchasePanelView(model) {
+
+    if (!(this instanceof app.PurchasePanelView)) {
+      return new app.PurchasePanelView(model);
+    }
+
+    var that = this,
+        _el = '#purchase-panel';
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.attr('data-state', that.Model.getActiveTab());
+      that.$el.attr('data-is-waiting', that.Model.getIsWaiting());
+    };
+
+    this.bindEvents = function () {
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'PurchasePanelView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.PurchasePanelView = PurchasePanelView;
+  invertebrate.View.isExtendedBy(app.PurchasePanelView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ResultListView(model, resultViewFactory, itemModelPack) {
+
+    if (!(this instanceof app.ResultListView)) {
+      return new app.ResultListView(model, resultViewFactory, itemModelPack);
+    }
+
+    var that = this,
+        _el = '#result-list-panel',
+        _elResultList = '.result-list',
+        _resultViewFactory = null,
+        _scrollTopValue = 0,
+        _lastKnownSearchId = null,
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    function calculateScrollTopValueToMaintain($el, searchId) {
+      if (_lastKnownSearchId === searchId) {
+        _scrollTopValue = $el.scrollTop();
+      } else {
+        _scrollTopValue = 0;
+        _lastKnownSearchId = searchId;
+      }
+    }
+
+    this.render = function (e) {
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      var searchId = that.Model.getSearchId();
+//      var isFreshSearch = _lastKnownSearchId !== searchId;
+      calculateScrollTopValueToMaintain(that.$elResultList, searchId);
+      that.$elResultList.empty();
+//      that.$elResultList.addClass('ios-scroll-enable');
+
+      that.Model.getResults().forEach(function (id) {
+        _resultViewFactory.create(id, function ($v) {
+          that.$elResultList.append($v);
+        });
+      });
+
+      that.$elResultList.scrollTop(_scrollTopValue);
+      that.$el.attr('data-mode', that.Model.getMode());
+    };
+
+    this.renderSetSelectedItemId = function (selectedItemId) {
+      $(_el).find('.t.selected').removeClass('selected');
+      var selectorNew = '.t[data-id="' + selectedItemId + '"]';
+      $(_el).find(selectorNew).addClass('selected');
+    };
+
+    this.renderAddItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
+    };
+
+    this.renderRemoveItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
+    };
+
+    this.renderAddHiddenItem = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+
+      var $selector = $(_el).find(selector);
+      $selector.addClass('hidden');
+    };
+
+    this.renderRemoveHiddenItem = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      var $selector = $(_el).find(selector);
+      $selector.removeClass('hidden');
+    };
+
+    this.renderAddBookmark = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-bookmark', 'true');
+    };
+
+    this.renderRemoveBookmark = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-bookmark', 'false');
+    };
+
+    this.renderSetMode = function (mode) {
+      $(_el).attr('data-mode', mode);
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elResultList = $(_elResultList);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ResultListView::init model not supplied';
+      }
+
+      if (!resultViewFactory) {
+        throw 'ResultListView::init resultViewFactory not supplied';
+      }
+
+      if (!itemModelPack) {
+        throw 'ResultListView::init itemModelPack not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _resultViewFactory = resultViewFactory;
+
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
+//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ResultListView = ResultListView;
+  invertebrate.View.isExtendedBy(app.ResultListView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function SearchFormView(model) {
+
+    if (!(this instanceof app.SearchFormView)) {
+      return new app.SearchFormView(model);
+    }
+
+    var that = this,
+        _el = '#search-form-container',
+        _templateName = 'search-form.html-local',
+        _renderOptimizations = {},
+        _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
+
+    this.$el = null;
+    this.$resultListPanelEl = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      var options = { done: that.postRender, postRenderScriptName: null };
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetMode(that.Model.getMode());
+      return app.instance.renderTemplate(that.$el, _templateName, that.Model, options);
+    };
+
+    this.bindEvents = function () {
+      var $keywords = that.$el.find('#keywords');
+      $keywords.on('change', function () {
+        that.Model.setKeywords($keywords.val(), { silent: true });
+      });
+
+      var $location = that.$el.find('#location');
+      $location.on('change', function () {
+        that.Model.setLocation($location.val(), { silent: true });
+      });
+
+      var $rate = that.$el.find('input[name="r"]');
+      $rate.on('change', function () {
+        that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+      });
+
+      if (!_waitStateIsBeingMonitored) {
+        monitorWaitState();
+      }
+    };
+
+    this.postRender = function () {
+      that.bindEvents();
+      that.Model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
+    };
+
+    this.renderSetIsVisible = function () {
+      if (that.Model.getIsVisible() === 'true') {
+        that.$el.removeClass('hidden');
+      } else if (that.Model.getIsVisible() === 'false') {
+        that.$el.addClass('hidden');
+      }
+      else {
+        throw 'invalid visibility state.'
+      }
+    };
+
+    this.renderSetIsWaiting = function () {
+      that.$el.find('btn-search').attr('data-is-waiting', that.Model.getIsWaiting());
+
+      if (!_waitStateIsBeingMonitored) {
+        monitorWaitState();
+      }
+    };
+
+    this.renderSetMode = function (mode) {
+      that.$resultListPanelEl.attr('data-search-form-mode', mode);
+    };
+
+    function monitorWaitState() {
+      _waitStateIsBeingMonitored = true;
+
+      if (that.Model.getIsWaiting() === 'true') {
+        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
+        setTimeout(function () {
+          that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
+          setTimeout(monitorWaitState, 2500); //wait for animation to complete before checking
+        }, 0);
+      } else {
+        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
+        _waitStateIsBeingMonitored = false;
+      }
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$resultListPanelEl = $('#result-list-panel'); /*to be renamed to search panel*/
+      that.render(); //this introduces the wait on initial visit
+    };
+
+    function init() {
+      if (!model) {
+        throw 'SearchFormView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.renderSetIsVisible;
+      _renderOptimizations[that.Model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
+      $.subscribe(that.Model.eventUris.setIsWaiting, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SearchFormView = SearchFormView;
+  invertebrate.View.isExtendedBy(app.SearchFormView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function SearchPanelView(model) {
+
+    if (!(this instanceof app.SearchPanelView)) {
+      return new app.SearchPanelView(model);
+    }
+
+    var that = this,
+        _el = '.search-panel',
+        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetMode();
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$navPanel = $('#nav-panel');
+    };
+
+    this.renderSetMode = function(mode) {
+      that.$el.attr('data-mode', that.Model.getMode());
+
+      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
+      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
+//      var label = that.Model.getMode() === _searchPanelModeEnum.Default ? 'hide<br/> search' : 'search';
+      that.$navPanel.find('.handle-search-panel').addClass('selected');
+    };
+
+    function init() {
+      if (!model) {
+        throw 'SearchPanelView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.SearchPanelView = SearchPanelView;
+  invertebrate.View.isExtendedBy(app.SearchPanelView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function TabBarView(model) {
+
+    if (!(this instanceof app.TabBarView)) {
+      return new app.TabBarView(model);
+    }
+
+    var that = this,
+        _el = '#tab-bar',
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetSelectedTab(that.Model.getSelectedTab())
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    this.renderSetSelectedTab = function(tab) {
+      that.$el.attr('data-selected-tab', tab);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'UIRootView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
+
+      $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.TabBarView = TabBarView;
+  invertebrate.View.isExtendedBy(app.TabBarView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function UIRootView(model) {
+
+    if (!(this instanceof app.UIRootView)) {
+      return new app.UIRootView(model);
+    }
+
+    var that = this,
+        _el = 'body',
+        _mainContainer = '#main-container',
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
+      that.$el.attr('data-ui-mode', that.Model.getUIMode());
+      that.$el.attr('data-modal', that.Model.getModal());
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$mainContainer = $(_mainContainer);
+    };
+
+    this.renderSetVisibilityMode = function(mode) {
+      that.$mainContainer.attr('data-visibility-mode', mode);
+    };
+
+    this.renderSetAreTransitionsEnabled = function() {
+        that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    };
+
+    this.renderSetModal = function(modal) {
+        that.$el.attr('data-modal', modal);
+    };
+
+    this.renderSetUIMode = function(uiMode) {
+        that.$el.attr('data-ui-mode', uiMode);
+    };
+
+    this.renderSetActiveTab = function(tab) {
+        that.$el.attr('data-active-tab', tab);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'UIRootView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
+      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
+      _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
+      _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+      _renderOptimizations[that.Model.eventUris.setActiveTab] = that.renderSetActiveTab;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
+      $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
+      $.subscribe(that.Model.eventUris.setModal, that.render);
+      $.subscribe(that.Model.eventUris.setUIMode, that.render);
+      $.subscribe(that.Model.eventUris.setActiveTab, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.UIRootView = UIRootView;
+  invertebrate.View.isExtendedBy(app.UIRootView);
+
+}(wizerati, $, invertebrate));
 ;//order of declaration matters here.
 (function (mod) {
   'use strict';
@@ -8409,37 +8439,6 @@ window.wizerati = {
 
 }(wizerati.mod('routing')));
 ;window.env = window.invertebrate.env.dev; //should be changed by the build process
-;(function (app, invertebrate, _) {
-  'use strict';
-
-  function App(env, router) {
-    if (!(this instanceof app.App)) {
-      return new app.App(env, router);
-    }
-
-    var that = this;
-
-    function init() {
-      if (!env) {
-        throw 'env not supplied';
-      }
-
-      if (!router) {
-        throw 'router not supplied';
-      }
-
-      that.env = env;
-      that.router = router;
-
-      return _.extend(that, new invertebrate.App(app.mod('templates').templateUrlHelper));
-    }
-
-    return init();
-  }
-
-  app.App = App;
-
-}(wizerati, invertebrate, _));
 ;$(function appStart() {
   'use strict';
 
