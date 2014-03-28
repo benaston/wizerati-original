@@ -15,7 +15,7 @@
 
 
     function init() {
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 

@@ -39,6 +39,7 @@ body[data-items-of-interest-mode='0'] #result-list-panel[data-search-form-mode='
 /*pinned items expanded*/
 body[data-items-of-interest-mode='1'] #result-list-panel[data-search-form-mode='1'] {
     -webkit-transform: translate3d(-480px,0,0);
+    box-shadow: none;
 }
 
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] #result-list-panel {

@@ -3124,6 +3124,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3155,6 +3156,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3221,7 +3223,7 @@ window.wizerati = {
 
 
     function init() {
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3397,6 +3399,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3426,7 +3429,7 @@ window.wizerati = {
     };
 
     this.getMode = function () {
-      return _mode || _bookmarkPanelModeEnum.Default;
+      return _mode;
     };
 
     this.setMode = function (value, options) {
@@ -3444,8 +3447,7 @@ window.wizerati = {
     };
 
     function init() {
-      _mode = _bookmarkPanelModeEnum.Default;
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3508,6 +3510,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3553,7 +3556,7 @@ window.wizerati = {
     };
 
     function init() {
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3699,17 +3702,13 @@ window.wizerati = {
     };
 
     function init() {
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!resultListModel) {
         throw 'resultListModel not supplied.';
       }
 
-//      _selectedItemModel = selectedItemModel;
       _resultListModel = resultListModel;
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3736,7 +3735,7 @@ window.wizerati = {
 
 
     function init() {
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3807,6 +3806,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -3831,7 +3831,10 @@ window.wizerati = {
         _mode = _modeEnum.Default,
         _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
 
-    this.eventUris = { default: 'update://resultlistmodel' };
+    this.eventUris = {
+      default: 'update://resultlistmodel',
+      setMode: 'update://resultlistmodel/setmode'
+    };
 
     this.getSearchId = function () {
       return _searchId;
@@ -3859,38 +3862,12 @@ window.wizerati = {
       _mode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setMode, value);
       }
     };
-//
-//    this.getResult = function (id) {
-//      if (!id) {
-//        throw 'id not supplied';
-//      }
-//
-//      return _.find(_results, function (r) {
-//        return r.id === id;
-//      });
-//    };
-//
-//    this.setSelectedResultId = function (id) {
-//      if (!id) {
-//        throw 'id not supplied';
-//      }
-//
-//      _.each(_results, function (r) {
-//        if (r.id === id) {
-//          r.isSelected = true;
-//        } else {
-//          r.isSelected = false;
-//        }
-//      });
-//
-//      $.publish(that.eventUris.default);
-//    };
 
     function init() {
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -4024,7 +4001,6 @@ window.wizerati = {
 
     function init() {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
-
       return that;
     }
 
@@ -4072,8 +4048,7 @@ window.wizerati = {
     };
 
     function init() {
-      _mode = _searchPanelModeEnum.Default;
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -4083,40 +4058,6 @@ window.wizerati = {
   app.SearchPanelModel = SearchPanelModel;
 
 }(wizerati, $));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SelectedCubeFaceModel() {
-
-    if (!(this instanceof app.SelectedCubeFaceModel)) {
-      return new app.SelectedCubeFaceModel();
-    }
-
-    var that = this,
-        _selectedCubeFaceId = '0';
-
-    this.updateEventUri = 'update://selectedcubefacemodel/';
-
-    this.getSelectedCubeFaceId = function () {
-      return _selectedCubeFaceId;
-    };
-
-    this.setSelectedCubeFaceId = function (value) {
-      _selectedCubeFaceId = value;
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SelectedCubeFaceModel = SelectedCubeFaceModel;
-  invertebrate.Model.isExtendedBy(app.SelectedCubeFaceModel);
-
-}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4169,6 +4110,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -4215,6 +4157,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -4250,6 +4193,7 @@ window.wizerati = {
     };
 
     function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
@@ -4328,9 +4272,9 @@ window.wizerati = {
       $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
-    this.getBodyWidth = function () {
-      return _bodyWidth;
-    };
+//    this.getBodyWidth = function () {
+//      return _bodyWidth;
+//    };
 
     this.getUIMode = function () {
       return _uiMode || '';
@@ -4365,10 +4309,7 @@ window.wizerati = {
     };
 
     function init() {
-
-
       that = $.decorate(that, app.mod('decorators').decorators.trace);
-
       return that;
     }
 
@@ -5043,10 +4984,10 @@ window.wizerati = {
         _elSelectedItemContainer2 = '#selected-item-container-2',
         _elPinnedItemsContainer = '.pinned-items-container',
         _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(1) .pinned-item-content',
-        _elPinnedItem2 = '.pinned-item:nth-child(2) .pinned-item-content',
-        _elPinnedItem3 = '.pinned-item:nth-child(3) .pinned-item-content',
-        _elPinnedItem4 = '.pinned-item:nth-child(4) .pinned-item-content',
+        _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
+        _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
+        _elPinnedItem3 = '.pinned-item:nth-child(4) .pinned-item-content',
+        _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
         _bookmarkService = null,
@@ -5108,7 +5049,6 @@ window.wizerati = {
       $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
       selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
-      console.log('INFO: Setting ItemOfInterest width to %s.', layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())
@@ -5545,6 +5485,10 @@ window.wizerati = {
       $(_el).find(selector).attr('data-is-favorite', 'false');
     };
 
+    this.renderSetMode = function (mode) {
+      $(_el).attr('data-mode', mode);
+    };
+
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elResultList = $(_elResultList);
@@ -5571,6 +5515,7 @@ window.wizerati = {
       that.Model = model;
       _resultViewFactory = resultViewFactory;
 
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
@@ -5579,6 +5524,7 @@ window.wizerati = {
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(bookmarkService.eventUris.removeFavorite, that.render);
@@ -6372,10 +6318,10 @@ window.wizerati = {
 
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+//      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized); //done by ioimodel.setmode
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _layoutCoordinator.layOut();
+//      _layoutCoordinator.layOut(); //i think this is taken care of by setting the mode of the ioimodel
     };
 
     function init() {
@@ -7877,7 +7823,6 @@ window.wizerati = {
       var leftP5 = 0;//10 * 5;
       var leftP6 = 0;//10 * 6;
 
-      var leftHandlePinnedItems = newWidth-5; /*the 5 is to achieve an aesthetic right margin for the word "comparison"*/
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement =  0;//_itemsOfInterestModel.getSelectedItemCount();
@@ -7887,17 +7832,10 @@ window.wizerati = {
         leftP4 = newWidth * (3 + selectedItemIncrement);
         leftP5 = newWidth * (4 + selectedItemIncrement);
         leftP6 = newWidth * (5 + selectedItemIncrement);
-        leftHandlePinnedItems = (newWidth * (numberOfItemsOfInterest))-5;
-        console.log('leftHandlePinnedItems (%s) = (newWidth (%s) * numberOfItemsOfInterest (%s));', leftHandlePinnedItems, newWidth, numberOfItemsOfInterest);
-      }
-
-      if(_itemsOfInterestModel.getPinnedItemCount() === 0) {
-        leftHandlePinnedItems = 0; /*avoid pushing out the scrollable area to the right if we have no pinned items*/
       }
 
       return {
         widthItemOfInterest: newWidth,
-        leftHandlePinnedItems: leftHandlePinnedItems,
         leftPinnedItem1: leftP1,
         leftPinnedItem2: leftP2,
         leftPinnedItem3: leftP3,

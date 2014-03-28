@@ -16,10 +16,10 @@
         _elSelectedItemContainer2 = '#selected-item-container-2',
         _elPinnedItemsContainer = '.pinned-items-container',
         _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(1) .pinned-item-content',
-        _elPinnedItem2 = '.pinned-item:nth-child(2) .pinned-item-content',
-        _elPinnedItem3 = '.pinned-item:nth-child(3) .pinned-item-content',
-        _elPinnedItem4 = '.pinned-item:nth-child(4) .pinned-item-content',
+        _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
+        _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
+        _elPinnedItem3 = '.pinned-item:nth-child(4) .pinned-item-content',
+        _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
         _bookmarkService = null,
@@ -81,7 +81,6 @@
       $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
       selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
-      console.log('INFO: Setting ItemOfInterest width to %s.', layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       $('body').attr('data-items-of-interest-mode', that.Model.getMode())

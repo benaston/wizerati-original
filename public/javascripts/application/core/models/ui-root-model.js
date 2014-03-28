@@ -66,9 +66,9 @@
       $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
-    this.getBodyWidth = function () {
-      return _bodyWidth;
-    };
+//    this.getBodyWidth = function () {
+//      return _bodyWidth;
+//    };
 
     this.getUIMode = function () {
       return _uiMode || '';
@@ -103,10 +103,7 @@
     };
 
     function init() {
-
-
       that = $.decorate(that, app.mod('decorators').decorators.trace);
-
       return that;
     }
 

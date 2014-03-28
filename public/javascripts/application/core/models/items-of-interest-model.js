@@ -133,17 +133,13 @@
     };
 
     function init() {
-//      if (!selectedItemModel) {
-//        throw 'selectedItemModel not supplied.';
-//      }
-
       if (!resultListModel) {
         throw 'resultListModel not supplied.';
       }
 
-//      _selectedItemModel = selectedItemModel;
       _resultListModel = resultListModel;
 
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 

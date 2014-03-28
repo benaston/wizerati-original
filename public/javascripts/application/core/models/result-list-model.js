@@ -12,7 +12,10 @@
         _mode = _modeEnum.Default,
         _results = []; //note these will be GUIDs - use the ItemCache for the actual objects
 
-    this.eventUris = { default: 'update://resultlistmodel' };
+    this.eventUris = {
+      default: 'update://resultlistmodel',
+      setMode: 'update://resultlistmodel/setmode'
+    };
 
     this.getSearchId = function () {
       return _searchId;
@@ -40,38 +43,12 @@
       _mode = value;
 
       if (!options.silent) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setMode, value);
       }
     };
-//
-//    this.getResult = function (id) {
-//      if (!id) {
-//        throw 'id not supplied';
-//      }
-//
-//      return _.find(_results, function (r) {
-//        return r.id === id;
-//      });
-//    };
-//
-//    this.setSelectedResultId = function (id) {
-//      if (!id) {
-//        throw 'id not supplied';
-//      }
-//
-//      _.each(_results, function (r) {
-//        if (r.id === id) {
-//          r.isSelected = true;
-//        } else {
-//          r.isSelected = false;
-//        }
-//      });
-//
-//      $.publish(that.eventUris.default);
-//    };
 
     function init() {
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 

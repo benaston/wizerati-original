@@ -84,6 +84,10 @@
       $(_el).find(selector).attr('data-is-favorite', 'false');
     };
 
+    this.renderSetMode = function (mode) {
+      $(_el).attr('data-mode', mode);
+    };
+
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elResultList = $(_elResultList);
@@ -110,6 +114,7 @@
       that.Model = model;
       _resultViewFactory = resultViewFactory;
 
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[bookmarkService.eventUris.addFavorite] = that.renderAddFavorite;
@@ -118,6 +123,7 @@
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
       $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.updateEventUri, that.render);
       $.subscribe(bookmarkService.eventUris.addFavorite, that.render);
       $.subscribe(bookmarkService.eventUris.removeFavorite, that.render);

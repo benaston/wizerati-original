@@ -17,7 +17,7 @@
     };
 
     this.getMode = function () {
-      return _mode || _bookmarkPanelModeEnum.Default;
+      return _mode;
     };
 
     this.setMode = function (value, options) {
@@ -35,8 +35,7 @@
     };
 
     function init() {
-      _mode = _bookmarkPanelModeEnum.Default;
-
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
       return that;
     }
 
