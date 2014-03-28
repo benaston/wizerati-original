@@ -5410,7 +5410,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '#search-form',
+        _el = '#search-form-container',
         _templateName = 'search-form.html-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?

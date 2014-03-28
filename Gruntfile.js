@@ -64,7 +64,6 @@ module.exports = function (grunt) {
           'public/stylesheets/application/wizerati-style-modal-container.css',
           'public/stylesheets/application/wizerati-style-apply-to-contract-dialog.css',
           'public/stylesheets/application/wizerati-style-tab-bar.css',
-          'public/stylesheets/application/wizerati-style-search-panel.css',
           'public/stylesheets/application/wizerati-style-search-form.css',
           'public/stylesheets/application/wizerati-style-search-panel-handle.css',
           'public/stylesheets/application/wizerati-style-bookmark-panel.css',
