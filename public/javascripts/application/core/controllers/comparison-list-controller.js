@@ -12,7 +12,7 @@
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _navbarItemEnum = app.mod('enum').Tab,
+        _tabEnum = app.mod('enum').Tab,
         _uiModelPack = null,
         _layoutCoordinator = null;
 
@@ -22,7 +22,7 @@
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized); //done by ioimodel.setmode
-      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
 //      _layoutCoordinator.layOut(); //i think this is taken care of by setting the mode of the ioimodel
     };

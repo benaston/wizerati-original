@@ -9,6 +9,7 @@
     box-shadow: 1px 0 1px -1px #0c0917;
     -webkit-filter: opacity(0%);
     pointer-events: none;
+    -webkit-user-select: none;
 }
 
 body[data-ui-mode='1'] #tab-bar {
@@ -58,9 +59,9 @@ body[data-hover-is-enabled='true'] #tab-bar button:hover {
     box-shadow: rgb(245, 245, 245) 0 0 8px 0;
 }
 
-#tab-bar[data-selected-item='0'] .i:nth-of-type(1) button:after,
-#tab-bar[data-selected-item='1'] .i:nth-of-type(2) button:after,
-#tab-bar[data-selected-item='2'] .i:nth-of-type(3) button:after {
+#tab-bar[data-selected-tab='0'] .i:nth-of-type(2) button:after,
+#tab-bar[data-selected-tab='1'] .i:nth-of-type(3) button:after,
+#tab-bar[data-selected-tab='2'] .i:nth-of-type(4) button:after {
     display: inline-block;
     position: absolute;
     content: '';

@@ -10,7 +10,7 @@
     var that = this,
         _actionedItems = {};
 
-    this.updateEventUri = 'update://actioneditemsmodel';
+    this.eventUris = { default: 'update://actioneditemsmodel' };
 
     this.isActioned = function (id) {
       return !!_actionedItems[id];
@@ -19,13 +19,13 @@
     this.addActionedItemId = function (value) {
       _actionedItems[value] = value;
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     this.removeActionedItemId = function (value) {
       delete _actionedItems[value];
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     function init() {

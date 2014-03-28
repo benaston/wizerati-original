@@ -3066,7 +3066,7 @@ window.wizerati = {
     var that = this,
         _actionedItems = {};
 
-    this.updateEventUri = 'update://actioneditemsmodel';
+    this.eventUris = { default: 'update://actioneditemsmodel' };
 
     this.isActioned = function (id) {
       return !!_actionedItems[id];
@@ -3075,13 +3075,13 @@ window.wizerati = {
     this.addActionedItemId = function (value) {
       _actionedItems[value] = value;
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     this.removeActionedItemId = function (value) {
       delete _actionedItems[value];
 
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.default);
     };
 
     function init() {
@@ -4026,7 +4026,7 @@ window.wizerati = {
         _tabEnum = app.mod('enum').Tab,
         _selectedTab = _tabEnum.Search;
 
-    this.updateEventUri = 'update://tabbarmodel';
+    this.eventUris = { setSelectedTab: 'update://tabbarmodel/setSelectedTab' };
 
     this.getSelectedTab = function () {
       return _selectedTab;
@@ -4034,7 +4034,7 @@ window.wizerati = {
 
     this.setSelectedTab = function (value) {
       _selectedTab = value;
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.setSelectedTab, value);
     };
 
     function init() {
@@ -5097,10 +5097,10 @@ window.wizerati = {
       $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
+//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
       that.Model = model;
 
@@ -5388,7 +5388,7 @@ window.wizerati = {
 //      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
       return that;
     }
@@ -5589,6 +5589,61 @@ window.wizerati = {
 
   app.SearchPanelView = SearchPanelView;
   invertebrate.View.isExtendedBy(app.SearchPanelView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function TabBarView(model) {
+
+    if (!(this instanceof app.TabBarView)) {
+      return new app.TabBarView(model);
+    }
+
+    var that = this,
+        _el = '#tab-bar',
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetSelectedTab(that.Model.getSelectedTab())
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    this.renderSetSelectedTab = function(tab) {
+      that.$el.attr('data-selected-tab', tab);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'UIRootView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
+
+      $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.TabBarView = TabBarView;
+  invertebrate.View.isExtendedBy(app.TabBarView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -6155,7 +6210,7 @@ window.wizerati = {
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _navbarItemEnum = app.mod('enum').Tab,
+        _tabEnum = app.mod('enum').Tab,
         _uiModelPack = null,
         _layoutCoordinator = null;
 
@@ -6165,7 +6220,7 @@ window.wizerati = {
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized); //done by ioimodel.setmode
-      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
 //      _layoutCoordinator.layOut(); //i think this is taken care of by setting the mode of the ioimodel
     };
@@ -8235,7 +8290,6 @@ window.wizerati = {
   'use strict';
 
   try {
-//    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
     mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
     mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
@@ -8284,6 +8338,7 @@ window.wizerati = {
     mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
+    mod.tabBarView = new wizerati.TabBarView(m.tabBarModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {

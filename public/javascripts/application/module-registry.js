@@ -256,7 +256,6 @@
   'use strict';
 
   try {
-//    mod.favoriteViewFactory = new wizerati.FavoriteViewFactory(i.signInIService, r.itemRepository, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
     mod.guidFactory = new wizerati.GuidFactory();
     mod.itemOfInterestViewFactory = new wizerati.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
     mod.resultViewFactory = new wizerati.ResultViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
@@ -305,6 +304,7 @@
     mod.itemsOfInterestView = new wizerati.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new wizerati.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new wizerati.SearchFormView(m.searchFormModel);
+    mod.tabBarView = new wizerati.TabBarView(m.tabBarModel);
     mod.uiRootView = new wizerati.UIRootView(m.uiRootModel);
   }
   catch (e) {

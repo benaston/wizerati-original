@@ -203,6 +203,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
     display: inline-block;
     vertical-align: top;
     overflow: hidden;
+    -webkit-user-select: none;
 }
 
 .t.hidden a {

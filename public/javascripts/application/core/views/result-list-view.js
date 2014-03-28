@@ -134,7 +134,7 @@
 //      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
       return that;
     }

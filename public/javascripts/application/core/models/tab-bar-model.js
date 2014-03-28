@@ -11,7 +11,7 @@
         _tabEnum = app.mod('enum').Tab,
         _selectedTab = _tabEnum.Search;
 
-    this.updateEventUri = 'update://tabbarmodel';
+    this.eventUris = { setSelectedTab: 'update://tabbarmodel/setSelectedTab' };
 
     this.getSelectedTab = function () {
       return _selectedTab;
@@ -19,7 +19,7 @@
 
     this.setSelectedTab = function (value) {
       _selectedTab = value;
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.setSelectedTab, value);
     };
 
     function init() {
