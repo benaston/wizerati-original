@@ -1,3 +1,20 @@
+/*cubic-bezier(0.2,0.3,0.25,0.9);*/
+
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #result-list-panel {
+    /*transition: -webkit-transform 2s ease-out;*/
+    transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9);
+}
+
+body[data-are-transitions-enabled='true'] .result-list,
+body[data-are-transitions-enabled='true'] .result-list-search-summary-container {
+    /*transition: -webkit-filter .2s ease-out;*/
+    transition: -webkit-filter .2s cubic-bezier(0.2,0.3,0.25,0.9);
+}
+
+.t a {
+    transition: max-height .2s ease-out; /* we use max-height because involve transition to auto height*/
+}
+
 #result-list-panel-container {
     width: 0;
     height: 100%;
@@ -33,24 +50,13 @@ body[data-ui-mode='0'] #result-list-panel-container {
 }
 
 body[data-items-of-interest-mode='0'] #result-list-panel[data-search-form-mode='1'] {
-    -webkit-transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 /*pinned items expanded*/
 body[data-items-of-interest-mode='1'] #result-list-panel[data-search-form-mode='1'] {
-    -webkit-transform: translate3d(-480px,0,0);
+    -webkit-transform: translate3d(-480px, 0, 0);
     box-shadow: none;
-}
-
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] #result-list-panel {
-    /*transition: opacity .2s ease-out 0s, -webkit-transform .2s ease-out;*/
-    /*transition: opacity .5s ease-out 0s, -webkit-transform .5s ease-out;*/
-    transition: -webkit-transform 2s ease-out;
-}
-
-body[data-are-transitions-enabled='true'] .result-list,
-body[data-are-transitions-enabled='true'] .result-list-search-summary-container {
-    transition: -webkit-filter .2s ease-out;
 }
 
 body[data-ui-mode='1'] .result-list-panel[data-search-form-mode='0'] {
@@ -69,16 +75,12 @@ body[data-ui-mode='0'] .result-list {
     display: none;
 }
 
-
-
 /*translations should only be applied when needed due to breakage of fixed position search form*/
 body[data-ui-mode='1'] #result-list-panel {
     opacity: 1;
-    /*-webkit-transform: translate(0, 0);*/
 }
 
 #result-list-panel[data-mode='1'] .result-list {
-    /*opacity: 0.2;*/
     pointer-events: none;
 }
 
@@ -92,24 +94,11 @@ body[data-ui-mode='1'] #result-list-panel {
     color: #999;
 }
 
-/*.search-panel[data-mode='1'] ~ #result-list-panel {*/
-    /*-webkit-transform: translate(-340px, 0);*/
-/*}*/
-
-/*.search-panel[data-mode='0'] ~ #result-list-panel[data-mode='1'] {*/
-    /*-webkit-transform: translate(-494px, 0); *//*420 (result list effective width)*/
-/*}*/
-
-/*.search-panel[data-mode='1'] ~ #result-list-panel[data-mode='1'] {*/
-    /*-webkit-transform: translate(-760px, 0); *//*420 (result list effective width) +274 (search panel effective width)*/
-/*}*/
-
 .result-list {
     width: 100%;
     padding: 0;
     position: relative;
     left: 0; /*required for transition*/
-    transition: left .3s ease-in-out;
 }
 
 .t-219 {
@@ -245,7 +234,6 @@ body[data-hover-is-enabled='true'] .t a:hover {
     padding: 15px 20px 25px 32px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     max-height: 250px; /*larger than it will ever get*/
-    transition: max-height .2s ease-out; /* we use max-height because involve transition to auto height*/
 }
 
 /*.c is the content container for the result, located inside the anchor itself (minus the icon-container)*/
