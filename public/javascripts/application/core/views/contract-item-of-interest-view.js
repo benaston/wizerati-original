@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '<div></div>',
+        _el = '<section></section>',
         _templateName = 'item-of-interest.html-local';
 
     this.$el = $(_el);

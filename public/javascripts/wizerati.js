@@ -6819,7 +6819,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '<div></div>',
+        _el = '<section></section>',
         _templateName = 'item-of-interest.html-local';
 
     this.$el = $(_el);
@@ -6895,7 +6895,7 @@ window.wizerati = {
       }
 
       //only apply the attributes in the positive case to save clutter in the DOM
-      if(!that.Model.isRead) {
+      if(that.Model.isRead) {
         that.$el.attr('data-is-unread', !that.Model.isRead);
       }
 
@@ -7149,7 +7149,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '.items-of-interest-panel',
+        _el = '#items-of-interest-panel',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItemContainerCurrent = null,

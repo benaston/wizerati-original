@@ -1,6 +1,6 @@
 {{ try {  }}<div class="flex-container {{= model.isSelected ? 'selected-item-content' : 'pinned-item-content' }}" style="width: {{=model.width}}px;">
     <!--<div id="top1" class="in-page-anchor-target"></div>-->
-    <div class="menu-and-metadata-container flex-item">
+    <header class="menu-and-metadata-container flex-item">
         <ul class="menu">
             <li><form class="frm-bookmark" method="POST" action="/bookmarks/{{=model.isBookmark ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
@@ -34,7 +34,7 @@
                 </div>
             </form></li>
         </ul>
-    </div>
+    </header>
     <div class="flex-item">
         <article class="item-of-interest-content {{=model.isHidden ? 'hidden' : '' }}">
             <h3 class="ioi-title">{{= model.title }}</h3>

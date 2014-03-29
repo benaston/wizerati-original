@@ -113,23 +113,27 @@ body[data-ui-mode='1'] #result-list-panel {
     content: '';
 }
 
-.icon-container {
+.i-c {
     position: absolute;
     left: 7px;
     top: 25px;
     width: 22px;
 }
 
-.is-bookmark, .is-in-comparison-list, .is-unread, .actioned {
+.is-bookmark, .is-in-comparison-list, .actioned {
     float: left;
     display: none;
 }
 
 .t[data-is-bookmark='true'] .is-bookmark,
 .t[data-is-in-comparison-list='true'] .is-in-comparison-list,
-.t[data-is-unread='true'] .is-unread,
+.is-unread,
 .t[data-is-actioned='true'] .actioned {
     display: inline-block;
+}
+
+.t[data-is-read='true'] .is-unread {
+    display: none;
 }
 
 .ti.is-bookmark:after {
@@ -213,7 +217,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
     width: 100%;
 }
 
-.t.hidden .tld, .t.hidden .rate, .t.hidden .location-and-posted, .t.hidden .icon-container {
+.t.hidden .tld, .t.hidden .rate, .t.hidden .location-and-posted, .t.hidden .i-c {
     visibility: hidden;
 }
 

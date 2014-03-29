@@ -1,4 +1,4 @@
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-panel {
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #items-of-interest-panel {
     transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9); /*for sliding whole lot when moving between comparison list states*/
 }
 
@@ -6,7 +6,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-p
     transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9), width 1s cubic-bezier(0.2,0.3,0.25,0.9) 2s; /*DELAY - reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
 }
 
-.items-of-interest-panel {
+#items-of-interest-panel {
     position: relative;
     display: inline-block;
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
@@ -15,7 +15,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] .items-of-interest-p
     opacity: 0;
 }
 
-body[data-items-of-interest-mode='1'] .items-of-interest-panel {
+body[data-items-of-interest-mode='1'] #items-of-interest-panel {
     -webkit-transform: translate3d(74px, 0, 0);
 }
 
@@ -46,19 +46,19 @@ body[data-hover-is-enabled='true'] .menu .btn-40:hover {
     right: 45px;
 }
 
-body[data-ui-mode='1'] .items-of-interest-panel {
+body[data-ui-mode='1'] #items-of-interest-panel {
     opacity: 1;
 }
 
-.search-panel[data-mode='1'] ~ .items-of-interest-panel {
+.search-panel[data-mode='1'] ~ #items-of-interest-panel {
     -webkit-transform: translate(-340px, 0);
 }
 
-.search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
+.search-panel[data-mode='0'] ~ .result-list-panel[data-mode='1'] ~ #items-of-interest-panel {
     -webkit-transform: translate(-494px, 0); /*420 (result list effective width)*/
 }
 
-.search-panel[data-mode='1'] ~ .result-list-panel[data-mode='1'] ~ .items-of-interest-panel {
+.search-panel[data-mode='1'] ~ .result-list-panel[data-mode='1'] ~ #items-of-interest-panel {
     -webkit-transform: translate(-760px, 0); /*420 (result list effective width) +340 (search panel effective width)*/
 }
 
@@ -171,7 +171,7 @@ body[data-ui-mode='1'] .items-of-interest-panel {
     color: white;
 }
 
-.items-of-interest-panel .menu {
+#items-of-interest-panel .menu {
     text-align: right;
 }
 

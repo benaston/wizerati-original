@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '.items-of-interest-panel',
+        _el = '#items-of-interest-panel',
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
         _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItemContainerCurrent = null,
