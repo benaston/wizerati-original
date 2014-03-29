@@ -87,8 +87,6 @@ body[data-ui-mode='0'] .search-form-title {
     display: block;
 }
 
-
-
 body[data-ui-mode='0'] form[name='search-form'] {
     top: 0;
     position: relative;

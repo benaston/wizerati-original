@@ -97,7 +97,7 @@ body[data-ui-mode='1'] #result-list-panel {
     left: 0; /*required for transition*/
 }
 
-.thumbnail-info, .ti {
+.ti {
     width: 22px;
     font-family: 'glyph';
     text-align: center;
