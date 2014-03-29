@@ -1,31 +1,31 @@
 <nav id="tab-bar" data-selected-tab="0">
     <ul>
         <li>
-            <a class="h">wizerati</a>
+            <h1><a class="h">wizerati</a></h1>
         </li>
         <li class="i">
-            <a href="/search" class="btn btn-40" title="search">
-                <span class="ico">&#xf1da;</span>
-                <span class="lbl">search</span>
-            </a>
+            <form action="/search" method="GET">
+                <button id="btn-nav-search" class="btn btn-40" title="search">&#xf1da;</button>
+                <label for="btn-nav-search" class="lbl">search</label>
+            </form>
         </li>
         <li class="i">
-            <a href="/bookmarks" class="btn btn-40" title="bookmarks">
-                <span class="ico">&#xf26b;</span>
-                <span class="lbl">bookmarks</span>
-            </a>
+            <form action="/bookmarks" method="GET">
+                <button id="btn-nav-bookmarks" class="btn btn-40" title="bookmarks">&#xf26b;</button>
+                <label for="btn-nav-bookmarks" class="lbl">bookmarks</label>
+            </form>
         </li>
         <li class="i">
-            <a href="/comparisonlist" class="btn btn-40" title="comparison list">
-                <span class="ico">&#xf30e;</span>
-                <span class="lbl">comparison list</span>
-            </a>
+            <form action="/comparisonlist" method="GET">
+                <button id="btn-nav-comparison-list" class="btn btn-40" title="comparison list">&#xf30e;</button>
+                <label for="btn-nav-comparison-list" class="lbl">comparison list</label>
+            </form>
         </li>
         <li class="i-sign-out">
-            <a href="/session/destroy" class="btn btn-40" title="sign out">
-                <span class="ico">&#xf317;</span>
-                <span class="lbl">sign out</span>
-            </a>
+            <form action="/session/destroy" method="GET">
+                <button id="btn-nav-sign-out" class="btn btn-40" title="sign out">&#xf317;</button>
+                <label for="btn-nav-sign-out" class="lbl">sign out</label>
+            </form>
         </li>
     </ul>
 </nav>
