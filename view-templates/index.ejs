@@ -5,7 +5,7 @@
     <title>Wizerati</title>
     <meta name="author" content="Ben Aston">
     <meta name="build" content="@@build">
-    <meta name="copyright" content="Copyright Ben Aston 2014. All rights reserved. Unauthorized duplication prohibited.">
+    <meta name="copyright" content="Copyright Ben Aston 2014. All rights reserved.">
     <style>@@css</style>
     <noscript><link rel="stylesheet" type="text/css" href="stylesheets/noscript.css"></noscript>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -17,13 +17,9 @@
 </head>
 <body data-ui-mode="-1" data-are-transitions-enabled="false" data-modal="-1" data-hover-is-enabled="true">
 <div id="main-container" data-visibility-mode="1">
-    <main>
-    @@nav-panel @@bookmark-panel@@result-list-panel@@items-of-interest-panel
-    </main>
-    <footer class="navbar">
-        <a class="btn-my-account" href="/user/show?id=userid">sign in</a> &nbsp;|&nbsp; <a
-                href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a> <span class="legal">wizerati &copy; 2014</span>
-    </footer>
+    <header>@@nav-panel</header>
+    <main>@@bookmark-panel@@result-list-panel@@items-of-interest-panel</main>
+    <footer class="f"><a class="btn-my-account" href="/user/show?id=userid">sign in</a> &nbsp;|&nbsp; <a href="/purchasepanel?tab=0" class="btn-advertisers">recruiters</a> <span class="legal">wizerati &copy; 2014</span></footer>
 </div>
 <div id="background-container"><div id="background-image"></div></div>
 @@apply-to-contract-dialog
