@@ -14,11 +14,6 @@
       Minimized: '1'
     };
 
-    mod.FavoritesCubeMode = {
-      Default: '0',
-      Edit: '1'
-    };
-
     mod.ItemSelectionSource = {
       Results: '0',
       Favorites: '1'
@@ -68,12 +63,6 @@
     mod.SearchFormMode = { /*the actual form used for searching*/
       Default: '0',
       Minimized: '1'
-    };
-
-    mod.SearchPanelMode = {
-      Default: '0',
-      Minimized: '1',
-      Hidden: '2'
     };
 
     mod.UIMode = {
@@ -155,7 +144,7 @@
   try {
     mod.actionedItemsModel = new wizerati.ActionedItemsModel();
     mod.applyToContractDialogModel = new wizerati.ApplyToContractDialogModel();
-    mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
+//    mod.advertisersPanelModel = new wizerati.AdvertisersPanelModel();
     mod.bookmarkPanelModel = new wizerati.BookmarkPanelModel();
     mod.bookmarkBookModel = new wizerati.BookmarkBookModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new wizerati.DeleteFavoriteGroupConfirmationDialogModel();
@@ -163,7 +152,6 @@
     mod.purchasePanelModel = new wizerati.PurchasePanelModel();
     mod.resultListModel = new wizerati.ResultListModel();
     mod.searchFormModel = new wizerati.SearchFormModel();
-    mod.searchPanelModel = new wizerati.SearchPanelModel();
     mod.signInPanelModel = new wizerati.SignInPanelModel();
     mod.tabBarModel = new wizerati.TabBarModel();
     mod.uiRootModel = new wizerati.UIRootModel();
@@ -285,8 +273,8 @@
   'use strict';
 
   try {
-    mod.layoutCalculator = new wizerati.LayoutCalculator(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
-    mod.layoutCoordinator = new wizerati.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator, m.searchPanelModel);
+    mod.layoutCalculator = new wizerati.LayoutCalculator(m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+    mod.layoutCoordinator = new wizerati.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator);
   }
   catch (e) {
     throw 'problem registering layout module. ' + e;
@@ -336,12 +324,12 @@
     mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
     mod.comparisonListController = new wizerati.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
-    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.searchPanelModel, m.resultListModel, m.searchFormModel);
+    mod.homeController = new wizerati.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new wizerati.ItemsOfInterestController(m.itemsOfInterestModel);
     mod.itemsOfInterestPanelModeController = new wizerati.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
     mod.searchController = new wizerati.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
     mod.searchFormModeController = new wizerati.SearchFormModeController(m.searchFormModel);
-    mod.selectedItemController = new wizerati.SelectedItemController(m.searchPanelModel, m.resultListModel, m.itemsOfInterestModel);
+    mod.selectedItemController = new wizerati.SelectedItemController(m.resultListModel, m.itemsOfInterestModel);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

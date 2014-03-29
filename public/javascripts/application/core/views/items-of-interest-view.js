@@ -14,7 +14,7 @@
         _elSelectedItemContainerCurrent = null,
         _elSelectedItemContainer1 = '#s-i-c-1',
         _elSelectedItemContainer2 = '#s-i-c-2',
-        _elPinnedItemsContainer = '.p-i-c',
+        _elPinnedItemsContainer = '#p-i-c',
         _elPinnedItems = '.pinned-item',
         _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
         _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',

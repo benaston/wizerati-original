@@ -1,14 +1,13 @@
 (function (app) {
   'use strict';
 
-  function SelectedItemController(searchPanelModel, resultListModel, itemsOfInterestModel) {
+  function SelectedItemController(resultListModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.SelectedItemController)) {
-      return new app.SelectedItemController(searchPanelModel, resultListModel, itemsOfInterestModel);
+      return new app.SelectedItemController(resultListModel, itemsOfInterestModel);
     }
 
     var that = this,
-        _searchPanelModel = null,
         _resultListModel = null,
         _itemsOfInterestModel = null;
 
@@ -31,10 +30,6 @@
     };
 
     function init() {
-      if (!searchPanelModel) {
-        throw 'SelectedItemController::init searchPanelModel not supplied.';
-      }
-
       if (!resultListModel) {
         throw 'SelectedItemController::init resultListModel not supplied.';
       }
@@ -43,7 +38,6 @@
         throw 'SelectedItemController::init itemsOfInterestModel not supplied.';
       }
 
-      _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _itemsOfInterestModel = itemsOfInterestModel;
 

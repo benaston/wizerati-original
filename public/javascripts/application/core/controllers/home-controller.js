@@ -1,15 +1,14 @@
 (function (app) {
   'use strict';
 
-  function HomeController(uiRootModel, searchPanelModel, resultListModel, searchFormModel) {
+  function HomeController(uiRootModel, resultListModel, searchFormModel) {
 
     if (!(this instanceof app.HomeController)) {
-      return new app.HomeController(uiRootModel, searchPanelModel, resultListModel, searchFormModel);
+      return new app.HomeController(uiRootModel, resultListModel, searchFormModel);
     }
 
     var that = this,
         _uiRootModel = null,
-        _searchPanelModel = null,
         _resultListModel = null,
         _searchFormModel = null,
         _modalEnum = wizerati.mod('enum').Modal,
@@ -21,15 +20,10 @@
     this.index = function () {
       try {
         _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag
-        _searchPanelModel.setMode(_searchPanelModeEnum.Default);
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
 
-        //uirootview should listen to the searchform model for the rendered flag
-        //and then render the change to the visibility mode to avoid expensieve polling?
-        //now wait for the search form to be injected into the dom, then show everything
-//        waitForSearchFormToBeRendered();
       } catch (err) {
         console.log('HomeController::index exception: ' + err);
       }
@@ -49,10 +43,6 @@
         throw 'HomeController::init uiRootModel not supplied.';
       }
 
-      if (!searchPanelModel) {
-        throw 'HomeController::init searchPanelModel not supplied.';
-      }
-
       if (!resultListModel) {
         throw 'HomeController::init resultListModel not supplied.';
       }
@@ -62,7 +52,6 @@
       }
 
       _uiRootModel = uiRootModel;
-      _searchPanelModel = searchPanelModel;
       _resultListModel = resultListModel;
       _searchFormModel = searchFormModel;
 

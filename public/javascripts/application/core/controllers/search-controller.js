@@ -44,7 +44,6 @@
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
        _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-       _uiModelPack.searchFormModel.setLocation(dto.location, {silent: true});
        _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
 
         _helper.resetUIForSearch();
