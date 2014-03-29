@@ -33,7 +33,7 @@
 
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
-        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'] });
+        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
         router.registerRoute('/selecteditem/update', function (dto) {
           c.selectedItemController.update(dto);

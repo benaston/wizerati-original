@@ -71,19 +71,6 @@
       }
     };
 
-    this.getLocation = function () {
-      return _location;
-    };
-
-    this.setLocation = function (value, options) {
-      options = options || { silent: false };
-      _location = value;
-
-      if (options.silent === false) {
-        $.publish(that.eventUris.default);
-      }
-    };
-
     this.getRate = function () {
       return _rate;
     };

@@ -12,7 +12,7 @@ label.radio {
     -webkit-user-select: none;
 }
 
-button.checked, a.btn.checked {
+button.checked, .btn.checked {
     background-color: rgba(0, 109, 204, 0.95);
     color: white;
     box-shadow: none;
@@ -36,9 +36,9 @@ button.checked, a.btn.checked {
 
 .form-button-container:after {
     content: ".";
-    height: 0px;
+    height: 0;
     clear: both;
-    line-height: 0px;
+    line-height: 0;
     visibility: hidden;
 }
 
@@ -47,7 +47,6 @@ button.checked, a.btn.checked {
     opacity: 0;
     transition: opacity .2s linear 0s, visibility 0s linear .2s;
     position: absolute;
-    width: 200px;
     top: 0;
     left: 330px;
     width: 200px;
@@ -112,10 +111,14 @@ label.radio-inverted:active {
     content: ".";
     height: 0;
     clear: both;
-    line-height: 0px;
+    line-height: 0;
     visibility: hidden;
 }
 
 .field-and-metadata-container {
     position: relative;
+}
+
+.ico {
+    font-family: ionicons;
 }

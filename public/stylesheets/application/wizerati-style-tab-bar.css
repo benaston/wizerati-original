@@ -18,6 +18,7 @@ body[data-ui-mode='1'] #tab-bar {
 }
 
 .i {
+    display: block;
     margin: 20px 0;
     text-align: center;
 }
@@ -29,11 +30,11 @@ body[data-ui-mode='1'] #tab-bar {
     width: 100%;
 }
 
-#tab-bar label {
+#tab-bar .lbl {
     color: whitesmoke;
 }
 
-#tab-bar button {
+#tab-bar .btn {
     position: relative; /*for positioning of after*/
     color: rgba(255, 255, 255, 1);
     border-color: rgba(255, 255, 255, .2);
@@ -55,8 +56,9 @@ body[data-hover-is-enabled='true'] .h:hover {
     color: white;
 }
 
-body[data-hover-is-enabled='true'] #tab-bar button:hover {
+body[data-hover-is-enabled='true'] #tab-bar .btn:hover {
     box-shadow: rgb(245, 245, 245) 0 0 8px 0;
+    text-decoration: none; /*required for anchor buttons*/
 }
 
 #tab-bar[data-selected-tab='0'] .i:nth-of-type(2) button:after,

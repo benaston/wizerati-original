@@ -2061,6 +2061,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     this.route = function (uri, dto, options) {
       options = options || { silent: false };
+      options.dtoPopulator = options.dtoPopulator || function() { return null; };
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -2078,24 +2079,21 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       }
 
       var route = that.routes[firstMatchingRouteUri];
+      var dto = dto
+          || createDtoFromQueryString(queryString.split('&'))
+          || options.dtoPopulator({})
+          || {};
+      dto.__isInvertebrateExternal__ =  options.isExternal;
 
       if (!route.options.silent && !options.silent) {
         document.title = route.options.title;
         history.pushState(null, null, route.options.uriTransform(uri, dto));
       }
 
-      if (dto) {
-        route.action(dto);
-
-        return;
-      }
-
-      var queryStringArguments = queryString.split('&');
-      route.action(extractQueryString(queryStringArguments, options.isExternal));
+      route.action(dto);
     };
 
     function routeHyperlink(evt) {
-
       var href = $(this).attr('href');
       var protocol = 'http//';
 
@@ -2106,13 +2104,8 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       }
 
       if (href.slice(protocol.length) !== protocol) {
-        evt.preventDefault();
-
-//          $.debounce(100, true, function() {
         that.route(href);
-//          });
       }
-
     }
 
     function routeFormSubmission(evt) {
@@ -2141,12 +2134,11 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       return dto;
     };
 
-    function extractQueryString(queryString, isExternal) {
+    function createDtoFromQueryString(queryString) {
       var dto = {};
-      dto.__isInvertebrateExternal__ = isExternal;
 
       if (queryString === '') {
-        return dto;
+        return null;
       }
 
       for (var i = 0; i < queryString.length; ++i) {
@@ -2165,6 +2157,8 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
       _defaultPageTitle = defaultPageTitle;
 
+      //if the models are initialized from local storage before routing begins
+      //then dto populators can be used when coming from an external uri
       window.addEventListener('popstate', function (e) {
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
@@ -2175,7 +2169,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       $(document).on('touchend', 'button', function () {
         $(this).removeClass('halo');
       });
-//      $(document).on('click', 'a:not([data-bypass-router])', routeHyperlink); //debounce attempt to prevent undesired interaction of double-click on results with double buffering
+
       $(document).on('click', 'a:not([data-bypass-router])', $.debounce(routeHyperlink, 500, true,
           function(evt){
             evt.preventDefault();
@@ -3599,6 +3593,8 @@ window.wizerati = {
 
     this.urlTransforms = {};
 
+    this.dtoPopulators = {};
+
     this.show = function (dto) {
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
@@ -3637,6 +3633,12 @@ window.wizerati = {
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
+    function dtoPopulatorShow(dto) {
+      dto.keywords = that.Model.getKeywords();
+      dto.r = that.Model.getRate();
+      return dto;
+    }
+
     function init() {
       if (!uiModelPack) {
         throw 'SearchController::init uiModelPack not supplied.';
@@ -3655,6 +3657,7 @@ window.wizerati = {
       _helper = searchControllerHelper;
 
       that.urlTransforms['/search'] = uriTransformShow;
+      that.dtoPopulators['/search'] = dtoPopulatorShow;
 
       return that;
     }
@@ -5417,19 +5420,6 @@ window.wizerati = {
       }
     };
 
-    this.getLocation = function () {
-      return _location;
-    };
-
-    this.setLocation = function (value, options) {
-      options = options || { silent: false };
-      _location = value;
-
-      if (options.silent === false) {
-        $.publish(that.eventUris.default);
-      }
-    };
-
     this.getRate = function () {
       return _rate;
     };
@@ -6006,7 +5996,7 @@ window.wizerati = {
 
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
-        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'] });
+        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
         router.registerRoute('/selecteditem/update', function (dto) {
           c.selectedItemController.update(dto);
@@ -6829,7 +6819,7 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '<article></article>',
+        _el = '<div></div>',
         _templateName = 'item-of-interest.html-local';
 
     this.$el = $(_el);

@@ -37,3 +37,11 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibi
     -webkit-filter: opacity(100%) blur(20px);
     transition: -webkit-filter .1s ease-out;
 }
+
+.modal-content-panel h1 {
+    margin-bottom: 40px;
+}
+
+.message-container p {
+    margin-bottom: 20px;
+}

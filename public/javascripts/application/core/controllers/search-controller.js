@@ -17,6 +17,8 @@
 
     this.urlTransforms = {};
 
+    this.dtoPopulators = {};
+
     this.show = function (dto) {
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
@@ -55,6 +57,12 @@
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
+    function dtoPopulatorShow(dto) {
+      dto.keywords = that.Model.getKeywords();
+      dto.r = that.Model.getRate();
+      return dto;
+    }
+
     function init() {
       if (!uiModelPack) {
         throw 'SearchController::init uiModelPack not supplied.';
@@ -73,6 +81,7 @@
       _helper = searchControllerHelper;
 
       that.urlTransforms['/search'] = uriTransformShow;
+      that.dtoPopulators['/search'] = dtoPopulatorShow;
 
       return that;
     }

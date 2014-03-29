@@ -221,6 +221,17 @@ module.exports = function (grunt) {
         files: [
           {src: ['view-templates/_index-javascript-injected.ejs'], dest: 'views/index-single-file.ejs'}
         ]
+      },
+      sass: {                              // Task
+        dist: {                            // Target
+          options: {                       // Target options
+            style: 'expanded'
+          },
+          files: {                         // Dictionary of files
+            'main.css': 'main.scss',       // 'destination': 'source'
+            'widgets.css': 'widgets.scss'
+          }
+        }
       }
     },
     qunit: {
@@ -252,6 +263,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-css');
   grunt.loadNpmTasks('grunt-css-url-embed');
   grunt.loadNpmTasks('grunt-replace');

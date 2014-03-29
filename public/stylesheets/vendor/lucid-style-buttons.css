@@ -14,14 +14,17 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /*removes dark active overlay when tapping buttons on ios*/
 }
 
-.btn-40 ~ .label {
+/*We support nesting and sibling label relationships.*/
+.btn-40 ~ .lbl,
+.btn-40 > .lbl {
     margin-top: 4px;
     font-size: .8rem;
     color: rgba(0, 109, 204, 0.95);
     -webkit-user-select: none;
+    line-height: 1.34rem; /*required for span labels*/
 }
 
-.btn-100 ~ .label {
+.btn-100 ~ .lbl {
     margin-top: 4px;
     font-size: 2.3rem;
     color: rgba(0, 109, 204, 0.95);
@@ -79,6 +82,7 @@ input[type='radio']:enabled:focus + label:after {
     bottom: -5px;
 }
 
+.lbl:focus,
 label:focus {
     outline: 5px auto rgb(230, 240, 248);
     outline-offset: 2px;
@@ -201,6 +205,3 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
     transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
 }
-
-
-

@@ -33,7 +33,6 @@ body[data-ui-mode='0'] #main-container[data-visibility-mode='2'] ~ #background-c
     background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
 }
 
-/*body[data-ui-mode='1'] #background-container #background-image,*/
 body[data-ui-mode='-1'] #background-container #background-image,
 body[data-ui-mode='0'] #background-container #background-image {
     background-size: 1500px 1500px;

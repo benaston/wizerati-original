@@ -39,7 +39,7 @@ body[data-hover-is-enabled='true'] .menu .btn-40:hover {
     box-shadow: #f5f5f5 0 0 8px 0;
 }
 
-.menu .btn-40 ~ .label {
+.menu .btn-40 ~ .lbl {
     color: whitesmoke;
     position: absolute;
     top: -5px;
@@ -156,6 +156,7 @@ body[data-ui-mode='1'] .items-of-interest-panel {
 }
 
 .menu {
+    display: block; /*required to ensure full width of item is used*/
     margin-right: 10px;
     margin-top: 0;
     padding-top: 0px;
@@ -251,10 +252,11 @@ body[data-ui-mode='1'] .items-of-interest-panel {
 
 .selected-top {
     background: rgba(0, 0, 0, .1);
-    box-shadow: 0px -15px 0 25px rgba(0, 0, 0, .1);
+    box-shadow: 0 -15px 0 25px rgba(0, 0, 0, .1);
 }
 
 .info {
+    display: block;
     color: #999;
     list-style: none;
 }
@@ -351,9 +353,8 @@ body[data-ui-mode='1'] .items-of-interest-panel {
 }
 
 .ioi-title {
-    clear: none;
     min-width: 250px;
-    display: inline-block;
+    display: block;
 }
 
 body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
