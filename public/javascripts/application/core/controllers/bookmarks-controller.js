@@ -33,16 +33,16 @@
 //        _uiModelPack.searchFormModel.setIsWaiting('true');
 //        _bookmarkRepository.getByUserId();
         _bookmarkService.getByUserId(_authenticationService.getCurrentUserId());
-      } catch (err) {
-        console.log('SearchController::show exception: ' + err);
-      }
 
-      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+        _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      } catch (err) {
+        console.log('BookmarksController::index exception: ' + err);
+      }
     };
 
     this.create = function (dto) {

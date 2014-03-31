@@ -62,9 +62,9 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:hover {
     text-decoration: none; /*required for anchor buttons*/
 }
 
-#tab-bar[data-selected-tab='0'] .i:nth-of-type(2) button:after,
-#tab-bar[data-selected-tab='1'] .i:nth-of-type(3) button:after,
-#tab-bar[data-selected-tab='2'] .i:nth-of-type(4) button:after {
+#tab-bar[data-selected-tab='0'] .i:nth-of-type(1) button:after,
+#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) button:after,
+#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) button:after {
     display: inline-block;
     position: absolute;
     content: '';

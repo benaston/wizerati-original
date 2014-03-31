@@ -11,13 +11,11 @@
         _modeEnum = app.mod('enum').SearchFormMode,
         _mode = _modeEnum.Minimized,
         _keywords = null,
-        _location = null,
         _isWaiting = 'false',
         _rate = null,
         _isVisible = 'true',
         _firstRenderCompleteFlag = false;
 
-//    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = {
       default: 'update://searchformmodel',
       setMode: 'update://searchformmodel/setmode',
@@ -72,6 +70,7 @@
 
     this.setRate = function (value, options) {
       options = options || { silent: false };
+
       _rate = value;
 
       if (options.silent === false) {
@@ -104,6 +103,7 @@
 
     function init() {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 

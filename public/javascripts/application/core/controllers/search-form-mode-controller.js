@@ -14,10 +14,11 @@
     this.update = function (dto) {
       try {
         if (_searchFormModel.getMode() !== dto.mode) { //refactor off?
+
           _searchFormModel.setMode(dto.mode);
 
           if (dto.mode === _searchFormModeEnum.Minimized) {
-            app.instance.router.redirect('/search', { keywords: _searchFormModel.keywords, r: _searchFormModel.r });
+            app.instance.router.redirect('/search');
           } else if (dto.mode === _searchFormModeEnum.Default) {
             app.instance.router.redirect('/search/edit');
           } else {

@@ -23,7 +23,7 @@
 
     this.route = function (uri, dto, options) {
       options = options || { silent: false };
-      options.dtoPopulator = options.dtoPopulator || function() { return null; };
+
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -41,9 +41,10 @@
       }
 
       var route = that.routes[firstMatchingRouteUri];
+      route.options.dtoPopulator = route.options.dtoPopulator || function() { return null; };
       var dto = dto
-          || createDtoFromQueryString(queryString.split('&'))
-          || options.dtoPopulator({})
+          || createDtoFromQueryString(queryString)
+          || route.options.dtoPopulator({})
           || {};
       dto.__isInvertebrateExternal__ =  options.isExternal;
 
@@ -97,14 +98,16 @@
     };
 
     function createDtoFromQueryString(queryString) {
-      var dto = {};
-
       if (queryString === '') {
         return null;
       }
 
-      for (var i = 0; i < queryString.length; ++i) {
-        var p = queryString[i].split('=');
+      var dto = {};
+
+      var qsItems = queryString.split('&');
+
+      for (var i = 0; i < qsItems.length; ++i) {
+        var p = qsItems[i].split('=');
         if (p.length !== 2) continue;
         dto[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' '));
       }
@@ -132,7 +135,7 @@
         $(this).removeClass('halo');
       });
 
-      $(document).on('click', 'a:not([data-bypass-router])', $.debounce(routeHyperlink, 500, true,
+      $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
           function(evt){
             evt.preventDefault();
           })); //debounce to prevent undesired interaction of double-click on results with double buffering

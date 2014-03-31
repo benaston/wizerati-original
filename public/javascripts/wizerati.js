@@ -2240,7 +2240,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     this.route = function (uri, dto, options) {
       options = options || { silent: false };
-      options.dtoPopulator = options.dtoPopulator || function() { return null; };
+
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -2258,9 +2258,10 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       }
 
       var route = that.routes[firstMatchingRouteUri];
+      route.options.dtoPopulator = route.options.dtoPopulator || function() { return null; };
       var dto = dto
-          || createDtoFromQueryString(queryString.split('&'))
-          || options.dtoPopulator({})
+          || createDtoFromQueryString(queryString)
+          || route.options.dtoPopulator({})
           || {};
       dto.__isInvertebrateExternal__ =  options.isExternal;
 
@@ -2314,14 +2315,16 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     };
 
     function createDtoFromQueryString(queryString) {
-      var dto = {};
-
       if (queryString === '') {
         return null;
       }
 
-      for (var i = 0; i < queryString.length; ++i) {
-        var p = queryString[i].split('=');
+      var dto = {};
+
+      var qsItems = queryString.split('&');
+
+      for (var i = 0; i < qsItems.length; ++i) {
+        var p = qsItems[i].split('=');
         if (p.length !== 2) continue;
         dto[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' '));
       }
@@ -2349,7 +2352,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         $(this).removeClass('halo');
       });
 
-      $(document).on('click', 'a:not([data-bypass-router])', $.debounce(routeHyperlink, 500, true,
+      $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
           function(evt){
             evt.preventDefault();
           })); //debounce to prevent undesired interaction of double-click on results with double buffering
@@ -3012,16 +3015,16 @@ window.wizerati = {
 //        _uiModelPack.searchFormModel.setIsWaiting('true');
 //        _bookmarkRepository.getByUserId();
         _bookmarkService.getByUserId(_authenticationService.getCurrentUserId());
-      } catch (err) {
-        console.log('SearchController::show exception: ' + err);
-      }
 
-      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+        _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
+        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      } catch (err) {
+        console.log('BookmarksController::index exception: ' + err);
+      }
     };
 
     this.create = function (dto) {
@@ -3784,7 +3787,6 @@ window.wizerati = {
     var that = this,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
-        _tabEnum = wizerati.mod('enum').Tab,
         _uiModelPack = null,
         _searchService = null,
         _helper = null,
@@ -3808,10 +3810,9 @@ window.wizerati = {
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        var currentSearchHash = $.toSHA1(JSON.stringify(dto));
+        var currentSearchHash = $.toSHA1('' + dto.keywords + dto.r);
 
         if(_previousSearchHash !== currentSearchHash) {
-          console.log('running search');
           _previousSearchHash = currentSearchHash;
           _uiModelPack.searchFormModel.setIsWaiting('true');
           _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
@@ -3840,8 +3841,8 @@ window.wizerati = {
     }
 
     function dtoPopulatorShow(dto) {
-      dto.keywords = that.Model.getKeywords();
-      dto.r = that.Model.getRate();
+      dto.keywords = _uiModelPack.searchFormModel.getKeywords();
+      dto.r = _uiModelPack.searchFormModel.getRate();
       return dto;
     }
 
@@ -3890,10 +3891,11 @@ window.wizerati = {
     this.update = function (dto) {
       try {
         if (_searchFormModel.getMode() !== dto.mode) { //refactor off?
+
           _searchFormModel.setMode(dto.mode);
 
           if (dto.mode === _searchFormModeEnum.Minimized) {
-            app.instance.router.redirect('/search', { keywords: _searchFormModel.keywords, r: _searchFormModel.r });
+            app.instance.router.redirect('/search');
           } else if (dto.mode === _searchFormModeEnum.Default) {
             app.instance.router.redirect('/search/edit');
           } else {
@@ -5627,13 +5629,11 @@ window.wizerati = {
         _modeEnum = app.mod('enum').SearchFormMode,
         _mode = _modeEnum.Minimized,
         _keywords = null,
-        _location = null,
         _isWaiting = 'false',
         _rate = null,
         _isVisible = 'true',
         _firstRenderCompleteFlag = false;
 
-//    this.updateEventUri = 'update://SearchFormModel/';
     this.eventUris = {
       default: 'update://searchformmodel',
       setMode: 'update://searchformmodel/setmode',
@@ -5688,6 +5688,7 @@ window.wizerati = {
 
     this.setRate = function (value, options) {
       options = options || { silent: false };
+
       _rate = value;
 
       if (options.silent === false) {
@@ -5720,6 +5721,7 @@ window.wizerati = {
 
     function init() {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
+
       return that;
     }
 
@@ -6113,27 +6115,27 @@ window.wizerati = {
 
     function init() {
       if (!uiRootModel) {
-        throw 'SearchControllerHelper::init uiRootModel not supplied.';
+        throw 'UIModelPack::init uiRootModel not supplied.';
       }
 
       if (!searchFormModel) {
-        throw 'SearchControllerHelper::init searchFormModel not supplied.';
+        throw 'UIModelPack::init searchFormModel not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'SearchControllerHelper::init resultListModel not supplied.';
+        throw 'UIModelPack::init resultListModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
+        throw 'UIModelPack::init itemsOfInterestModel not supplied.';
       }
 
       if (!tabBarModel) {
-        throw 'SearchControllerHelper::init tabBarModel not supplied.';
+        throw 'UIModelPack::init tabBarModel not supplied.';
       }
 
       if (!bookmarkPanelModel) {
-        throw 'SearchControllerHelper::init bookmarkPanelModel not supplied.';
+        throw 'UIModelPack::init bookmarkPanelModel not supplied.';
       }
 
       that.uiRootModel = uiRootModel;
@@ -8013,13 +8015,18 @@ window.wizerati = {
 
     var that = this,
         _el = '#search-form-container',
+        _resultListPanelEl = '#result-list-panel',
         _templateName = 'search-form.html-local',
         _renderOptimizations = {},
-        _waitStateIsBeingMonitored = false; //is the periodic check for whether we are waiting running?
+        _waitStateIsBeingMonitored = false;
 
     this.$el = null;
-    this.$resultListPanelEl = null;
-    this.Model = null;
+
+    this.model = null;
+
+//    this.searchModel = null;
+//
+//    this.tempSearchModel = null;
 
     this.render = function (e) {
       var options = { done: that.postRender, postRenderScriptName: null };
@@ -8029,49 +8036,33 @@ window.wizerati = {
         return;
       }
 
-      that.renderSetMode(that.Model.getMode());
-      return app.instance.renderTemplate(that.$el, _templateName, that.Model, options);
+      app.instance.renderTemplate(that.$el, _templateName, that.model, options);
+      that.renderSetMode(that.model.getMode());
     };
 
     this.bindEvents = function () {
-//      var $keywords = that.$el.find('#keywords');
-//      $keywords.on('change', function () {
-//        that.Model.setKeywords($keywords.val(), { silent: true });
-//      });
-
-//      var $rate = that.$el.find('input[name="r"]');
-//      $rate.on('change', function () {
-//        that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
-//      });
-//
-      //we update the model only on click of search to enable trivial cancelling of unwanted changes
+     //we update the model only on click of search to enable trivial cancelling of unwanted changes
      var $btn = that.$el.find('#btn-search');
       $btn.on('click', function () {
-        that.Model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
-        that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
-      });
+        that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
+        that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
 
-      //reset the form on cancel
-      var $btn = that.$el.find('#btn-cancel-search');
-      $btn.on('click', function () {
-        that.Model.setKeywords(that.Model.getKeywords());
-        that.Model.setRate(that.Model.getRate());
+        //needed?
+        if (!_waitStateIsBeingMonitored) {
+          monitorWaitState();
+        }
       });
-
-      if (!_waitStateIsBeingMonitored) {
-        monitorWaitState();
-      }
     };
 
     this.postRender = function () {
       that.bindEvents();
-      that.Model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
+      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
     };
 
     this.renderSetIsVisible = function () {
-      if (that.Model.getIsVisible() === 'true') {
+      if (that.model.getIsVisible() === 'true') {
         that.$el.removeClass('hidden');
-      } else if (that.Model.getIsVisible() === 'false') {
+      } else if (that.model.getIsVisible() === 'false') {
         that.$el.addClass('hidden');
       }
       else {
@@ -8080,7 +8071,7 @@ window.wizerati = {
     };
 
     this.renderSetIsWaiting = function () {
-      that.$el.find('btn-search').attr('data-is-waiting', that.Model.getIsWaiting());
+      that.$el.find('btn-search').attr('data-is-waiting', that.model.getIsWaiting());
 
       if (!_waitStateIsBeingMonitored) {
         monitorWaitState();
@@ -8088,13 +8079,14 @@ window.wizerati = {
     };
 
     this.renderSetMode = function (mode) {
-      that.$resultListPanelEl.attr('data-search-form-mode', mode);
+//      that.$resultListPanelEl.attr('data-search-form-mode', mode);
+      $(_resultListPanelEl).attr('data-search-form-mode', mode); /*attempt to ensure correct behavior after re-rendering*/
     };
 
     function monitorWaitState() {
       _waitStateIsBeingMonitored = true;
 
-      if (that.Model.getIsWaiting() === 'true') {
+      if (that.model.getIsWaiting() === 'true') {
         that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
         setTimeout(function () {
           that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
@@ -8108,7 +8100,7 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.$resultListPanelEl = $('#result-list-panel'); /*to be renamed to search panel*/
+      that.$resultListPanelEl = $(_resultListPanelEl);
       that.render(); //this introduces the wait on initial visit
     };
 
@@ -8118,16 +8110,16 @@ window.wizerati = {
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
+      that.model = model;
 
-      _renderOptimizations[that.Model.eventUris.setIsVisible] = that.renderSetIsVisible;
-      _renderOptimizations[that.Model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[that.model.eventUris.setIsVisible] = that.renderSetIsVisible;
+      _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
+      _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
 
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setIsVisible, that.render);
-      $.subscribe(that.Model.eventUris.setIsWaiting, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.model.eventUris.default, that.render);
+      $.subscribe(that.model.eventUris.setIsVisible, that.render);
+      $.subscribe(that.model.eventUris.setIsWaiting, that.render);
+      $.subscribe(that.model.eventUris.setMode, that.render);
 
       return that;
     }

@@ -18,27 +18,27 @@
 
     function init() {
       if (!uiRootModel) {
-        throw 'SearchControllerHelper::init uiRootModel not supplied.';
+        throw 'UIModelPack::init uiRootModel not supplied.';
       }
 
       if (!searchFormModel) {
-        throw 'SearchControllerHelper::init searchFormModel not supplied.';
+        throw 'UIModelPack::init searchFormModel not supplied.';
       }
 
       if (!resultListModel) {
-        throw 'SearchControllerHelper::init resultListModel not supplied.';
+        throw 'UIModelPack::init resultListModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
-        throw 'SearchControllerHelper::init itemsOfInterestModel not supplied.';
+        throw 'UIModelPack::init itemsOfInterestModel not supplied.';
       }
 
       if (!tabBarModel) {
-        throw 'SearchControllerHelper::init tabBarModel not supplied.';
+        throw 'UIModelPack::init tabBarModel not supplied.';
       }
 
       if (!bookmarkPanelModel) {
-        throw 'SearchControllerHelper::init bookmarkPanelModel not supplied.';
+        throw 'UIModelPack::init bookmarkPanelModel not supplied.';
       }
 
       that.uiRootModel = uiRootModel;

@@ -10,7 +10,6 @@
     var that = this,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
-        _tabEnum = wizerati.mod('enum').Tab,
         _uiModelPack = null,
         _searchService = null,
         _helper = null,
@@ -34,10 +33,9 @@
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        var currentSearchHash = $.toSHA1(JSON.stringify(dto));
+        var currentSearchHash = $.toSHA1('' + dto.keywords + dto.r);
 
         if(_previousSearchHash !== currentSearchHash) {
-          console.log('running search');
           _previousSearchHash = currentSearchHash;
           _uiModelPack.searchFormModel.setIsWaiting('true');
           _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
@@ -66,8 +64,8 @@
     }
 
     function dtoPopulatorShow(dto) {
-      dto.keywords = that.Model.getKeywords();
-      dto.r = that.Model.getRate();
+      dto.keywords = _uiModelPack.searchFormModel.getKeywords();
+      dto.r = _uiModelPack.searchFormModel.getRate();
       return dto;
     }
 
