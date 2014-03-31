@@ -17,6 +17,10 @@ body[data-ui-mode='0'] #search-form-container {
     position: relative; /*enables absolute positioning of buttons in brownfield mode (given that the container is fixed position*/
 }
 
+body[data-ui-mode='0'] #search-form-container hr {
+    display: none;
+}
+
 body[data-ui-mode='1'] #search-form-container {
     position: fixed;
     top: 0;
@@ -132,7 +136,7 @@ body[data-ui-mode='0'] form[name='search-form'] {
 }
 
 body[data-ui-mode='0'] .search-button-container {
-    top: 215px;
+    top: -15px;
 }
 
 .search-filters > :first-child {

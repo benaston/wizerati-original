@@ -32,11 +32,9 @@ module.exports = function (grunt) {
           'public/stylesheets/reset/third-party-reset.css',
           'public/stylesheets/reset/wizerati-style-reset-form.css',
           'public/stylesheets/reset/wizerati-style-reset-non-form.css',
-
           'public/stylesheets/vendor/lucid-style-buttons.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
-
           'public/stylesheets/application/*.css',
         ],
         dest: 'public/stylesheets/<%= pkg.name %>.css'
@@ -273,13 +271,11 @@ module.exports = function (grunt) {
     'uglify',
     'cssUrlEmbed',
     'cssmin',
-//    'replace:escapeAngleBracketPercent',
     'replace:injectEditWarningIntoHead',
     'replace:injectCssIntoHead',
     'replace:injectInPageTemplates',
     'replace:injectBuildNumber',
     'replace:injectDialogs',
-//    'replace:injectFavoriteCube',
     'replace:injectScriptTagForDebugging',
     'replace:injectJavaScriptIntoBody',
     'replace:correctForReplaceTaskBug'

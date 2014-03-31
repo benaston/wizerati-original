@@ -65,10 +65,6 @@ input[type="radio"]:focus + .focus-indicator {
     display: block;
 }
 
-.field {
-    height: 35px;
-}
-
 label.radio {
     height: 80px;
     width: 80px;

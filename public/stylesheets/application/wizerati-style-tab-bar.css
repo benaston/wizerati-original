@@ -7,6 +7,7 @@
     background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
     z-index: 3;
     box-shadow: 1px 0 1px -1px #0c0917;
+    min-height: 549px;
     -webkit-filter: opacity(0%);
     pointer-events: none;
     -webkit-user-select: none;

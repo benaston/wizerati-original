@@ -6,7 +6,7 @@ html input[type="email"],
 html input[type="search"],
 html input[type="tel"] {
     display: inline-block;
-    width: 285px;
+    width: 343px;
     margin: 20px 20px 0;
     background-color: rgba(0, 0, 0, 0);
     border: 0;
@@ -20,6 +20,7 @@ html input[type="tel"] {
     border-radius: 5px;
     box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
     -webkit-user-select: none;
+    height: 49px;
 }
 
 form {

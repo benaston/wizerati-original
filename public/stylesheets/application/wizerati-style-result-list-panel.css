@@ -2,6 +2,11 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #result-list-panel {
     transition: -webkit-transform 2s cubic-bezier(0.2, 0.3, 0.25, 0.9);
 }
 
+/*attempt to ensure fixed position header is in the correct position immediately*/
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #result-list-panel[data-search-form-mode='0'] {
+    transition: -webkit-transform 0s;
+}
+
 body[data-are-transitions-enabled='true'] .result-list,
 body[data-are-transitions-enabled='true'] .result-list-search-summary-container {
     transition: -webkit-filter .2s cubic-bezier(0.2, 0.3, 0.25, 0.9);
@@ -40,6 +45,8 @@ body[data-ui-mode='0'] #result-list-panel-container {
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
 }
+
+
 
 #result-list-panel[data-search-form-mode='0'] {
     -webkit-transform: none; /*having a transform screws with the fixed positioning of the search form*/
@@ -81,7 +88,7 @@ body[data-ui-mode='1'] #result-list-panel {
 }
 
 /*h1 for the result list does not follow default h1 styling*/
-#result-list-panel h1 {
+.r-l-s-s-c-h1 {
     font-size: inherit;
     line-height: inherit;
     font-family: inherit;
