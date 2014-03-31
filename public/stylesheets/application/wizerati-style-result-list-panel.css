@@ -46,8 +46,6 @@ body[data-ui-mode='0'] #result-list-panel-container {
     -webkit-overflow-scrolling: touch;
 }
 
-
-
 #result-list-panel[data-search-form-mode='0'] {
     -webkit-transform: none; /*having a transform screws with the fixed positioning of the search form*/
 }
@@ -113,6 +111,8 @@ body[data-ui-mode='1'] #result-list-panel {
     padding: 0;
     position: relative;
     left: 0; /*required for transition*/
+    -webkit-filter: opacity(100%); /*in order to get the return transition from the search from working*/
+    -webkit-backface-visibility: hidden; /*fix blur resulting from filter*/
 }
 
 .ti {

@@ -30,19 +30,28 @@
     };
 
     this.bindEvents = function () {
-      var $keywords = that.$el.find('#keywords');
-      $keywords.on('change', function () {
-        that.Model.setKeywords($keywords.val(), { silent: true });
-      });
+//      var $keywords = that.$el.find('#keywords');
+//      $keywords.on('change', function () {
+//        that.Model.setKeywords($keywords.val(), { silent: true });
+//      });
 
-      var $location = that.$el.find('#location');
-      $location.on('change', function () {
-        that.Model.setLocation($location.val(), { silent: true });
-      });
-
-      var $rate = that.$el.find('input[name="r"]');
-      $rate.on('change', function () {
+//      var $rate = that.$el.find('input[name="r"]');
+//      $rate.on('change', function () {
+//        that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+//      });
+//
+      //we update the model only on click of search to enable trivial cancelling of unwanted changes
+     var $btn = that.$el.find('#btn-search');
+      $btn.on('click', function () {
+        that.Model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
         that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+      });
+
+      //reset the form on cancel
+      var $btn = that.$el.find('#btn-cancel-search');
+      $btn.on('click', function () {
+        that.Model.setKeywords(that.Model.getKeywords());
+        that.Model.setRate(that.Model.getRate());
       });
 
       if (!_waitStateIsBeingMonitored) {

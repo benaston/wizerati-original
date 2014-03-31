@@ -13,7 +13,8 @@
         _tabEnum = wizerati.mod('enum').Tab,
         _uiModelPack = null,
         _searchService = null,
-        _helper = null;
+        _helper = null,
+        _previousSearchHash = 'null'; //yes a string saying null
 
     this.urlTransforms = {};
 
@@ -23,18 +24,26 @@
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
         //refactor to be based on dirty checking
-        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
-          _helper.resetUIForSearch();
-          return;
-        }
+//        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
+//          _helper.resetUIForSearch();
+//          return;
+//        }
 
         if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        _uiModelPack.searchFormModel.setIsWaiting('true');
-        _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
+        var currentSearchHash = $.toSHA1(JSON.stringify(dto));
+
+        if(_previousSearchHash !== currentSearchHash) {
+          console.log('running search');
+          _previousSearchHash = currentSearchHash;
+          _uiModelPack.searchFormModel.setIsWaiting('true');
+          _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
+        } else {
+          _helper.resetUIForSearch();
+        }
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
       }

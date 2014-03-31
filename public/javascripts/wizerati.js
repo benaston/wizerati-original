@@ -1737,7 +1737,186 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
   }
 
 }($));
-;/* jQuery Tiny Pub/Sub - v0.7 - 10/27/2011
+;(function ($) {
+  'use strict';
+
+  /**
+ *
+ *  Secure Hash Algorithm (SHA1)
+ *  http://www.webtoolkit.info/
+ *
+ **/
+
+  $.toSHA1 = function (msg) {
+
+  function rotate_left(n,s) {
+    var t4 = ( n<<s ) | (n>>>(32-s));
+    return t4;
+  }
+
+  function lsb_hex(val) {
+    var str="";
+    var i;
+    var vh;
+    var vl;
+
+    for( i=0; i<=6; i+=2 ) {
+      vh = (val>>>(i*4+4))&0x0f;
+      vl = (val>>>(i*4))&0x0f;
+      str += vh.toString(16) + vl.toString(16);
+    }
+    return str;
+  }
+
+  function cvt_hex(val) {
+    var str="";
+    var i;
+    var v;
+
+    for( i=7; i>=0; i-- ) {
+      v = (val>>>(i*4))&0x0f;
+      str += v.toString(16);
+    }
+    return str;
+  };
+
+
+  function Utf8Encode(string) {
+    string = string.replace(/\r\n/g,"\n");
+    var utftext = "";
+
+    for (var n = 0; n < string.length; n++) {
+
+      var c = string.charCodeAt(n);
+
+      if (c < 128) {
+        utftext += String.fromCharCode(c);
+      }
+      else if((c > 127) && (c < 2048)) {
+        utftext += String.fromCharCode((c >> 6) | 192);
+        utftext += String.fromCharCode((c & 63) | 128);
+      }
+      else {
+        utftext += String.fromCharCode((c >> 12) | 224);
+        utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+        utftext += String.fromCharCode((c & 63) | 128);
+      }
+
+    }
+
+    return utftext;
+  }
+
+  var blockstart;
+  var i, j;
+  var W = new Array(80);
+  var H0 = 0x67452301;
+  var H1 = 0xEFCDAB89;
+  var H2 = 0x98BADCFE;
+  var H3 = 0x10325476;
+  var H4 = 0xC3D2E1F0;
+  var A, B, C, D, E;
+  var temp;
+
+  msg = Utf8Encode(msg);
+
+  var msg_len = msg.length;
+
+  var word_array = new Array();
+  for( i=0; i<msg_len-3; i+=4 ) {
+    j = msg.charCodeAt(i)<<24 | msg.charCodeAt(i+1)<<16 |
+        msg.charCodeAt(i+2)<<8 | msg.charCodeAt(i+3);
+    word_array.push( j );
+  }
+
+  switch( msg_len % 4 ) {
+    case 0:
+      i = 0x080000000;
+      break;
+    case 1:
+      i = msg.charCodeAt(msg_len-1)<<24 | 0x0800000;
+      break;
+
+    case 2:
+      i = msg.charCodeAt(msg_len-2)<<24 | msg.charCodeAt(msg_len-1)<<16 | 0x08000;
+      break;
+
+    case 3:
+      i = msg.charCodeAt(msg_len-3)<<24 | msg.charCodeAt(msg_len-2)<<16 | msg.charCodeAt(msg_len-1)<<8    | 0x80;
+      break;
+  }
+
+  word_array.push( i );
+
+  while( (word_array.length % 16) != 14 ) word_array.push( 0 );
+
+  word_array.push( msg_len>>>29 );
+  word_array.push( (msg_len<<3)&0x0ffffffff );
+
+
+  for ( blockstart=0; blockstart<word_array.length; blockstart+=16 ) {
+
+    for( i=0; i<16; i++ ) W[i] = word_array[blockstart+i];
+    for( i=16; i<=79; i++ ) W[i] = rotate_left(W[i-3] ^ W[i-8] ^ W[i-14] ^ W[i-16], 1);
+
+    A = H0;
+    B = H1;
+    C = H2;
+    D = H3;
+    E = H4;
+
+    for( i= 0; i<=19; i++ ) {
+      temp = (rotate_left(A,5) + ((B&C) | (~B&D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
+      E = D;
+      D = C;
+      C = rotate_left(B,30);
+      B = A;
+      A = temp;
+    }
+
+    for( i=20; i<=39; i++ ) {
+      temp = (rotate_left(A,5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
+      E = D;
+      D = C;
+      C = rotate_left(B,30);
+      B = A;
+      A = temp;
+    }
+
+    for( i=40; i<=59; i++ ) {
+      temp = (rotate_left(A,5) + ((B&C) | (B&D) | (C&D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
+      E = D;
+      D = C;
+      C = rotate_left(B,30);
+      B = A;
+      A = temp;
+    }
+
+    for( i=60; i<=79; i++ ) {
+      temp = (rotate_left(A,5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
+      E = D;
+      D = C;
+      C = rotate_left(B,30);
+      B = A;
+      A = temp;
+    }
+
+    H0 = (H0 + A) & 0x0ffffffff;
+    H1 = (H1 + B) & 0x0ffffffff;
+    H2 = (H2 + C) & 0x0ffffffff;
+    H3 = (H3 + D) & 0x0ffffffff;
+    H4 = (H4 + E) & 0x0ffffffff;
+
+  }
+
+  var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
+
+  return temp.toLowerCase();
+
+}
+
+
+}($));;/* jQuery Tiny Pub/Sub - v0.7 - 10/27/2011
  * http://benalman.com/
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT, GPL */
 
@@ -3608,7 +3787,8 @@ window.wizerati = {
         _tabEnum = wizerati.mod('enum').Tab,
         _uiModelPack = null,
         _searchService = null,
-        _helper = null;
+        _helper = null,
+        _previousSearchHash = 'null'; //yes a string saying null
 
     this.urlTransforms = {};
 
@@ -3618,18 +3798,26 @@ window.wizerati = {
       try {
         //check if we are moving from another navbar item (in which case do not bother with the new search)
         //refactor to be based on dirty checking
-        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
-          _helper.resetUIForSearch();
-          return;
-        }
+//        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
+//          _helper.resetUIForSearch();
+//          return;
+//        }
 
         if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        _uiModelPack.searchFormModel.setIsWaiting('true');
-        _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
+        var currentSearchHash = $.toSHA1(JSON.stringify(dto));
+
+        if(_previousSearchHash !== currentSearchHash) {
+          console.log('running search');
+          _previousSearchHash = currentSearchHash;
+          _uiModelPack.searchFormModel.setIsWaiting('true');
+          _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
+        } else {
+          _helper.resetUIForSearch();
+        }
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
       }
@@ -4638,13 +4826,13 @@ window.wizerati = {
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
-        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s)));', newWidth, viewPortWidth, widthTabBar, effectiveWidthResultListPanel);
+//        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s)));', newWidth, viewPortWidth, widthTabBar, effectiveWidthResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         if ((widthTakenByTabBarAndResultListPanel + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel) / numberOfItemsOfInterest;
-          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTabBar, effectiveWidthResultListPanel, numberOfItemsOfInterest);
+//          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTabBar, effectiveWidthResultListPanel, numberOfItemsOfInterest);
         } else {
-          console.log('no resize required.')
+//          console.log('no resize required.')
         }
       } else {
         throw "invalid itemsOfInterestModel mode.";
@@ -5452,11 +5640,6 @@ window.wizerati = {
       setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
-    //needed?
-//    this.getIsVisible = function () {
-//      return _isVisible;
-//    };
-
     this.getFirstRenderCompleteFlag = function () {
       return _firstRenderCompleteFlag;
     };
@@ -5486,7 +5669,7 @@ window.wizerati = {
     };
 
     this.getKeywords = function () {
-      return _keywords;
+      return _keywords || '';
     };
 
     this.setKeywords = function (value, options) {
@@ -5500,7 +5683,7 @@ window.wizerati = {
     };
 
     this.getRate = function () {
-      return _rate;
+      return _rate || '200';
     };
 
     this.setRate = function (value, options) {
@@ -7851,19 +8034,28 @@ window.wizerati = {
     };
 
     this.bindEvents = function () {
-      var $keywords = that.$el.find('#keywords');
-      $keywords.on('change', function () {
-        that.Model.setKeywords($keywords.val(), { silent: true });
-      });
+//      var $keywords = that.$el.find('#keywords');
+//      $keywords.on('change', function () {
+//        that.Model.setKeywords($keywords.val(), { silent: true });
+//      });
 
-      var $location = that.$el.find('#location');
-      $location.on('change', function () {
-        that.Model.setLocation($location.val(), { silent: true });
-      });
-
-      var $rate = that.$el.find('input[name="r"]');
-      $rate.on('change', function () {
+//      var $rate = that.$el.find('input[name="r"]');
+//      $rate.on('change', function () {
+//        that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+//      });
+//
+      //we update the model only on click of search to enable trivial cancelling of unwanted changes
+     var $btn = that.$el.find('#btn-search');
+      $btn.on('click', function () {
+        that.Model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
         that.Model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+      });
+
+      //reset the form on cancel
+      var $btn = that.$el.find('#btn-cancel-search');
+      $btn.on('click', function () {
+        that.Model.setKeywords(that.Model.getKeywords());
+        that.Model.setRate(that.Model.getRate());
       });
 
       if (!_waitStateIsBeingMonitored) {

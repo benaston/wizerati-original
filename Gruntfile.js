@@ -15,6 +15,7 @@ module.exports = function (grunt) {
           'public/javascripts/vendor/underscore.js',
           'public/javascripts/vendor/_cookie.js',
           'public/javascripts/vendor/decorator.js',
+          'public/javascripts/vendor/sha-1.js',
           'public/javascripts/vendor/tiny-pub-sub.js',
           'public/javascripts/vendor/moment.min.js',
           'public/javascripts/vendor/invertebrate/invertebrate.js',

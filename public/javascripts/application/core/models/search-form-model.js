@@ -24,11 +24,6 @@
       setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
-    //needed?
-//    this.getIsVisible = function () {
-//      return _isVisible;
-//    };
-
     this.getFirstRenderCompleteFlag = function () {
       return _firstRenderCompleteFlag;
     };
@@ -58,7 +53,7 @@
     };
 
     this.getKeywords = function () {
-      return _keywords;
+      return _keywords || '';
     };
 
     this.setKeywords = function (value, options) {
@@ -72,7 +67,7 @@
     };
 
     this.getRate = function () {
-      return _rate;
+      return _rate || '200';
     };
 
     this.setRate = function (value, options) {
