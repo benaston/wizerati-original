@@ -7,20 +7,23 @@ html input[type="search"],
 html input[type="tel"] {
     display: inline-block;
     width: 285px;
-    margin: 20px 20px 0 20px;
-    border-radius: 0;
+    margin: 20px 20px 0;
     background-color: rgba(0, 0, 0, 0);
-    border: none;
-    border-bottom: 1px solid rgba(2, 86, 244, .1);
-    vertical-align: middle;
-    outline: none;
-    padding: 0;
-    transition: border linear 0.2s;
+    border: 0;
+    outline: 0;
+    padding: 0 5px;
+    transition: border linear .2s;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    -webkit-appearance: none; /*Prevent iOS styling (e.g. rounded corners on search input)*/
+    -webkit-appearance: none;
     color: #333;
     font-size: 1rem;
-    line-height: 35px;
+    border-radius: 5px;
+    box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
+    -webkit-user-select: none;
+}
+
+form {
+    -webkit-user-select: none;
 }
 
 input[type="search"] {
@@ -39,6 +42,7 @@ label, .lbl {
     margin: 0;
     cursor: pointer;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-user-select: none;
 }
 
 body[data-hover-is-enabled='true'] input[type="radio"]:not(:checked) + label:hover {

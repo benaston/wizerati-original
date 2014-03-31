@@ -34,7 +34,7 @@
         }
 
         _uiModelPack.searchFormModel.setIsWaiting('true');
-        _searchService.runSearch(dto.keywords, dto.location, dto.r, _helper.searchSuccess);
+        _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
       }

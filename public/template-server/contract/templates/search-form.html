@@ -1,62 +1,79 @@
 {{ try {
 var rate = model.getRate();
 var keywords = model.getKeywords();
-}}<h1 class="logo">wizerati</h1>
-<h2 class="tag-line">UK IT contract job search</h2>
+}}<div class="logo">wizerati</div>
+<div class="tag-line">UK IT contract job search</div>
 <form id="search-form" name="search-form" action="/search" method="GET">
     <div class="search-fields">
-      <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="my skills (e.g. ruby) and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
+      <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="my skills and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
       <span>minimum daily rate (gbp)</span>
       <table>
-        <tbody><tr>
-          <td>
-            <input id="r250" name="r" type="radio" value="250" tabindex="1" {{= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" }}>
-              <label for="r250">250</label>
-          </td>
+        <tbody>
+        <tr>
             <td>
-            <input id="r350" name="r" type="radio" value="350" tabindex="1" {{= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" }}>
-              <label for="r350">350</label>
-          </td>
-          <td>
-            <input id="r450" name="r" type="radio" value="450" tabindex="1" {{= rate ? rate === "450" ? "checked='checked'" : ""  : "" }}>
-              <label for="r450">450</label>
-          </td>
-          <td>
-            <input id="r550" name="r" type="radio" value="550" tabindex="1" {{= rate ? rate === "550" ? "checked='checked'" : ""  : "" }}>
-              <label for="r550">550</label>
-          </td>
-          <td>
-            <input id="r650" name="r" type="radio" value="650" tabindex="1" {{= rate ? rate === "650" ? "checked='checked'" : ""  : "" }}>
-              <label for="r650">650</label>
-          </td>
+                <input id="r200" name="r" type="radio" value="200" tabindex="1" {{= rate ? rate === "200" ? "checked='checked'" : ""  : "" }}>
+                <label for="r200">200</label>
+            </td>
+            <td>
+                <input id="r300" name="r" type="radio" value="300" tabindex="1" {{= rate ? rate === "300" ? "checked='checked'" : ""  : "" }}>
+                <label for="r300">300</label>
+            </td>
+            <td>
+                <input id="r400" name="r" type="radio" value="400" tabindex="1" {{= rate ? rate === "400" ? "checked='checked'" : ""  : "" }}>
+                <label for="r400">400</label>
+            </td>
+            <td>
+                <input id="r500" name="r" type="radio" value="500" tabindex="1" {{= rate ? rate === "500" ? "checked='checked'" : ""  : "" }}>
+                <label for="r500">500</label>
+            </td>
+            <td>
+                <input id="r600" name="r" type="radio" value="600" tabindex="1" {{= rate ? rate === "600" ? "checked='checked'" : ""  : "" }}>
+                <label for="r600">600</label>
+            </td>
+            <td>
+                <input id="r700" name="r" type="radio" value="700" tabindex="1" required="required" {{= rate ? rate === "700" ? "checked='checked'" : ""  : "" }}>
+                <label for="r700">700</label>
+            </td>
+            <td>
+                <input id="r800" name="r" type="radio" value="800" tabindex="1" required="required" {{= rate ? rate === "800" ? "checked='checked'" : ""  : "" }}>
+                <label for="r800">800</label>
+            </td>
         </tr>
         <tr>
-          <td>
-            <input id="r300" name="r" type="radio" value="300" tabindex="1" {{= rate ? rate === "300" ? "checked='checked'" : ""  : "" }}>
-            <label for="r300">300</label>
-          </td>
             <td>
-            <input id="r400" name="r" type="radio" value="400" tabindex="1" {{= rate ? rate === "400" ? "checked='checked'" : ""  : "" }}>
-            <label for="r400">400</label>
-          </td>
-          <td>
-            <input id="r500" name="r" type="radio" value="500" tabindex="1" {{= rate ? rate === "500" ? "checked='checked'" : ""  : "" }}>
-            <label for="r500">500</label>
-          </td>
-          <td>
-            <input id="r600" name="r" type="radio" value="600" tabindex="1" {{= rate ? rate === "600" ? "checked='checked'" : ""  : "" }}>
-            <label for="r600">600</label>
-          </td>
-          <td>
-            <input id="r700" name="r" type="radio" value="700" tabindex="1" required="required" {{= rate ? rate === "700" ? "checked='checked'" : ""  : "" }}>
-            <label for="r700">700</label>
-          </td>
+                <input id="r250" name="r" type="radio" value="250" tabindex="1" {{= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" }}>
+                <label for="r250">250</label>
+            </td>
+            <td>
+                <input id="r350" name="r" type="radio" value="350" tabindex="1" {{= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" }}>
+                <label for="r350">350</label>
+            </td>
+            <td>
+                <input id="r450" name="r" type="radio" value="450" tabindex="1" {{= rate ? rate === "450" ? "checked='checked'" : ""  : "" }}>
+                <label for="r450">450</label>
+            </td>
+            <td>
+                <input id="r550" name="r" type="radio" value="550" tabindex="1" {{= rate ? rate === "550" ? "checked='checked'" : ""  : "" }}>
+                <label for="r550">550</label>
+            </td>
+            <td>
+                <input id="r650" name="r" type="radio" value="650" tabindex="1" {{= rate ? rate === "650" ? "checked='checked'" : ""  : "" }}>
+                <label for="r650">650</label>
+            </td>
+            <td>
+                <input id="r750" name="r" type="radio" value="750" tabindex="1" {{= rate ? rate === "750" ? "checked='checked'" : ""  : "" }}>
+                <label for="r750">750</label>
+            </td><td>
+                <input id="r850" name="r" type="radio" value="850" tabindex="1" {{= rate ? rate === "850" ? "checked='checked'" : ""  : "" }}>
+                <label for="r850">850</label>
+            </td>
         </tr>
       </tbody>
       </table>
     </div>
+    <div class="search-buttons-container">
     <div class="cancel-button-container">
         <div class="rotating-button-container">
             <button form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">cancel</span>
@@ -67,10 +84,12 @@ var keywords = model.getKeywords();
             <button type="submit" id="btn-search" tabindex="1" class="btn btn-40 btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">search</span>
         </div>
     </div>
+    </div>
 </form>
 <form id="frm-cancel-search" action="/searchformmode/update" method="POST">
     <input type="hidden" name="mode" value="1">
 </form>
+        <hr/>
 {{
 } catch(e) {
 throw "template exception: search-form. " + e;

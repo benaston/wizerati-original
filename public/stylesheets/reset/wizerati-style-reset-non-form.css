@@ -23,7 +23,7 @@ blockquote {
 
 body {
     font-size: 100%;
-    line-height: 134%;
+    line-height: 1.5;
     color: #333333;
     -webkit-font-smoothing: antialiased;
 }
@@ -43,6 +43,10 @@ code {
     white-space: nowrap;
     background-color: #f7f7f9;
     border: 1px solid #e1e1e8;
+}
+
+div {
+    -webkit-user-select: none;
 }
 
 em {
@@ -116,6 +120,7 @@ table {
     background-color: transparent;
     border-collapse: collapse;
     border-spacing: 0;
+    -webkit-user-select: none;
 }
 
 #no-script {

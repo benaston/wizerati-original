@@ -8,12 +8,21 @@
       return new app.AuthenticationService();
     }
 
-    var that = this;
+    var that = this,
+        _currentUserId = null;
 
     this.authenticate = function (username, password) {
 
 //          $.ajax({ url: options.searchUri, success: success, cache: false });
       return false;
+    };
+
+    this.setCurrentUserId = function () {
+      return _currentUserId;
+    };
+
+    this.getCurrentUserId = function () {
+      return _currentUserId;
     };
 
     function init() {

@@ -11,6 +11,26 @@
         _bookmarkBookModel = null,
         _itemRepository = null;
 
+    this.getByUserId = function (userid) {
+      done = done || function (data) {};
+
+      $.ajax({
+        url: '/bookmarks/',
+        success: success,
+        cache: false
+      });
+
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
+        }
+
+        var results = $.parseJSON(data);
+        _itemCache.insert(results);
+        done(results);
+      }
+    };
+
     this.addBookmark = function (id) {
       if (!id) {
         throw 'BookmarkService::addBookmark id not supplied.';

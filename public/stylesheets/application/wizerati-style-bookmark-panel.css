@@ -46,10 +46,22 @@ body[data-ui-mode='1'] #bookmark-panel-container[data-mode='0']  #bookmark-panel
     left: 0;
 }
 
+/*h1 for the result list does not follow default h1 styling*/
+#bookmark-panel h1 {
+    font-size: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    margin: inherit;
+    display: table-cell;
+    vertical-align: middle;
+}
+
 .bookmark-panel-summary {
     padding: 15px 10px 14px 10px;
     box-sizing: border-box; /*because we are applying padding*/
     color: #999;
+    height:67px;
+    display: table;
 }
 
 .bookmark-list-summary {
@@ -61,6 +73,7 @@ body[data-ui-mode='1'] #bookmark-panel-container[data-mode='0']  #bookmark-panel
     font-family: helvetica-bold;
     width: 100%;
     z-index: 1; /*ensure remains over results*/
+
 }
 
 /*"narrow-screen" devices like iphone*/

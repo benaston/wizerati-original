@@ -13,7 +13,7 @@
         _itemCache = null;
 
     //rename to success, plus add timeout argument and error
-    this.runSearch = function (keywords, location, rate, done) {
+    this.runSearch = function (keywords, rate, done) {
         done = !done ? function (data) {
         } : done;
 

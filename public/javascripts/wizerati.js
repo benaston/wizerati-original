@@ -2801,10 +2801,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, uiModelPack) {
+  function BookmarksController(bookmarkService, uiModelPack, helper) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, uiModelPack);
+      return new app.BookmarksController(bookmarkService, uiModelPack, helper);
     }
 
     var that = this,
@@ -2815,24 +2815,24 @@ window.wizerati = {
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _bookmarkService = null,
-        _uiModelPack = null;
+        _uiModelPack = null,
+        _helper = null;
 
     this.index = function (dto) {
       try {
-        //check if we are moving from another navbar item (in which case do not bother with the new search)
-        //refactor to be based on dirty checking
-        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
-          _helper.resetUIForSearch();
-          return;
-        }
+//        if (!(dto.__isInvertebrateExternal__)) {
+//          _helper.resetUIForSearch();
+//          return;
+//        }
 
-        if (dto.__isInvertebrateExternal__) {
-          _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-          _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
-        }
+//        if (dto.__isInvertebrateExternal__) {
+//          _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
+//          _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
+//        }
 
-        _uiModelPack.searchFormModel.setIsWaiting('true');
-        _searchService.runSearch(dto.keywords, dto.location, dto.r, _helper.searchSuccess);
+//        _uiModelPack.searchFormModel.setIsWaiting('true');
+//        _bookmarkRepository.getByUserId();
+        _bookmarkService.getByUserId(_authenticationService.getCurrentUserId());
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
       }
@@ -2863,15 +2863,20 @@ window.wizerati = {
 
     function init() {
       if (!bookmarkService) {
-        throw 'BookmarkedItemsController::init bookmarkService not supplied.';
+        throw 'BookmarksController::init bookmarkService not supplied.';
       }
 
       if (!uiModelPack) {
-        throw 'BookmarkedItemsController::init uiModelPack not supplied.';
+        throw 'BookmarksController::init uiModelPack not supplied.';
+      }
+
+      if (!helper) {
+        throw 'BookmarksController::init helper not supplied.';
       }
 
       _bookmarkService = bookmarkService;
       _uiModelPack = uiModelPack;
+      _helper = helper;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -3624,7 +3629,7 @@ window.wizerati = {
         }
 
         _uiModelPack.searchFormModel.setIsWaiting('true');
-        _searchService.runSearch(dto.keywords, dto.location, dto.r, _helper.searchSuccess);
+        _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
       }
@@ -5816,6 +5821,42 @@ window.wizerati = {
 //    metadata.prefetchTemplates();
 //    metadata.prefetchPostRenderActions();
 //});
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function UserModel() {
+
+    if (!(this instanceof app.UserModel)) {
+      return new app.UserModel();
+    }
+
+    var that = this,
+        _userId = null;
+
+    this.eventUris = { default: 'update://usermodel' };
+
+    this.getUserId = function () {
+      return _userId;
+    };
+
+    this.setUserId = function (value) {
+      _userId = value;
+
+      $.publish(that.eventUris.default, value);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.UserModel = UserModel;
+  invertebrate.Model.isExtendedBy(app.UserModel);
+
+}(wizerati, $, invertebrate));
 ;(function (app) {
   'use strict';
 
@@ -6297,12 +6338,21 @@ window.wizerati = {
       return new app.AuthenticationService();
     }
 
-    var that = this;
+    var that = this,
+        _currentUserId = null;
 
     this.authenticate = function (username, password) {
 
 //          $.ajax({ url: options.searchUri, success: success, cache: false });
       return false;
+    };
+
+    this.setCurrentUserId = function () {
+      return _currentUserId;
+    };
+
+    this.getCurrentUserId = function () {
+      return _currentUserId;
     };
 
     function init() {
@@ -6379,6 +6429,26 @@ window.wizerati = {
         _bookmarkBookModel = null,
         _itemRepository = null;
 
+    this.getByUserId = function (userid) {
+      done = done || function (data) {};
+
+      $.ajax({
+        url: '/bookmarks/',
+        success: success,
+        cache: false
+      });
+
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
+        }
+
+        var results = $.parseJSON(data);
+        _itemCache.insert(results);
+        done(results);
+      }
+    };
+
     this.addBookmark = function (id) {
       if (!id) {
         throw 'BookmarkService::addBookmark id not supplied.';
@@ -6441,7 +6511,7 @@ window.wizerati = {
         _itemCache = null;
 
     //rename to success, plus add timeout argument and error
-    this.runSearch = function (keywords, location, rate, done) {
+    this.runSearch = function (keywords, rate, done) {
         done = !done ? function (data) {
         } : done;
 
@@ -8388,6 +8458,7 @@ window.wizerati = {
 
   try {
     mod.searchControllerHelper = new wizerati.SearchControllerHelper(p.uiModelPack, f.guidFactory, l.layoutCoordinator);
+    mod.bookmarksControllerHelper = new wizerati.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator);
   }
   catch (e) {
     throw 'problem registering helpers module. ' + e;
@@ -8402,7 +8473,7 @@ window.wizerati = {
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
+    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack, h.bookmarksControllerHelper);
     mod.comparisonListController = new wizerati.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);

@@ -84,11 +84,13 @@ body[data-ui-mode='0'] .logo, body[data-ui-mode='0'] .tag-line {
     font-size: 3.2em;
     top: 30px;
     margin: 22px 0 0 0;
+    -webkit-user-select: none;
 }
 
 .tag-line {
     font-size: .8rem;
     top: 59px;
+    -webkit-user-select: none;
 }
 
 body[data-ui-mode='1'] .logo,

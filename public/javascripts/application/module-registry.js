@@ -307,6 +307,7 @@
 
   try {
     mod.searchControllerHelper = new wizerati.SearchControllerHelper(p.uiModelPack, f.guidFactory, l.layoutCoordinator);
+    mod.bookmarksControllerHelper = new wizerati.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator);
   }
   catch (e) {
     throw 'problem registering helpers module. ' + e;
@@ -321,7 +322,7 @@
   try {
     mod.actionedItemsController = new wizerati.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new wizerati.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack);
+    mod.bookmarksController = new wizerati.BookmarksController(s.bookmarkService, p.uiModelPack, h.bookmarksControllerHelper);
     mod.comparisonListController = new wizerati.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new wizerati.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new wizerati.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);

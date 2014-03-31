@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, uiModelPack) {
+  function BookmarksController(bookmarkService, uiModelPack, helper) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, uiModelPack);
+      return new app.BookmarksController(bookmarkService, uiModelPack, helper);
     }
 
     var that = this,
@@ -15,24 +15,24 @@
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _bookmarkService = null,
-        _uiModelPack = null;
+        _uiModelPack = null,
+        _helper = null;
 
     this.index = function (dto) {
       try {
-        //check if we are moving from another navbar item (in which case do not bother with the new search)
-        //refactor to be based on dirty checking
-        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
-          _helper.resetUIForSearch();
-          return;
-        }
+//        if (!(dto.__isInvertebrateExternal__)) {
+//          _helper.resetUIForSearch();
+//          return;
+//        }
 
-        if (dto.__isInvertebrateExternal__) {
-          _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-          _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
-        }
+//        if (dto.__isInvertebrateExternal__) {
+//          _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
+//          _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
+//        }
 
-        _uiModelPack.searchFormModel.setIsWaiting('true');
-        _searchService.runSearch(dto.keywords, dto.location, dto.r, _helper.searchSuccess);
+//        _uiModelPack.searchFormModel.setIsWaiting('true');
+//        _bookmarkRepository.getByUserId();
+        _bookmarkService.getByUserId(_authenticationService.getCurrentUserId());
       } catch (err) {
         console.log('SearchController::show exception: ' + err);
       }
@@ -63,15 +63,20 @@
 
     function init() {
       if (!bookmarkService) {
-        throw 'BookmarkedItemsController::init bookmarkService not supplied.';
+        throw 'BookmarksController::init bookmarkService not supplied.';
       }
 
       if (!uiModelPack) {
-        throw 'BookmarkedItemsController::init uiModelPack not supplied.';
+        throw 'BookmarksController::init uiModelPack not supplied.';
+      }
+
+      if (!helper) {
+        throw 'BookmarksController::init helper not supplied.';
       }
 
       _bookmarkService = bookmarkService;
       _uiModelPack = uiModelPack;
+      _helper = helper;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
