@@ -19,6 +19,8 @@
     this.eventUris = {
       default: 'update://searchformmodel',
       setMode: 'update://searchformmodel/setmode',
+      setRate: 'update://searchformmodel/setrate',
+      setKeywords: 'update://searchformmodel/setkeywords',
       setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
@@ -60,7 +62,7 @@
       _keywords = value;
 
       if (options.silent === false) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setKeywords, value);
       }
     };
 
@@ -74,7 +76,7 @@
       _rate = value;
 
       if (options.silent === false) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setRate, value);
       }
     };
 

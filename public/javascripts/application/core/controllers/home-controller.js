@@ -14,12 +14,11 @@
         _modalEnum = wizerati.mod('enum').Modal,
         _uiModeEnum = wizerati.mod('enum').UIMode,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
-        _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
         _resultListModeEnum = wizerati.mod('enum').ResultListMode;
 
     this.index = function () {
       try {
-        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag
+        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);

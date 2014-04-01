@@ -73,9 +73,23 @@
       }
     };
 
+    //when rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
+    //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
     this.renderSetMode = function (mode) {
-//      that.$resultListPanelEl.attr('data-search-form-mode', mode);
-      $(_resultListPanelEl).attr('data-search-form-mode', mode); /*attempt to ensure correct behavior after re-rendering*/
+      this.renderSetKeywords();
+      this.renderSetRate();
+      $(_resultListPanelEl).attr('data-search-form-mode', mode);
+    };
+
+    this.renderSetKeywords = function (keywords) {
+      keywords = keywords || that.model.getKeywords();
+      that.$el.find('#keywords').val(keywords);
+    };
+
+    this.renderSetRate = function (rate) {
+      rate = rate || that.model.getRate();
+      that.$el.find('input[name="r"]:checked').prop('checked', false).blur();
+      that.$el.find('input[name="r"][value="'+rate+'"]').prop('checked', true);
     };
 
     function monitorWaitState() {
@@ -110,11 +124,15 @@
       _renderOptimizations[that.model.eventUris.setIsVisible] = that.renderSetIsVisible;
       _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
       _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
+      _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
 
       $.subscribe(that.model.eventUris.default, that.render);
       $.subscribe(that.model.eventUris.setIsVisible, that.render);
       $.subscribe(that.model.eventUris.setIsWaiting, that.render);
       $.subscribe(that.model.eventUris.setMode, that.render);
+      $.subscribe(that.model.eventUris.setKeywords, that.render);
+      $.subscribe(that.model.eventUris.setRate, that.render);
 
       return that;
     }

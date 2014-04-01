@@ -43,8 +43,8 @@
     this.edit = function (dto) {
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
-       _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-       _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
+//       _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
+//       _uiModelPack.searchFormModel.setRate(dto.r, {silent: false});
 
         _helper.resetUIForSearch();
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Default);

@@ -3387,12 +3387,11 @@ window.wizerati = {
         _modalEnum = wizerati.mod('enum').Modal,
         _uiModeEnum = wizerati.mod('enum').UIMode,
         _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
-        _searchPanelModeEnum = wizerati.mod('enum').SearchPanelMode,
         _resultListModeEnum = wizerati.mod('enum').ResultListMode;
 
     this.index = function () {
       try {
-        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag
+        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
@@ -3826,8 +3825,8 @@ window.wizerati = {
     this.edit = function (dto) {
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
-       _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-       _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
+//       _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
+//       _uiModelPack.searchFormModel.setRate(dto.r, {silent: false});
 
         _helper.resetUIForSearch();
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Default);
@@ -5636,6 +5635,8 @@ window.wizerati = {
     this.eventUris = {
       default: 'update://searchformmodel',
       setMode: 'update://searchformmodel/setmode',
+      setRate: 'update://searchformmodel/setrate',
+      setKeywords: 'update://searchformmodel/setkeywords',
       setIsWaiting: 'update://searchformmodel/setiswaiting',
       setIsVisible: 'update://searchformmodel/setisvisible' };
 
@@ -5677,7 +5678,7 @@ window.wizerati = {
       _keywords = value;
 
       if (options.silent === false) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setKeywords, value);
       }
     };
 
@@ -5691,7 +5692,7 @@ window.wizerati = {
       _rate = value;
 
       if (options.silent === false) {
-        $.publish(that.eventUris.default);
+        $.publish(that.eventUris.setRate, value);
       }
     };
 
@@ -8174,9 +8175,23 @@ window.wizerati = {
       }
     };
 
+    //when rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
+    //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
     this.renderSetMode = function (mode) {
-//      that.$resultListPanelEl.attr('data-search-form-mode', mode);
-      $(_resultListPanelEl).attr('data-search-form-mode', mode); /*attempt to ensure correct behavior after re-rendering*/
+      this.renderSetKeywords();
+      this.renderSetRate();
+      $(_resultListPanelEl).attr('data-search-form-mode', mode);
+    };
+
+    this.renderSetKeywords = function (keywords) {
+      keywords = keywords || that.model.getKeywords();
+      that.$el.find('#keywords').val(keywords);
+    };
+
+    this.renderSetRate = function (rate) {
+      rate = rate || that.model.getRate();
+      that.$el.find('input[name="r"]:checked').prop('checked', false).blur();
+      that.$el.find('input[name="r"][value="'+rate+'"]').prop('checked', true);
     };
 
     function monitorWaitState() {
@@ -8211,11 +8226,15 @@ window.wizerati = {
       _renderOptimizations[that.model.eventUris.setIsVisible] = that.renderSetIsVisible;
       _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
       _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
+      _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
 
       $.subscribe(that.model.eventUris.default, that.render);
       $.subscribe(that.model.eventUris.setIsVisible, that.render);
       $.subscribe(that.model.eventUris.setIsWaiting, that.render);
       $.subscribe(that.model.eventUris.setMode, that.render);
+      $.subscribe(that.model.eventUris.setKeywords, that.render);
+      $.subscribe(that.model.eventUris.setRate, that.render);
 
       return that;
     }
