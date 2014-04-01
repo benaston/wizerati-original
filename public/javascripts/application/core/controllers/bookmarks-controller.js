@@ -4,7 +4,7 @@
   function BookmarksController(bookmarkService, uiModelPack, helper) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, uiModelPack, helper);
+      return new app.BookmarksController(bookmarkService, uiModelPack, helper, userModel);
     }
 
     var that = this,
@@ -32,7 +32,7 @@
 
 //        _uiModelPack.searchFormModel.setIsWaiting('true');
 //        _bookmarkRepository.getByUserId();
-        _bookmarkService.getByUserId(_authenticationService.getCurrentUserId());
+        _bookmarkService.getByUserId(_userModel.getUserId());
 
         _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
         _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
@@ -74,9 +74,14 @@
         throw 'BookmarksController::init helper not supplied.';
       }
 
+      if (!userModel) {
+        throw 'BookmarksController::init userModel not supplied.';
+      }
+
       _bookmarkService = bookmarkService;
       _uiModelPack = uiModelPack;
       _helper = helper;
+      _userModel = userModel;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 

@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function ItemCache() {
+  function ObjectCache() {
 
-    if (!(this instanceof app.ItemCache)) {
-      return new app.ItemCache();
+    if (!(this instanceof app.ObjectCache)) {
+      return new app.ObjectCache();
     }
 
     var that = this;
@@ -41,6 +41,6 @@
     return init();
   }
 
-  app.ItemCache = ItemCache;
+  app.ObjectCache = ObjectCache;
 
 }(wizerati));

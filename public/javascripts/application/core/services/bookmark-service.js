@@ -1,18 +1,27 @@
 (function (app) {
   'use strict';
 
-  function BookmarkService(bookmarkBookModel, itemRepository) {
+  function BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository) {
 
     if (!(this instanceof app.BookmarkService)) {
-      return new app.BookmarkService(bookmarkBookModel, itemRepository);
+      return new app.BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository);
     }
 
     var that = this,
         _bookmarkBookModel = null,
+        _bookmarkRepository = null,
         _itemRepository = null;
 
     this.getByUserId = function (userid) {
       done = done || function (data) {};
+
+      var bookmarks = _bookmarkRepository.getByUserId(userId, function done1(bookmarks){
+        _itemRepository.getById(bookmarks.map(function(b){ return b.itemId; }), function done2(items) {
+          return items.map(function(i){
+            return _.extend({}, i, bookmarks)
+          });
+        });
+      });
 
       $.ajax({
         url: '/bookmarks/',
@@ -46,7 +55,7 @@
 
     this.removeBookmark = function (id) {
       if (!id) {
-        throw 'BookmarkService::addBookmark id not supplied.';
+        throw 'BookmarkService::removeBookmark id not supplied.';
       }
 
       _itemRepository.getById(id, function (item) {
@@ -57,16 +66,21 @@
 
     function init() {
       if (!bookmarkBookModel) {
-        throw 'bookModel not supplied';
+        throw 'BookmarkService::init bookModel not supplied';
+      }
+
+      if (!bookmarkRepository) {
+        throw 'BookmarkService::init bookmarkRepository not supplied';
       }
 
       if (!itemRepository) {
-        throw 'itemRepository not supplied';
+        throw 'BookmarkService::init itemRepository not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
       _bookmarkBookModel = bookmarkBookModel;
+      _bookmarkRepository = bookmarkRepository;
       _itemRepository = itemRepository;
 
       return that;

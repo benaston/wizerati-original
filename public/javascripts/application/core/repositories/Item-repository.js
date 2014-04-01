@@ -12,12 +12,16 @@
         _itemCache = null,
         _croniclIService = null;
 
-    this.getById = function (id, done) {
+    this.getByIds = function (idArr, done) {
       var cachedItem = _itemCache.items[id];
       if (cachedItem) {
         done(cachedItem);
         return;
       }
+
+      $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
+        success: success,
+        cache: false });
 
       function success(data) {
         if (!data) {
@@ -29,21 +33,38 @@
 
         done(result);
       }
+    };
 
-//      setTimeout(function () {
-        $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
-          success: success,
-          cache: false });
-//      }, 2000);
+    this.getById = function (id, done) {
+      var cachedItem = _itemCache.items[id];
+      if (cachedItem) {
+        done(cachedItem);
+        return;
+      }
+
+      $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
+        success: success,
+        cache: false });
+
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
+        }
+
+        var result = $.parseJSON(data);
+        _itemCache.insert([result]);
+
+        done(result);
+      }
     };
 
     function init() {
       if (!itemCache) {
-        throw 'itemCache not supplied.';
+        throw 'ItemRepository::init itemCache not supplied.';
       }
 
       if (!croniclIService) {
-        throw 'croniclIService not supplied.';
+        throw 'ItemRepository::init croniclIService not supplied.';
       }
 
       _itemCache = itemCache;
