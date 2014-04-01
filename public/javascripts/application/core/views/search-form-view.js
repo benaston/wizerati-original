@@ -47,11 +47,12 @@
       $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
         setTimeout(function(){
+          $('#tab-bar').scrollTop();
           $('#tab-bar').css({
             'height':'100%',
             'position':'fixed'
           });
-        }, 100); //attempt to circumvent fixed position vs keyboard issue in ios
+        }, 500); //attempt to circumvent fixed position vs keyboard issue in ios
       });
     };
 
