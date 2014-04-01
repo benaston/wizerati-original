@@ -26,7 +26,7 @@
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        var currentSearchHash = $.toSHA1('' + dto.keywords + dto.r);
+        var currentSearchHash = '' + dto.keywords + dto.r;
 
         if(_previousSearchHash !== currentSearchHash) {
           _previousSearchHash = currentSearchHash;

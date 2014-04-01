@@ -94,7 +94,13 @@
         dto[$r.name] = $r.value;
       });
 
-      return dto;
+      //If we have found nothing to add to the dto from the form, then return null
+      //permitting fall through to any dtoPopulationFunctions later.
+      if(Object.keys(dto).length) {
+        return dto;
+      }
+
+      return null;
     };
 
     function createDtoFromQueryString(queryString) {

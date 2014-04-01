@@ -2311,7 +2311,13 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         dto[$r.name] = $r.value;
       });
 
-      return dto;
+      //If we have found nothing to add to the dto from the form, then return null
+      //permitting fall through to any dtoPopulationFunctions later.
+      if(Object.keys(dto).length) {
+        return dto;
+      }
+
+      return null;
     };
 
     function createDtoFromQueryString(queryString) {
@@ -3808,7 +3814,7 @@ window.wizerati = {
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        var currentSearchHash = $.toSHA1('' + dto.keywords + dto.r);
+        var currentSearchHash = '' + dto.keywords + dto.r;
 
         if(_previousSearchHash !== currentSearchHash) {
           _previousSearchHash = currentSearchHash;
