@@ -150,11 +150,6 @@ body[data-ui-mode='0'] .search-button-container {
     display: inline-block;
 }
 
-.search-form-inner-container {
-    width: 100%;
-    position: absolute;
-}
-
 .search-filters {
     margin: 20px 20px 20px 21px;
 }
