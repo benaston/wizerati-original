@@ -44,7 +44,7 @@
       });
 
       var $form = that.$el.find('#search-form');
-      $btn.on('submit', function () {
+      $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
       });
     };
