@@ -73,7 +73,7 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:hover {
     background: #fff;
     left: -5px;
     bottom: 24px;
-    box-shadow: 0 0 2px 0px white;
+    box-shadow: 0 0 2px 0 white;
 }
 
 #tab-bar h1 {

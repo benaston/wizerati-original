@@ -160,8 +160,8 @@ module.exports = function (grunt) {
         options: {
           patterns: [
             {
-              match: 'apply-to-contract-dialog',
-              replacement: '<%= grunt.file.read("public/template-server/contract/templates/apply-to-contract-dialog.html") %>'
+              match: 'apply-dialog-contract',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/apply-dialog.html") %>'
             }
           ]
         },

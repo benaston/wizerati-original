@@ -69,3 +69,9 @@ label:focus {
 button:disabled + label {
     opacity: .1;
 }
+
+/*attempt to correct vertical alignment for webkit*/
+::-webkit-input-placeholder {
+    position: relative;
+    top: 1px;
+}
