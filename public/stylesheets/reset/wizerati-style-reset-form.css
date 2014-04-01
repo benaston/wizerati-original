@@ -11,15 +11,13 @@ html input[type="tel"] {
     background-color: rgba(0, 0, 0, 0);
     border: 0;
     outline: 0;
-    padding: 0 5px;
-    transition: border linear .2s;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-appearance: none;
     color: #333;
     font-size: 1rem;
     border-radius: 5px;
     box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
-    height: 49px;
+    padding: 15px 0px 12px 0;
 }
 
 form {
@@ -69,8 +67,6 @@ button:disabled + label {
     opacity: .1;
 }
 
-/*attempt to correct vertical alignment for webkit*/
-::-webkit-input-placeholder {
-    position: relative;
-    top: 1px;
+::-webkit-search-cancel-button {
+    margin:4px; /*prevent clipping of the button in safari, and ensures correct indentation from RHS*/
 }
