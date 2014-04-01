@@ -8155,7 +8155,8 @@ window.wizerati = {
       $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
         setTimeout(function(){
-          $('body').scrollTop();
+          $('#tab-bar').css({ position: 'absolute'});
+          $('#tab-bar').css({ position: 'fixed'});
         }, 500); //attempt to circumvent fixed position vs keyboard issue in ios
       });
     };
