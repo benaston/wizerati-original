@@ -17,7 +17,7 @@ html input[type="tel"] {
     font-size: 1rem;
     border-radius: 5px;
     box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
-    padding: 15px 0px 12px 0;
+    padding: 15px 5px 12px 5px;
 }
 
 form {
@@ -68,5 +68,5 @@ button:disabled + label {
 }
 
 ::-webkit-search-cancel-button {
-    margin:4px; /*prevent clipping of the button in safari, and ensures correct indentation from RHS*/
+    display: none; /*too much bother to get this styled correctly*/
 }
