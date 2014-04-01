@@ -2345,10 +2345,10 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
       });
 
-      $(document).on('touchstart', 'button', function () {
+      $(document).on('touchstart', 'button, .lbl', function () {
         $(this).addClass('halo');
       });
-      $(document).on('touchend', 'button', function () {
+      $(document).on('touchend', 'button, .lbl', function () {
         $(this).removeClass('halo');
       });
 
