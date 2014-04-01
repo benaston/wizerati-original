@@ -116,7 +116,8 @@
   'use strict';
 
   try {
-    mod.itemCache = new w.ItemCache();
+    mod.itemCache = new w.ObjectCache();
+    mod.bookmarkCache = new w.ObjectCache();
   }
   catch (e) {
     throw 'problem registering caches module. ' + e;
@@ -214,6 +215,7 @@
 
   try {
     mod.itemRepository = new w.ItemRepository(w.mod('caches').itemCache, i.croniclIService);
+    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService);
   }
   catch (e) {
     throw 'problem registering repositories module. ' + e;
@@ -228,7 +230,7 @@
   try {
     mod.accountService = new w.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new w.AuthenticationService();
-    mod.bookmarkService = new w.BookmarkService(m.bookmarkBookModel, r.itemRepository);
+    mod.bookmarkService = new w.BookmarkService(m.bookmarkBookModel, r.bookmarkRepository, r.itemRepository);
 
     mod.authorizationService = new w.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);

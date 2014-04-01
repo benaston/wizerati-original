@@ -1,7 +1,7 @@
 (function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, uiModelPack, helper) {
+  function BookmarksController(bookmarkService, uiModelPack, helper, userModel) {
 
     if (!(this instanceof app.BookmarksController)) {
       return new app.BookmarksController(bookmarkService, uiModelPack, helper, userModel);
@@ -16,7 +16,8 @@
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _bookmarkService = null,
         _uiModelPack = null,
-        _helper = null;
+        _helper = null,
+        _userModel = null;
 
     this.index = function (dto) {
       try {

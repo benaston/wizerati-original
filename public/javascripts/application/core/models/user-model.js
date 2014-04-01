@@ -10,7 +10,7 @@
     var that = this,
         _userId = null;
 
-    this.eventUris = { default: 'update://usermodel' };
+    this.eventUris = { default: 'update://usermodel/' };
 
     this.getUserId = function () {
       return _userId;

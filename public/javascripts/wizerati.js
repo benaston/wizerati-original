@@ -2983,7 +2983,7 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, uiModelPack, helper) {
+  function BookmarksController(bookmarkService, uiModelPack, helper, userModel) {
 
     if (!(this instanceof app.BookmarksController)) {
       return new app.BookmarksController(bookmarkService, uiModelPack, helper, userModel);
@@ -2998,7 +2998,8 @@ window.wizerati = {
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _bookmarkService = null,
         _uiModelPack = null,
-        _helper = null;
+        _helper = null,
+        _userModel = null;
 
     this.index = function (dto) {
       try {
@@ -6023,7 +6024,7 @@ window.wizerati = {
     var that = this,
         _userId = null;
 
-    this.eventUris = { default: 'update://usermodel' };
+    this.eventUris = { default: 'update://usermodel/' };
 
     this.getUserId = function () {
       return _userId;
@@ -6232,6 +6233,8 @@ window.wizerati = {
         _croniclIService = null;
 
     this.getByIds = function (idArr, done) {
+      //identify items not cached, get them then merge results with items from cache
+
       var cachedItem = _itemCache.items[id];
       if (cachedItem) {
         done(cachedItem);
@@ -6699,9 +6702,10 @@ window.wizerati = {
         _bookmarkRepository = null,
         _itemRepository = null;
 
-    this.getByUserId = function (userid) {
+    this.getByUserId = function (userId) {
       done = done || function (data) {};
 
+      //get bookmarks, get items corresponding to bookmarks, merge and return
       var bookmarks = _bookmarkRepository.getByUserId(userId, function done1(bookmarks){
         _itemRepository.getById(bookmarks.map(function(b){ return b.itemId; }), function done2(items) {
           return items.map(function(i){
@@ -8549,7 +8553,8 @@ window.wizerati = {
   'use strict';
 
   try {
-    mod.itemCache = new w.ItemCache();
+    mod.itemCache = new w.ObjectCache();
+    mod.bookmarkCache = new w.ObjectCache();
   }
   catch (e) {
     throw 'problem registering caches module. ' + e;
@@ -8647,6 +8652,7 @@ window.wizerati = {
 
   try {
     mod.itemRepository = new w.ItemRepository(w.mod('caches').itemCache, i.croniclIService);
+    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService);
   }
   catch (e) {
     throw 'problem registering repositories module. ' + e;
@@ -8661,7 +8667,7 @@ window.wizerati = {
   try {
     mod.accountService = new w.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new w.AuthenticationService();
-    mod.bookmarkService = new w.BookmarkService(m.bookmarkBookModel, r.itemRepository);
+    mod.bookmarkService = new w.BookmarkService(m.bookmarkBookModel, r.bookmarkRepository, r.itemRepository);
 
     mod.authorizationService = new w.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);

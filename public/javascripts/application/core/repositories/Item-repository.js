@@ -13,6 +13,8 @@
         _croniclIService = null;
 
     this.getByIds = function (idArr, done) {
+      //identify items not cached, get them then merge results with items from cache
+
       var cachedItem = _itemCache.items[id];
       if (cachedItem) {
         done(cachedItem);

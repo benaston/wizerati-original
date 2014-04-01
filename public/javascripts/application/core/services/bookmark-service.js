@@ -12,9 +12,10 @@
         _bookmarkRepository = null,
         _itemRepository = null;
 
-    this.getByUserId = function (userid) {
+    this.getByUserId = function (userId) {
       done = done || function (data) {};
 
+      //get bookmarks, get items corresponding to bookmarks, merge and return
       var bookmarks = _bookmarkRepository.getByUserId(userId, function done1(bookmarks){
         _itemRepository.getById(bookmarks.map(function(b){ return b.itemId; }), function done2(items) {
           return items.map(function(i){
