@@ -193,12 +193,12 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 
 /*media queries must be on a single line to avoid safari bug*/
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-    .btn {
+    .btn, .lbl {
         /*delay on border-color avoids a flash during the interval between resetting the is-waiting flag on waiting buttons*/
         transition: border-color 0.1s ease-out .2s, box-shadow .3s ease-out, border-left-width .2s ease-out;
     }
 
-    .btn:enabled:active, a.btn:not(.disabled):active {
+    .radio:enabled + .lbl:active, .btn:enabled:active, a.btn:not(.disabled):active {
         box-shadow: none; /* touch start and end events take care of this*/
     }
 }
