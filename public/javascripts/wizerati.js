@@ -8155,7 +8155,7 @@ window.wizerati = {
       $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
         setTimeout(function(){
-          $('#tab-bar').click();
+          $('#tab-bar').touch();
           $('#tab-bar').css({
             'height':'100%',
             'position':'fixed'
