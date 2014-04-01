@@ -19,7 +19,6 @@ html input[type="tel"] {
     font-size: 1rem;
     border-radius: 5px;
     box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
-    -webkit-user-select: none;
     height: 49px;
 }
 
