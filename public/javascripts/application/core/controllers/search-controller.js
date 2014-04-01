@@ -21,13 +21,6 @@
 
     this.show = function (dto) {
       try {
-        //check if we are moving from another navbar item (in which case do not bother with the new search)
-        //refactor to be based on dirty checking
-//        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
-//          _helper.resetUIForSearch();
-//          return;
-//        }
-
         if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});

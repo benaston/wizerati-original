@@ -3804,13 +3804,6 @@ window.wizerati = {
 
     this.show = function (dto) {
       try {
-        //check if we are moving from another navbar item (in which case do not bother with the new search)
-        //refactor to be based on dirty checking
-//        if(_uiModelPack.tabBarModel.getSelectedTab() !== _tabEnum.Search) {
-//          _helper.resetUIForSearch();
-//          return;
-//        }
-
         if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
@@ -8126,10 +8119,6 @@ window.wizerati = {
 
     this.model = null;
 
-//    this.searchModel = null;
-//
-//    this.tempSearchModel = null;
-
     this.render = function (e) {
       var options = { done: that.postRender, postRenderScriptName: null };
 
@@ -8153,6 +8142,11 @@ window.wizerati = {
         if (!_waitStateIsBeingMonitored) {
           monitorWaitState();
         }
+      });
+
+      var $form = that.$el.find('#search-form');
+      $btn.on('submit', function () {
+        that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
       });
     };
 

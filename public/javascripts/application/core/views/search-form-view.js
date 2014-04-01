@@ -18,10 +18,6 @@
 
     this.model = null;
 
-//    this.searchModel = null;
-//
-//    this.tempSearchModel = null;
-
     this.render = function (e) {
       var options = { done: that.postRender, postRenderScriptName: null };
 
@@ -45,6 +41,11 @@
         if (!_waitStateIsBeingMonitored) {
           monitorWaitState();
         }
+      });
+
+      var $form = that.$el.find('#search-form');
+      $btn.on('submit', function () {
+        that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
       });
     };
 
