@@ -4066,9 +4066,9 @@ window.wizerati = {
           //workaround for height bug on static elements with the keyboard
           if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
             if(dto.mode === _searchFormModeEnum.Default) {
-              $('#result-list-panel-container').css({'display': 'block'});
+              $('#bookmark-panel-container').css({'display': 'block'});
               setTimeout(function(){
-                $('#result-list-panel-container').css({'display': 'inline-block'});
+                $('#bookmark-panel-container').css({'display': 'inline-block'});
               }, 125)
             }
           }
