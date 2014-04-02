@@ -8353,9 +8353,9 @@ window.wizerati = {
 
       that.$el.find('#keywords').on('blur', function () {
         $('#tab-bar').css({ display: 'inline-table'});
-        setTimeout(function(){
-          $('#tab-bar').css({ display: 'block'});
-        }, 1000);
+//        setTimeout(function(){
+//          $('#tab-bar').css({ display: 'block'});
+//        }, 1000);
 //        $('#tab-bar').css({ position: 'fixed'});
       });
 
