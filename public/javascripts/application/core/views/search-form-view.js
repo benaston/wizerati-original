@@ -55,16 +55,16 @@
       });
 
       //Fixes iOS issue with calculating the bounds of fixed position elements.
-      that.$el.find('#keywords').on('focus', function () {
-//        $('#tab-bar').css({ position: 'absolute'});
-      });
+//      that.$el.find('#keywords').on('focus', function () {
+////        $('#tab-bar').css({ position: 'absolute'});
+//      });
 
       //Fix static positioning bug in iOS.
-      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
-        that.$el.find('#keywords').on('blur', function () {
-          $('#tab-bar').css({ display: 'inline-table'});
-        });
-      }
+//      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
+//        that.$el.find('#keywords').on('blur', function () {
+//          $('#tab-bar').css({ display: 'inline-table'});
+//        });
+//      }
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {

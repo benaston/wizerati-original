@@ -4062,25 +4062,6 @@ window.wizerati = {
 
           _searchFormModel.setMode(dto.mode);
 
-          //Workaround for height bug on static elements with the keyboard.
-          //Forces repaint of large-enough part of page to ensure fixed
-          //position element is correctly rendered.
-          if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
-//            if(dto.mode === _searchFormModeEnum.Default) {
-//              $('#bookmark-panel-container').css({'display': 'block'});
-//              setTimeout(function(){
-//                $('#bookmark-panel-container').css({'display': 'inline-block'});
-//              }, 62);
-//            }
-
-//            if(dto.mode === _searchFormModeEnum.Minimized) {
-//              $('#tab-bar').css({ position: 'absolute'});
-//              setTimeout(function(){
-//                $('#tab-bar').css({ position: 'fixed'});
-//              }, 62);
-//            }
-          }
-
           if (dto.mode === _searchFormModeEnum.Minimized) {
             app.instance.router.redirect('/search');
           } else if (dto.mode === _searchFormModeEnum.Default) {
@@ -8347,16 +8328,16 @@ window.wizerati = {
       });
 
       //Fixes iOS issue with calculating the bounds of fixed position elements.
-      that.$el.find('#keywords').on('focus', function () {
-//        $('#tab-bar').css({ position: 'absolute'});
-      });
+//      that.$el.find('#keywords').on('focus', function () {
+////        $('#tab-bar').css({ position: 'absolute'});
+//      });
 
       //Fix static positioning bug in iOS.
-      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
-        that.$el.find('#keywords').on('blur', function () {
-          $('#tab-bar').css({ display: 'inline-table'});
-        });
-      }
+//      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
+//        that.$el.find('#keywords').on('blur', function () {
+//          $('#tab-bar').css({ display: 'inline-table'});
+//        });
+//      }
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {

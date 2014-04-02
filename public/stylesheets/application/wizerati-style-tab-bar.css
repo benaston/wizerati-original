@@ -1,4 +1,5 @@
 #tab-bar {
+    display: inline-table; /*fixes fixed positioning issue on iOS*/
     position: fixed;
     left: 0;
     top: 0;
