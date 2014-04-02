@@ -3271,8 +3271,8 @@ window.wizerati = {
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
+      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 2000); //avoid impacting animation frame rate
     };
 
     function init() {
@@ -8371,31 +8371,14 @@ window.wizerati = {
 
     //When rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
     //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
+    //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
     this.renderSetMode = function (mode) {
       if (mode === _modeEnum.Default) {
-        //ensure horizontal scroll position is correct
-//        $('#main-container').scrollToX(0)
-
         //ensure UI matches model values
         this.renderSetKeywords();
         this.renderSetRate();
-
-        that.$el.find('#keywords').blur(); //important to trigger ios static position fix
-        //Prevent horizontal scrolling in preparation for changing the tab bar position to absolute.
-//          $('#main-container').css({'overflow-x': 'hidden'});
-
-        //Use absolute positioning for the tab bar to fix rendering issue with iOS keyboard.
-//        $('#tab-bar').css({position: 'absolute'});
       }
 
-      if (mode === _modeEnum.Minimized) {
-        setTimeout(function () {
-//          $('#main-container').css({'overflow-x': 'scroll'});
-//          $('#tab-bar').css({position: 'fixed'});
-        }, 500);
-      }
-
-//      $(_resultListPanelEl).attr('data-search-form-mode', mode);
       $('#search-form-panel-container').attr('data-mode', mode);
     };
 
