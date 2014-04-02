@@ -33,7 +33,7 @@ body[data-ui-mode='0'] #search-form-panel {
     height: 310px;
     width: 500px;
     left: 50%;
-    top: 44%;
+    top: 43%;
     margin-left: -250px;
     margin-top: -155px;
     border-radius: 130px;
@@ -137,7 +137,7 @@ body[data-ui-mode='0'] .search-form-title {
 }
 
 body[data-ui-mode='0'] form[name='search-form'] {
-    top: 6px; /*empirical*/
+    top: 10px; /*empirical*/
     position: relative;
 }
 
