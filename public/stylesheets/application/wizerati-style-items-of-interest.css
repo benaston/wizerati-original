@@ -3,7 +3,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #items-of-interest-p
 }
 
 .selected-item-content, .pinned-item-content {
-    transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9), width 1s cubic-bezier(0.2,0.3,0.25,0.9) 3.2s; /*DELAY - IMPORTANT that is longer than the duration of the preceding animation to avoid Safari rendering flash. Reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
+    transition: -webkit-transform 2s cubic-bezier(0.2,0.3,0.25,0.9), width 1s cubic-bezier(0.2,0.3,0.25,0.9) 2.5s; /*DELAY - IMPORTANT that is longer than the duration of the preceding animation to avoid Safari rendering flash. Reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
 }
 
 #items-of-interest-panel {
