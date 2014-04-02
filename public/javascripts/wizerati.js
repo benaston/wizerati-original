@@ -4065,10 +4065,10 @@ window.wizerati = {
 
           //workaround for height bug on static elements with the keyboard
           if(dto.mode === _searchFormModeEnum.Default) {
-            $('#search-form-panel-container').css({'display': 'static'});
+            $('#search-form-panel-container').css({'display': 'block'});
             setTimeout(function(){
               $('#search-form-panel-container').css({'display': 'inline-block'});
-            }, 1000)
+            }, 0)
           }
 
 

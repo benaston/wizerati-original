@@ -3,6 +3,7 @@
 #search-form-panel-container {
     vertical-align: top;
     width: 0;
+    height: 100%;
     display: inline-block;
 }
 
