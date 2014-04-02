@@ -2831,7 +2831,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'true'
+          'enableTrace': 'false'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -3259,7 +3259,6 @@ window.wizerati = {
     var that = this,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _tabEnum = app.mod('enum').Tab,
         _uiModelPack = null,
@@ -3270,9 +3269,8 @@ window.wizerati = {
 
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
-      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 2500); //avoid impacting animation frame rate
+      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 5000); //avoid impacting animation frame rate
     };
 
     function init() {
@@ -4988,7 +4986,7 @@ window.wizerati = {
       var widthTabBar = _widthTabBar;
 
       var effectiveWidthResultListPanel = effectiveWidthResultListPanelForDevice;
-      if(_resultListModel.getMode() === _resultListModeEnum.Minimized && _bookmarkPanelModel.getMode() === _bookmarkPanelModeEnum.Minimized) {
+      if(mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 

@@ -34,7 +34,7 @@
       var widthTabBar = _widthTabBar;
 
       var effectiveWidthResultListPanel = effectiveWidthResultListPanelForDevice;
-      if(_resultListModel.getMode() === _resultListModeEnum.Minimized && _bookmarkPanelModel.getMode() === _bookmarkPanelModeEnum.Minimized) {
+      if(mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
