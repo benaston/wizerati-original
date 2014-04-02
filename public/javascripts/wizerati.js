@@ -8355,7 +8355,7 @@ window.wizerati = {
         $('#tab-bar').css({ display: 'inline-table'});
         setTimeout(function(){
           $('#tab-bar').css({ display: 'block'});
-        }, 62);
+        }, 1000);
 //        $('#tab-bar').css({ position: 'fixed'});
       });
 
