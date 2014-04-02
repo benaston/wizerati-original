@@ -29,12 +29,12 @@
               }, 62);
             }
 
-            if(dto.mode === _searchFormModeEnum.Minimized) {
-              $('#tab-bar').css({ position: 'absolute'});
-              setTimeout(function(){
-                $('#tab-bar').css({ position: 'fixed'});
-              }, 62);
-            }
+//            if(dto.mode === _searchFormModeEnum.Minimized) {
+//              $('#tab-bar').css({ position: 'absolute'});
+//              setTimeout(function(){
+//                $('#tab-bar').css({ position: 'fixed'});
+//              }, 62);
+//            }
           }
 
           if (dto.mode === _searchFormModeEnum.Minimized) {

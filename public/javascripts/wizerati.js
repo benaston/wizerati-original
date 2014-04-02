@@ -4073,12 +4073,12 @@ window.wizerati = {
               }, 62);
             }
 
-            if(dto.mode === _searchFormModeEnum.Minimized) {
-              $('#tab-bar').css({ position: 'absolute'});
-              setTimeout(function(){
-                $('#tab-bar').css({ position: 'fixed'});
-              }, 62);
-            }
+//            if(dto.mode === _searchFormModeEnum.Minimized) {
+//              $('#tab-bar').css({ position: 'absolute'});
+//              setTimeout(function(){
+//                $('#tab-bar').css({ position: 'fixed'});
+//              }, 62);
+//            }
           }
 
           if (dto.mode === _searchFormModeEnum.Minimized) {
@@ -8345,9 +8345,14 @@ window.wizerati = {
         that.renderSetRate();
       });
 
-//      that.$el.find('#keywords').on('focus', function () {
-//        $('#tab-bar').css({ position: 'absolute'});
-//      });
+      //Fixes iOS issue with calculating the bounds of fixed position elements.
+      that.$el.find('#keywords').on('focus', function () {
+        $('#tab-bar').css({ position: 'absolute'});
+      });
+
+      that.$el.find('#keywords').on('blur', function () {
+        $('#tab-bar').css({ position: 'fixed'});
+      });
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
