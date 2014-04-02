@@ -21,9 +21,9 @@
           //workaround for height bug on static elements with the keyboard
           if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
             if(dto.mode === _searchFormModeEnum.Default) {
-              $('#search-form-panel-container').css({'display': 'block'});
+              $('#result-list-panel-container').css({'display': 'block'});
               setTimeout(function(){
-                $('#search-form-panel-container').css({'display': 'inline-block'});
+                $('#result-list-panel-container').css({'display': 'inline-block'});
               }, 125)
             }
           }
