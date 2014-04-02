@@ -18,7 +18,9 @@
 
           _searchFormModel.setMode(dto.mode);
 
-          //workaround for height bug on static elements with the keyboard
+          //Workaround for height bug on static elements with the keyboard.
+          //Forces repaint of large-enough part of page to ensure fixed
+          //position element is correctly rendered.
           if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
             if(dto.mode === _searchFormModeEnum.Default) {
               $('#bookmark-panel-container').css({'display': 'block'});

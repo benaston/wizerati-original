@@ -53,9 +53,9 @@
         that.renderSetRate();
       });
 
-      that.$el.find('#keywords').on('focus', function () {
-        $('#tab-bar').css({ position: 'absolute'});
-      });
+//      that.$el.find('#keywords').on('focus', function () {
+//        $('#tab-bar').css({ position: 'absolute'});
+//      });
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
