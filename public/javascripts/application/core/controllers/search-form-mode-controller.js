@@ -17,9 +17,15 @@
 
 
           _searchFormModel.setMode(dto.mode);
+
           //workaround for height bug on static elements with the keyboard
-          $('#search-form-panel-container').css({'display': 'static'});
-          $('#search-form-panel-container').css({'display': 'inline-block'});
+          if(dto.mode === _searchFormModeEnum.Default) {
+            setTimeout(function(){
+              $('#search-form-panel-container').css({'display': 'static'});
+              $('#search-form-panel-container').css({'display': 'inline-block'});
+            }, 1000)
+          }
+
 
           if (dto.mode === _searchFormModeEnum.Minimized) {
             app.instance.router.redirect('/search');
