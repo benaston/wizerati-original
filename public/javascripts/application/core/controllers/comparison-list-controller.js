@@ -21,7 +21,8 @@
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
-      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 5000); //avoid impacting animation frame rate
+//      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 5000); //avoid impacting animation frame rate
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); //avoid impacting animation frame rate
     };
 
     function init() {
