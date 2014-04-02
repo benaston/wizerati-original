@@ -47,6 +47,7 @@
       //values in the form elements must be reset to those of the backing model
       //if the user cancels the form. This is mainly redundant due to similar
       // logic in the renderSetMode method.
+      //needed?
       var $btn = that.$el.find('#btn-cancel-search');
       $btn.on('click', function () {
         that.renderSetKeywords();
@@ -107,6 +108,7 @@
         this.renderSetKeywords();
         this.renderSetRate();
 
+        that.$el.find('#keywords').blur(); //important to trigger ios static position fix
         //Prevent horizontal scrolling in preparation for changing the tab bar position to absolute.
 //          $('#main-container').css({'overflow-x': 'hidden'});
 
