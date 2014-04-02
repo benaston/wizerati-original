@@ -14,15 +14,6 @@
       Minimized: '1'
     };
 
-    mod.ItemSelectionSource = {
-      Results: '0',
-      Favorites: '1'
-    };
-
-    mod.ItemsOfInterestAction = {
-      Remove: '0'
-    };
-
     mod.ItemsOfInterestMode = {
       Default: '0',
       PinnedItemsExpanded: '1'
@@ -60,7 +51,7 @@
       Minimized: '1'
     };
 
-    mod.SearchFormMode = { /*the actual form used for searching*/
+    mod.SearchFormMode = {
       Default: '0',
       Minimized: '1'
     };
