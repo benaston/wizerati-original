@@ -2831,7 +2831,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'false'
+          'enableTrace': 'true'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -3272,7 +3272,7 @@ window.wizerati = {
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
-      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 2000); //avoid impacting animation frame rate
+      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 2500); //avoid impacting animation frame rate
     };
 
     function init() {
