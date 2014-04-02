@@ -3009,9 +3009,9 @@ window.wizerati = {
       var uiMode = _uiRootModel.getUIMode();
 
       //refactor?
-      if (uiMode === _uiModeEnum.GreenfieldSearch) {
+      if (uiMode === _uiModeEnum.Start) {
         app.instance.router.redirect('/');
-      } else if (uiMode === _uiModeEnum.Search) {
+      } else if (uiMode === _uiModeEnum.InUse) {
         app.instance.router.redirect('/search');
       } else {
         throw 'invalid UI mode';
@@ -3190,7 +3190,7 @@ window.wizerati = {
         _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
         _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
         _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
-        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (err) {
@@ -3559,24 +3559,14 @@ window.wizerati = {
 
     this.index = function () {
       try {
-        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
+        _uiRootModel.setUIMode(_uiModeEnum.Start); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-
       } catch (err) {
         console.log('HomeController::index exception: ' + err);
       }
     };
-
-    function waitForSearchFormToBeRendered() {
-      if (_searchFormModel.getFirstRenderCompleteFlag()) {
-        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-        return;
-      }
-
-      setTimeout(waitForSearchFormToBeRendered, 10);
-    }
 
     function init() {
       if (!uiRootModel) {
@@ -4650,7 +4640,7 @@ window.wizerati = {
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 
@@ -4716,12 +4706,12 @@ window.wizerati = {
         _layoutCoordinator = null;
 
     this.resetUIForSearch = function () {
-
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+      _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 
@@ -4732,7 +4722,7 @@ window.wizerati = {
       _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       var delayToRender = 0;
-      if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
+      if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.Start) {
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundOrLoadingIndicator);
         _uiModelPack.uiRootModel.setAreTransitionsEnabled(false);
         delayToRender = 100; //wait for the opacity fade to complete
@@ -5798,25 +5788,14 @@ window.wizerati = {
         _mode = _modeEnum.Minimized,
         _keywords = null,
         _isWaiting = 'false',
-        _rate = null,
-        _isVisible = 'true',
-        _firstRenderCompleteFlag = false;
+        _rate = null;
 
     this.eventUris = {
       default: 'update://searchformmodel',
       setMode: 'update://searchformmodel/setmode',
-      setRate: 'update://searchformmodel/setrate',
       setKeywords: 'update://searchformmodel/setkeywords',
-      setIsWaiting: 'update://searchformmodel/setiswaiting',
-      setIsVisible: 'update://searchformmodel/setisvisible' };
-
-    this.getFirstRenderCompleteFlag = function () {
-      return _firstRenderCompleteFlag;
-    };
-
-    this.setFirstRenderCompleteFlag = function () {
-      _firstRenderCompleteFlag = true;
-    };
+      setRate: 'update://searchformmodel/setrate',
+      setIsWaiting: 'update://searchformmodel/setiswaiting' };
 
     this.getMode = function () {
       return _mode;
@@ -5832,11 +5811,11 @@ window.wizerati = {
       $.publish(that.eventUris.setMode, value);
     };
 
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-
-      $.publish(that.eventUris.setIsVisible);
-    };
+//    this.setIsVisible = function (value) {
+//      _isVisible = value;
+//
+//      $.publish(that.eventUris.setIsVisible);
+//    };
 
     this.getKeywords = function () {
       return _keywords || '';
@@ -6065,7 +6044,6 @@ window.wizerati = {
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
         _activeTab = _tabEnum.Search,
-        _bodyWidth = null,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
 
@@ -6081,7 +6059,7 @@ window.wizerati = {
       return _visibilityMode;
     };
 
-    //useful to temporarily hide the entire UI
+    //used to show or hide the entire UI
     this.setVisibilityMode = function (value) {
       if (value === _visibilityMode) {
         return;
@@ -6116,10 +6094,6 @@ window.wizerati = {
       $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
-//    this.getBodyWidth = function () {
-//      return _bodyWidth;
-//    };
-
     this.getUIMode = function () {
       return _uiMode || '';
     };
@@ -6151,6 +6125,11 @@ window.wizerati = {
         $.publish(that.eventUris.setModal, _modal);
       }
     };
+
+    this.clearModal = function(){
+      that.setModal(_modalEnum.None);
+    };
+
 
     function init() {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -8280,9 +8259,8 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '#search-form-container',
+        _el = '#search-form-panel-container',
         _modeEnum = app.mod('enum').SearchFormMode,
-        _resultListPanelEl = '#result-list-panel',
         _templateName = 'search-form.html-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
@@ -8326,18 +8304,6 @@ window.wizerati = {
         that.renderSetRate();
       });
 
-      //Fixes iOS issue with calculating the bounds of fixed position elements.
-//      that.$el.find('#keywords').on('focus', function () {
-////        $('#tab-bar').css({ position: 'absolute'});
-//      });
-
-      //Fix static positioning bug in iOS.
-//      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
-//        that.$el.find('#keywords').on('blur', function () {
-//          $('#tab-bar').css({ display: 'inline-table'});
-//        });
-//      }
-
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
@@ -8346,18 +8312,7 @@ window.wizerati = {
 
     this.postRender = function () {
       that.bindEvents();
-      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
-    };
-
-    this.renderSetIsVisible = function () {
-      if (that.model.getIsVisible() === 'true') {
-        that.$el.removeClass('hidden');
-      } else if (that.model.getIsVisible() === 'false') {
-        that.$el.addClass('hidden');
-      }
-      else {
-        throw 'invalid visibility state.'
-      }
+//      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
     };
 
     this.renderSetIsWaiting = function () {
@@ -8378,7 +8333,7 @@ window.wizerati = {
         this.renderSetRate();
       }
 
-      $('#search-form-panel-container').attr('data-mode', mode);
+      that.$el.attr('data-mode', mode);
     };
 
     this.renderSetKeywords = function (keywords) {
@@ -8409,7 +8364,6 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.$resultListPanelEl = $(_resultListPanelEl);
       that.render(); //this introduces the wait on initial visit
     };
 
@@ -8421,14 +8375,12 @@ window.wizerati = {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.model = model;
 
-      _renderOptimizations[that.model.eventUris.setIsVisible] = that.renderSetIsVisible;
       _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
       _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
       _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
 
       $.subscribe(that.model.eventUris.default, that.render);
-      $.subscribe(that.model.eventUris.setIsVisible, that.render);
       $.subscribe(that.model.eventUris.setIsWaiting, that.render);
       $.subscribe(that.model.eventUris.setMode, that.render);
       $.subscribe(that.model.eventUris.setKeywords, that.render);
@@ -8444,68 +8396,68 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.SearchFormView);
 
 }(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SearchPanelView(model) {
-
-    if (!(this instanceof app.SearchPanelView)) {
-      return new app.SearchPanelView(model);
-    }
-
-    var that = this,
-        _el = '.search-panel',
-        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.renderSetMode();
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$navPanel = $('#nav-panel');
-    };
-
-    this.renderSetMode = function(mode) {
-      that.$el.attr('data-mode', that.Model.getMode());
-
-      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
-      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
-      that.$navPanel.find('.handle-search-panel').addClass('selected');
-    };
-
-    function init() {
-      if (!model) {
-        throw 'SearchPanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SearchPanelView = SearchPanelView;
-  invertebrate.View.isExtendedBy(app.SearchPanelView);
-
-}(wizerati, $, invertebrate));
+;//(function (app, $, invertebrate) {
+//  'use strict';
+//
+//  function SearchPanelView(model) {
+//
+//    if (!(this instanceof app.SearchPanelView)) {
+//      return new app.SearchPanelView(model);
+//    }
+//
+//    var that = this,
+//        _el = '.search-panel',
+//        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
+//        _renderOptimizations = {};
+//
+//    this.$el = null;
+//    this.Model = null;
+//
+//    this.render = function (e) {
+//      if (e && _renderOptimizations[e.type]) {
+//        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+//        return;
+//      }
+//
+//      that.renderSetMode();
+//    };
+//
+//    this.onDomReady = function () {
+//      that.$el = $(_el);
+//      that.$navPanel = $('#nav-panel');
+//    };
+//
+//    this.renderSetMode = function(mode) {
+//      that.$el.attr('data-mode', that.Model.getMode());
+//
+//      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
+//      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
+//      that.$navPanel.find('.handle-search-panel').addClass('selected');
+//    };
+//
+//    function init() {
+//      if (!model) {
+//        throw 'SearchPanelView::init model not supplied';
+//      }
+//
+//      that = $.decorate(that, app.mod('decorators').decorators.trace);
+//      that.Model = model;
+//
+//      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+//
+//      $.subscribe(that.Model.eventUris.setMode, that.render);
+//      $.subscribe(that.Model.eventUris.default, that.render);
+//
+//      return that;
+//    }
+//
+//    return init();
+//  }
+//
+//  app.SearchPanelView = SearchPanelView;
+//  invertebrate.View.isExtendedBy(app.SearchPanelView);
+//
+//}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -8714,9 +8666,8 @@ window.wizerati = {
 
     mod.UIMode = {
       NotReady: '-1',
-      GreenfieldSearch: '0',
-      Search: '1', /*rename to greenfield and brownfield*/
-      SingleItem: '4' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
+      Start: '0',
+      InUse: '1'
     };
 
     mod.UserRole = {
@@ -9030,89 +8981,85 @@ window.wizerati = {
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
 
   //disable hover states in touch devices
-  if('ontouchstart' in window) {
+  if ('ontouchstart' in window) {
     $('body').attr('data-hover-is-enabled', 'false');
   }
 
-    $('#bookmark-panel').bind('scroll', function(e){
-      window.stackHeads();
-    });
-//  }
+  $('#bookmark-panel').bind('scroll', function (e) {
+    window.stackHeads();
+  });
 
+  window.stackHeads = function (e) {
+    var fixedHeaders = document.getElementsByClassName('fixedheader');
+    var panel = document.getElementById('bookmark-panel');
+    for (var i = 0; i < fixedHeaders.length; i++) {
+      var currentHeader = fixedHeaders[i];
+      var nextHeader = fixedHeaders[i + 1];
+      var placeholder = getPrevNext(currentHeader)[0];
+      var currentScrollPosY = panel.scrollTop;
+      var placeholderPosY = findPosY(placeholder);
+      console.log('currentScrollPosY: %s. findPosY(placeholder): %s', currentScrollPosY, findPosY(placeholder));
 
-  window.stackHeads=function(e){
-      var fixedHeaders = document.getElementsByClassName('fixedheader');
-      var panel = document.getElementById('bookmark-panel');
-      for(var i = 0; i < fixedHeaders.length; i++){
-        var currentHeader = fixedHeaders[i];
-        var nextHeader = fixedHeaders[i+1];
-        var placeholder = getPrevNext(currentHeader)[0];
-        var currentScrollPosY = panel.scrollTop;
-        var placeholderPosY = findPosY(placeholder);
-        console.log('currentScrollPosY: %s. findPosY(placeholder): %s', currentScrollPosY, findPosY(placeholder));
+      if (currentScrollPosY > placeholderPosY) {
+        //if our scroll position in the panel is father than the placeholder of the current header's position in the DOM...
+        if (typeof nextHeader != 'undefined') {
+          //If this isn't the last header.
+          var distanceToNextHeader = findPosY(nextHeader) - currentScrollPosY;
+          console.log('findPosY(nextHeader): %s', findPosY(nextHeader));
+          console.log('distanceToNextHeader: %s', distanceToNextHeader);
+          //the difference between our scroll position and the header's placeholder's position
+          if (distanceToNextHeader < currentHeader.offsetHeight) { //offsetHeight ===  height of element inc padding, border
+            //if we have less distance between the placeholder of the next element and the top of of the page than the height of the current header, we push the header up so it doesn't overlap.
+            currentHeader.style.position = "fixed";
+            currentHeader.style.top = '-' + (currentHeader.offsetHeight - distanceToNextHeader) + 'px';
 
-        if(currentScrollPosY > placeholderPosY) {
-          //if our scroll position in the panel is father than the placeholder of the current header's position in the DOM...
-          if(typeof nextHeader != 'undefined') {
-            //If this isn't the last header.
-            var distanceToNextHeader = findPosY(nextHeader) - currentScrollPosY;
-            console.log('findPosY(nextHeader): %s', findPosY(nextHeader));
-            console.log('distanceToNextHeader: %s', distanceToNextHeader);
-            //the difference between our scroll position and the header's placeholder's position
-            if(distanceToNextHeader < currentHeader.offsetHeight) { //offsetHeight ===  height of element inc padding, border
-              //if we have less distance between the placeholder of the next element and the top of of the page than the height of the current header, we push the header up so it doesn't overlap.
-              currentHeader.style.position="fixed";
-              currentHeader.style.top='-'+(currentHeader.offsetHeight-distanceToNextHeader)+'px';
-
-            }
-            else{
-              //if there is another header, but we have room
-              //console.log(header
-              placeholder.style.height=currentHeader.offsetHeight+'px';
-              currentHeader.style.position="fixed";
-              currentHeader.style.top="0px";
-            }
-          } else {
-
-            placeholder.style.height=currentHeader.offsetHeight+'px';
-            //if there isn't another header
-            currentHeader.style.position="fixed";
-            currentHeader.style.top="0px";
           }
-
-
+          else {
+            //if there is another header, but we have room
+            //console.log(header
+            placeholder.style.height = currentHeader.offsetHeight + 'px';
+            currentHeader.style.position = "fixed";
+            currentHeader.style.top = "0px";
+          }
         } else {
-          placeholder.style.height='0px';
-          //if we haven't gotten to the header yet
-          currentHeader.style.position='static';
-          currentHeader.style.removeProperty('top');
-        }
-      }
 
-      return true;
+          placeholder.style.height = currentHeader.offsetHeight + 'px';
+          //if there isn't another header
+          currentHeader.style.position = "fixed";
+          currentHeader.style.top = "0px";
+        }
+
+
+      } else {
+        placeholder.style.height = '0px';
+        //if we haven't gotten to the header yet
+        currentHeader.style.position = 'static';
+        currentHeader.style.removeProperty('top');
+      }
+    }
+
+    return true;
   };
-  function getPrevNext(el){
-    var els=document.getElementsByTagName('*');
-    for(var j=0;j<els.length;j++){
-      if(els[j]==el){
-        return [els[j-1],els[j+1]];
+  function getPrevNext(el) {
+    var els = document.getElementsByTagName('*');
+    for (var j = 0; j < els.length; j++) {
+      if (els[j] == el) {
+        return [els[j - 1], els[j + 1]];
       }
     }
     return false;
   }
 
-  function findPosY(element)
-  {
+  function findPosY(element) {
     var posY = 0;
-    if(element.offsetParent) {//offsetParent is the closest parent that has position:relative or position:absolute or the body of the page
-      while(1)
-      {
+    if (element.offsetParent) {//offsetParent is the closest parent that has position:relative or position:absolute or the body of the page
+      while (1) {
         posY += element.offsetTop;
-        if(!element.offsetParent)
+        if (!element.offsetParent)
           break;
         element = element.offsetParent;
       }
-    } else if(element.y) {
+    } else if (element.y) {
       posY += element.y;
     }
 

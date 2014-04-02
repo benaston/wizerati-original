@@ -12,25 +12,14 @@
         _mode = _modeEnum.Minimized,
         _keywords = null,
         _isWaiting = 'false',
-        _rate = null,
-        _isVisible = 'true',
-        _firstRenderCompleteFlag = false;
+        _rate = null;
 
     this.eventUris = {
       default: 'update://searchformmodel',
       setMode: 'update://searchformmodel/setmode',
-      setRate: 'update://searchformmodel/setrate',
       setKeywords: 'update://searchformmodel/setkeywords',
-      setIsWaiting: 'update://searchformmodel/setiswaiting',
-      setIsVisible: 'update://searchformmodel/setisvisible' };
-
-    this.getFirstRenderCompleteFlag = function () {
-      return _firstRenderCompleteFlag;
-    };
-
-    this.setFirstRenderCompleteFlag = function () {
-      _firstRenderCompleteFlag = true;
-    };
+      setRate: 'update://searchformmodel/setrate',
+      setIsWaiting: 'update://searchformmodel/setiswaiting' };
 
     this.getMode = function () {
       return _mode;
@@ -46,11 +35,11 @@
       $.publish(that.eventUris.setMode, value);
     };
 
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-
-      $.publish(that.eventUris.setIsVisible);
-    };
+//    this.setIsVisible = function (value) {
+//      _isVisible = value;
+//
+//      $.publish(that.eventUris.setIsVisible);
+//    };
 
     this.getKeywords = function () {
       return _keywords || '';

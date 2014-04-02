@@ -24,7 +24,7 @@
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 

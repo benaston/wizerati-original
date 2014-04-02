@@ -67,9 +67,8 @@
 
     mod.UIMode = {
       NotReady: '-1',
-      GreenfieldSearch: '0',
-      Search: '1', /*rename to greenfield and brownfield*/
-      SingleItem: '4' /*note: hidden is not on this list because it is useful to have the "hiding" action separate from the mode of the ui*/
+      Start: '0',
+      InUse: '1'
     };
 
     mod.UserRole = {

@@ -18,24 +18,14 @@
 
     this.index = function () {
       try {
-        _uiRootModel.setUIMode(_uiModeEnum.GreenfieldSearch); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
+        _uiRootModel.setUIMode(_uiModeEnum.Start); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
         _resultListModel.setMode(_resultListModeEnum.Default);
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-
       } catch (err) {
         console.log('HomeController::index exception: ' + err);
       }
     };
-
-    function waitForSearchFormToBeRendered() {
-      if (_searchFormModel.getFirstRenderCompleteFlag()) {
-        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-        return;
-      }
-
-      setTimeout(waitForSearchFormToBeRendered, 10);
-    }
 
     function init() {
       if (!uiRootModel) {

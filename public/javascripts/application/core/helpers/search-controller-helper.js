@@ -20,12 +20,12 @@
         _layoutCoordinator = null;
 
     this.resetUIForSearch = function () {
-
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.Search);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+      _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 
@@ -36,7 +36,7 @@
       _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       var delayToRender = 0;
-      if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.GreenfieldSearch) {
+      if (_uiModelPack.uiRootModel.getUIMode() === _uiModeEnum.Start) {
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.HiddenNoBackgroundOrLoadingIndicator);
         _uiModelPack.uiRootModel.setAreTransitionsEnabled(false);
         delayToRender = 100; //wait for the opacity fade to complete

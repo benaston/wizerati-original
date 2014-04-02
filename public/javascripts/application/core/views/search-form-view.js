@@ -8,9 +8,8 @@
     }
 
     var that = this,
-        _el = '#search-form-container',
+        _el = '#search-form-panel-container',
         _modeEnum = app.mod('enum').SearchFormMode,
-        _resultListPanelEl = '#result-list-panel',
         _templateName = 'search-form.html-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
@@ -54,18 +53,6 @@
         that.renderSetRate();
       });
 
-      //Fixes iOS issue with calculating the bounds of fixed position elements.
-//      that.$el.find('#keywords').on('focus', function () {
-////        $('#tab-bar').css({ position: 'absolute'});
-//      });
-
-      //Fix static positioning bug in iOS.
-//      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
-//        that.$el.find('#keywords').on('blur', function () {
-//          $('#tab-bar').css({ display: 'inline-table'});
-//        });
-//      }
-
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
@@ -74,18 +61,7 @@
 
     this.postRender = function () {
       that.bindEvents();
-      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
-    };
-
-    this.renderSetIsVisible = function () {
-      if (that.model.getIsVisible() === 'true') {
-        that.$el.removeClass('hidden');
-      } else if (that.model.getIsVisible() === 'false') {
-        that.$el.addClass('hidden');
-      }
-      else {
-        throw 'invalid visibility state.'
-      }
+//      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
     };
 
     this.renderSetIsWaiting = function () {
@@ -106,7 +82,7 @@
         this.renderSetRate();
       }
 
-      $('#search-form-panel-container').attr('data-mode', mode);
+      that.$el.attr('data-mode', mode);
     };
 
     this.renderSetKeywords = function (keywords) {
@@ -137,7 +113,6 @@
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.$resultListPanelEl = $(_resultListPanelEl);
       that.render(); //this introduces the wait on initial visit
     };
 
@@ -149,14 +124,12 @@
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.model = model;
 
-      _renderOptimizations[that.model.eventUris.setIsVisible] = that.renderSetIsVisible;
       _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
       _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
       _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
       _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
 
       $.subscribe(that.model.eventUris.default, that.render);
-      $.subscribe(that.model.eventUris.setIsVisible, that.render);
       $.subscribe(that.model.eventUris.setIsWaiting, that.render);
       $.subscribe(that.model.eventUris.setMode, that.render);
       $.subscribe(that.model.eventUris.setKeywords, that.render);

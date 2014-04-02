@@ -26,9 +26,9 @@
       var uiMode = _uiRootModel.getUIMode();
 
       //refactor?
-      if (uiMode === _uiModeEnum.GreenfieldSearch) {
+      if (uiMode === _uiModeEnum.Start) {
         app.instance.router.redirect('/');
-      } else if (uiMode === _uiModeEnum.Search) {
+      } else if (uiMode === _uiModeEnum.InUse) {
         app.instance.router.redirect('/search');
       } else {
         throw 'invalid UI mode';

@@ -15,7 +15,6 @@
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
         _activeTab = _tabEnum.Search,
-        _bodyWidth = null,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
 
@@ -31,7 +30,7 @@
       return _visibilityMode;
     };
 
-    //useful to temporarily hide the entire UI
+    //used to show or hide the entire UI
     this.setVisibilityMode = function (value) {
       if (value === _visibilityMode) {
         return;
@@ -66,10 +65,6 @@
       $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
-//    this.getBodyWidth = function () {
-//      return _bodyWidth;
-//    };
-
     this.getUIMode = function () {
       return _uiMode || '';
     };
@@ -101,6 +96,11 @@
         $.publish(that.eventUris.setModal, _modal);
       }
     };
+
+    this.clearModal = function(){
+      that.setModal(_modalEnum.None);
+    };
+
 
     function init() {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
