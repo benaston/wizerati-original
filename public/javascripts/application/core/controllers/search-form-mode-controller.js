@@ -15,6 +15,7 @@
       try {
         if (_searchFormModel.getMode() !== dto.mode) { //refactor off?
 
+
           _searchFormModel.setMode(dto.mode);
 
           if (dto.mode === _searchFormModeEnum.Minimized) {

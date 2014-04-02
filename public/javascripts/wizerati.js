@@ -237,7 +237,171 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
   }
 
   $.Deferred = Deferred
-})(Zepto);(function ($) {
+})(Zepto);/* Author:
+ Max Degterev @suprMax
+ */
+
+;(function($) {
+  var DEFAULTS = {
+//    endY: $.os.android ? 1 : 0,
+//    endX: $.os.android ? 1 : 0,
+    endY: 0,
+    endX: 0,
+    duration: 2000,
+    updateRate: 15
+  };
+
+  var interpolate = function (source, target, shift) {
+    return (source + (target - source) * shift);
+  };
+
+  var easing = function (pos) {
+    return (-Math.cos(pos * Math.PI) / 2) + .5;
+  };
+
+  var scroll = function(settings) {
+    var options = $.extend({}, DEFAULTS, settings);
+
+    if (options.duration === 0) {
+      window.scrollTo(0, options.endY);
+      if (typeof options.callback === 'function') options.callback();
+      return;
+    }
+
+    var startY = window.pageYOffset,
+        startT = Date.now(),
+        finishT = startT + options.duration;
+
+    var animate = function() {
+      var now = Date.now(),
+          shift = (now > finishT) ? 1 : (now - startT) / options.duration;
+
+      window.scrollTo(0, interpolate(startY, options.endY, easing(shift)));
+
+      if (now < finishT) {
+        setTimeout(animate, options.updateRate);
+      }
+      else {
+        if (typeof options.callback === 'function') options.callback();
+      }
+    };
+
+    animate();
+  };
+
+  var scrollX = function(settings) {
+    var options = $.extend({}, DEFAULTS, settings);
+
+    if (options.duration === 0) {
+      window.scrollTo(options.endX,0);
+      if (typeof options.callback === 'function') options.callback();
+      return;
+    }
+
+    var startX = window.pageXOffset,
+        startT = Date.now(),
+        finishT = startT + options.duration;
+
+    var animate = function() {
+      var now = Date.now(),
+          shift = (now > finishT) ? 1 : (now - startT) / options.duration;
+
+      window.scrollTo(interpolate(startX, options.endX, easing(shift)), 0);
+
+      if (now < finishT) {
+        setTimeout(animate, options.updateRate);
+      }
+      else {
+        if (typeof options.callback === 'function') options.callback();
+      }
+    };
+
+    animate();
+  };
+
+  var scrollNodeX = function(settings) {
+    var options = $.extend({}, DEFAULTS, settings);
+
+    if (options.duration === 0) {
+      this.scrollTop = options.endX;
+      if (typeof options.callback === 'function') options.callback();
+      return;
+    }
+
+    var startX = this.scrollLeft,
+        startT = Date.now(),
+        finishT = startT + options.duration,
+        _this = this;
+
+    var animate = function() {
+      var now = Date.now(),
+          shift = (now > finishT) ? 1 : (now - startT) / options.duration;
+
+      _this.scrollLeft = interpolate(startX, options.endX, easing(shift));
+
+      if (now < finishT) {
+        setTimeout(animate, options.updateRate);
+      }
+      else {
+        if (typeof options.callback === 'function') options.callback();
+      }
+    };
+
+    animate();
+  };
+
+  var scrollNode = function(settings) {
+    var options = $.extend({}, DEFAULTS, settings);
+
+    if (options.duration === 0) {
+      this.scrollTop = options.endY;
+      if (typeof options.callback === 'function') options.callback();
+      return;
+    }
+
+    var startY = this.scrollTop,
+        startT = Date.now(),
+        finishT = startT + options.duration,
+        _this = this;
+
+    var animate = function() {
+      var now = Date.now(),
+          shift = (now > finishT) ? 1 : (now - startT) / options.duration;
+
+      _this.scrollTop = interpolate(startY, options.endY, easing(shift));
+
+      if (now < finishT) {
+        setTimeout(animate, options.updateRate);
+      }
+      else {
+        if (typeof options.callback === 'function') options.callback();
+      }
+    };
+
+    animate();
+  };
+
+  $.scrollTo = scroll;
+  $.scrollToX = scrollX;
+
+  $.fn.scrollTo = function() {
+    if (this.length) {
+      var args = arguments;
+      this.forEach(function(elem, index) {
+        scrollNode.apply(elem, args);
+      });
+    }
+  };
+
+  $.fn.scrollToX = function() {
+    if (this.length) {
+      var args = arguments;
+      this.forEach(function(elem, index) {
+        scrollNodeX.apply(elem, args);
+      });
+    }
+  };
+}(Zepto));;(function ($) {
   'use strict';
 
   $.debounce = function (func, threshold, execAsap, alwaysRun) {
@@ -3895,6 +4059,7 @@ window.wizerati = {
     this.update = function (dto) {
       try {
         if (_searchFormModel.getMode() !== dto.mode) { //refactor off?
+
 
           _searchFormModel.setMode(dto.mode);
 
@@ -8117,6 +8282,7 @@ window.wizerati = {
 
     var that = this,
         _el = '#search-form-container',
+        _modeEnum = app.mod('enum').SearchFormMode,
         _resultListPanelEl = '#result-list-panel',
         _templateName = 'search-form.html-local',
         _renderOptimizations = {},
@@ -8139,8 +8305,8 @@ window.wizerati = {
     };
 
     this.bindEvents = function () {
-     //we update the model only on click of search to enable trivial cancelling of unwanted changes
-     var $btn = that.$el.find('#btn-search');
+      //we update the model only on click of search to enable trivial cancelling of unwanted changes
+      var $btn = that.$el.find('#btn-search');
       $btn.on('click', function () {
         that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
         that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
@@ -8151,13 +8317,22 @@ window.wizerati = {
         }
       });
 
+      //values in the form elements must be reset to those of the backing model
+      //if the user cancels the form. This is mainly redundant due to similar
+      // logic in the renderSetMode method.
+      var $btn = that.$el.find('#btn-cancel-search');
+      $btn.on('click', function () {
+        that.renderSetKeywords();
+        that.renderSetRate();
+      });
+
+      that.$el.find('#keywords').on('focus', function () {
+        $('#tab-bar').css({ position: 'absolute'});
+      });
+
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
         that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
-        setTimeout(function(){
-          $('#tab-bar').css({ position: 'absolute'});
-          $('#tab-bar').css({ position: 'fixed'});
-        }, 500); //attempt to circumvent fixed position vs keyboard issue in ios
       });
     };
 
@@ -8185,11 +8360,31 @@ window.wizerati = {
       }
     };
 
-    //when rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
+    //When rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
     //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
     this.renderSetMode = function (mode) {
-      this.renderSetKeywords();
-      this.renderSetRate();
+      if (mode === _modeEnum.Default) {
+        //ensure horizontal scroll position is correct
+        $('#main-container').scrollToX(0)
+
+        //ensure UI matches model values
+        this.renderSetKeywords();
+        this.renderSetRate();
+
+        //Prevent horizontal scrolling in preparation for changing the tab bar position to absolute.
+          $('#main-container').css({'overflow-x': 'hidden'});
+
+        //Use absolute positioning for the tab bar to fix rendering issue with iOS keyboard.
+        $('#tab-bar').css({position: 'absolute'});
+      }
+
+      if (mode === _modeEnum.Minimized) {
+        setTimeout(function () {
+          $('#main-container').css({'overflow-x': 'scroll'});
+          $('#tab-bar').css({position: 'fixed'});
+        }, 500);
+      }
+
       $(_resultListPanelEl).attr('data-search-form-mode', mode);
     };
 
@@ -8201,7 +8396,7 @@ window.wizerati = {
     this.renderSetRate = function (rate) {
       rate = rate || that.model.getRate();
       that.$el.find('input[name="r"]:checked').prop('checked', false).blur();
-      that.$el.find('input[name="r"][value="'+rate+'"]').prop('checked', true);
+      that.$el.find('input[name="r"][value="' + rate + '"]').prop('checked', true);
     };
 
     function monitorWaitState() {

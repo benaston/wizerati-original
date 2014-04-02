@@ -11,6 +11,8 @@ module.exports = function (grunt) {
           'public/javascripts/vendor/zepto.min.js',
           'public/javascripts/vendor/zepto-callbacks.js',
           'public/javascripts/vendor/zepto-deferred.js',
+//          'public/javascripts/vendor/zepto-fx.js',
+          'public/javascripts/vendor/smooth-scroll.js',
           'public/javascripts/vendor/debounce.js',
           'public/javascripts/vendor/underscore.js',
           'public/javascripts/vendor/_cookie.js',
