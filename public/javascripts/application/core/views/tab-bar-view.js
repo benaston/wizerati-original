@@ -14,6 +14,10 @@
     this.$el = null;
     this.Model = null;
 
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -21,10 +25,6 @@
       }
 
       that.renderSetSelectedTab(that.Model.getSelectedTab())
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
     };
 
     this.renderSetSelectedTab = function(tab) {

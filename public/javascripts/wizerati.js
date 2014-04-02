@@ -8088,7 +8088,7 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.PurchasePanelView);
 
 }(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
+;(function (app, $, inv) {
   'use strict';
 
   function ResultListView(model, resultViewFactory, itemModelPack) {
@@ -8099,45 +8099,36 @@ window.wizerati = {
 
     var that = this,
         _el = '#result-list-panel',
-        _elResultList = '.result-list',
+        _elContainer = '#result-list-panel-container',
+        _elResultList = '#result-list',
         _resultViewFactory = null,
-        _scrollTopValue = 0,
-        _lastKnownSearchId = null,
         _renderOptimizations = {};
 
     this.$el = null;
+    this.$elContainer = null;
     this.Model = null;
 
-    function calculateScrollTopValueToMaintain($el, searchId) {
-      if (_lastKnownSearchId === searchId) {
-        _scrollTopValue = $el.scrollTop();
-      } else {
-        _scrollTopValue = 0;
-        _lastKnownSearchId = searchId;
-      }
-    }
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elContainer = $(_elContainer);
+      that.$elResultList = $(_elResultList);
+    };
 
     this.render = function (e) {
-
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
-      var searchId = that.Model.getSearchId();
-//      var isFreshSearch = _lastKnownSearchId !== searchId;
-      calculateScrollTopValueToMaintain(that.$elResultList, searchId);
       that.$elResultList.empty();
-//      that.$elResultList.addClass('ios-scroll-enable');
-
       that.Model.getResults().forEach(function (id) {
         _resultViewFactory.create(id, function ($v) {
           that.$elResultList.append($v);
         });
       });
 
-      that.$elResultList.scrollTop(_scrollTopValue);
-      that.$el.attr('data-mode', that.Model.getMode());
+      that.$el.scrollTop(0);
+      that.renderSetMode();
     };
 
     this.renderSetSelectedItemId = function (selectedItemId) {
@@ -8180,12 +8171,8 @@ window.wizerati = {
     };
 
     this.renderSetMode = function (mode) {
-      $(_el).attr('data-mode', mode);
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$elResultList = $(_elResultList);
+      mode = mode || that.Model.getMode();
+      that.$elContainer.attr('data-mode', mode);
     };
 
     function init() {
@@ -8221,7 +8208,6 @@ window.wizerati = {
       $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
@@ -8233,7 +8219,7 @@ window.wizerati = {
   }
 
   app.ResultListView = ResultListView;
-  invertebrate.View.isExtendedBy(app.ResultListView);
+  inv.View.isExtendedBy(app.ResultListView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -8246,27 +8232,16 @@ window.wizerati = {
     }
 
     var that = this,
-        _el = '#search-form-panel-container',
-        _modeEnum = app.mod('enum').SearchFormMode,
+        _el = '#search-form-panel',
+        _elContainer = '#search-form-panel-container',
         _templateName = 'search-form.html-local',
+        _modeEnum = app.mod('enum').SearchFormMode,
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
 
     this.$el = null;
-
+    this.$elContainer = null;
     this.model = null;
-
-    this.render = function (e) {
-      var options = { done: that.postRender, postRenderScriptName: null };
-
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      app.instance.renderTemplate(that.$el, _templateName, that.model, options);
-      that.renderSetMode(that.model.getMode());
-    };
 
     this.bindEvents = function () {
       //we update the model only on click of search to enable trivial cancelling of unwanted changes
@@ -8299,7 +8274,39 @@ window.wizerati = {
 
     this.postRender = function () {
       that.bindEvents();
-//      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
+    };
+
+    function monitorWaitState() {
+      _waitStateIsBeingMonitored = true;
+
+      if (that.model.getIsWaiting() === 'true') {
+        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
+        setTimeout(function () {
+          that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
+          setTimeout(monitorWaitState, 2500); //wait for animation to complete before checking
+        }, 0);
+      } else {
+        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
+        _waitStateIsBeingMonitored = false;
+      }
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elContainer = $(_elContainer);
+      that.render(); //this introduces the wait on initial visit
+    };
+
+    this.render = function (e) {
+      var options = { done: that.postRender, postRenderScriptName: null };
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      app.instance.renderTemplate(that.$el, _templateName, that.model, options);
+      that.renderSetMode(that.model.getMode());
     };
 
     this.renderSetIsWaiting = function () {
@@ -8320,7 +8327,7 @@ window.wizerati = {
         this.renderSetRate();
       }
 
-      that.$el.attr('data-mode', mode);
+      that.$elContainer.attr('data-mode', mode);
     };
 
     this.renderSetKeywords = function (keywords) {
@@ -8332,26 +8339,6 @@ window.wizerati = {
       rate = rate || that.model.getRate();
       that.$el.find('input[name="r"]:checked').prop('checked', false).blur();
       that.$el.find('input[name="r"][value="' + rate + '"]').prop('checked', true);
-    };
-
-    function monitorWaitState() {
-      _waitStateIsBeingMonitored = true;
-
-      if (that.model.getIsWaiting() === 'true') {
-        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
-        setTimeout(function () {
-          that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
-          setTimeout(monitorWaitState, 2500); //wait for animation to complete before checking
-        }, 0);
-      } else {
-        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
-        _waitStateIsBeingMonitored = false;
-      }
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.render(); //this introduces the wait on initial visit
     };
 
     function init() {
@@ -8383,68 +8370,6 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.SearchFormView);
 
 }(wizerati, $, invertebrate));
-;//(function (app, $, invertebrate) {
-//  'use strict';
-//
-//  function SearchPanelView(model) {
-//
-//    if (!(this instanceof app.SearchPanelView)) {
-//      return new app.SearchPanelView(model);
-//    }
-//
-//    var that = this,
-//        _el = '.search-panel',
-//        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-//        _renderOptimizations = {};
-//
-//    this.$el = null;
-//    this.Model = null;
-//
-//    this.render = function (e) {
-//      if (e && _renderOptimizations[e.type]) {
-//        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-//        return;
-//      }
-//
-//      that.renderSetMode();
-//    };
-//
-//    this.onDomReady = function () {
-//      that.$el = $(_el);
-//      that.$navPanel = $('#nav-panel');
-//    };
-//
-//    this.renderSetMode = function(mode) {
-//      that.$el.attr('data-mode', that.Model.getMode());
-//
-//      var oppositeMode = that.Model.getMode() === _searchPanelModeEnum.Default ? _searchPanelModeEnum.Minimized : _searchPanelModeEnum.Default;
-//      that.$navPanel.find('.handle-search-panel input[name="mode"]').attr('value', oppositeMode);
-//      that.$navPanel.find('.handle-search-panel').addClass('selected');
-//    };
-//
-//    function init() {
-//      if (!model) {
-//        throw 'SearchPanelView::init model not supplied';
-//      }
-//
-//      that = $.decorate(that, app.mod('decorators').decorators.trace);
-//      that.Model = model;
-//
-//      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-//
-//      $.subscribe(that.Model.eventUris.setMode, that.render);
-//      $.subscribe(that.Model.eventUris.default, that.render);
-//
-//      return that;
-//    }
-//
-//    return init();
-//  }
-//
-//  app.SearchPanelView = SearchPanelView;
-//  invertebrate.View.isExtendedBy(app.SearchPanelView);
-//
-//}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -8461,6 +8386,10 @@ window.wizerati = {
     this.$el = null;
     this.Model = null;
 
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -8468,10 +8397,6 @@ window.wizerati = {
       }
 
       that.renderSetSelectedTab(that.Model.getSelectedTab())
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
     };
 
     this.renderSetSelectedTab = function(tab) {
@@ -8517,6 +8442,11 @@ window.wizerati = {
     this.$el = null;
     this.Model = null;
 
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$mainContainer = $(_mainContainer);
+    };
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -8526,11 +8456,6 @@ window.wizerati = {
       that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
       that.$el.attr('data-modal', that.Model.getModal());
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$mainContainer = $(_mainContainer);
     };
 
     this.renderSetVisibilityMode = function(mode) {

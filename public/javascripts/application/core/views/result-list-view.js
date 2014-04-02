@@ -1,4 +1,4 @@
-(function (app, $, invertebrate) {
+(function (app, $, inv) {
   'use strict';
 
   function ResultListView(model, resultViewFactory, itemModelPack) {
@@ -9,45 +9,36 @@
 
     var that = this,
         _el = '#result-list-panel',
-        _elResultList = '.result-list',
+        _elContainer = '#result-list-panel-container',
+        _elResultList = '#result-list',
         _resultViewFactory = null,
-        _scrollTopValue = 0,
-        _lastKnownSearchId = null,
         _renderOptimizations = {};
 
     this.$el = null;
+    this.$elContainer = null;
     this.Model = null;
 
-    function calculateScrollTopValueToMaintain($el, searchId) {
-      if (_lastKnownSearchId === searchId) {
-        _scrollTopValue = $el.scrollTop();
-      } else {
-        _scrollTopValue = 0;
-        _lastKnownSearchId = searchId;
-      }
-    }
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elContainer = $(_elContainer);
+      that.$elResultList = $(_elResultList);
+    };
 
     this.render = function (e) {
-
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
-      var searchId = that.Model.getSearchId();
-//      var isFreshSearch = _lastKnownSearchId !== searchId;
-      calculateScrollTopValueToMaintain(that.$elResultList, searchId);
       that.$elResultList.empty();
-//      that.$elResultList.addClass('ios-scroll-enable');
-
       that.Model.getResults().forEach(function (id) {
         _resultViewFactory.create(id, function ($v) {
           that.$elResultList.append($v);
         });
       });
 
-      that.$elResultList.scrollTop(_scrollTopValue);
-      that.$el.attr('data-mode', that.Model.getMode());
+      that.$el.scrollTop(0);
+      that.renderSetMode();
     };
 
     this.renderSetSelectedItemId = function (selectedItemId) {
@@ -90,12 +81,8 @@
     };
 
     this.renderSetMode = function (mode) {
-      $(_el).attr('data-mode', mode);
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$elResultList = $(_elResultList);
+      mode = mode || that.Model.getMode();
+      that.$elContainer.attr('data-mode', mode);
     };
 
     function init() {
@@ -131,7 +118,6 @@
       $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
       $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-//      $.subscribe(itemModelPack.hiddenItemsModel.updateEventUri, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
       $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
       $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
@@ -143,6 +129,6 @@
   }
 
   app.ResultListView = ResultListView;
-  invertebrate.View.isExtendedBy(app.ResultListView);
+  inv.View.isExtendedBy(app.ResultListView);
 
 }(wizerati, $, invertebrate));

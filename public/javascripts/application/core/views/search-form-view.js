@@ -8,27 +8,16 @@
     }
 
     var that = this,
-        _el = '#search-form-panel-container',
-        _modeEnum = app.mod('enum').SearchFormMode,
+        _el = '#search-form-panel',
+        _elContainer = '#search-form-panel-container',
         _templateName = 'search-form.html-local',
+        _modeEnum = app.mod('enum').SearchFormMode,
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
 
     this.$el = null;
-
+    this.$elContainer = null;
     this.model = null;
-
-    this.render = function (e) {
-      var options = { done: that.postRender, postRenderScriptName: null };
-
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      app.instance.renderTemplate(that.$el, _templateName, that.model, options);
-      that.renderSetMode(that.model.getMode());
-    };
 
     this.bindEvents = function () {
       //we update the model only on click of search to enable trivial cancelling of unwanted changes
@@ -61,7 +50,39 @@
 
     this.postRender = function () {
       that.bindEvents();
-//      that.model.setFirstRenderCompleteFlag(); //enables us to delay showing the UI until the search form has been rendered
+    };
+
+    function monitorWaitState() {
+      _waitStateIsBeingMonitored = true;
+
+      if (that.model.getIsWaiting() === 'true') {
+        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
+        setTimeout(function () {
+          that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
+          setTimeout(monitorWaitState, 2500); //wait for animation to complete before checking
+        }, 0);
+      } else {
+        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
+        _waitStateIsBeingMonitored = false;
+      }
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elContainer = $(_elContainer);
+      that.render(); //this introduces the wait on initial visit
+    };
+
+    this.render = function (e) {
+      var options = { done: that.postRender, postRenderScriptName: null };
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      app.instance.renderTemplate(that.$el, _templateName, that.model, options);
+      that.renderSetMode(that.model.getMode());
     };
 
     this.renderSetIsWaiting = function () {
@@ -82,7 +103,7 @@
         this.renderSetRate();
       }
 
-      that.$el.attr('data-mode', mode);
+      that.$elContainer.attr('data-mode', mode);
     };
 
     this.renderSetKeywords = function (keywords) {
@@ -94,26 +115,6 @@
       rate = rate || that.model.getRate();
       that.$el.find('input[name="r"]:checked').prop('checked', false).blur();
       that.$el.find('input[name="r"][value="' + rate + '"]').prop('checked', true);
-    };
-
-    function monitorWaitState() {
-      _waitStateIsBeingMonitored = true;
-
-      if (that.model.getIsWaiting() === 'true') {
-        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
-        setTimeout(function () {
-          that.$el.find('.btn-primary').attr('data-is-waiting', 'true'); //trigger animation
-          setTimeout(monitorWaitState, 2500); //wait for animation to complete before checking
-        }, 0);
-      } else {
-        that.$el.find('.btn-primary').attr('data-is-waiting', 'false');
-        _waitStateIsBeingMonitored = false;
-      }
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.render(); //this introduces the wait on initial visit
     };
 
     function init() {

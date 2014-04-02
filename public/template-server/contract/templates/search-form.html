@@ -2,7 +2,6 @@
 var rate = model.getRate();
 var keywords = model.getKeywords();
 }}
-<section id="search-form-panel">
 <div class="logo">wizerati</div>
 <div class="tag-line">UK IT contract job search</div>
 <form id="search-form" name="search-form" action="/search" method="GET">
@@ -76,7 +75,7 @@ var keywords = model.getKeywords();
 <form id="frm-cancel-search" name="frm-cancel-search" action="/searchformmode/update" method="POST">
     <input type="hidden" name="mode" value="1"/>
 </form>
-</section>
+
 {{
 } catch(e) {
 throw "template exception: contract/search-form. " + e;

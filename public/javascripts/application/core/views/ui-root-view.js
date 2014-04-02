@@ -15,6 +15,11 @@
     this.$el = null;
     this.Model = null;
 
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$mainContainer = $(_mainContainer);
+    };
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -24,11 +29,6 @@
       that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
       that.$el.attr('data-modal', that.Model.getModal());
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$mainContainer = $(_mainContainer);
     };
 
     this.renderSetVisibilityMode = function(mode) {
