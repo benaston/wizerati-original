@@ -59,13 +59,12 @@
 //        $('#tab-bar').css({ position: 'absolute'});
       });
 
-      that.$el.find('#keywords').on('blur', function () {
-        $('#tab-bar').css({ display: 'inline-table'});
-//        setTimeout(function(){
-//          $('#tab-bar').css({ display: 'block'});
-//        }, 1000);
-//        $('#tab-bar').css({ position: 'fixed'});
-      });
+      //Fix static positioning bug in iOS.
+      if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
+        that.$el.find('#keywords').on('blur', function () {
+          $('#tab-bar').css({ display: 'inline-table'});
+        });
+      }
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {

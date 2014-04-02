@@ -62,6 +62,7 @@ body[data-ui-mode='1'] #search-form {
 }
 
 body[data-ui-mode='1'] #search-form-container {
+    display: inline-table; /*fixes fixed positioning issue on iOS*/
     position: fixed;
     top: 0;
     /*left: 74px; *//*width of tab bar*/
