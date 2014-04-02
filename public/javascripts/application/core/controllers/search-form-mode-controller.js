@@ -24,7 +24,7 @@
               $('#search-form-panel-container').css({'display': 'block'});
               setTimeout(function(){
                 $('#search-form-panel-container').css({'display': 'inline-block'});
-              }, 250)
+              }, 125)
             }
           }
 
