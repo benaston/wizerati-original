@@ -4069,7 +4069,7 @@ window.wizerati = {
               $('#bookmark-panel-container').css({'display': 'block'});
               setTimeout(function(){
                 $('#bookmark-panel-container').css({'display': 'inline-block'});
-              }, 125)
+              }, 62)
             }
           }
 
