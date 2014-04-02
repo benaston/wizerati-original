@@ -55,11 +55,15 @@
 
       //Fixes iOS issue with calculating the bounds of fixed position elements.
       that.$el.find('#keywords').on('focus', function () {
-        $('#tab-bar').css({ position: 'absolute'});
+//        $('#tab-bar').css({ position: 'absolute'});
       });
 
       that.$el.find('#keywords').on('blur', function () {
-        $('#tab-bar').css({ position: 'fixed'});
+        $('#tab-bar').css({ display: 'inline-table'});
+        setTimeout(function(){
+          $('#tab-bar').css({ display: 'block'});
+        }, 62);
+//        $('#tab-bar').css({ position: 'fixed'});
       });
 
       var $form = that.$el.find('#search-form');
