@@ -3270,10 +3270,9 @@ window.wizerati = {
 
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized); //done by ioimodel.setmode
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-//      _layoutCoordinator.layOut(); //i think this is taken care of by setting the mode of the ioimodel
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
     };
 
     function init() {
@@ -4069,9 +4068,14 @@ window.wizerati = {
           if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
             if(dto.mode === _searchFormModeEnum.Default) {
               $('#bookmark-panel-container').css({'display': 'block'});
+              $('#tab-bar').css({ position: 'absolute'});
+
               setTimeout(function(){
                 $('#bookmark-panel-container').css({'display': 'inline-block'});
-              }, 62)
+                $('#tab-bar').css({ position: 'fixed'});
+              }, 62);
+
+
             }
           }
 

@@ -24,9 +24,14 @@
           if(/(iPad|iPhone|iPod)/g.test( navigator.userAgent )) {
             if(dto.mode === _searchFormModeEnum.Default) {
               $('#bookmark-panel-container').css({'display': 'block'});
+              $('#tab-bar').css({ position: 'absolute'});
+
               setTimeout(function(){
                 $('#bookmark-panel-container').css({'display': 'inline-block'});
-              }, 62)
+                $('#tab-bar').css({ position: 'fixed'});
+              }, 62);
+
+
             }
           }
 
