@@ -17,6 +17,7 @@
 
 
           _searchFormModel.setMode(dto.mode);
+          $('#search-form-container').css({'z-index': 3});
 
           if (dto.mode === _searchFormModeEnum.Minimized) {
             app.instance.router.redirect('/search');
