@@ -33,14 +33,14 @@ body[data-ui-mode='1'] .f {
 
 .logo {
     margin-top: 10px;
-    line-height: 2.9rem;
-    font-size: 2.9em;
+    line-height: 3.9rem;
+    font-size: 3.9em;
     color: rgba(82, 110, 125, 1);
     font-family: helvetica-bold;
 }
 
 .tag-line {
-    font-size: .8rem;
+    font-size: 1rem;
     color: rgba(82, 110, 125, 1);
     font-family: helvetica-bold;
 }

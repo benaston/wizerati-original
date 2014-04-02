@@ -33,7 +33,7 @@ body[data-ui-mode='0'] #search-form-panel {
     height: 310px;
     width: 500px;
     left: 50%;
-    top: 43%;
+    top: 39%;
     margin-left: -250px;
     margin-top: -155px;
     border-radius: 130px;
@@ -45,6 +45,7 @@ body[data-ui-mode='0'] #search-form-panel {
 /*body[data-ui-mode='0'] #keywords {*/
 #keywords {
     width: 460px;
+    padding-right: 79px; /*space for search button*/
 }
 
 #search-form {
@@ -137,7 +138,7 @@ body[data-ui-mode='0'] .search-form-title {
 }
 
 body[data-ui-mode='0'] form[name='search-form'] {
-    top: 10px; /*empirical*/
+    top: 14px; /*empirical*/
     position: relative;
 }
 
