@@ -20,6 +20,7 @@
         _layoutCoordinator = null;
 
     this.resetUIForSearch = function () {
+
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);

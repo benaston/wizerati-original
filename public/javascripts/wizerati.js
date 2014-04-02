@@ -4718,6 +4718,7 @@ window.wizerati = {
         _layoutCoordinator = null;
 
     this.resetUIForSearch = function () {
+
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
@@ -8310,7 +8311,7 @@ window.wizerati = {
       $btn.on('click', function () {
         that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
         that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
-
+        $('body').scrollToX({duration: 100});
         //needed?
         if (!_waitStateIsBeingMonitored) {
           monitorWaitState();
@@ -8365,27 +8366,28 @@ window.wizerati = {
     this.renderSetMode = function (mode) {
       if (mode === _modeEnum.Default) {
         //ensure horizontal scroll position is correct
-        $('#main-container').scrollToX(0)
+//        $('#main-container').scrollToX(0)
 
         //ensure UI matches model values
         this.renderSetKeywords();
         this.renderSetRate();
 
         //Prevent horizontal scrolling in preparation for changing the tab bar position to absolute.
-          $('#main-container').css({'overflow-x': 'hidden'});
+//          $('#main-container').css({'overflow-x': 'hidden'});
 
         //Use absolute positioning for the tab bar to fix rendering issue with iOS keyboard.
-        $('#tab-bar').css({position: 'absolute'});
+//        $('#tab-bar').css({position: 'absolute'});
       }
 
       if (mode === _modeEnum.Minimized) {
         setTimeout(function () {
-          $('#main-container').css({'overflow-x': 'scroll'});
-          $('#tab-bar').css({position: 'fixed'});
+//          $('#main-container').css({'overflow-x': 'scroll'});
+//          $('#tab-bar').css({position: 'fixed'});
         }, 500);
       }
 
-      $(_resultListPanelEl).attr('data-search-form-mode', mode);
+//      $(_resultListPanelEl).attr('data-search-form-mode', mode);
+      $('#search-form-panel-container').attr('data-mode', mode);
     };
 
     this.renderSetKeywords = function (keywords) {

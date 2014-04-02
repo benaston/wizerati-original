@@ -134,10 +134,16 @@ module.exports = function (grunt) {
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/result.html") %>'
             },
             {
+              match: 'footer',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/footer.html") %>'
+            },{
               match: 'no-script',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/no-script.html") %>'
             },
             {
+              match: 'search-form-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/search-form-panel.html") %>'
+            },{
               match: 'result-list-panel',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/result-list-panel.html") %>'
             },

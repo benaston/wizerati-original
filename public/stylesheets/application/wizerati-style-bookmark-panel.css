@@ -4,7 +4,7 @@
     overflow: visible;
     position: relative;
     display: inline-block;
-    z-index: 2; /*needs to be infront of result list*/
+
 }
 
 #bookmark-panel {
@@ -18,7 +18,7 @@
     vertical-align: top;
     overflow-x: hidden;
     overflow-y: scroll;
-    z-index: -1; /*fixes a webkit z-index bug I think*/
+    z-index: 2; /*4=tab-bar, 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
     box-shadow: none;
     background-color: white;
     -webkit-filter: opacity(0%); /*attempt to avoid flash of visibility on greenfield*/

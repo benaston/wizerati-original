@@ -1,3 +1,18 @@
+#search-form-panel-container[data-mode='0'] #search-form-container {
+    -webkit-filter: opacity(100%);
+    pointer-events: auto;
+}
+
+#search-form-panel-container[data-mode='1'] #search-form-container {
+    -webkit-filter: opacity(0%);
+    pointer-events: none;
+}
+
+/*rename!*/
+#search-form-container {
+    z-index: 3; /*4=tab-bar, 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
+}
+
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] #search-form-container {
     transition: -webkit-filter .2s ease-out;
 }
@@ -25,27 +40,35 @@ body[data-ui-mode='0'] #keywords {
 }
 
 #search-form-container hr {
-    margin-top: 30px;
+    width: 335px;
+    margin: 38px 0 0 145px;
 }
 
 body[data-ui-mode='0'] #search-form-container hr {
     display: none;
 }
 
+body[data-ui-mode='1'] #search-form {
+    left: 74px; /*width of tab bar*/
+}
+
 body[data-ui-mode='1'] #search-form-container {
     position: fixed;
     top: 0;
-    left: 74px; /*width of tab bar*/
-    width: 480px;
-    height: 210px;
+    /*left: 74px; *//*width of tab bar*/
+    /*width: 480px;*/
+    /*height: 210px;*/
+    width: 100%;
+    height: 100%;
     text-align: left;
-    margin: auto;
+    background: rgba(255, 255, 255, .97);
+    /*margin: auto;*/
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
 .search-buttons-container {
     position: relative; /*to give context to absolutely positioned buttons*/
-    height:88px; /*to enable correct positioning of hr after*/
+    height: 88px; /*to enable correct positioning of hr after*/
 }
 
 .search-panel[data-mode='1'] #search-form-container {
@@ -67,7 +90,7 @@ body[data-ui-mode='1'] [data-search-form-mode='0'] #search-form-container {
 }
 
 body[data-ui-mode='1'] [data-search-form-mode='1'] #search-form-container {
-    left:0; /*position is not fixed when minimized! - hence we need to change the left value*/
+    left: 0; /*position is not fixed when minimized! - hence we need to change the left value*/
     -webkit-filter: opacity(0%); /*prevent it from being visible when users pull down to scroll on iOS*/
     /*-webkit-transform: translateY(-318px); *//* to base of the search buttons*/
 }
@@ -213,3 +236,4 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         top: 207px;
     }
 }
+
