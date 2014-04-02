@@ -3,7 +3,7 @@
     pointer-events: auto;
 }
 
-#search-form-panel-container[data-mode='1'] #search-form-container {
+body[data-ui-mode='1'] #search-form-panel-container[data-mode='1'] #search-form-container {
     -webkit-filter: opacity(0%);
     pointer-events: none;
 }
