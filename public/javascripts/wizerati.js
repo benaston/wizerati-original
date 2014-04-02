@@ -6039,11 +6039,9 @@ window.wizerati = {
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _modalEnum = app.mod('enum').Modal,
-        _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
-        _activeTab = _tabEnum.Search,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
         _areTransitionsEnabled = 'true';
 
@@ -6051,8 +6049,7 @@ window.wizerati = {
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
       setModal: 'update://uirootmodel/setmodal',
-      setUIMode: 'update://uirootmodel/setuimode',
-      setActiveTab: 'update://uirootmodel/setactivetab'
+      setUIMode: 'update://uirootmodel/setuimode'
     };
 
     this.getVisibilityMode = function () {
@@ -6082,16 +6079,6 @@ window.wizerati = {
       _areTransitionsEnabled = value;
 
       $.publish(that.eventUris.setAreTransitionsEnabled);
-    };
-
-    this.setActiveTab = function (value) {
-      if (value === _activeTab) {
-        return;
-      }
-
-      _activeTab = value;
-
-      $.publish(that.eventUris.setActiveTab, _activeTab);
     };
 
     this.getUIMode = function () {
@@ -8493,7 +8480,7 @@ window.wizerati = {
 
     function init() {
       if (!model) {
-        throw 'UIRootView::init model not supplied';
+        throw 'TabBarView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -8562,10 +8549,6 @@ window.wizerati = {
         that.$el.attr('data-ui-mode', uiMode);
     };
 
-    this.renderSetActiveTab = function(tab) {
-        that.$el.attr('data-active-tab', tab);
-    };
-
     function init() {
       if (!model) {
         throw 'UIRootView::init model not supplied';
@@ -8578,14 +8561,12 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
       _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
       _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
-      _renderOptimizations[that.Model.eventUris.setActiveTab] = that.renderSetActiveTab;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
       $.subscribe(that.Model.eventUris.setModal, that.render);
       $.subscribe(that.Model.eventUris.setUIMode, that.render);
-      $.subscribe(that.Model.eventUris.setActiveTab, that.render);
 
       return that;
     }
@@ -8617,11 +8598,6 @@ window.wizerati = {
       Default: '0',
       PinnedItemsExpanded: '1'
     };
-
-//    mod.ItemsOfInterestViewEvent = {
-//      Default: '0',
-//      WindowResize: '1'
-//    };
 
     mod.MainContainerVisibilityMode = {
       Hidden: '0',

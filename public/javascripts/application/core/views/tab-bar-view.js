@@ -33,7 +33,7 @@
 
     function init() {
       if (!model) {
-        throw 'UIRootView::init model not supplied';
+        throw 'TabBarView::init model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);

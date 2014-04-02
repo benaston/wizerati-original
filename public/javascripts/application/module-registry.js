@@ -19,11 +19,6 @@
       PinnedItemsExpanded: '1'
     };
 
-//    mod.ItemsOfInterestViewEvent = {
-//      Default: '0',
-//      WindowResize: '1'
-//    };
-
     mod.MainContainerVisibilityMode = {
       Hidden: '0',
       HiddenNoBackgroundOrLoadingIndicator: '1',
