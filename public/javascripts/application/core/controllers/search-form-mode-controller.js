@@ -20,8 +20,8 @@
 
           //workaround for height bug on static elements with the keyboard
           if(dto.mode === _searchFormModeEnum.Default) {
+            $('#search-form-panel-container').css({'display': 'static'});
             setTimeout(function(){
-              $('#search-form-panel-container').css({'display': 'static'});
               $('#search-form-panel-container').css({'display': 'inline-block'});
             }, 1000)
           }
