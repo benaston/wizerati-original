@@ -14,23 +14,7 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /*removes dark active overlay when tapping buttons on ios*/
 }
 
-/*We support nesting and sibling label relationships.*/
-.btn-40 ~ .lbl,
-.btn-40 > .lbl {
-    margin-top: 4px;
-    font-size: .8rem;
-    color: rgba(0, 109, 204, 0.95);
-    -webkit-user-select: none;
-    line-height: 1.34rem; /*required for span labels*/
-}
-
-.btn-100 ~ .lbl {
-    margin-top: 4px;
-    font-size: 2.3rem;
-    color: rgba(0, 109, 204, 0.95);
-}
-
-.btn-40 {
+.btn-s {
     width: 67px; /*chosen to match ipad pass entry size, plus centered on left*/
     border-radius: 85px;
     line-height: 67px;
@@ -39,12 +23,28 @@
     color: rgba(0, 109, 204, 0.95);
 }
 
+/*We support nesting and sibling label relationships.*/
+.btn-s ~ .lbl,
+.btn-s > .lbl {
+    margin-top: 4px;
+    font-size: .8rem;
+    color: rgba(0, 109, 204, 0.95);
+    -webkit-user-select: none;
+    line-height: 1.34rem; /*required for span labels*/
+}
+
 .btn-100 {
     width: 110px;
     border-radius: 100px !important;
     line-height: 97px !important;
     height: 110px !important;
     font-size: 2.1em;
+}
+
+.btn-100 ~ .lbl {
+    margin-top: 4px;
+    font-size: 2.3rem;
+    color: rgba(0, 109, 204, 0.95);
 }
 
 .btn:disabled,
@@ -137,35 +137,8 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     border-color: rgba(189, 54, 47, .95) rgba(189, 54, 47, .95) rgba(189, 54, 47, .95) !important;
 }
 
-.btn-with-notch:before {
-    display: block;
-    content: '';
-    width: 0px;
-    background-color: white;
-    height: 0px;
-    position: relative;
-    top: -3px;
-    -webkit-transform: rotate(0);
-    left: 34px;
-    box-shadow: 0px -1px 0px 2px rgba(0, 109, 204, 0.95), 0px -7px 0px 2px rgba(0, 109, 204, 0.95), 5px -9px 0px 2px rgba(0, 109, 204, 0.95), 5px -3px 0px 2px rgba(0, 109, 204, 0.95);
-}
-
-.btn-with-notch:hover:before {
-    display: block;
-    content: '';
-    width: 0px;
-    background-color: white;
-    height: 0px;
-    position: relative;
-    top: -3px;
-    -webkit-transform: rotate(0);
-    left: 34px;
-    box-shadow: 0px -1px 0px 2px #0059b8, 0px -7px 0px 2px #0059b8, 5px -9px 0px 2px #0059b8, 5px -3px 0px 2px #0059b8;
-}
-
 *[data-is-waiting='success'] .btn-success, *[data-is-waiting='primary'] .btn-primary {
     border: 1px solid rgba(2, 86, 244, .9);
-    /*box-shadow: 0 2px 0 2px rgba(0,0,0,.05) inset;*/
     border-left: 0;
     -webkit-animation-duration: 2s;
     -webkit-animation-name: rotate;
@@ -175,13 +148,16 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 
 /*Rotates and border-color changes when waiting*/
 .rotating-button-container > .btn[data-is-waiting='true'] {
-    /*border: 1px solid rgba(2, 86, 244, .9);*/
     box-shadow: 0 2px 0 2px rgba(0,0,0,.05) inset;
-    /*border-left: 0;*/
     -webkit-animation-duration: 2.5s;
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: 1;
     -webkit-animation-timing-function: ease-out-in;
+}
+
+.radio:enabled + .lbl:active.halo, .btn.halo:enabled:active {
+    box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
+    transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
 }
 
 @media not screen and (min-device-width: 768px) and (max-device-width: 1024px) {
@@ -201,9 +177,4 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     .radio:enabled + .lbl:active, .btn:enabled:active, a.btn:not(.disabled):active {
         box-shadow: none; /* touch start and end events take care of this*/
     }
-}
-
-.radio:enabled + .lbl:active.halo, .btn.halo:enabled:active {
-    box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);
-    transition: border-color 0.1s linear, box-shadow 0s linear, border-left-width .2s ease-out;
 }

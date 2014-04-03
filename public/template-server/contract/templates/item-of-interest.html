@@ -5,7 +5,7 @@
             <li><form class="frm-bookmark" method="POST" action="/bookmarks/{{=model.isBookmark ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-40 {{=model.isFavoritable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
+                    <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s {{=model.isFavoritable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
                             title="{{=model.isFavoritable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
                     <label class="lbl" for="btn-bookmark-{{= model.id}}">{{= model.isFavorite ? 'remove bookmark' : 'bookmark' }}</label>
                 </div>
@@ -13,7 +13,7 @@
             <li><form class="frm-hide" method="POST" action="/hiddenitems/{{=model.isHidden ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button id="btn-hide-{{= model.id}}" class="btn btn-40 {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
+                    <button id="btn-hide-{{= model.id}}" class="btn btn-s {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
                             title="{{=model.isHideable ? 'Hide this from future results' : '' }}" {{=model.isHideable || model.isHidden ? '' : 'disabled' }}>&#xf30f;</button>
                     <label class="lbl" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'un-hide' : 'hide' }}</label>
                 </div>
@@ -21,14 +21,14 @@
             <li><form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button id="btn-action-{{= model.id}}" class="btn btn-40 {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
+                    <button id="btn-action-{{= model.id}}" class="btn btn-s {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
                             title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable || model.isHidden ? '' : 'disabled' }}>&#xf16c;</button>
                     <label class="lbl" for="btn-action-{{= model.id}}">apply</label>
                 </div>
             </form></li>
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button id="btn-pin-{{= model.id}}" class="btn btn-40 {{=model.isPinnable || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
+                    <button id="btn-pin-{{= model.id}}" class="btn btn-s {{=model.isPinnable || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
                             title="{{=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already in your comparison list / You have the maximum number of permitted items in the comparison list / You cannot add hidden items to the comparison list' }}" {{=model.isPinnable || model.isInComparisonList ? '' : 'disabled' }}>{{= model.isPinned ? '&#xf30e;' : '&#xf30e;' }}</button>
                     <label class="lbl" for="btn-pin-{{= model.id}}">{{= model.isPinned ? 'compare' : 'compare' }}</label>
                 </div>

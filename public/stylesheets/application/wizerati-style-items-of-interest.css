@@ -24,22 +24,22 @@ body[data-items-of-interest-mode='1'] .s-i-content {
     -webkit-transform: translate3d(-100%, 0, 0);
 }
 
-.menu .btn-40.checked {
+.menu .btn-s.checked {
     background: rgba(14, 17, 19, 1);
     color: rgba(126, 157, 173, 1);
 }
 
-.menu .btn-40 {
+.menu .btn-s {
     position: relative; /*ensure focus indicator works as expected*/
     color: rgba(255, 255, 255, 1);
     border-color: rgba(255, 255, 255, .2);
 }
 
-body[data-hover-is-enabled='true'] .menu .btn-40:hover {
+body[data-hover-is-enabled='true'] .menu .btn-s:hover {
     box-shadow: #f5f5f5 0 0 8px 0;
 }
 
-.menu .btn-40 ~ .lbl {
+.menu .btn-s ~ .lbl {
     color: whitesmoke;
     position: absolute;
     top: -5px;

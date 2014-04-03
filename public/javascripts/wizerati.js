@@ -7069,8 +7069,6 @@ window.wizerati = {
         throw 'FavoritesCubeView::init model not supplied';
       }
 
-
-
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
       _favoriteViewFactory = favoriteViewFactory;
