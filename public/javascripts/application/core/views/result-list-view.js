@@ -70,8 +70,8 @@
       $selector.removeClass('hidden');
     };
 
-    this.renderAddBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
+    this.renderAddBookmark = function (bookmark) {
+      var selector = '.t[data-id="' + bookmark.id + '"]';
       $(_el).find(selector).attr('data-is-bookmark', 'true');
     };
 

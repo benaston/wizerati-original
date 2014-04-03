@@ -81,14 +81,9 @@
       $selector.removeClass('hidden');
     };
 
-    this.renderAddBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'true');
-    };
-
     this.renderRemoveBookmark = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'false');
+      $(_el).find(selector).remove();
     };
 
     this.renderSetMode = function (mode) {
@@ -117,7 +112,7 @@
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
       _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+//      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
       _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
       _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;

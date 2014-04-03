@@ -126,8 +126,8 @@
       $('body').attr('data-items-of-interest-mode', mode)
     };
 
-    this.renderAddBookmark = function (itemId) {
-      var $frms = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]')
+    this.renderAddBookmark = function (bookmark) {
+      var $frms = $('.p-i[data-id="' + bookmark.id + '"], .s-i[data-id="' + bookmark.id + '"]')
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');

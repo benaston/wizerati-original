@@ -63,22 +63,22 @@
       $.publish(that.eventUris.setIsWaiting, value);
     };
 
-    //When adding a bookmark, the service should be used (which in-turn calls this).
-    this.addBookmark = function (id) {
-      if (that.isBookmark(id)) {
+    //When adding a bookmark, the SERVICE should be used (which in-turn calls this).
+    this.addBookmark = function (bookmark) {
+      if (that.isBookmark(bookmark.id)) {
         return;
       }
-      _bookmarks.push(id);
+      _bookmarks.push(bookmark);
 
-      $.publish(that.eventUris.addBookmark, id);
+      $.publish(that.eventUris.addBookmark, bookmark);
     };
 
-    //When removing a bookmark, the service should be used (which in-turn calls this).
+    //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
     this.removeBookmark = function (id) {
       if (!that.isBookmark(id)) {
         return;
       }
-      _bookmarks = _.reject(_bookmarks, function(b){ return b === id; });
+      _bookmarks = _.reject(_bookmarks, function(b){ return b.id === id; });
 
       $.publish(that.eventUris.removeBookmark, id);
     };

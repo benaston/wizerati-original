@@ -38,8 +38,8 @@
         that.$el.attr('data-is-actioned', that.Model.isActioned);
       }
 
-      if(that.Model.isBookmark) {
-        that.$el.attr('data-is-bookmark', that.Model.isBookmark);
+      if(!!(that.Model.bookmarkDateTime)) {
+        that.$el.attr('data-is-bookmark', !!(that.Model.bookmarkDateTime));
       }
 
       if(that.Model.isPinned) {

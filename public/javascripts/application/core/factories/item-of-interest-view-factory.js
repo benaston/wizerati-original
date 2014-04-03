@@ -65,16 +65,11 @@
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
             item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-//            item.isBookmark = item['isBookmark'];
+            item.isBookmark = !!(item.bookmarkDateTime); //if it has a bmk date time it is a bmk
             item.isSelected = isSelectedItem;
             item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             }));
-//            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-//            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
-//              return i === item.id;
-//            })));
-
             item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
