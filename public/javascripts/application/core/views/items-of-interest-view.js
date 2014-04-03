@@ -9,17 +9,15 @@
 
     var that = this,
         _el = '#items-of-interest-panel',
-        _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItemContainerCurrent = null,
         _elSelectedItemContainer1 = '#s-i-c-1',
         _elSelectedItemContainer2 = '#s-i-c-2',
         _elPinnedItemsContainer = '#p-i-c',
-        _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
-        _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
-        _elPinnedItem3 = '.pinned-item:nth-child(4) .pinned-item-content',
-        _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
+        _elPinnedItems = '.p-i',
+        _elPinnedItem1 = '.p-i:nth-child(2) .p-i-content',
+        _elPinnedItem2 = '.p-i:nth-child(3) .p-i-content',
+        _elPinnedItem3 = '.p-i:nth-child(4) .p-i-content',
+        _elPinnedItem4 = '.p-i:nth-child(5) .p-i-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
         _layoutCoordinator = null,
@@ -31,46 +29,60 @@
     this.$el = null;
     this.Model = null;
 
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
+      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
+      that.$elSelectedItemContainer = $('.s-i-c');
+      that.$elPinnedItems = $(_elPinnedItems);
+    };
+
+    function addPinnedItems(items, done) {
+      done = done || function () {
+      };
+
+      items.forEach(function (id) {
+        if (id === null) {
+          return;
+        }
+        _itemOfInterestViewFactory.create(id,
+            that.Model.getLayout().widthItemOfInterest,
+            false,
+            function ($view) {
+              $(_elPinnedItemsContainer).append($view);
+              $view.scrollTop(_scrollTopValues[id]);
+              that.renderLayout(that.Model.getLayout());
+            });
+      });
+
+      done();
+    }
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
-      renderPrivate({ animateSelectedItem: false, removedItemId: null });
-    };
-
-    function renderPrivate(options) {
-      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
-      that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
-
-      //these values should be stored before the modification of the DOM (hence before the removal below)
-      storeScrollTopValues();
-      storeScrollLeftValue();
-
-      that.$el.find('.selected-item, .pinned-item').remove();
+      that.$el.find('.selected-item, .p-i').remove();
 
       var items = that.Model.getItemsOfInterest();
       if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
+        _itemOfInterestViewFactory.createSelectedItem(items.selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            true,
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
-              function addSelectedItem() {
+              function addSelectedItem() { //Nested to close over $view.
                 $(_elSelectedItemContainer1).prepend($view);
-                $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                $('body').scrollLeft(_scrollLeft);
                 _layoutCoordinator.layOut();
               }
             });
       } else {
         addPinnedItems(items.pinnedItems, function () {
-          $('body').scrollLeft(_scrollLeft);
           _layoutCoordinator.layOut();
         });
       }
-    }
+    };
 
     this.renderLayout = function (layout) {
       var selectedItemContent = $('.s-i-c').find('.selected-item-content');
@@ -79,10 +91,10 @@
       $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
       $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
-      selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      selectedItemContent.width(layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
-      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
+      $('body').attr('data-items-of-interest-mode', that.Model.getMode());
     };
 
     this.renderAddHiddenItem = function (itemId) {
@@ -115,77 +127,36 @@
       $frm.find('.btn').removeClass('checked');
     };
 
-    this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
-      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
-
-      //these values should be stored before the modification of the DOM (hence before the removal below)
-      storeScrollTopValues();
-      storeScrollLeftValue();
-
+    this.renderSetSelectedItemId = function () {
       var prevEl = _elSelectedItemContainerCurrent || _elSelectedItemContainer2;
       var $prevEl = $(prevEl);
       _elSelectedItemContainerCurrent = prevEl === _elSelectedItemContainer1 ? _elSelectedItemContainer2 : _elSelectedItemContainer1;
       var $currentEl = $(_elSelectedItemContainerCurrent);
-      $currentEl.addClass('buffer');
-      var items = that.Model.getItemsOfInterest();
+      $currentEl.addClass('buffer'); //Ensure the element we are modifying is hidden while we do so.
+      var selectedItem = that.Model.getItemsOfInterest().selectedItem;
 
-      if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
+      if (selectedItem) {
+        _itemOfInterestViewFactory
+            .createSelectedItem(selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            true,
             function done($view) {
               $currentEl.html($view);
-              $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+              $view.scrollTop(_scrollTopValues[selectedItem + 's']);
               $('body').scrollLeft(_scrollLeft);
               $prevEl.addClass('buffer');
               $currentEl.removeClass('buffer');
-
               setTimeout(function () {
                 $prevEl.empty();
-              }, 300); //give time for fade effect to complete
+              }, 300); //Give time for any effect to complete.
             });
       }
     };
 
-    this.renderSetMode = function () {
-      var mode = that.Model.getMode();
-      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
-      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
-
-
-      if (mode === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
-      } else {
-        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
-      }
-
+    this.renderSetMode = function (mode) {
       $('body').attr('data-items-of-interest-mode', mode)
     };
 
-    function addPinnedItems(items, done) {
-      done = done || function () {
-      };
-
-      items.forEach(function (id) {
-        if (id === null) {
-          return;
-        }
-        _itemOfInterestViewFactory.create(id,
-            that.Model.getLayout().widthItemOfInterest,
-            false,
-            function ($view) {
-              $(_elPinnedItemsContainer).append($view);
-              $view.scrollTop(_scrollTopValues[id]);
-              that.renderLayout(that.Model.getLayout());
-            });
-      });
-
-      done();
-    }
-
-    this.renderRemoveItemOfInterest = function(id) {
+    this.renderRemoveItemOfInterest = function (id) {
       var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
       $frm.attr('action', '/itemsofinterest/create');
       $frm.find('.btn').removeClass('checked');
@@ -207,30 +178,6 @@
             $view.scrollTop(_scrollTopValues[id]);
             that.renderLayout(that.Model.getLayout());
           });
-    };
-
-    function storeScrollTopValues() {
-      var selectedItem = that.$el.find('.item-of-interest.selected');
-
-      if (selectedItem) {
-        _scrollTopValues[selectedItem.attr('data-id') + 's'] = $(selectedItem).scrollTop();
-      }
-
-      _.each(that.$el.find('.item-of-interest:not(.selected)'), function (e) {
-        _scrollTopValues[$(e).attr('data-id')] = $(e).scrollTop();
-      });
-    }
-
-    function storeScrollLeftValue() {
-      _scrollLeft = $('body').scrollLeft();
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
-      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
-      that.$elSelectedItemContainer = $('.s-i-c');
-      that.$elPinnedItems = $(_elPinnedItems);
     };
 
     function init() {

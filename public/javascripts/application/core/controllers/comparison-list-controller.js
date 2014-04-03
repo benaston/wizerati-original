@@ -17,12 +17,11 @@
 
     this.index = function (dto) {
        //if external get state from local storage...
-
+      _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
-//      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 5000); //avoid impacting animation frame rate
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); //avoid impacting animation frame rate
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
     };
 
     function init() {

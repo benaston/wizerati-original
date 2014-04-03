@@ -20,7 +20,7 @@
       if (that.Model.isSelected) {
         that.$el.addClass('selected-item');
       } else {
-        that.$el.addClass('pinned-item');
+        that.$el.addClass('p-i');
       }
 
       if (that.Model.isHidden) {

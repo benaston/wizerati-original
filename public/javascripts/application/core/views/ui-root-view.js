@@ -47,6 +47,10 @@
         that.$el.attr('data-ui-mode', uiMode);
     };
 
+    this.renderSetScrollLeft = function(left) {
+      that.$el.scrollToX({endX: left, duration: 1500});
+    };
+
     function init() {
       if (!model) {
         throw 'UIRootView::init model not supplied';
@@ -59,12 +63,14 @@
       _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
       _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
       _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+      _renderOptimizations[that.Model.eventUris.setScrollLeft] = that.renderSetScrollLeft;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
       $.subscribe(that.Model.eventUris.setModal, that.render);
       $.subscribe(that.Model.eventUris.setUIMode, that.render);
+      $.subscribe(that.Model.eventUris.setScrollLeft, that.render);
 
       return that;
     }

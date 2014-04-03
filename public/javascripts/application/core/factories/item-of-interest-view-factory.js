@@ -15,6 +15,14 @@
         _itemModelPack = null,
         _roleEnum = app.mod('enum').UserRole;
 
+    this.createSelectedItem = function (id, width, done) {
+      that.create(id, width, true, done);
+    };
+
+    this.createComparisonListItem = function (id, width, isSelectedItem, done) {
+      that.create(id, width, false, done);
+    };
+
     this.create = function (id, width, isSelectedItem, done) {
       if (!id) {
         throw 'ItemOfInterestViewFactory::create id not supplied.';

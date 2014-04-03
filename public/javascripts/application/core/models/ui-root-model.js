@@ -20,7 +20,8 @@
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
       setModal: 'update://uirootmodel/setmodal',
-      setUIMode: 'update://uirootmodel/setuimode'
+      setUIMode: 'update://uirootmodel/setuimode',
+      setScrollLeft: 'update://uirootmodel/setscrollleft'
     };
 
     this.getVisibilityMode = function () {
@@ -68,6 +69,10 @@
       if (!options.silent) {
         $.publish(that.eventUris.setUIMode, _uiMode);
       }
+    };
+
+    this.setScrollLeft = function (value) {
+        $.publish(that.eventUris.setScrollLeft, value);
     };
 
     this.getModal = function () {

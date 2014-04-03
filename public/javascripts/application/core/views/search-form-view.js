@@ -20,21 +20,17 @@
     this.model = null;
 
     this.bindEvents = function () {
-      //we update the model only on click of search to enable trivial cancelling of unwanted changes
+      //We update the model only on click of search to enable trivial cancelling of unwanted changes.
       var $btn = that.$el.find('#btn-search');
       $btn.on('click', function () {
         that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
         that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
         $('body').scrollToX({duration: 100});
-        //needed?
-        if (!_waitStateIsBeingMonitored) {
-          monitorWaitState();
-        }
       });
 
       //values in the form elements must be reset to those of the backing model
       //if the user cancels the form. This is mainly redundant due to similar
-      // logic in the renderSetMode method.
+      //logic in the renderSetMode method.
       //needed?
       var $btn = that.$el.find('#btn-cancel-search');
       $btn.on('click', function () {
@@ -44,7 +40,7 @@
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
-        that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
+        that.$el.find('#keywords').blur(); //Ensure keypad is minimised on iOS should it be used to invoke search.
       });
     };
 

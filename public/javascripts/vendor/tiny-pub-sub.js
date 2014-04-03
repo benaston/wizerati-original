@@ -10,7 +10,7 @@
     try {
       o.on.apply(o, arguments);
     } catch (e) {
-      throw 'tinyPubSub::subscribe exception: ' + e;
+      throw 'tinyPubSub::subscribe exception: ' + e + '. ENSURE YOU HAVE CREATED THE EVENT URIS FOR ANY NEW EVENTS IN THE PUBLISHING MODEL.';
     }
   };
 

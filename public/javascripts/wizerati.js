@@ -2092,7 +2092,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
     try {
       o.on.apply(o, arguments);
     } catch (e) {
-      throw 'tinyPubSub::subscribe exception: ' + e;
+      throw 'tinyPubSub::subscribe exception: ' + e + '. ENSURE YOU HAVE CREATED THE EVENT URIS FOR ANY NEW EVENTS IN THE PUBLISHING MODEL.';
     }
   };
 
@@ -3266,12 +3266,11 @@ window.wizerati = {
 
     this.index = function (dto) {
        //if external get state from local storage...
-
+      _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded); //i think this is taken care of by setting the mode of the ioimodel
-//      setTimeout(function() { _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); }, 5000); //avoid impacting animation frame rate
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList); //avoid impacting animation frame rate
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
     };
 
     function init() {
@@ -4398,6 +4397,14 @@ window.wizerati = {
         _itemModelPack = null,
         _roleEnum = app.mod('enum').UserRole;
 
+    this.createSelectedItem = function (id, width, done) {
+      that.create(id, width, true, done);
+    };
+
+    this.createComparisonListItem = function (id, width, isSelectedItem, done) {
+      that.create(id, width, false, done);
+    };
+
     this.create = function (id, width, isSelectedItem, done) {
       if (!id) {
         throw 'ItemOfInterestViewFactory::create id not supplied.';
@@ -5501,13 +5508,7 @@ window.wizerati = {
     this.setMode = function (value) {
       _mode = value;
 
-//      if (_mode === _modeEnum.PinnedItemsExpanded) {
-//        _resultListModel.setMode(_resultListModeEnum.Minimized)
-//      } else if (_mode === _modeEnum.Default) {
-//        _resultListModel.setMode(_resultListModeEnum.Default)
-//      }
-
-      $.publish(that.eventUris.setMode);
+      $.publish(that.eventUris.setMode, value);
     };
 
     this.getLayout = function () {
@@ -6021,7 +6022,8 @@ window.wizerati = {
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
       setAreTransitionsEnabled: 'update://uirootmodel/setaretransitionsenabled',
       setModal: 'update://uirootmodel/setmodal',
-      setUIMode: 'update://uirootmodel/setuimode'
+      setUIMode: 'update://uirootmodel/setuimode',
+      setScrollLeft: 'update://uirootmodel/setscrollleft'
     };
 
     this.getVisibilityMode = function () {
@@ -6069,6 +6071,10 @@ window.wizerati = {
       if (!options.silent) {
         $.publish(that.eventUris.setUIMode, _uiMode);
       }
+    };
+
+    this.setScrollLeft = function (value) {
+        $.publish(that.eventUris.setScrollLeft, value);
     };
 
     this.getModal = function () {
@@ -7317,7 +7323,7 @@ window.wizerati = {
       if (that.Model.isSelected) {
         that.$el.addClass('selected-item');
       } else {
-        that.$el.addClass('pinned-item');
+        that.$el.addClass('p-i');
       }
 
       if (that.Model.isHidden) {
@@ -7636,17 +7642,15 @@ window.wizerati = {
 
     var that = this,
         _el = '#items-of-interest-panel',
-        _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _elHandlePinnedItems = '.handle-pinned-items',
         _elSelectedItemContainerCurrent = null,
         _elSelectedItemContainer1 = '#s-i-c-1',
         _elSelectedItemContainer2 = '#s-i-c-2',
         _elPinnedItemsContainer = '#p-i-c',
-        _elPinnedItems = '.pinned-item',
-        _elPinnedItem1 = '.pinned-item:nth-child(2) .pinned-item-content',
-        _elPinnedItem2 = '.pinned-item:nth-child(3) .pinned-item-content',
-        _elPinnedItem3 = '.pinned-item:nth-child(4) .pinned-item-content',
-        _elPinnedItem4 = '.pinned-item:nth-child(5) .pinned-item-content',
+        _elPinnedItems = '.p-i',
+        _elPinnedItem1 = '.p-i:nth-child(2) .p-i-content',
+        _elPinnedItem2 = '.p-i:nth-child(3) .p-i-content',
+        _elPinnedItem3 = '.p-i:nth-child(4) .p-i-content',
+        _elPinnedItem4 = '.p-i:nth-child(5) .p-i-content',
         _itemModelPack = null,
         _itemOfInterestViewFactory = null,
         _layoutCoordinator = null,
@@ -7658,46 +7662,60 @@ window.wizerati = {
     this.$el = null;
     this.Model = null;
 
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
+      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
+      that.$elSelectedItemContainer = $('.s-i-c');
+      that.$elPinnedItems = $(_elPinnedItems);
+    };
+
+    function addPinnedItems(items, done) {
+      done = done || function () {
+      };
+
+      items.forEach(function (id) {
+        if (id === null) {
+          return;
+        }
+        _itemOfInterestViewFactory.create(id,
+            that.Model.getLayout().widthItemOfInterest,
+            false,
+            function ($view) {
+              $(_elPinnedItemsContainer).append($view);
+              $view.scrollTop(_scrollTopValues[id]);
+              that.renderLayout(that.Model.getLayout());
+            });
+      });
+
+      done();
+    }
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
 
-      renderPrivate({ animateSelectedItem: false, removedItemId: null });
-    };
-
-    function renderPrivate(options) {
-      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
-      that.$el.attr('data-pinned-item-count', that.Model.getPinnedItemCount()); //enables CSS-based visibility of the handle
-
-      //these values should be stored before the modification of the DOM (hence before the removal below)
-      storeScrollTopValues();
-      storeScrollLeftValue();
-
-      that.$el.find('.selected-item, .pinned-item').remove();
+      that.$el.find('.selected-item, .p-i').remove();
 
       var items = that.Model.getItemsOfInterest();
       if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
+        _itemOfInterestViewFactory.createSelectedItem(items.selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            true,
             function done($view) {
               addPinnedItems(items.pinnedItems, addSelectedItem);
-              function addSelectedItem() {
+              function addSelectedItem() { //Nested to close over $view.
                 $(_elSelectedItemContainer1).prepend($view);
-                $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
-                $('body').scrollLeft(_scrollLeft);
                 _layoutCoordinator.layOut();
               }
             });
       } else {
         addPinnedItems(items.pinnedItems, function () {
-          $('body').scrollLeft(_scrollLeft);
           _layoutCoordinator.layOut();
         });
       }
-    }
+    };
 
     this.renderLayout = function (layout) {
       var selectedItemContent = $('.s-i-c').find('.selected-item-content');
@@ -7706,10 +7724,10 @@ window.wizerati = {
       $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
       $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
-      selectedItemContent.width(layout.widthItemOfInterest); //important that we read the DOM here rather than caching the selected item and pinned items, because things are added and removed from the DOM
+      selectedItemContent.width(layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
-      $('body').attr('data-items-of-interest-mode', that.Model.getMode())
+      $('body').attr('data-items-of-interest-mode', that.Model.getMode());
     };
 
     this.renderAddHiddenItem = function (itemId) {
@@ -7742,77 +7760,36 @@ window.wizerati = {
       $frm.find('.btn').removeClass('checked');
     };
 
-    this.renderSetSelectedItemId = function (selectedItemId, previouslySelectedItemId) {
-      that.$el.attr('data-selected-item-count', that.Model.getSelectedItemId() ? '1' : '0'); //enables CSS-based visibility of the handle
-
-      //these values should be stored before the modification of the DOM (hence before the removal below)
-      storeScrollTopValues();
-      storeScrollLeftValue();
-
+    this.renderSetSelectedItemId = function () {
       var prevEl = _elSelectedItemContainerCurrent || _elSelectedItemContainer2;
       var $prevEl = $(prevEl);
       _elSelectedItemContainerCurrent = prevEl === _elSelectedItemContainer1 ? _elSelectedItemContainer2 : _elSelectedItemContainer1;
       var $currentEl = $(_elSelectedItemContainerCurrent);
-      $currentEl.addClass('buffer');
-      var items = that.Model.getItemsOfInterest();
+      $currentEl.addClass('buffer'); //Ensure the element we are modifying is hidden while we do so.
+      var selectedItem = that.Model.getItemsOfInterest().selectedItem;
 
-      if (items.selectedItem) {
-        _itemOfInterestViewFactory.create(items.selectedItem,
+      if (selectedItem) {
+        _itemOfInterestViewFactory
+            .createSelectedItem(selectedItem,
             that.Model.getLayout().widthItemOfInterest,
-            true,
             function done($view) {
               $currentEl.html($view);
-              $view.scrollTop(_scrollTopValues[items.selectedItem + 's']);
+              $view.scrollTop(_scrollTopValues[selectedItem + 's']);
               $('body').scrollLeft(_scrollLeft);
               $prevEl.addClass('buffer');
               $currentEl.removeClass('buffer');
-
               setTimeout(function () {
                 $prevEl.empty();
-              }, 300); //give time for fade effect to complete
+              }, 300); //Give time for any effect to complete.
             });
       }
     };
 
-    this.renderSetMode = function () {
-      var mode = that.Model.getMode();
-      var otherMode = mode === _modeEnum.Default ? _modeEnum.PinnedItemsExpanded : _modeEnum.Default;
-      $(_elHandlePinnedItems).find('a').attr('href', '/itemsofinterestpanelmode/update?mode=' + otherMode);
-
-
-      if (mode === _modeEnum.Default) {
-        $(_elHandlePinnedItems).find('.label').html('show <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf264;')
-      } else {
-        $(_elHandlePinnedItems).find('.label').html('hide <span class="comparison">comparison</span> list')
-        $(_elHandlePinnedItems).find('.btn').html('&#xf25d;')
-      }
-
+    this.renderSetMode = function (mode) {
       $('body').attr('data-items-of-interest-mode', mode)
     };
 
-    function addPinnedItems(items, done) {
-      done = done || function () {
-      };
-
-      items.forEach(function (id) {
-        if (id === null) {
-          return;
-        }
-        _itemOfInterestViewFactory.create(id,
-            that.Model.getLayout().widthItemOfInterest,
-            false,
-            function ($view) {
-              $(_elPinnedItemsContainer).append($view);
-              $view.scrollTop(_scrollTopValues[id]);
-              that.renderLayout(that.Model.getLayout());
-            });
-      });
-
-      done();
-    }
-
-    this.renderRemoveItemOfInterest = function(id) {
+    this.renderRemoveItemOfInterest = function (id) {
       var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
       $frm.attr('action', '/itemsofinterest/create');
       $frm.find('.btn').removeClass('checked');
@@ -7834,30 +7811,6 @@ window.wizerati = {
             $view.scrollTop(_scrollTopValues[id]);
             that.renderLayout(that.Model.getLayout());
           });
-    };
-
-    function storeScrollTopValues() {
-      var selectedItem = that.$el.find('.item-of-interest.selected');
-
-      if (selectedItem) {
-        _scrollTopValues[selectedItem.attr('data-id') + 's'] = $(selectedItem).scrollTop();
-      }
-
-      _.each(that.$el.find('.item-of-interest:not(.selected)'), function (e) {
-        _scrollTopValues[$(e).attr('data-id')] = $(e).scrollTop();
-      });
-    }
-
-    function storeScrollLeftValue() {
-      _scrollLeft = $('body').scrollLeft();
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
-      that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
-      that.$elSelectedItemContainer = $('.s-i-c');
-      that.$elPinnedItems = $(_elPinnedItems);
     };
 
     function init() {
@@ -8216,21 +8169,17 @@ window.wizerati = {
     this.model = null;
 
     this.bindEvents = function () {
-      //we update the model only on click of search to enable trivial cancelling of unwanted changes
+      //We update the model only on click of search to enable trivial cancelling of unwanted changes.
       var $btn = that.$el.find('#btn-search');
       $btn.on('click', function () {
         that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
         that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
         $('body').scrollToX({duration: 100});
-        //needed?
-        if (!_waitStateIsBeingMonitored) {
-          monitorWaitState();
-        }
       });
 
       //values in the form elements must be reset to those of the backing model
       //if the user cancels the form. This is mainly redundant due to similar
-      // logic in the renderSetMode method.
+      //logic in the renderSetMode method.
       //needed?
       var $btn = that.$el.find('#btn-cancel-search');
       $btn.on('click', function () {
@@ -8240,7 +8189,7 @@ window.wizerati = {
 
       var $form = that.$el.find('#search-form');
       $form.on('submit', function () {
-        that.$el.find('#keywords').blur(); //required to ensure keypad is minimised should it be used to invoke search
+        that.$el.find('#keywords').blur(); //Ensure keypad is minimised on iOS should it be used to invoke search.
       });
     };
 
@@ -8459,6 +8408,10 @@ window.wizerati = {
         that.$el.attr('data-ui-mode', uiMode);
     };
 
+    this.renderSetScrollLeft = function(left) {
+      that.$el.scrollToX({endX: left, duration: 1500});
+    };
+
     function init() {
       if (!model) {
         throw 'UIRootView::init model not supplied';
@@ -8471,12 +8424,14 @@ window.wizerati = {
       _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
       _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
       _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+      _renderOptimizations[that.Model.eventUris.setScrollLeft] = that.renderSetScrollLeft;
 
       $.subscribe(that.Model.eventUris.default, that.render);
       $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
       $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
       $.subscribe(that.Model.eventUris.setModal, that.render);
       $.subscribe(that.Model.eventUris.setUIMode, that.render);
+      $.subscribe(that.Model.eventUris.setScrollLeft, that.render);
 
       return that;
     }

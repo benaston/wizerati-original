@@ -67,13 +67,7 @@
     this.setMode = function (value) {
       _mode = value;
 
-//      if (_mode === _modeEnum.PinnedItemsExpanded) {
-//        _resultListModel.setMode(_resultListModeEnum.Minimized)
-//      } else if (_mode === _modeEnum.Default) {
-//        _resultListModel.setMode(_resultListModeEnum.Default)
-//      }
-
-      $.publish(that.eventUris.setMode);
+      $.publish(that.eventUris.setMode, value);
     };
 
     this.getLayout = function () {
