@@ -9,7 +9,6 @@
     var that = this,
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
         _previouslySelectedItemId = null,
         _mode = _modeEnum.Default,
         _layout = {
@@ -111,7 +110,7 @@
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
-      $.publish(that.eventUris.addItemOfInterest, id);
+      $.publish(that.eventUris.addItemOfInterest, id, _itemsOfInterest.pinnedItems.length);
     };
 
     this.removeItemOfInterest = function (id) {

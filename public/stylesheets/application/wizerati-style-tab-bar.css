@@ -82,3 +82,22 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:hover {
     line-height: inherit;
     font-size: inherit;
 }
+
+#btn-nav-comparison-list[data-count='']::before {
+    display: none;
+}
+
+#btn-nav-comparison-list::before {
+    display: block;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: rgba(14,17,19,1);
+    content: attr(data-count);
+    border-radius: 30px;
+    line-height: 25px;
+    font-size: 1rem;
+    top: -5px;
+    left: -3px;
+    color: rgba(126,157,173,1);
+}

@@ -5443,7 +5443,6 @@ window.wizerati = {
     var that = this,
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
         _previouslySelectedItemId = null,
         _mode = _modeEnum.Default,
         _layout = {
@@ -5545,7 +5544,7 @@ window.wizerati = {
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
-      $.publish(that.eventUris.addItemOfInterest, id);
+      $.publish(that.eventUris.addItemOfInterest, id, _itemsOfInterest.pinnedItems.length);
     };
 
     this.removeItemOfInterest = function (id) {
@@ -5583,33 +5582,6 @@ window.wizerati = {
   app.ItemsOfInterestModel = ItemsOfInterestModel;
 
 }(wizerati, $));
-;(function (app) {
-  'use strict';
-
-  function NavPanelModel() {
-
-    if (!(this instanceof app.NavPanelModel)) {
-      return new app.NavPanelModel();
-    }
-
-    var that = this;
-
-    this.eventUris = {
-      default: 'update://navpanelmodel/'
-    };
-
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.NavPanelModel = NavPanelModel;
-
-}(wizerati));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -8373,15 +8345,16 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function TabBarView(model) {
+  function TabBarView(model, itemsOfInterestModel) {
 
     if (!(this instanceof app.TabBarView)) {
-      return new app.TabBarView(model);
+      return new app.TabBarView(model, itemsOfInterestModel);
     }
 
     var that = this,
         _el = '#tab-bar',
-        _renderOptimizations = {};
+        _renderOptimizations = {},
+        _itemsOfInterestModel = null;
 
     this.$el = null;
     this.Model = null;
@@ -8403,17 +8376,29 @@ window.wizerati = {
       that.$el.attr('data-selected-tab', tab);
     };
 
+    this.renderAddItemOfInterest = function(id, count) {
+      $('#btn-nav-comparison-list').attr('data-count', count);
+    };
+
     function init() {
       if (!model) {
         throw 'TabBarView::init model not supplied';
       }
 
+      if (!itemsOfInterestModel) {
+        throw 'TabBarView::init itemsOfInterestModel not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
 
+      _itemsOfInterestModel = itemsOfInterestModel;
+
       _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
+      _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
 
       $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
 
       return that;
     }
@@ -8785,7 +8770,7 @@ window.wizerati = {
     mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new w.SearchFormView(m.searchFormModel);
-    mod.tabBarView = new w.TabBarView(m.tabBarModel);
+    mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel);
     mod.uiRootView = new w.UIRootView(m.uiRootModel);
   }
   catch (e) {
