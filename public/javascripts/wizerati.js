@@ -6992,96 +6992,6 @@ window.wizerati = {
 //                _.each(results, function (r) {
 //                    resultModels.push(_resultModelFactory.create(r));
 //                });
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function AccountActivationView(model) {
-
-    if (!(this instanceof app.AccountActivationView)) {
-      return new app.AccountActivationView(model);
-    }
-
-    var that = this,
-        _el = '#activation-panel';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'AccountActivationView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AccountActivationView = AccountActivationView;
-  invertebrate.View.isExtendedBy(app.AccountActivationView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ApplyToContractDialogView(model) {
-
-    if (!(this instanceof app.ApplyToContractDialogView)) {
-      return new app.ApplyToContractDialogView(model);
-    }
-
-    var that = this,
-        _el = '#apply-to-contract-dialog',
-        _jobTitleEl = '.job-title',
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ApplyToContractDialogView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ApplyToContractDialogView = ApplyToContractDialogView;
-  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
-
-}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate, _) {
   'use strict';
 
@@ -7200,7 +7110,6 @@ window.wizerati = {
 
     var that = this,
         _el = '#bookmark-panel-container',
-        _modeEnum = app.mod('enum').BookmarkPanelMode,
         _renderOptimizations = {};
 
     this.$el = null;
@@ -7222,11 +7131,6 @@ window.wizerati = {
 
     this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
-
-      var oppositeMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.Minimized : _modeEnum.Default;
-      that.$navPanel.find('.handle-bookmark-panel input[name="mode"]').attr('value', oppositeMode);
-//      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'bookmarks';
-      that.$navPanel.find('.handle-bookmark-panel').addClass('selected');
     };
 
     function init() {
@@ -7250,55 +7154,6 @@ window.wizerati = {
 
   app.BookmarkPanelView = BookmarkPanelView;
   invertebrate.View.isExtendedBy(app.BookmarkPanelView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractFavoriteView(model) {
-
-    if (!(this instanceof app.ContractFavoriteView)) {
-      return new app.ContractFavoriteView(model);
-    }
-
-    var that = this,
-        _el = '<div class="thumbnail thumbnail-108"></div>',
-        _templateName = 'favorite.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      } else {
-        that.$el.removeClass('selected');
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractFavoriteView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractFavoriteView = ContractFavoriteView;
-  invertebrate.View.isExtendedBy(app.ContractFavoriteView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -7429,208 +7284,6 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.ContractResultView);
 
 }(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorFavoriteView(model) {
-
-    if (!(this instanceof app.ContractorFavoriteView)) {
-      return new app.ContractorFavoriteView(model);
-    }
-
-    var that = this,
-        _el = '<div class="thumbnail thumbnail-108"></div>',
-        _templateName = 'favorite.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorFavoriteView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      that.render();
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorFavoriteView = ContractorFavoriteView;
-  invertebrate.View.isExtendedBy(app.ContractorFavoriteView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorItemOfInterestView(model) {
-
-    if (!(this instanceof app.ContractorItemOfInterestView)) {
-      return new app.ContractorItemOfInterestView(model);
-    }
-
-    var that = this,
-        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
-        _templateName = 'item-of-interest.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-id', that.Model.id);
-
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      }
-
-      if (that.Model.shouldAnimateIn) {
-        that.$el.css({ left: '-' + model.width});
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorItemOfInterestView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
-  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorResultView(model) {
-
-    if (!(this instanceof app.ContractorResultView)) {
-      return new app.ContractorResultView(model);
-    }
-
-    var that = this,
-        _templateName = 'result.html';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (options) {
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorResultView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorResultView = ContractorResultView;
-  invertebrate.View.isExtendedBy(app.ContractorResultView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, document) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel) {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogView)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel);
-    }
-
-    var that = this,
-        _el = '#delete-favorite-group-confirmation-dialog',
-        _messageContainerEl = '.message-container',
-        _deleteButtonEl = '.btn-danger',
-        _favoritesCubeModel = null,
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var favoriteGroupId = that.Model.getFavoriteGroupId();
-      var favoriteGroupName = _favoritesCubeModel.getFavoriteGroupName(favoriteGroupId);
-      that.$el.find(_messageContainerEl).html('<p>You have chosen to delete the following group of favorites:</p><blockquote><em>' + favoriteGroupName + '</em></blockquote><p>This cannot be undone.</p><p>Are you sure you want to delete this group?</p>')
-      that.$el.find(_deleteButtonEl).attr('href', '/favoritegroup/destroy?id=' + favoriteGroupId);
-    };
-
-    this.bindEvents = function () {
-      $(document).keyup(function (e) {
-        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getModal() === _uiModeEnum.DeleteFavoriteGroupConfirmationDialog) {
-          that.Model.setIsVisible(false);
-        }
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.bindEvents();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoritesCubeModel = favoritesCubeModel;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogView = DeleteFavoriteGroupConfirmationDialogView;
-  invertebrate.View.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogView);
-
-}(wizerati, $, invertebrate, document));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -7875,6 +7528,347 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
 
 }(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function AccountActivationView(model) {
+
+    if (!(this instanceof app.AccountActivationView)) {
+      return new app.AccountActivationView(model);
+    }
+
+    var that = this,
+        _el = '#activation-panel';
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+    };
+
+    this.bindEvents = function () {
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'AccountActivationView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AccountActivationView = AccountActivationView;
+  invertebrate.View.isExtendedBy(app.AccountActivationView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ApplyToContractDialogView(model) {
+
+    if (!(this instanceof app.ApplyToContractDialogView)) {
+      return new app.ApplyToContractDialogView(model);
+    }
+
+    var that = this,
+        _el = '#apply-to-contract-dialog',
+        _jobTitleEl = '.job-title',
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ApplyToContractDialogView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogView = ApplyToContractDialogView;
+  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractFavoriteView(model) {
+
+    if (!(this instanceof app.ContractFavoriteView)) {
+      return new app.ContractFavoriteView(model);
+    }
+
+    var that = this,
+        _el = '<div class="thumbnail thumbnail-108"></div>',
+        _templateName = 'favorite.html';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      if (that.Model.isSelected) {
+        that.$el.addClass('selected');
+      } else {
+        that.$el.removeClass('selected');
+      }
+
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractFavoriteView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractFavoriteView = ContractFavoriteView;
+  invertebrate.View.isExtendedBy(app.ContractFavoriteView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractorFavoriteView(model) {
+
+    if (!(this instanceof app.ContractorFavoriteView)) {
+      return new app.ContractorFavoriteView(model);
+    }
+
+    var that = this,
+        _el = '<div class="thumbnail thumbnail-108"></div>',
+        _templateName = 'favorite.html';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractorFavoriteView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      that.render();
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractorFavoriteView = ContractorFavoriteView;
+  invertebrate.View.isExtendedBy(app.ContractorFavoriteView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractorItemOfInterestView(model) {
+
+    if (!(this instanceof app.ContractorItemOfInterestView)) {
+      return new app.ContractorItemOfInterestView(model);
+    }
+
+    var that = this,
+        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
+        _templateName = 'item-of-interest.html';
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.attr('data-id', that.Model.id);
+
+      if (that.Model.isSelected) {
+        that.$el.addClass('selected');
+      }
+
+      if (that.Model.shouldAnimateIn) {
+        that.$el.css({ left: '-' + model.width});
+      }
+
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractorItemOfInterestView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
+  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ContractorResultView(model) {
+
+    if (!(this instanceof app.ContractorResultView)) {
+      return new app.ContractorResultView(model);
+    }
+
+    var that = this,
+        _templateName = 'result.html';
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (options) {
+      app.instance.renderTemplate(that.$el,
+          _templateName,
+          that.Model,
+          {});
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ContractorResultView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ContractorResultView = ContractorResultView;
+  invertebrate.View.isExtendedBy(app.ContractorResultView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, document) {
+  'use strict';
+
+  function DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel) {
+
+    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogView)) {
+      return new app.DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel);
+    }
+
+    var that = this,
+        _el = '#delete-favorite-group-confirmation-dialog',
+        _messageContainerEl = '.message-container',
+        _deleteButtonEl = '.btn-danger',
+        _favoritesCubeModel = null,
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      var favoriteGroupId = that.Model.getFavoriteGroupId();
+      var favoriteGroupName = _favoritesCubeModel.getFavoriteGroupName(favoriteGroupId);
+      that.$el.find(_messageContainerEl).html('<p>You have chosen to delete the following group of favorites:</p><blockquote><em>' + favoriteGroupName + '</em></blockquote><p>This cannot be undone.</p><p>Are you sure you want to delete this group?</p>')
+      that.$el.find(_deleteButtonEl).attr('href', '/favoritegroup/destroy?id=' + favoriteGroupId);
+    };
+
+    this.bindEvents = function () {
+      $(document).keyup(function (e) {
+        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getModal() === _uiModeEnum.DeleteFavoriteGroupConfirmationDialog) {
+          that.Model.setIsVisible(false);
+        }
+      });
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.bindEvents();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
+      }
+
+      if (!favoritesCubeModel) {
+        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _favoritesCubeModel = favoritesCubeModel;
+
+      $.subscribe(that.Model.updateEventUri, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.DeleteFavoriteGroupConfirmationDialogView = DeleteFavoriteGroupConfirmationDialogView;
+  invertebrate.View.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogView);
+
+}(wizerati, $, invertebrate, document));
 ;(function (app, $, invertebrate, document) {
   'use strict';
 
@@ -8409,7 +8403,7 @@ window.wizerati = {
     };
 
     this.renderSetScrollLeft = function(left) {
-      that.$el.scrollToX({endX: left, duration: 1500});
+      that.$el.scrollToX({endX: left, duration: 1000});
     };
 
     function init() {

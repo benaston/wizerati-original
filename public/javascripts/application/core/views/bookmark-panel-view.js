@@ -9,7 +9,6 @@
 
     var that = this,
         _el = '#bookmark-panel-container',
-        _modeEnum = app.mod('enum').BookmarkPanelMode,
         _renderOptimizations = {};
 
     this.$el = null;
@@ -31,11 +30,6 @@
 
     this.renderSetMode = function(mode) {
       that.$el.attr('data-mode', that.Model.getMode());
-
-      var oppositeMode = that.Model.getMode() === _modeEnum.Default ? _modeEnum.Minimized : _modeEnum.Default;
-      that.$navPanel.find('.handle-bookmark-panel input[name="mode"]').attr('value', oppositeMode);
-//      var label = that.Model.getMode() === _modeEnum.Default ? 'hide<br/> bookmarks' : 'bookmarks';
-      that.$navPanel.find('.handle-bookmark-panel').addClass('selected');
     };
 
     function init() {

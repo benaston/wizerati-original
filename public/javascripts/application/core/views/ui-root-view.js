@@ -48,7 +48,7 @@
     };
 
     this.renderSetScrollLeft = function(left) {
-      that.$el.scrollToX({endX: left, duration: 1500});
+      that.$el.scrollToX({endX: left, duration: 1000});
     };
 
     function init() {
