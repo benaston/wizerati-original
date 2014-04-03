@@ -32,8 +32,8 @@
       that.$el.attr('data-selected-tab', tab);
     };
 
-    this.renderAddItemOfInterest = function(id, count) {
-      $('#btn-nav-comparison-list').attr('data-count', count);
+    this.renderAddOrRemoveItemOfInterest = function(id, count) {
+      $('#btn-nav-comparison-list').attr('data-count', count || '');
     };
 
     function init() {
@@ -51,10 +51,12 @@
       _itemsOfInterestModel = itemsOfInterestModel;
 
       _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
-      _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+      _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
+      _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
 
       $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
       $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
 
       return that;
     }

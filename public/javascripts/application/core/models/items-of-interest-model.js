@@ -97,11 +97,6 @@
         return;
       }
 
-//      if (_selectedItemModel.getSelectedItemId() === id) {
-//        _selectedItemModel.setSelectedItemId(null, { silent: true });
-//        _itemsOfInterest.selectedItem = null;
-//      }
-
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
 
       $.publish(that.eventUris.addItemOfInterest, id, _itemsOfInterest.pinnedItems.length);
@@ -116,7 +111,7 @@
         return idOfPinnedItem === id;
       });
 
-      $.publish(that.eventUris.removeItemOfInterest, id);
+      $.publish(that.eventUris.removeItemOfInterest, id, _itemsOfInterest.pinnedItems.length);
     };
 
     this.isPinned = function (id) {

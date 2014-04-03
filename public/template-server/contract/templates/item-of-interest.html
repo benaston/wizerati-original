@@ -5,8 +5,8 @@
             <li><form class="frm-bookmark" method="POST" action="/bookmarks/{{=model.isBookmark ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s {{=model.isFavoritable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
-                            title="{{=model.isFavoritable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
+                    <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s {{=model.isBookmarkable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
+                            title="{{=model.isBookmarkable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>&#xf26b;</button>
                     <label class="lbl" for="btn-bookmark-{{= model.id}}">{{= model.isFavorite ? 'remove bookmark' : 'bookmark' }}</label>
                 </div>
             </form></li>
@@ -28,8 +28,8 @@
             </form></li>
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button id="btn-pin-{{= model.id}}" class="btn btn-s {{=model.isPinnable || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
-                            title="{{=model.isPinnable ? 'Add to/Remove from comparison list' : 'This item is already in your comparison list / You have the maximum number of permitted items in the comparison list / You cannot add hidden items to the comparison list' }}" {{=model.isPinnable || model.isInComparisonList ? '' : 'disabled' }}>{{= model.isPinned ? '&#xf30e;' : '&#xf30e;' }}</button>
+                    <button id="btn-pin-{{= model.id}}" class="btn btn-s {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
+                            title="{{=model.canAddToComparisonList ? 'Add to/Remove from comparison list' : 'This item is already in your comparison list / You have the maximum number of permitted items in the comparison list / You cannot add hidden items to the comparison list' }}" {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }}>&#xf30e;</button>
                     <label class="lbl" for="btn-pin-{{= model.id}}">{{= model.isPinned ? 'compare' : 'compare' }}</label>
                 </div>
             </form></li>

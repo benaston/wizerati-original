@@ -58,6 +58,19 @@
       done();
     }
 
+    this.renderLayout = function (layout) {
+      var selectedItemContent = $('.s-i-c').find('.s-i-content');
+      $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
+      $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
+      $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
+      $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
+
+      selectedItemContent.width(layout.widthItemOfInterest);
+      $(_elPinnedItems).children().width(layout.widthItemOfInterest);
+
+      $('body').attr('data-items-of-interest-mode', that.Model.getMode());
+    };
+
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -82,49 +95,6 @@
           _layoutCoordinator.layOut();
         });
       }
-    };
-
-    this.renderLayout = function (layout) {
-      var selectedItemContent = $('.s-i-c').find('.s-i-content');
-      $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
-      $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
-      $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
-      $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
-
-      selectedItemContent.width(layout.widthItemOfInterest);
-      $(_elPinnedItems).children().width(layout.widthItemOfInterest);
-
-      $('body').attr('data-items-of-interest-mode', that.Model.getMode());
-    };
-
-    this.renderAddHiddenItem = function (itemId) {
-      var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
-      var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/destroy');
-      $frm.find('.btn').addClass('checked');
-      $items.addClass('hidden');
-      $items.find('.btn:not(.btn-hide)').attr('disabled', 'disabled');
-    };
-
-    this.renderRemoveHiddenItem = function (itemId) {
-      var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
-      var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/create');
-      $frm.find('.btn').removeClass('checked');
-      $items.removeClass('hidden');
-      $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
-    };
-
-    this.renderAddBookmark = function (itemId) {
-      var $frm = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]').find('.frm-bookmark');
-      $frm.attr('action', '/bookmarks/destroy');
-      $frm.find('.btn').addClass('checked');
-    };
-
-    this.renderRemoveBookmark = function (itemId) {
-      var $frm = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]').find('.frm-bookmark');
-      $frm.attr('action', '/bookmarks/create');
-      $frm.find('.btn').removeClass('checked');
     };
 
     this.renderSetSelectedItemId = function () {
@@ -156,13 +126,46 @@
       $('body').attr('data-items-of-interest-mode', mode)
     };
 
-    this.renderRemoveItemOfInterest = function (id) {
-      var $frm = $('.s-i[data-id="' + id + '"]').find('.frm-pin');
-      $frm.attr('action', '/itemsofinterest/create');
-      $frm.find('.btn').removeClass('checked');
+    this.renderAddBookmark = function (itemId) {
+      var $frms = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]')
+      var $bFrm = $frms.find('.frm-bookmark');
+      $bFrm.attr('action', '/bookmarks/destroy');
+      $bFrm.find('.btn').addClass('checked');
 
-      $('.p-i[data-id="' + id + '"]').remove();
-      _layoutCoordinator.layOut();
+      //Bookmarked items cannot be hidden.
+      var $hFrm = $frms.find('.frm-hide');
+      $hFrm.find('.btn').attr('disabled', 'disabled');
+    };
+
+    this.renderRemoveBookmark = function (itemId) {
+      var $frms = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]')
+      var $bFrm = $frms.find('.frm-bookmark');
+      $bFrm.attr('action', '/bookmarks/create');
+      $bFrm.find('.btn').removeClass('checked');
+
+      //Non-bookmarked items can be hidden.
+      var $hFrm = $frms.find('.frm-hide');
+      $hFrm.find('.btn').removeAttr('disabled');
+    };
+
+    this.renderAddHiddenItem = function (itemId) {
+      var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
+      var $frm = $items.find('.frm-hide');
+      $frm.attr('action', '/hiddenitems/destroy');
+      $frm.find('.btn').addClass('checked');
+      $items.addClass('hidden');
+
+      $items.find('.menu .btn:not(.btn-hide):not(.btn-pin)').attr('disabled', 'disabled');
+      $items.find('.menu .btn-pin:not(.checked)').attr('disabled', 'disabled');
+    };
+
+    this.renderRemoveHiddenItem = function (itemId) {
+      var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
+      var $frmsHide = $items.find('.frm-hide');
+      $frmsHide.attr('action', '/hiddenitems/create');
+      $frmsHide.find('.btn').removeClass('checked');
+      $items.removeClass('hidden');
+      $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
     };
 
     this.renderAddItemOfInterest = function (id) {
@@ -170,14 +173,28 @@
       frm.attr('action', '/itemsofinterest/destroy');
       frm.find('button').addClass('checked');
 
-      _itemOfInterestViewFactory.create(id,
+      _itemOfInterestViewFactory.createComparisonListItem(id,
           that.Model.getLayout().widthItemOfInterest,
-          false,
           function ($view) {
             $(_elPinnedItemsContainer).append($view);
             $view.scrollTop(_scrollTopValues[id]);
             that.renderLayout(that.Model.getLayout());
           });
+    };
+
+    this.renderRemoveItemOfInterest = function (id) {
+      var $item = $('.s-i[data-id="' + id + '"]');
+      var $frmPin = $item.find('.frm-pin');
+      $frmPin.attr('action', '/itemsofinterest/create');
+      $frmPin.find('.btn').removeClass('checked');
+
+      //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
+      if($item.find('.frm-hide .btn.checked').length) {
+        $frmPin.find('.btn').attr('disabled', 'disabled');
+      }
+
+      $('.p-i[data-id="' + id + '"]').remove();
+      _layoutCoordinator.layOut();
     };
 
     function init() {

@@ -52,12 +52,15 @@
     opacity: 0.3;
 }
 
-a.btn:hover {
+a.btn:hover,
+.btn:hover {
     text-decoration: none;
 }
 
-.btn:enabled:hover {
-    text-decoration: none;
+/*Do not show the hand when hovering over a disabled button.*/
+.btn:not(:enabled):hover,
+.btn:not(:enabled) ~ label:hover {
+    cursor: auto;
 }
 
 .btn:enabled:focus {
@@ -78,8 +81,8 @@ input[type='radio']:enabled:focus + label:after {
     height: 5px;
     border-radius: 5px;
     position: absolute;
-    right: -5px;
-    bottom: -5px;
+    right: 0;
+    bottom: 0;
 }
 
 .lbl:focus,

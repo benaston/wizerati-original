@@ -19,7 +19,7 @@
       that.create(id, width, true, done);
     };
 
-    this.createComparisonListItem = function (id, width, isSelectedItem, done) {
+    this.createComparisonListItem = function (id, width, done) {
       that.create(id, width, false, done);
     };
 
@@ -45,7 +45,7 @@
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+            item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isBookmark = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isInComparisonList = !isSelectedItem;
@@ -64,18 +64,18 @@
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavoritable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isBookmark = item['isBookmark'];
+            item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+//            item.isBookmark = item['isBookmark'];
             item.isSelected = isSelectedItem;
             item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             }));
-            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.isPinnable = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+//            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
+            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
               return i === item.id;
             })));
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && isSelectedItem && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.width = width;
