@@ -11,7 +11,6 @@ module.exports = function (grunt) {
           'public/javascripts/vendor/zepto.min.js',
           'public/javascripts/vendor/zepto-callbacks.js',
           'public/javascripts/vendor/zepto-deferred.js',
-//          'public/javascripts/vendor/zepto-fx.js',
           'public/javascripts/vendor/smooth-scroll.js',
           'public/javascripts/vendor/debounce.js',
           'public/javascripts/vendor/underscore.js',
@@ -132,6 +131,9 @@ module.exports = function (grunt) {
             },{
               match: 'result-contract-template',
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/result.html") %>'
+            },{
+              match: 'bookmark-period-contract-template',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/bookmark-period.html") %>'
             },
             {
               match: 'footer',
@@ -156,8 +158,8 @@ module.exports = function (grunt) {
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/tab-bar.html") %>'
             },
             {
-              match: 'bookmark-panel',
-              replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmark-panel.html") %>'
+              match: 'bookmark-list-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmark-list-panel.html") %>'
             }
           ]
         },

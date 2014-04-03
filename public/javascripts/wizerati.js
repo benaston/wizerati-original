@@ -3153,46 +3153,29 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, uiModelPack, helper, userModel) {
+  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, uiModelPack, helper, userModel);
+      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository);
     }
 
     var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _navbarItemEnum = app.mod('enum').Tab,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _bookmarkService = null,
-        _uiModelPack = null,
+        _bookmarkBookModel = null,
         _helper = null,
-        _userModel = null;
+        _userModel = null,
+        _bookmarksHavePreviouslyBeenRetrieved = false,
+        _bookmarkRepository = false;
 
     this.index = function (dto) {
       try {
-//        if (!(dto.__isInvertebrateExternal__)) {
-//          _helper.resetUIForSearch();
-//          return;
-//        }
-
-//        if (dto.__isInvertebrateExternal__) {
-//          _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-//          _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
-//        }
-
-//        _uiModelPack.searchFormModel.setIsWaiting('true');
-//        _bookmarkRepository.getByUserId();
-        _bookmarkService.getByUserId(_userModel.getUserId());
-
-        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-        _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
-        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+        if (!_bookmarksHavePreviouslyBeenRetrieved) {
+          _bookmarksHavePreviouslyBeenRetrieved = true;
+          _bookmarkBookModel.setIsWaiting('true');
+          _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
+        } else {
+          _helper.resetUIForBookmarks();
+        }
       } catch (err) {
         console.log('BookmarksController::index exception: ' + err);
       }
@@ -3219,7 +3202,7 @@ window.wizerati = {
         throw 'BookmarksController::init bookmarkService not supplied.';
       }
 
-      if (!uiModelPack) {
+      if (!bookmarkBookModel) {
         throw 'BookmarksController::init uiModelPack not supplied.';
       }
 
@@ -3231,10 +3214,15 @@ window.wizerati = {
         throw 'BookmarksController::init userModel not supplied.';
       }
 
+      if (!bookmarkRepository) {
+        throw 'BookmarksController::init bookmarkRepository not supplied.';
+      }
+
       _bookmarkService = bookmarkService;
-      _uiModelPack = uiModelPack;
+      _bookmarkBookModel = bookmarkBookModel;
       _helper = helper;
       _userModel = userModel;
+      _bookmarkRepository = bookmarkRepository;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -3952,7 +3940,7 @@ window.wizerati = {
         _uiModelPack = null,
         _searchService = null,
         _helper = null,
-        _previousSearchHash = 'null'; //yes a string saying null
+        _previousSearchHash = null;
 
     this.urlTransforms = {};
 
@@ -3967,7 +3955,7 @@ window.wizerati = {
 
         var currentSearchHash = '' + dto.keywords + dto.r;
 
-        if(_previousSearchHash !== currentSearchHash) {
+        if(_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
           _previousSearchHash = currentSearchHash;
           _uiModelPack.searchFormModel.setIsWaiting('true');
           _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
@@ -3982,9 +3970,6 @@ window.wizerati = {
     this.edit = function (dto) {
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
-//       _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-//       _uiModelPack.searchFormModel.setRate(dto.r, {silent: false});
-
         _helper.resetUIForSearch();
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
@@ -4350,6 +4335,87 @@ window.wizerati = {
   app.AccountEntity = AccountEntity;
 
 }(wizerati));
+;//
+//(function (app) {
+//  'use strict';
+//
+//  function BookmarkPeriodViewFactory(signInIService, itemRepository, itemModelPack) {
+//
+//    if (!(this instanceof app.BookmarkPeriodViewFactory)) {
+//      return new app.BookmarkPeriodViewFactory(signInIService,
+//          itemRepository,
+//          itemModelPack);
+//    }
+//
+//    var that = this,
+//        _signInIService = null,
+//        _itemRepository = null,
+//        _itemModelPack = null,
+//        _roleEnum = app.mod('enum').UserRole;
+//
+//    this.create = function (bookmarkArr, done) {
+//      if (!bookmarkArr) {
+//        throw 'ResultViewFactory::create bookmarkArr not supplied.';
+//      }
+//
+//      if (!done) {
+//        throw 'ResultViewFactory::create done not supplied.';
+//      }
+//
+//      done(new app.ContractorResultView(item).render().$el);
+//
+//      var role = _signInIService.getCurrentRole();
+//      switch (role) {
+//        case _roleEnum.Employer:
+//        case _roleEnum.EmployerStranger:
+//          _itemRepository.getById(id, function (item) {
+//            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+//            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+//            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//            done(new app.ContractorResultView(item).render().$el);
+//          });
+//          break;
+//        case _roleEnum.Contractor:
+//        case _roleEnum.ContractorStranger:
+//          _itemRepository.getById(id, function (item) {
+//            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+//            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+//            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
+//            done(new app.ContractResultView(item).render().$el);
+//          });
+//          break;
+//        default:
+//          throw 'ResultViewFactory::create invalid user role "' + role + '"';
+//      }
+//    };
+//
+//    function init() {
+//      if (!signInIService) {
+//        throw 'ResultViewFactory::init loginService not supplied.';
+//      }
+//
+//      if (!itemRepository) {
+//        throw 'ResultViewFactory::init itemRepository not supplied.';
+//      }
+//
+//      if (!itemModelPack) {
+//        throw 'ResultViewFactory::init itemModelPack not supplied.';
+//      }
+//
+//      _signInIService = signInIService;
+//      _itemRepository = itemRepository;
+//      _itemModelPack = itemModelPack;
+//
+//      return that;
+//    }
+//
+//    return init();
+//  }
+//
+//  app.BookmarkPeriodViewFactory = BookmarkPeriodViewFactory;
+//
+//}(wizerati));
 ;(function (app) {
   'use strict';
 
@@ -4528,17 +4594,16 @@ window.wizerati = {
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
             done(new app.ContractorResultView(item).render().$el);
           });
           break;
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
@@ -4626,40 +4691,38 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarksControllerHelper(uiModelPack, layoutCoordinator) {
+  function BookmarksControllerHelper(uiModelPack, layoutCoordinator, bookmarkListModel) {
 
     if (!(this instanceof app.BookmarksControllerHelper)) {
-      return new app.BookmarksControllerHelper(uiModelPack, layoutCoordinator);
+      return new app.BookmarksControllerHelper(uiModelPack, layoutCoordinator, bookmarkListModel);
     }
 
     var that = this,
         _uiModeEnum = app.mod('enum').UIMode,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
-        _guidFactory = null,
-        _layoutCoordinator = null;
+        _layoutCoordinator = null,
+        _bookmarkListModel = null;
 
     this.resetUIForBookmarks = function () {
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
       _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
+      _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 
-    //bookmarks are an id and a date
-    //we then retrieve all these items from the item repository, forcing them into local memory (retrieving from the db if required)
-    //we then render, knowing everything will come from memory
     this.bookmarkRetrievalSuccess = function (bookmarks) {
-      _uiModelPack.bookmarkBookModel.setBookmarks(_.map(bookmarks, function (b) { return b.id; }), +new Date());
-      _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-
+      console.log(bookmarks);
+      _bookmarkListModel.setBookmarks(bookmarks);
+      _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       _layoutCoordinator.layOut();
       that.resetUIForBookmarks();
@@ -4667,22 +4730,25 @@ window.wizerati = {
       //this must occur *after the search panel mode is set* to its eventual value, to
       //ensure the initial width rendering of items of interest is the correct one
       // (avoiding a repaint)
-      if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
-        _uiModelPack.itemsOfInterestModel.setSelectedItemId(bookmarks[0].id);
-      }
+      _uiModelPack.itemsOfInterestModel.setSelectedItemId(_bookmarkListModel.getSelectedItemId() || bookmarks[0].id);
     };
 
     function init() {
       if (!uiModelPack) {
-        throw 'SearchControllerHelper::init uiModelPack not supplied.';
+        throw 'BookmarksControllerHelper::init uiModelPack not supplied.';
       }
 
       if (!layoutCoordinator) {
-        throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
+        throw 'BookmarksControllerHelper::init layoutCoordinator not supplied.';
+      }
+
+      if (!bookmarkListModel) {
+        throw 'BookmarksControllerHelper::init bookmarkListModel not supplied.';
       }
 
       _uiModelPack = uiModelPack;
       _layoutCoordinator = layoutCoordinator;
+      _bookmarkListModel = bookmarkListModel;
 
       return that;
     }
@@ -4696,10 +4762,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator) {
+  function SearchControllerHelper(uiModelPack, layoutCoordinator) {
 
     if (!(this instanceof app.SearchControllerHelper)) {
-      return new app.SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator);
+      return new app.SearchControllerHelper(uiModelPack, layoutCoordinator);
     }
 
     var that = this,
@@ -4711,7 +4777,6 @@ window.wizerati = {
         _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
-        _guidFactory = null,
         _layoutCoordinator = null;
 
     this.resetUIForSearch = function () {
@@ -4727,7 +4792,8 @@ window.wizerati = {
     this.searchSuccess = function (results) {
       _uiModelPack.resultListModel.setResults(_.map(results, function (r) {
         return r.id;
-      }), _guidFactory.create());
+      }), +new Date());
+//      }), _guidFactory.create());
       _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       var delayToRender = 0;
@@ -4764,16 +4830,11 @@ window.wizerati = {
         throw 'SearchControllerHelper::init uiModelPack not supplied.';
       }
 
-      if (!guidFactory) {
-        throw 'SearchControllerHelper::init guidFactory not supplied.';
-      }
-
       if (!layoutCoordinator) {
         throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
       }
 
       _uiModelPack = uiModelPack;
-      _guidFactory = guidFactory;
       _layoutCoordinator = layoutCoordinator;
 
       return that;
@@ -5227,23 +5288,66 @@ window.wizerati = {
 ;(function (app, $, invertebrate, _) {
   'use strict';
 
-  function BookmarkBookModel() {
+  function BookmarkListModel() {
 
-    if (!(this instanceof app.BookmarkBookModel)) {
-      return new app.BookmarkBookModel();
+    if (!(this instanceof app.BookmarkListModel)) {
+      return new app.BookmarkListModel();
     }
 
     var that = this,
-        _bookmarks = [];
+        _bookmarks = [],
+        _isWaiting = false,
+        _selectedItemId = false,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _mode = _bookmarkPanelModeEnum.Minimized;
 
     this.eventUris = {
       default: 'update://bookmarkbookmodel',
       addBookmark: 'update://bookmarkbookmodel/addbookmark',
-      removeBookmark: 'update://bookmarkbookmodel/removebookmark'
+      removeBookmark: 'update://bookmarkbookmodel/removebookmark',
+      setIsWaiting: 'update://bookmarkbookmodel/setiswaiting',
+      setMode: 'update://bookmarkbookmodel/setmode'
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
+      }
+
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    this.getSelectedItemId = function () {
+      return _selectedItemId || _bookmarks.length > 0 ? _bookmarks[0] : null;
     };
 
     this.getBookmarks = function () {
       return _bookmarks;
+    };
+
+    this.setBookmarks = function (value) {
+      _bookmarks = value;
+
+      $.publish(that.eventUris.default);
+    };
+
+    this.setIsWaiting= function (value) {
+      if (value === _isWaiting) {
+        return;
+      }
+      _isWaiting = value;
+
+      $.publish(that.eventUris.setIsWaiting, value);
     };
 
     //When adding a bookmark, the service should be used (which in-turn calls this).
@@ -5280,57 +5384,10 @@ window.wizerati = {
     return init();
   }
 
-  app.BookmarkBookModel = BookmarkBookModel;
-  invertebrate.Model.isExtendedBy(app.BookmarkBookModel);
+  app.BookmarkListModel = BookmarkListModel;
+  invertebrate.Model.isExtendedBy(app.BookmarkListModel);
 
 }(wizerati, $, invertebrate, _));
-;(function (app, $) {
-  'use strict';
-
-  function BookmarkPanelModel() {
-
-    if (!(this instanceof app.BookmarkPanelModel)) {
-      return new app.BookmarkPanelModel();
-    }
-
-    var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _mode = _bookmarkPanelModeEnum.Minimized;
-
-    this.eventUris = {
-      default: 'update://bookmarkpanelmodel/',
-      setMode: 'update://bookmarkpanelmodel/setmode'
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value, options) {
-      if (_mode === value) {
-        return;
-      }
-
-      options = options || { silent: false };
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, _mode);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkPanelModel = BookmarkPanelModel;
-
-}(wizerati, $));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -5612,6 +5669,53 @@ window.wizerati = {
   invertebrate.Model.isExtendedBy(app.AdvertisersPanelModel);
 
 }(wizerati, $, invertebrate));
+;(function (app, $) {
+  'use strict';
+
+  function BookmarkPanelModel() {
+
+    if (!(this instanceof app.BookmarkPanelModel)) {
+      return new app.BookmarkPanelModel();
+    }
+
+    var that = this,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _mode = _bookmarkPanelModeEnum.Minimized;
+
+    this.eventUris = {
+      default: 'update://bookmarkpanelmodel/',
+      setMode: 'update://bookmarkpanelmodel/setmode'
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
+      }
+
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPanelModel = BookmarkPanelModel;
+
+}(wizerati, $));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -6132,7 +6236,7 @@ window.wizerati = {
     this.eventUris = { default: 'update://usermodel/' };
 
     this.getUserId = function () {
-      return _userId;
+      return _userId || 'ben@bj.ma';
     };
 
     this.setUserId = function (value) {
@@ -6268,25 +6372,36 @@ window.wizerati = {
 ;(function (app, $) {
   'use strict';
 
-  function BookmarkRepository(cache, croniclIService) {
+  function BookmarkRepository(bookmarkCache, croniclIService, itemCache) {
 
     if (!(this instanceof app.BookmarkRepository)) {
-      return new app.BookmarkRepository(cache,
+      return new app.BookmarkRepository(bookmarkCache,
           croniclIService);
     }
 
     var that = this,
-        _cache = null,
-        _croniclIService = null;
+        _bookmarkCache = null,
+        _croniclIService = null,
+        _itemCache = null;
 
+    //Return full items. Bookmark cache receives only id and bookmarkDateTime to avoid duplication of data.
+    //All full items added to item cache, thereby ensuring they will not need to be retrieved again via ajax.
     this.getByUserId = function (userId, done) {
-      var cachedItem = _cache.items[userId];
-      if (cachedItem) {
-        done(cachedItem);
+      if(!userId) {
+        throw 'BookmarkRepository::getByUserId userId not supplied.'
+      }
+
+      if(!done) {
+        throw 'BookmarkRepository::getByUserId done not supplied.'
+      }
+
+      var cachedBookmarks = _bookmarkCache.items[userId];
+      if (cachedBookmarks) {
+        done(cachedBookmarks.value); //Bookmarks returned as kvp.
         return;
       }
 
-      $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + id,
+      $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + userId,
         success: success,
         cache: false });
 
@@ -6295,15 +6410,17 @@ window.wizerati = {
           throw 'BookmarkRepository::getByUserId::success data not supplied';
         }
 
-        var result = $.parseJSON(data);
-        _cache.insert([result]);
+        var bookmarkItems = $.parseJSON(data);
+        var bookmarks = bookmarkItems.map(function (b) { return { id: b.id, bookmarkDateTime: b.bookmarkDateTime }; });
+        _bookmarkCache.insert([{ id: userId, value: bookmarks }]);
+        _itemCache.insert(bookmarkItems); //Ensure local item cache is primed with the bookmarks (the bookmark cache is dealt with in the repository).
 
-        done(result);
+        done(bookmarks);
       }
     };
 
     function init() {
-      if (!cache) {
+      if (!bookmarkCache) {
         throw 'BookmarkRepository::init cache not supplied.';
       }
 
@@ -6311,8 +6428,13 @@ window.wizerati = {
         throw 'BookmarkRepository::init croniclIService not supplied.';
       }
 
-      _cache = cache;
+      if (!itemCache) {
+        throw 'BookmarkRepository::init itemCache not supplied.';
+      }
+
+      _bookmarkCache = bookmarkCache;
       _croniclIService = croniclIService;
+      _itemCache = itemCache;
 
       return that;
     }
@@ -6336,31 +6458,6 @@ window.wizerati = {
     var that = this,
         _itemCache = null,
         _croniclIService = null;
-
-    this.getByIds = function (idArr, done) {
-      //identify items not cached, get them then merge results with items from cache
-
-      var cachedItem = _itemCache.items[id];
-      if (cachedItem) {
-        done(cachedItem);
-        return;
-      }
-
-      $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
-        success: success,
-        cache: false });
-
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
-        }
-
-        var result = $.parseJSON(data);
-        _itemCache.insert([result]);
-
-        done(result);
-      }
-    };
 
     this.getById = function (id, done) {
       var cachedItem = _itemCache.items[id];
@@ -6796,45 +6893,35 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository) {
+  function BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository, itemCache) {
 
     if (!(this instanceof app.BookmarkService)) {
-      return new app.BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository);
+      return new app.BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository, itemCache);
     }
 
     var that = this,
         _bookmarkBookModel = null,
         _bookmarkRepository = null,
-        _itemRepository = null;
+        _itemRepository = null,
+        _itemCache = null;
 
-    this.getByUserId = function (userId) {
-      done = done || function (data) {};
-
-      //get bookmarks, get items corresponding to bookmarks, merge and return
-      var bookmarks = _bookmarkRepository.getByUserId(userId, function done1(bookmarks){
-        _itemRepository.getById(bookmarks.map(function(b){ return b.itemId; }), function done2(items) {
-          return items.map(function(i){
-            return _.extend({}, i, bookmarks)
-          });
-        });
-      });
-
-      $.ajax({
-        url: '/bookmarks/',
-        success: success,
-        cache: false
-      });
-
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
-        }
-
-        var results = $.parseJSON(data);
-        _itemCache.insert(results);
-        done(results);
-      }
-    };
+    //Bookmarks returned are same as result items - but their bookmarkedDateTimes are populated.
+//    this.getByUserId = function (userId, done) {
+//      if(!userId) {
+//        throw 'BookmarkService::getByUserId userId not supplied.'
+//      }
+//
+//      if(!done) {
+//        throw 'BookmarkService::getByUserId done not supplied.'
+//      }
+//
+//      _bookmarkRepository.getByUserId(userId, success);
+//
+//      function success(bookmarks) {
+////        _itemCache.insert(bookmarks); //Ensure local item cache is primed with the bookmarks (the bookmark cache is dealt with in the repository).
+//        done(bookmarks);
+//      }
+//    };
 
     this.addBookmark = function (id) {
       if (!id) {
@@ -6843,7 +6930,7 @@ window.wizerati = {
 
       if (!_bookmarkBookModel.isBookmark(id)) {
         _itemRepository.getById(id, function (item) {
-          item['isBookmark'] = true;
+          item.isBookmark = true; //Ensure local in-memory cache is updated with the change.
           _bookmarkBookModel.addBookmark(id);
         });
       }
@@ -6855,7 +6942,7 @@ window.wizerati = {
       }
 
       _itemRepository.getById(id, function (item) {
-        item['isBookmark'] = false;
+        item.isBookmark = false; //Ensure local in-memory cache is updated with the change.
         _bookmarkBookModel.removeBookmark(id);
       });
     };
@@ -6873,11 +6960,16 @@ window.wizerati = {
         throw 'BookmarkService::init itemRepository not supplied';
       }
 
+      if (!itemCache) {
+        throw 'BookmarkService::init itemCache not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
       _bookmarkBookModel = bookmarkBookModel;
       _bookmarkRepository = bookmarkRepository;
       _itemRepository = itemRepository;
+      _itemCache = itemCache;
 
       return that;
     }
@@ -6989,126 +7081,31 @@ window.wizerati = {
 //                _.each(results, function (r) {
 //                    resultModels.push(_resultModelFactory.create(r));
 //                });
-;(function (app, $, invertebrate, _) {
+;(function (app, $, inv) {
   'use strict';
 
-  function BookmarkBookView(model) {
+  function BookmarkListView(model, resultViewFactory, itemModelPack) {
 
-    if (!(this instanceof app.BookmarkBookView)) {
-      return new app.BookmarkBookView(model);
+    if (!(this instanceof app.BookmarkListView)) {
+      return new app.BookmarkListView(model, resultViewFactory, itemModelPack);
     }
 
     var that = this,
-        _el = '#favorites-cube',
-        _favoriteViewFactory = null,
-        _selectedCubeFaceModel = null,
-        _actionedItemsModel = null,
-        _hiddenItemsModel = null,
-        _itemsOfInterestModel = null,
-        _bookmarkService = null,
-        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
-          '.cube-face-labels li:nth-child(2)',   //left
-          '.cube-face-labels li:nth-child(3)',   //front
-          '.cube-face-labels li:nth-child(4)',   //right
-          '.cube-face-labels li:nth-child(5)',   //bottom
-          '.cube-face-labels li:nth-child(6)' ], //back
-        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
-        _modeEnum = app.mod('enum').FavoritesCubeMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var mode = that.Model.getMode();
-      that.$el.attr('data-mode', mode);
-      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
-      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
-      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
-        return previousValue + (currentValue ? '1' : '0');
-      }, ''));
-
-      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
-        that.$el.addClass('hide');
-        return;
-      } else {
-        that.$el.removeClass('hide');
-      }
-
-      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
-        var $face = that.$el.find(_faceEls[index1]);
-        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
-        $face.find('*').not('.face-empty-message').remove();
-        $faceSelectorSpots.removeClass('filled');
-        $.each(faceFavorites, function (index2, f) {
-          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
-            $face.append($v);
-            $($faceSelectorSpots[index2]).addClass('filled');
-          });
-        });
-      });
-
-      that.$el.attr('data-selected-face-id',
-          _selectedCubeFaceModel.getSelectedCubeFaceId());
-
-      var faceLabels = that.Model.getFaceLabels();
-      $.each(_labelEls, function (index, el) {
-        $(el).text(faceLabels[index]);
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.render();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'FavoritesCubeView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoriteViewFactory = favoriteViewFactory;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _bookmarkService = bookmarkService;
-
-      $.subscribe(that.Model.updateEventUriPrivate, that.render);
-      $.subscribe(that.Model.updateEventUri, that.render);
-      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkBookView = BookmarkBookView;
-  invertebrate.View.isExtendedBy(app.BookmarkBookView);
-
-}(wizerati, $, invertebrate, _));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function BookmarkPanelView(model) {
-
-    if (!(this instanceof app.BookmarkPanelView)) {
-      return new app.BookmarkPanelView(model);
-    }
-
-    var that = this,
-        _el = '#bookmark-panel-container',
+        _el = '#bookmark-list-panel',
+        _elContainer = '#bookmark-list-panel-container',
+        _elList = '#bookmark-list',
+        _resultViewFactory = null,
         _renderOptimizations = {};
 
     this.$el = null;
+    this.$elContainer = null;
     this.Model = null;
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elContainer = $(_elContainer);
+      that.$elList = $(_elList);
+    };
 
     this.render = function (e) {
       if (e && _renderOptimizations[e.type]) {
@@ -7116,30 +7113,108 @@ window.wizerati = {
         return;
       }
 
+      //group by period (e.g. everything today, everything yesterday...)
+      var grouped = {};
+
+      that.Model.getBookmarks().forEach(function(b){
+        var key = moment(b.bookmarkDateTime).fromNow();
+        key = (/hour|minute|second/g).test(key) ? 'today' : key;
+        if(grouped[key]) {
+          grouped[key].push(b);
+        }  else {
+          grouped[key] = [b]
+        }
+      });
+
+      that.$elList.empty();
+      Object.keys(grouped).forEach(function (key) {
+        that.$elList.append(new app.BookmarkPeriodView({key: key, bookmarkArr: grouped[key]}, _resultViewFactory).render().$el);
+      });
+
+      that.$el.scrollTop(0);
       that.renderSetMode();
     };
 
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$navPanel = $('#nav-panel');
+    this.renderSetSelectedItemId = function (selectedItemId) {
+      $(_el).find('.t.selected').removeClass('selected');
+      var selectorNew = '.t[data-id="' + selectedItemId + '"]';
+      $(_el).find(selectorNew).addClass('selected');
     };
 
-    this.renderSetMode = function(mode) {
-      that.$el.attr('data-mode', that.Model.getMode());
+    this.renderAddItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
+    };
+
+    this.renderRemoveItemOfInterest = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
+    };
+
+    this.renderAddHiddenItem = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+
+      var $selector = $(_el).find(selector);
+      $selector.addClass('hidden');
+    };
+
+    this.renderRemoveHiddenItem = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      var $selector = $(_el).find(selector);
+      $selector.removeClass('hidden');
+    };
+
+    this.renderAddBookmark = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-bookmark', 'true');
+    };
+
+    this.renderRemoveBookmark = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      $(_el).find(selector).attr('data-is-bookmark', 'false');
+    };
+
+    this.renderSetMode = function (mode) {
+      mode = mode || that.Model.getMode();
+      that.$elContainer.attr('data-mode', mode);
     };
 
     function init() {
       if (!model) {
-        throw 'BookmarkPanelView::init model not supplied';
+        throw 'BookmarkListView::init model not supplied';
+      }
+
+      if (!resultViewFactory) {
+        throw 'BookmarkListView::init resultViewFactory not supplied';
+      }
+
+      if (!itemModelPack) {
+        throw 'BookmarkListView::init itemModelPack not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
       that.Model = model;
+      _resultViewFactory = resultViewFactory;
 
       _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
+      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
-      $.subscribe(that.Model.eventUris.setMode, that.render);
       $.subscribe(that.Model.eventUris.default, that.render);
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
+      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
       return that;
     }
@@ -7147,8 +7222,61 @@ window.wizerati = {
     return init();
   }
 
-  app.BookmarkPanelView = BookmarkPanelView;
-  invertebrate.View.isExtendedBy(app.BookmarkPanelView);
+  app.BookmarkListView = BookmarkListView;
+  inv.View.isExtendedBy(app.BookmarkListView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function BookmarkPeriodView(model, resultViewFactory) {
+
+    if (!(this instanceof app.BookmarkPeriodView)) {
+      return new app.BookmarkPeriodView(model);
+    }
+
+    var that = this,
+        _el = '<div class="bookmark-period"></div>',
+        _templateName = 'bookmark-period.html-local',
+        _resultViewFactory = null;
+
+    this.$el = $(_el);
+    this.Model = null;
+
+    this.render = function () {
+      app.instance.renderTemplate(that.$el, _templateName, that.Model, {});
+
+      var $bookmarkListEl = that.$el.find('.bookmark-list');
+      that.Model.bookmarkArr.forEach(function(bookmark){
+        _resultViewFactory.create(bookmark.id, function done($v){
+          $bookmarkListEl.append($v);
+        });
+      });
+
+      return that;
+    };
+
+    function init() {
+      if (!model) {
+        throw 'BookmarkPeriodView::init model not supplied';
+      }
+
+      if (!resultViewFactory) {
+        throw 'BookmarkPeriodView::init resultViewFactory not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _resultViewFactory = resultViewFactory;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPeriodView = BookmarkPeriodView;
+  invertebrate.View.isExtendedBy(app.BookmarkPeriodView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -7635,6 +7763,168 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
 
 }(wizerati, $, invertebrate));
+;(function (app, $, invertebrate, _) {
+  'use strict';
+
+  function BookmarkBookView(model) {
+
+    if (!(this instanceof app.BookmarkBookView)) {
+      return new app.BookmarkBookView(model);
+    }
+
+    var that = this,
+        _el = '#favorites-cube',
+        _favoriteViewFactory = null,
+        _selectedCubeFaceModel = null,
+        _actionedItemsModel = null,
+        _hiddenItemsModel = null,
+        _itemsOfInterestModel = null,
+        _bookmarkService = null,
+        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
+          '.cube-face-labels li:nth-child(2)',   //left
+          '.cube-face-labels li:nth-child(3)',   //front
+          '.cube-face-labels li:nth-child(4)',   //right
+          '.cube-face-labels li:nth-child(5)',   //bottom
+          '.cube-face-labels li:nth-child(6)' ], //back
+        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
+        _modeEnum = app.mod('enum').FavoritesCubeMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      var mode = that.Model.getMode();
+      that.$el.attr('data-mode', mode);
+      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
+      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
+      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
+        return previousValue + (currentValue ? '1' : '0');
+      }, ''));
+
+      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
+        that.$el.addClass('hide');
+        return;
+      } else {
+        that.$el.removeClass('hide');
+      }
+
+      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
+        var $face = that.$el.find(_faceEls[index1]);
+        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
+        $face.find('*').not('.face-empty-message').remove();
+        $faceSelectorSpots.removeClass('filled');
+        $.each(faceFavorites, function (index2, f) {
+          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
+            $face.append($v);
+            $($faceSelectorSpots[index2]).addClass('filled');
+          });
+        });
+      });
+
+      that.$el.attr('data-selected-face-id',
+          _selectedCubeFaceModel.getSelectedCubeFaceId());
+
+      var faceLabels = that.Model.getFaceLabels();
+      $.each(_labelEls, function (index, el) {
+        $(el).text(faceLabels[index]);
+      });
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.render();
+    };
+
+    function init() {
+      if (!model) {
+        throw 'FavoritesCubeView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+      _favoriteViewFactory = favoriteViewFactory;
+      _selectedCubeFaceModel = selectedCubeFaceModel;
+      _hiddenItemsModel = hiddenItemsModel;
+      _actionedItemsModel = actionedItemsModel;
+      _itemsOfInterestModel = itemsOfInterestModel;
+      _bookmarkService = bookmarkService;
+
+      $.subscribe(that.Model.updateEventUriPrivate, that.render);
+      $.subscribe(that.Model.updateEventUri, that.render);
+      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
+      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
+      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
+      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkBookView = BookmarkBookView;
+  invertebrate.View.isExtendedBy(app.BookmarkBookView);
+
+}(wizerati, $, invertebrate, _));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function BookmarkPanelView(model) {
+
+    if (!(this instanceof app.BookmarkPanelView)) {
+      return new app.BookmarkPanelView(model);
+    }
+
+    var that = this,
+        _el = '#bookmark-panel-container',
+        _renderOptimizations = {};
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function (e) {
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      that.renderSetMode();
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$navPanel = $('#nav-panel');
+    };
+
+    this.renderSetMode = function(mode) {
+      that.$el.attr('data-mode', that.Model.getMode());
+    };
+
+    function init() {
+      if (!model) {
+        throw 'BookmarkPanelView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+
+      $.subscribe(that.Model.eventUris.setMode, that.render);
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.BookmarkPanelView = BookmarkPanelView;
+  invertebrate.View.isExtendedBy(app.BookmarkPanelView);
+
+}(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -8047,7 +8337,7 @@ window.wizerati = {
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
-      that.$elResultList = $(_elResultList);
+      that.$elList = $(_elResultList);
     };
 
     this.render = function (e) {
@@ -8056,10 +8346,10 @@ window.wizerati = {
         return;
       }
 
-      that.$elResultList.empty();
+      that.$elList.empty();
       that.Model.getResults().forEach(function (id) {
         _resultViewFactory.create(id, function ($v) {
-          that.$elResultList.append($v);
+          that.$elList.append($v);
         });
       });
 
@@ -8338,6 +8628,13 @@ window.wizerati = {
 
     this.renderAddOrRemoveItemOfInterest = function(id, count) {
       $('#btn-nav-comparison-list').attr('data-count', count || '');
+
+      if(count === 1) {
+        $('#btn-nav-comparison-list').addClass('pulse');
+        setTimeout(function(){
+          $('#btn-nav-comparison-list').removeClass('pulse');
+        }, 300);
+      }
     };
 
     function init() {
@@ -8588,9 +8885,7 @@ window.wizerati = {
   try {
     mod.actionedItemsModel = new w.ActionedItemsModel();
     mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
-//    mod.advertisersPanelModel = new w.AdvertisersPanelModel();
-    mod.bookmarkPanelModel = new w.BookmarkPanelModel();
-    mod.bookmarkBookModel = new w.BookmarkBookModel();
+    mod.bookmarkListModel = new w.BookmarkListModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new w.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new w.HiddenItemsModel();
     mod.purchasePanelModel = new w.PurchasePanelModel();
@@ -8613,8 +8908,8 @@ window.wizerati = {
   'use strict';
 
   try {
-    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkBookModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
-    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
+    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel);
   }
   catch (e) {
     throw 'problem registering packs module. ' + e;
@@ -8658,7 +8953,7 @@ window.wizerati = {
 
   try {
     mod.itemRepository = new w.ItemRepository(w.mod('caches').itemCache, i.croniclIService);
-    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService);
+    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService, w.mod('caches').itemCache);
   }
   catch (e) {
     throw 'problem registering repositories module. ' + e;
@@ -8673,7 +8968,7 @@ window.wizerati = {
   try {
     mod.accountService = new w.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new w.AuthenticationService();
-    mod.bookmarkService = new w.BookmarkService(m.bookmarkBookModel, r.bookmarkRepository, r.itemRepository);
+    mod.bookmarkService = new w.BookmarkService(m.bookmarkListModel, r.bookmarkRepository, r.itemRepository, ca.itemCache);
 
     mod.authorizationService = new w.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
@@ -8719,7 +9014,7 @@ window.wizerati = {
   'use strict';
 
   try {
-    mod.layoutCalculator = new w.LayoutCalculator(m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+    mod.layoutCalculator = new w.LayoutCalculator(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel);
     mod.layoutCoordinator = new w.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator);
   }
   catch (e) {
@@ -8734,7 +9029,7 @@ window.wizerati = {
 
   try {
     mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
-    mod.bookmarkPanelView = new w.BookmarkPanelView(m.bookmarkPanelModel);
+    mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel,f.resultViewFactory, p.itemModelPack);
     mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new w.SearchFormView(m.searchFormModel);
@@ -8748,27 +9043,27 @@ window.wizerati = {
 }(wizerati, wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('packs')));
 
 
-(function (w, mod, p, f, l) {
+(function (w, mod, p, f, l, m) {
   'use strict';
 
   try {
-    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, f.guidFactory, l.layoutCoordinator);
-    mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator);
+    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator);
+    mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
   }
   catch (e) {
     throw 'problem registering helpers module. ' + e;
   }
 
-}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout')));
+}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (w, mod, f, l, m, s, p, h) {
+(function (w, mod, f, l, m, s, p, h, r) {
   'use strict';
 
   try {
     mod.actionedItemsController = new w.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, p.uiModelPack, h.bookmarksControllerHelper, m.userModel);
+    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository);
     mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new w.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
@@ -8782,7 +9077,7 @@ window.wizerati = {
     throw 'problem registering controllers module. ' + e;
   }
 
-}(wizerati, wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs'), wizerati.mod('helpers')));
+}(wizerati, wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs'), wizerati.mod('helpers'), wizerati.mod('repositories')));
 
 
 (function (mod) {
@@ -8830,13 +9125,13 @@ window.wizerati = {
     $('body').attr('data-hover-is-enabled', 'false');
   }
 
-  $('#bookmark-panel').bind('scroll', function (e) {
+  $('#bookmark-list-panel').bind('scroll', function (e) {
     window.stackHeads();
   });
 
   window.stackHeads = function (e) {
     var fixedHeaders = document.getElementsByClassName('fixedheader');
-    var panel = document.getElementById('bookmark-panel');
+    var panel = document.getElementById('bookmark-list-panel');
     for (var i = 0; i < fixedHeaders.length; i++) {
       var currentHeader = fixedHeaders[i];
       var nextHeader = fixedHeaders[i + 1];

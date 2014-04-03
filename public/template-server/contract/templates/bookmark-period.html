@@ -1,0 +1,9 @@
+{{ try { }}
+<div class="placeholder"></div>
+<div class="bookmark-list-summary fixedheader">Jobs bookmarked {{= model.key }}</div>
+<ul class="bookmark-list"></ul>
+{{
+} catch(e) {
+throw "template exception: contract/result. " + e;
+}
+}}

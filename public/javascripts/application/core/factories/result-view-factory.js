@@ -29,17 +29,16 @@
         case _roleEnum.Employer:
         case _roleEnum.EmployerStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
             done(new app.ContractorResultView(item).render().$el);
           });
           break;
         case _roleEnum.Contractor:
         case _roleEnum.ContractorStranger:
           _itemRepository.getById(id, function (item) {
-            item.isFavorite = item['isBookmark'];
             item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);

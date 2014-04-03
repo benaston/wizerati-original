@@ -1,45 +1,35 @@
 (function (app) {
   'use strict';
 
-  function BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository) {
+  function BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository, itemCache) {
 
     if (!(this instanceof app.BookmarkService)) {
-      return new app.BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository);
+      return new app.BookmarkService(bookmarkBookModel, bookmarkRepository, itemRepository, itemCache);
     }
 
     var that = this,
         _bookmarkBookModel = null,
         _bookmarkRepository = null,
-        _itemRepository = null;
+        _itemRepository = null,
+        _itemCache = null;
 
-    this.getByUserId = function (userId) {
-      done = done || function (data) {};
-
-      //get bookmarks, get items corresponding to bookmarks, merge and return
-      var bookmarks = _bookmarkRepository.getByUserId(userId, function done1(bookmarks){
-        _itemRepository.getById(bookmarks.map(function(b){ return b.itemId; }), function done2(items) {
-          return items.map(function(i){
-            return _.extend({}, i, bookmarks)
-          });
-        });
-      });
-
-      $.ajax({
-        url: '/bookmarks/',
-        success: success,
-        cache: false
-      });
-
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
-        }
-
-        var results = $.parseJSON(data);
-        _itemCache.insert(results);
-        done(results);
-      }
-    };
+    //Bookmarks returned are same as result items - but their bookmarkedDateTimes are populated.
+//    this.getByUserId = function (userId, done) {
+//      if(!userId) {
+//        throw 'BookmarkService::getByUserId userId not supplied.'
+//      }
+//
+//      if(!done) {
+//        throw 'BookmarkService::getByUserId done not supplied.'
+//      }
+//
+//      _bookmarkRepository.getByUserId(userId, success);
+//
+//      function success(bookmarks) {
+////        _itemCache.insert(bookmarks); //Ensure local item cache is primed with the bookmarks (the bookmark cache is dealt with in the repository).
+//        done(bookmarks);
+//      }
+//    };
 
     this.addBookmark = function (id) {
       if (!id) {
@@ -48,7 +38,7 @@
 
       if (!_bookmarkBookModel.isBookmark(id)) {
         _itemRepository.getById(id, function (item) {
-          item['isBookmark'] = true;
+          item.isBookmark = true; //Ensure local in-memory cache is updated with the change.
           _bookmarkBookModel.addBookmark(id);
         });
       }
@@ -60,7 +50,7 @@
       }
 
       _itemRepository.getById(id, function (item) {
-        item['isBookmark'] = false;
+        item.isBookmark = false; //Ensure local in-memory cache is updated with the change.
         _bookmarkBookModel.removeBookmark(id);
       });
     };
@@ -78,11 +68,16 @@
         throw 'BookmarkService::init itemRepository not supplied';
       }
 
+      if (!itemCache) {
+        throw 'BookmarkService::init itemCache not supplied';
+      }
+
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 
       _bookmarkBookModel = bookmarkBookModel;
       _bookmarkRepository = bookmarkRepository;
       _itemRepository = itemRepository;
+      _itemCache = itemCache;
 
       return that;
     }

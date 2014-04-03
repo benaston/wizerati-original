@@ -34,6 +34,13 @@
 
     this.renderAddOrRemoveItemOfInterest = function(id, count) {
       $('#btn-nav-comparison-list').attr('data-count', count || '');
+
+      if(count === 1) {
+        $('#btn-nav-comparison-list').addClass('pulse');
+        setTimeout(function(){
+          $('#btn-nav-comparison-list').removeClass('pulse');
+        }, 300);
+      }
     };
 
     function init() {

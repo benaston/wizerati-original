@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator) {
+  function SearchControllerHelper(uiModelPack, layoutCoordinator) {
 
     if (!(this instanceof app.SearchControllerHelper)) {
-      return new app.SearchControllerHelper(uiModelPack, guidFactory, layoutCoordinator);
+      return new app.SearchControllerHelper(uiModelPack, layoutCoordinator);
     }
 
     var that = this,
@@ -16,7 +16,6 @@
         _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
-        _guidFactory = null,
         _layoutCoordinator = null;
 
     this.resetUIForSearch = function () {
@@ -32,7 +31,8 @@
     this.searchSuccess = function (results) {
       _uiModelPack.resultListModel.setResults(_.map(results, function (r) {
         return r.id;
-      }), _guidFactory.create());
+      }), +new Date());
+//      }), _guidFactory.create());
       _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       var delayToRender = 0;
@@ -69,16 +69,11 @@
         throw 'SearchControllerHelper::init uiModelPack not supplied.';
       }
 
-      if (!guidFactory) {
-        throw 'SearchControllerHelper::init guidFactory not supplied.';
-      }
-
       if (!layoutCoordinator) {
         throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
       }
 
       _uiModelPack = uiModelPack;
-      _guidFactory = guidFactory;
       _layoutCoordinator = layoutCoordinator;
 
       return that;

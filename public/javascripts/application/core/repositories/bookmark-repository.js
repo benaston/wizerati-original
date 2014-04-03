@@ -1,25 +1,36 @@
 (function (app, $) {
   'use strict';
 
-  function BookmarkRepository(cache, croniclIService) {
+  function BookmarkRepository(bookmarkCache, croniclIService, itemCache) {
 
     if (!(this instanceof app.BookmarkRepository)) {
-      return new app.BookmarkRepository(cache,
+      return new app.BookmarkRepository(bookmarkCache,
           croniclIService);
     }
 
     var that = this,
-        _cache = null,
-        _croniclIService = null;
+        _bookmarkCache = null,
+        _croniclIService = null,
+        _itemCache = null;
 
+    //Return full items. Bookmark cache receives only id and bookmarkDateTime to avoid duplication of data.
+    //All full items added to item cache, thereby ensuring they will not need to be retrieved again via ajax.
     this.getByUserId = function (userId, done) {
-      var cachedItem = _cache.items[userId];
-      if (cachedItem) {
-        done(cachedItem);
+      if(!userId) {
+        throw 'BookmarkRepository::getByUserId userId not supplied.'
+      }
+
+      if(!done) {
+        throw 'BookmarkRepository::getByUserId done not supplied.'
+      }
+
+      var cachedBookmarks = _bookmarkCache.items[userId];
+      if (cachedBookmarks) {
+        done(cachedBookmarks.value); //Bookmarks returned as kvp.
         return;
       }
 
-      $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + id,
+      $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + userId,
         success: success,
         cache: false });
 
@@ -28,15 +39,17 @@
           throw 'BookmarkRepository::getByUserId::success data not supplied';
         }
 
-        var result = $.parseJSON(data);
-        _cache.insert([result]);
+        var bookmarkItems = $.parseJSON(data);
+        var bookmarks = bookmarkItems.map(function (b) { return { id: b.id, bookmarkDateTime: b.bookmarkDateTime }; });
+        _bookmarkCache.insert([{ id: userId, value: bookmarks }]);
+        _itemCache.insert(bookmarkItems); //Ensure local item cache is primed with the bookmarks (the bookmark cache is dealt with in the repository).
 
-        done(result);
+        done(bookmarks);
       }
     };
 
     function init() {
-      if (!cache) {
+      if (!bookmarkCache) {
         throw 'BookmarkRepository::init cache not supplied.';
       }
 
@@ -44,8 +57,13 @@
         throw 'BookmarkRepository::init croniclIService not supplied.';
       }
 
-      _cache = cache;
+      if (!itemCache) {
+        throw 'BookmarkRepository::init itemCache not supplied.';
+      }
+
+      _bookmarkCache = bookmarkCache;
       _croniclIService = croniclIService;
+      _itemCache = itemCache;
 
       return that;
     }

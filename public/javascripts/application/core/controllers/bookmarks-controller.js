@@ -1,46 +1,29 @@
 (function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, uiModelPack, helper, userModel) {
+  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, uiModelPack, helper, userModel);
+      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository);
     }
 
     var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _navbarItemEnum = app.mod('enum').Tab,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _bookmarkService = null,
-        _uiModelPack = null,
+        _bookmarkBookModel = null,
         _helper = null,
-        _userModel = null;
+        _userModel = null,
+        _bookmarksHavePreviouslyBeenRetrieved = false,
+        _bookmarkRepository = false;
 
     this.index = function (dto) {
       try {
-//        if (!(dto.__isInvertebrateExternal__)) {
-//          _helper.resetUIForSearch();
-//          return;
-//        }
-
-//        if (dto.__isInvertebrateExternal__) {
-//          _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-//          _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
-//        }
-
-//        _uiModelPack.searchFormModel.setIsWaiting('true');
-//        _bookmarkRepository.getByUserId();
-        _bookmarkService.getByUserId(_userModel.getUserId());
-
-        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-        _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
-        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+        if (!_bookmarksHavePreviouslyBeenRetrieved) {
+          _bookmarksHavePreviouslyBeenRetrieved = true;
+          _bookmarkBookModel.setIsWaiting('true');
+          _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
+        } else {
+          _helper.resetUIForBookmarks();
+        }
       } catch (err) {
         console.log('BookmarksController::index exception: ' + err);
       }
@@ -67,7 +50,7 @@
         throw 'BookmarksController::init bookmarkService not supplied.';
       }
 
-      if (!uiModelPack) {
+      if (!bookmarkBookModel) {
         throw 'BookmarksController::init uiModelPack not supplied.';
       }
 
@@ -79,10 +62,15 @@
         throw 'BookmarksController::init userModel not supplied.';
       }
 
+      if (!bookmarkRepository) {
+        throw 'BookmarksController::init bookmarkRepository not supplied.';
+      }
+
       _bookmarkService = bookmarkService;
-      _uiModelPack = uiModelPack;
+      _bookmarkBookModel = bookmarkBookModel;
       _helper = helper;
       _userModel = userModel;
+      _bookmarkRepository = bookmarkRepository;
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
 

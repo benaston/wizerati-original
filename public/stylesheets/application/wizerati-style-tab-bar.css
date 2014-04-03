@@ -101,3 +101,8 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     left: -3px;
     color: rgba(126,157,173,1);
 }
+
+
+#btn-nav-comparison-list.pulse::before {
+    -webkit-animation: pulse .2s 1 0;
+}

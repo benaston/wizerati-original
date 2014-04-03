@@ -18,13 +18,13 @@ $(function appStart() {
     $('body').attr('data-hover-is-enabled', 'false');
   }
 
-  $('#bookmark-panel').bind('scroll', function (e) {
+  $('#bookmark-list-panel').bind('scroll', function (e) {
     window.stackHeads();
   });
 
   window.stackHeads = function (e) {
     var fixedHeaders = document.getElementsByClassName('fixedheader');
-    var panel = document.getElementById('bookmark-panel');
+    var panel = document.getElementById('bookmark-list-panel');
     for (var i = 0; i < fixedHeaders.length; i++) {
       var currentHeader = fixedHeaders[i];
       var nextHeader = fixedHeaders[i + 1];

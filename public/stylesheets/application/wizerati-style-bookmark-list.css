@@ -1,4 +1,4 @@
-#bookmark-panel-container {
+#bookmark-list-panel-container {
     width: 0;
     height: 100%;
     overflow: visible;
@@ -6,7 +6,7 @@
     display: inline-block;
 }
 
-#bookmark-panel {
+#bookmark-list-panel {
     display: inline-block;
     position: relative; /*required to ensure correct horizontal scrolling behavior*/
     top: 0;
@@ -27,15 +27,15 @@
 }
 
 /*We avoid the translate because it screws with the fixed position headers*/
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-panel-container[data-mode='0'] #bookmark-panel {
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-list-panel-container[data-mode='0'] #bookmark-list-panel {
     transition: -webkit-filter .2s ease-out;
 }
 
-body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-panel-container[data-mode='1'] #bookmark-panel {
+body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-list-panel-container[data-mode='1'] #bookmark-list-panel {
     transition: -webkit-filter .2s ease-out, left 0 linear .2s;
 }
 
-body[data-ui-mode='1'] #bookmark-panel-container[data-mode='0']  #bookmark-panel {
+body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-list-panel {
     -webkit-filter: opacity(100%);
     box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
     left: 0;
@@ -43,7 +43,7 @@ body[data-ui-mode='1'] #bookmark-panel-container[data-mode='0']  #bookmark-panel
 }
 
 /*h1 for the result list does not follow default h1 styling*/
-#bookmark-panel h1 {
+#bookmark-list-panel h1 {
     font-size: inherit;
     line-height: inherit;
     font-family: inherit;
@@ -52,7 +52,7 @@ body[data-ui-mode='1'] #bookmark-panel-container[data-mode='0']  #bookmark-panel
     vertical-align: middle;
 }
 
-.bookmark-panel-summary {
+.bookmark-list-panel-summary {
     padding: 15px 10px 14px 10px;
     box-sizing: border-box; /*because we are applying padding*/
     color: #999;
@@ -60,6 +60,7 @@ body[data-ui-mode='1'] #bookmark-panel-container[data-mode='0']  #bookmark-panel
     display: table;
 }
 
+/*what is this*/
 .bookmark-list-summary {
     background-color: rgba(246, 246, 246, 1);
     padding: 15px 10px 14px 10px;

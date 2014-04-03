@@ -13,7 +13,7 @@
     this.eventUris = { default: 'update://usermodel/' };
 
     this.getUserId = function () {
-      return _userId;
+      return _userId || 'ben@bj.ma';
     };
 
     this.setUserId = function (value) {

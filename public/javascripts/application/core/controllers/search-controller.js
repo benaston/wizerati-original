@@ -13,7 +13,7 @@
         _uiModelPack = null,
         _searchService = null,
         _helper = null,
-        _previousSearchHash = 'null'; //yes a string saying null
+        _previousSearchHash = null;
 
     this.urlTransforms = {};
 
@@ -28,7 +28,7 @@
 
         var currentSearchHash = '' + dto.keywords + dto.r;
 
-        if(_previousSearchHash !== currentSearchHash) {
+        if(_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
           _previousSearchHash = currentSearchHash;
           _uiModelPack.searchFormModel.setIsWaiting('true');
           _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
@@ -43,9 +43,6 @@
     this.edit = function (dto) {
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
-//       _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
-//       _uiModelPack.searchFormModel.setRate(dto.r, {silent: false});
-
         _helper.resetUIForSearch();
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);

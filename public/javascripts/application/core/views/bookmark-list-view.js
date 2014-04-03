@@ -1,16 +1,16 @@
 (function (app, $, inv) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, itemModelPack) {
+  function BookmarkListView(model, resultViewFactory, itemModelPack) {
 
-    if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model, resultViewFactory, itemModelPack);
+    if (!(this instanceof app.BookmarkListView)) {
+      return new app.BookmarkListView(model, resultViewFactory, itemModelPack);
     }
 
     var that = this,
-        _el = '#result-list-panel',
-        _elContainer = '#result-list-panel-container',
-        _elResultList = '#result-list',
+        _el = '#bookmark-list-panel',
+        _elContainer = '#bookmark-list-panel-container',
+        _elList = '#bookmark-list',
         _resultViewFactory = null,
         _renderOptimizations = {};
 
@@ -21,7 +21,7 @@
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
-      that.$elList = $(_elResultList);
+      that.$elList = $(_elList);
     };
 
     this.render = function (e) {
@@ -30,11 +30,22 @@
         return;
       }
 
+      //group by period (e.g. everything today, everything yesterday...)
+      var grouped = {};
+
+      that.Model.getBookmarks().forEach(function(b){
+        var key = moment(b.bookmarkDateTime).fromNow();
+        key = (/hour|minute|second/g).test(key) ? 'today' : key;
+        if(grouped[key]) {
+          grouped[key].push(b);
+        }  else {
+          grouped[key] = [b]
+        }
+      });
+
       that.$elList.empty();
-      that.Model.getResults().forEach(function (id) {
-        _resultViewFactory.create(id, function ($v) {
-          that.$elList.append($v);
-        });
+      Object.keys(grouped).forEach(function (key) {
+        that.$elList.append(new app.BookmarkPeriodView({key: key, bookmarkArr: grouped[key]}, _resultViewFactory).render().$el);
       });
 
       that.$el.scrollTop(0);
@@ -87,15 +98,15 @@
 
     function init() {
       if (!model) {
-        throw 'ResultListView::init model not supplied';
+        throw 'BookmarkListView::init model not supplied';
       }
 
       if (!resultViewFactory) {
-        throw 'ResultListView::init resultViewFactory not supplied';
+        throw 'BookmarkListView::init resultViewFactory not supplied';
       }
 
       if (!itemModelPack) {
-        throw 'ResultListView::init itemModelPack not supplied';
+        throw 'BookmarkListView::init itemModelPack not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -128,7 +139,7 @@
     return init();
   }
 
-  app.ResultListView = ResultListView;
-  inv.View.isExtendedBy(app.ResultListView);
+  app.BookmarkListView = BookmarkListView;
+  inv.View.isExtendedBy(app.BookmarkListView);
 
 }(wizerati, $, invertebrate));

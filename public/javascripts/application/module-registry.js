@@ -130,9 +130,7 @@
   try {
     mod.actionedItemsModel = new w.ActionedItemsModel();
     mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
-//    mod.advertisersPanelModel = new w.AdvertisersPanelModel();
-    mod.bookmarkPanelModel = new w.BookmarkPanelModel();
-    mod.bookmarkBookModel = new w.BookmarkBookModel();
+    mod.bookmarkListModel = new w.BookmarkListModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new w.DeleteFavoriteGroupConfirmationDialogModel();
     mod.hiddenItemsModel = new w.HiddenItemsModel();
     mod.purchasePanelModel = new w.PurchasePanelModel();
@@ -155,8 +153,8 @@
   'use strict';
 
   try {
-    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkBookModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
-    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkPanelModel);
+    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
+    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel);
   }
   catch (e) {
     throw 'problem registering packs module. ' + e;
@@ -200,7 +198,7 @@
 
   try {
     mod.itemRepository = new w.ItemRepository(w.mod('caches').itemCache, i.croniclIService);
-    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService);
+    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService, w.mod('caches').itemCache);
   }
   catch (e) {
     throw 'problem registering repositories module. ' + e;
@@ -215,7 +213,7 @@
   try {
     mod.accountService = new w.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new w.AuthenticationService();
-    mod.bookmarkService = new w.BookmarkService(m.bookmarkBookModel, r.bookmarkRepository, r.itemRepository);
+    mod.bookmarkService = new w.BookmarkService(m.bookmarkListModel, r.bookmarkRepository, r.itemRepository, ca.itemCache);
 
     mod.authorizationService = new w.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
@@ -261,7 +259,7 @@
   'use strict';
 
   try {
-    mod.layoutCalculator = new w.LayoutCalculator(m.resultListModel, m.bookmarkPanelModel, m.itemsOfInterestModel);
+    mod.layoutCalculator = new w.LayoutCalculator(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel);
     mod.layoutCoordinator = new w.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator);
   }
   catch (e) {
@@ -276,7 +274,7 @@
 
   try {
     mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
-    mod.bookmarkPanelView = new w.BookmarkPanelView(m.bookmarkPanelModel);
+    mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel,f.resultViewFactory, p.itemModelPack);
     mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new w.SearchFormView(m.searchFormModel);
@@ -290,27 +288,27 @@
 }(wizerati, wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('packs')));
 
 
-(function (w, mod, p, f, l) {
+(function (w, mod, p, f, l, m) {
   'use strict';
 
   try {
-    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, f.guidFactory, l.layoutCoordinator);
-    mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator);
+    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator);
+    mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
   }
   catch (e) {
     throw 'problem registering helpers module. ' + e;
   }
 
-}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout')));
+}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models')));
 
 
-(function (w, mod, f, l, m, s, p, h) {
+(function (w, mod, f, l, m, s, p, h, r) {
   'use strict';
 
   try {
     mod.actionedItemsController = new w.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, p.uiModelPack, h.bookmarksControllerHelper, m.userModel);
+    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository);
     mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new w.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
@@ -324,7 +322,7 @@
     throw 'problem registering controllers module. ' + e;
   }
 
-}(wizerati, wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs'), wizerati.mod('helpers')));
+}(wizerati, wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs'), wizerati.mod('helpers'), wizerati.mod('repositories')));
 
 
 (function (mod) {

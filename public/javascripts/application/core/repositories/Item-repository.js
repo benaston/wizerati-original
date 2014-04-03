@@ -12,31 +12,6 @@
         _itemCache = null,
         _croniclIService = null;
 
-    this.getByIds = function (idArr, done) {
-      //identify items not cached, get them then merge results with items from cache
-
-      var cachedItem = _itemCache.items[id];
-      if (cachedItem) {
-        done(cachedItem);
-        return;
-      }
-
-      $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
-        success: success,
-        cache: false });
-
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
-        }
-
-        var result = $.parseJSON(data);
-        _itemCache.insert([result]);
-
-        done(result);
-      }
-    };
-
     this.getById = function (id, done) {
       var cachedItem = _itemCache.items[id];
       if (cachedItem) {
