@@ -7321,7 +7321,7 @@ window.wizerati = {
       that.$el.attr('data-id', that.Model.id);
 
       if (that.Model.isSelected) {
-        that.$el.addClass('selected-item');
+        that.$el.addClass('s-i');
       } else {
         that.$el.addClass('p-i');
       }
@@ -7718,7 +7718,7 @@ window.wizerati = {
     };
 
     this.renderLayout = function (layout) {
-      var selectedItemContent = $('.s-i-c').find('.selected-item-content');
+      var selectedItemContent = $('.s-i-c').find('.s-i-content');
       $(_elPinnedItem1).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem1 + 'px,0,0)'});
       $(_elPinnedItem2).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem2 + 'px,0,0)'});
       $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
@@ -7731,7 +7731,7 @@ window.wizerati = {
     };
 
     this.renderAddHiddenItem = function (itemId) {
-      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
+      var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
       var $frm = $items.find('.frm-hide');
       $frm.attr('action', '/hiddenitems/destroy');
       $frm.find('.btn').addClass('checked');
@@ -7740,7 +7740,7 @@ window.wizerati = {
     };
 
     this.renderRemoveHiddenItem = function (itemId) {
-      var $items = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]');
+      var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
       var $frm = $items.find('.frm-hide');
       $frm.attr('action', '/hiddenitems/create');
       $frm.find('.btn').removeClass('checked');
@@ -7749,13 +7749,13 @@ window.wizerati = {
     };
 
     this.renderAddBookmark = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      var $frm = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]').find('.frm-bookmark');
       $frm.attr('action', '/bookmarks/destroy');
       $frm.find('.btn').addClass('checked');
     };
 
     this.renderRemoveBookmark = function (itemId) {
-      var $frm = $('.pinned-item[data-id="' + itemId + '"], .selected-item[data-id="' + itemId + '"]').find('.frm-bookmark');
+      var $frm = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]').find('.frm-bookmark');
       $frm.attr('action', '/bookmarks/create');
       $frm.find('.btn').removeClass('checked');
     };
@@ -7790,11 +7790,11 @@ window.wizerati = {
     };
 
     this.renderRemoveItemOfInterest = function (id) {
-      var $frm = $('.selected-item[data-id="' + id + '"]').find('.frm-pin');
+      var $frm = $('.s-i[data-id="' + id + '"]').find('.frm-pin');
       $frm.attr('action', '/itemsofinterest/create');
       $frm.find('.btn').removeClass('checked');
 
-      $('.pinned-item[data-id="' + id + '"]').remove();
+      $('.p-i[data-id="' + id + '"]').remove();
       _layoutCoordinator.layOut();
     };
 

@@ -2,7 +2,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #items-of-interest-p
     transition: -webkit-transform 1.5s cubic-bezier(0.2,0.3,0.25,0.9); /*for sliding whole lot when moving between comparison list states*/
 }
 
-.selected-item-content, .p-i-content {
+.s-i-content, .p-i-content {
     transition: -webkit-transform 1.5s cubic-bezier(0.2,0.3,0.25,0.9), width 1s cubic-bezier(0.2,0.3,0.25,0.9) 2.0s; /*DELAY - IMPORTANT that is longer than the duration of the preceding animation to avoid Safari rendering flash. Reduce JANK that occurs when animating concurrently. For sliding of individual selected item or pinned items*/
 }
 
@@ -19,7 +19,7 @@ body[data-items-of-interest-mode='1'] #items-of-interest-panel {
     -webkit-transform: translate3d(74px, 0, 0);
 }
 
-body[data-items-of-interest-mode='1'] .selected-item-content {
+body[data-items-of-interest-mode='1'] .s-i-content {
     /*must be applied to an element with a width - hence the content*/
     -webkit-transform: translate3d(-100%, 0, 0);
 }
@@ -79,7 +79,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     -webkit-filter: opacity(0);
 }
 
-.selected-item .i-o-i-c > :not(.menu-container),
+.s-i .i-o-i-c > :not(.menu-container),
 .p-i .i-o-i-c > :not(.menu-container),
 .p-i .i-o-i-c .item-metadata {
     -webkit-filter: opacity(100%);
@@ -88,15 +88,15 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
 }
 
-.selected-item.hidden .i-o-i-c > :not(.menu-container),
+.s-i.hidden .i-o-i-c > :not(.menu-container),
 .p-i.hidden .i-o-i-c > :not(.menu-container),
-.selected-item.hidden .i-o-i-c .item-metadata,
+.s-i.hidden .i-o-i-c .item-metadata,
 .p-i.hidden .i-o-i-c .item-metadata {
     -webkit-filter: opacity(10%);
     transition: -webkit-filter .2s ease-out;
 }
 
-.selected-item, .p-i {
+.s-i, .p-i {
     display: inline-block;
     position: relative;
     top: 0;
@@ -108,7 +108,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     -webkit-transform: scale(1); /*required to circumvent transform z-index bug in webkit when transforms applied*/
 }
 
-.selected-item-content, .p-i-content {
+.s-i-content, .p-i-content {
     width: 340px;
     overflow-y: scroll;
     height: 100%;
@@ -120,7 +120,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     box-shadow: 1px 0 1px -1px #0c0917;
 }
 
-.selected-item {
+.s-i {
     z-index: 6;
 }
 
@@ -148,7 +148,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     z-index: 0;
 }
 
-.collapsed > .selected-item-content {
+.collapsed > .s-i-content {
     width: 0;
     opacity: 0;
     padding: 0;
@@ -188,13 +188,13 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     text-align: right;
 }
 
-.selected-item .table-bordered, .p-i .table-bordered {
+.s-i .table-bordered, .p-i .table-bordered {
     margin-top: 0;
     border: 0;
     display: inline-block;
 }
 
-.selected-item table td:nth-of-type(1):nth-last-of-type(2),
+.s-i table td:nth-of-type(1):nth-last-of-type(2),
 .p-i table td:nth-of-type(1):nth-last-of-type(2) {
     width: 50%;
     text-align: right;
@@ -214,13 +214,13 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     margin-top: 27px;
 }
 
-.selected-item .table-bordered td,
+.s-i .table-bordered td,
 .p-i .table-bordered td {
     padding: 3px;
     text-align: right;
 }
 
-.selected-item table td:nth-of-type(2):nth-last-of-type(1),
+.s-i table td:nth-of-type(2):nth-last-of-type(1),
 .p-i table td:nth-of-type(2):nth-last-of-type(1) {
     width: 50%;
     text-align: left;

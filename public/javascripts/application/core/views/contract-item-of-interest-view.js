@@ -18,7 +18,7 @@
       that.$el.attr('data-id', that.Model.id);
 
       if (that.Model.isSelected) {
-        that.$el.addClass('selected-item');
+        that.$el.addClass('s-i');
       } else {
         that.$el.addClass('p-i');
       }
