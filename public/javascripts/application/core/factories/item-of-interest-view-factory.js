@@ -71,9 +71,11 @@
               return i === item.id;
             }));
 //            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
-              return i === item.id;
-            })));
+//            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+//              return i === item.id;
+//            })));
+
+            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);

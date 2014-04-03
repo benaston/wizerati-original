@@ -4453,9 +4453,11 @@ window.wizerati = {
               return i === item.id;
             }));
 //            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
-              return i === item.id;
-            })));
+//            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 5 && (!_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+//              return i === item.id;
+//            })));
+
+            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
             item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
             item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
             item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
@@ -7471,6 +7473,11 @@ window.wizerati = {
       if($item.find('.frm-hide .btn.checked').length) {
         $frmPin.find('.btn').attr('disabled', 'disabled');
       }
+
+      //Ensure the compare button on the selected item is re-enabled if it is disabled. By removing an item from the comparison list, by definition it is no longer full.
+      var selectedItemPinButton = $('.s-i .btn-pin');
+      selectedItemPinButton.removeAttr('disabled');
+      selectedItemPinButton.removeClass('disabled');
 
       $('.p-i[data-id="' + id + '"]').remove();
       _layoutCoordinator.layOut();

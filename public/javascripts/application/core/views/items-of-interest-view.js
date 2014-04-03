@@ -193,6 +193,11 @@
         $frmPin.find('.btn').attr('disabled', 'disabled');
       }
 
+      //Ensure the compare button on the selected item is re-enabled if it is disabled. By removing an item from the comparison list, by definition it is no longer full.
+      var selectedItemPinButton = $('.s-i .btn-pin');
+      selectedItemPinButton.removeAttr('disabled');
+      selectedItemPinButton.removeClass('disabled');
+
       $('.p-i[data-id="' + id + '"]').remove();
       _layoutCoordinator.layOut();
     };
