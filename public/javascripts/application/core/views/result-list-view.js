@@ -1,27 +1,32 @@
 (function (app, $, inv) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, itemModelPack) {
+  function ResultListView(model, resultViewFactory, itemModelPack, searchFormModel) {
 
     if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model, resultViewFactory, itemModelPack);
+      return new app.ResultListView(model, resultViewFactory, itemModelPack, searchFormModel);
     }
 
     var that = this,
         _el = '#result-list-panel',
         _elContainer = '#result-list-panel-container',
         _elResultList = '#result-list',
+        _elH1 = '#r-l-s-s-c-h1',
         _resultViewFactory = null,
+        _searchFormModel = null,
         _renderOptimizations = {};
 
     this.$el = null;
     this.$elContainer = null;
+    this.$elList = null;
+    this.$elH1 = null;
     this.Model = null;
 
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
       that.$elList = $(_elResultList);
+      that.$elH1 = $(_elH1);
     };
 
     this.render = function (e) {
@@ -39,7 +44,19 @@
 
       that.$el.scrollTop(0);
       that.renderSetMode();
+      renderCount();
     };
+
+    function htmlEncode(value){
+      //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+      //then grab the encoded contents back out.  The div never exists on the page.
+      return $('<div/>').text(value).html();
+    }
+
+    function renderCount() {
+      var count = that.Model.getResults().length || 'No';
+      that.$elH1.text(count + ' results for "' + _searchFormModel.getKeywords().trim() + ' ' + _searchFormModel.getRate() + ' GBP/day"');
+    }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
@@ -88,20 +105,25 @@
     function init() {
       try {
         if (!model) {
-          throw 'ResultListView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!resultViewFactory) {
-          throw 'ResultListView::init resultViewFactory not supplied';
+          throw 'resultViewFactory not supplied';
         }
 
         if (!itemModelPack) {
-          throw 'ResultListView::init itemModelPack not supplied';
+          throw 'itemModelPack not supplied';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
         _resultViewFactory = resultViewFactory;
+        _searchFormModel = searchFormModel;
 
         _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;

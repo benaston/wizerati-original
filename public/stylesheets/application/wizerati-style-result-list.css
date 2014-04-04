@@ -112,11 +112,15 @@ body[data-ui-mode='1'] #result-list-panel {
 }
 
 /*h1 for the result list does not follow default h1 styling*/
-.r-l-s-s-c-h1 {
+#r-l-s-s-c-h1 {
     font-size: inherit;
-    line-height: inherit;
     font-family: inherit;
-    margin: inherit;
+    width: 361px; /*empirical*/
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 67px;
+    margin: 0;
 }
 
 .result-list-search-summary-container > :first-child {
@@ -298,6 +302,10 @@ body[data-hover-is-enabled='true'] .t a:hover {
 
 #frm-edit-search {
     float: right;
+}
+
+#result-list-panel header {
+    height: 67px; /*This fixes what I believe to be a bug in webkit rendering whitespace when the overflow ellipsis is used inside.*/
 }
 
 /*"narrow-screen" devices like iphone*/

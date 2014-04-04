@@ -6,28 +6,28 @@ var keywords = model.getKeywords();
 <div class="tag-line">UK IT contract job search</div>
 <form id="search-form" name="search-form" action="/search" method="GET">
     <div class="search-fields">
-      <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="my skills and / or location" autocorrect="off" autocapitalize="none" tabindex="1">
+      <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
       <span>minimum daily rate (gbp)</span>
         <ol>
-            <li><input id="r200" class="radio" name="r" type="radio" value="200" tabindex="1" {{= rate ? rate === "200" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r200" class="radio" name="r" type="radio" value=">200" tabindex="1" {{= rate ? rate === "200" ? "checked='checked'" : ""  : "" }}>
                 <label for="r200" class="lbl">200</label></li>
-            <li><input id="r250" class="radio" name="r" type="radio" value="250" tabindex="1" {{= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" }}>
+            <li><input id="r250" class="radio" name="r" type="radio" value=">250" tabindex="1" {{= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" }}>
                 <label for="r250" class="lbl">250</label></li>
-            <li><input id="r300" class="radio" name="r" type="radio" value="300" tabindex="1" {{= rate ? rate === "300" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r300" class="radio" name="r" type="radio" value=">300" tabindex="1" {{= rate ? rate === "300" ? "checked='checked'" : ""  : "" }}>
                 <label for="r300" class="lbl">300</label></li>
-            <li><input id="r350" class="radio" name="r" type="radio" value="350" tabindex="1" {{= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" }}>
+            <li><input id="r350" class="radio" name="r" type="radio" value=">350" tabindex="1" {{= rate ? rate === "350" ? "checked='checked'" : ""  : "checked='checked'" }}>
                 <label for="r350" class="lbl">350</label></li>
-            <li><input id="r400" class="radio" name="r" type="radio" value="400" tabindex="1" {{= rate ? rate === "400" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r400" class="radio" name="r" type="radio" value=">400" tabindex="1" {{= rate ? rate === "400" ? "checked='checked'" : ""  : "" }}>
                 <label for="r400" class="lbl">400</label></li>
-            <li><input id="r450" class="radio" name="r" type="radio" value="450" tabindex="1" {{= rate ? rate === "450" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r450" class="radio" name="r" type="radio" value=">450" tabindex="1" {{= rate ? rate === "450" ? "checked='checked'" : ""  : "" }}>
                 <label for="r450" class="lbl">450</label></li>
-            <li><input id="r500" class="radio" name="r" type="radio" value="500" tabindex="1" {{= rate ? rate === "500" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r500" class="radio" name="r" type="radio" value=">500" tabindex="1" {{= rate ? rate === "500" ? "checked='checked'" : ""  : "" }}>
                 <label for="r500" class="lbl">500</label></li>
-            <li><input id="r550" class="radio" name="r" type="radio" value="550" tabindex="1" {{= rate ? rate === "550" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r550" class="radio" name="r" type="radio" value=">550" tabindex="1" {{= rate ? rate === "550" ? "checked='checked'" : ""  : "" }}>
                 <label for="r550" class="lbl">550</label></li>
-            <li><input id="r600" class="radio" name="r" type="radio" value="600" tabindex="1" {{= rate ? rate === "600" ? "checked='checked'" : ""  : "" }}>
+            <li><input id="r600" class="radio" name="r" type="radio" value=">600" tabindex="1" {{= rate ? rate === "600" ? "checked='checked'" : ""  : "" }}>
                 <label for="r600" class="lbl">600</label></li>
         </ol>
     </div>

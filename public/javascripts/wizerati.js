@@ -4992,12 +4992,6 @@ window.wizerati = {
       $.publish(that.eventUris.setMode, value);
     };
 
-//    this.setIsVisible = function (value) {
-//      _isVisible = value;
-//
-//      $.publish(that.eventUris.setIsVisible);
-//    };
-
     this.getKeywords = function () {
       return _keywords || '';
     };
@@ -6781,27 +6775,32 @@ window.wizerati = {
 ;(function (app, $, inv) {
   'use strict';
 
-  function ResultListView(model, resultViewFactory, itemModelPack) {
+  function ResultListView(model, resultViewFactory, itemModelPack, searchFormModel) {
 
     if (!(this instanceof app.ResultListView)) {
-      return new app.ResultListView(model, resultViewFactory, itemModelPack);
+      return new app.ResultListView(model, resultViewFactory, itemModelPack, searchFormModel);
     }
 
     var that = this,
         _el = '#result-list-panel',
         _elContainer = '#result-list-panel-container',
         _elResultList = '#result-list',
+        _elH1 = '#r-l-s-s-c-h1',
         _resultViewFactory = null,
+        _searchFormModel = null,
         _renderOptimizations = {};
 
     this.$el = null;
     this.$elContainer = null;
+    this.$elList = null;
+    this.$elH1 = null;
     this.Model = null;
 
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
       that.$elList = $(_elResultList);
+      that.$elH1 = $(_elH1);
     };
 
     this.render = function (e) {
@@ -6819,7 +6818,19 @@ window.wizerati = {
 
       that.$el.scrollTop(0);
       that.renderSetMode();
+      renderCount();
     };
+
+    function htmlEncode(value){
+      //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+      //then grab the encoded contents back out.  The div never exists on the page.
+      return $('<div/>').text(value).html();
+    }
+
+    function renderCount() {
+      var count = that.Model.getResults().length || 'No';
+      that.$elH1.text(count + ' results for "' + _searchFormModel.getKeywords().trim() + ' ' + _searchFormModel.getRate() + ' GBP/day"');
+    }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
@@ -6868,20 +6879,25 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'ResultListView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!resultViewFactory) {
-          throw 'ResultListView::init resultViewFactory not supplied';
+          throw 'resultViewFactory not supplied';
         }
 
         if (!itemModelPack) {
-          throw 'ResultListView::init itemModelPack not supplied';
+          throw 'itemModelPack not supplied';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
         _resultViewFactory = resultViewFactory;
+        _searchFormModel = searchFormModel;
 
         _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
@@ -7526,7 +7542,7 @@ window.wizerati = {
     mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
     mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel,f.resultViewFactory, p.itemModelPack);
     mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
-    mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
+    mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
     mod.searchFormView = new w.SearchFormView(m.searchFormModel);
     mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
     mod.uiRootView = new w.UIRootView(m.uiRootModel);

@@ -35,12 +35,6 @@
       $.publish(that.eventUris.setMode, value);
     };
 
-//    this.setIsVisible = function (value) {
-//      _isVisible = value;
-//
-//      $.publish(that.eventUris.setIsVisible);
-//    };
-
     this.getKeywords = function () {
       return _keywords || '';
     };
