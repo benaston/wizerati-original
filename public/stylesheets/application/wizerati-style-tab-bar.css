@@ -59,7 +59,7 @@ body[data-hover-is-enabled='true'] .h:hover {
 }
 
 body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
-    box-shadow: rgb(245, 245, 245) 0 0 8px 0;
+    box-shadow: rgba(255,255,255,.4) 0 0 5px 0;
     text-decoration: none; /*required for anchor buttons*/
 }
 
@@ -99,6 +99,7 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     font-size: 1rem;
     top: -5px;
     left: -3px;
+    border: 1px solid rgba(255,255,255,.5);
 }
 
 /*#btn-nav-comparison-list.pulse::before {*/

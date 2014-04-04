@@ -35,7 +35,7 @@ body[data-items-of-interest-mode='1'] .s-i-content {
 }
 
 body[data-hover-is-enabled='true'] .menu .btn-s:enabled:hover {
-    box-shadow: #f5f5f5 0 0 8px 0;
+    box-shadow: rgba(255,255,255,.4) 0 0 5px 0;
 }
 
 .menu .btn-s ~ .lbl {
