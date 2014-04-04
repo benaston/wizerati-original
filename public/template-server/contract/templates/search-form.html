@@ -5,9 +5,6 @@ var keywords = model.getKeywords();
 <div class="logo">wizerati</div>
 <div class="tag-line">UK IT contract job search</div>
 
-<input id="foo" class="" type="radio" value=">200" tabindex="1" />
-<label for="foo" class="">200</label>
-
 <form id="search-form" name="search-form" action="/search" method="GET">
     <div class="search-fields">
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
