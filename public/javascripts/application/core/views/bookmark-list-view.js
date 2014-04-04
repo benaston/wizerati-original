@@ -37,7 +37,7 @@
 
       that.Model.getBookmarks().forEach(function (b) {
         var key = moment(b.bookmarkDateTime).fromNow();
-        key = (/hour|minute|second/g).test(key) ? 'today' : key;
+        key = (/hour|minute|second/g).test(key) ? 'Today' : key;
         if (grouped[key]) {
           grouped[key].push(b);
         } else {
@@ -62,7 +62,8 @@
 
     function renderCount() {
       var count = that.Model.getBookmarks().length || 'no';
-      that.$elSummary.html('<h1>You have ' + count + ' bookmarks.</h1>');
+      var noun = count === 1 ? 'bookmark' : 'bookmarks';
+      that.$elSummary.html('<h1>You have ' + count + ' ' + noun + '.</h1>');
     }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
@@ -81,22 +82,29 @@
       $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
     };
 
-    this.renderAddHiddenItem = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
+    this.renderAddHiddenItem = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
 
       var $selector = $(_el).find(selector);
       $selector.addClass('hidden');
     };
 
-    this.renderRemoveHiddenItem = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
+    this.renderRemoveHiddenItem = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
       var $selector = $(_el).find(selector);
       $selector.removeClass('hidden');
     };
 
-    this.renderRemoveBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).remove();
+    this.renderRemoveBookmark = function (id) {
+      var selectorOnlyChild = '.t[data-id="' + id + '"]:only-child';
+      var $onlyChild = $(_el).find(selectorOnlyChild);
+      if($onlyChild.length) {
+        $onlyChild.parent().parent().remove(); //Remove the entire period if this is the only remaining bookmark within it.
+      } else {
+        var selector = '.t[data-id="' + id + '"]';
+        $(_el).find(selector).remove();
+      }
+
       renderCount();
     };
 
