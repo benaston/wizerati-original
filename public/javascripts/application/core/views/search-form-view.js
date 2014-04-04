@@ -114,25 +114,29 @@
     };
 
     function init() {
-      if (!model) {
-        throw 'SearchFormView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'SearchFormView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.model = model;
+
+        _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
+        _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
+        _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
+
+        $.subscribe(that.model.eventUris.default, that.render);
+        $.subscribe(that.model.eventUris.setIsWaiting, that.render);
+        $.subscribe(that.model.eventUris.setMode, that.render);
+        $.subscribe(that.model.eventUris.setKeywords, that.render);
+        $.subscribe(that.model.eventUris.setRate, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'SearchFormView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.model = model;
-
-      _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
-      _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
-      _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
-
-      $.subscribe(that.model.eventUris.default, that.render);
-      $.subscribe(that.model.eventUris.setIsWaiting, that.render);
-      $.subscribe(that.model.eventUris.setMode, that.render);
-      $.subscribe(that.model.eventUris.setKeywords, that.render);
-      $.subscribe(that.model.eventUris.setRate, that.render);
-
-      return that;
     }
 
     return init();

@@ -18,9 +18,13 @@ $(function appStart() {
     $('body').attr('data-hover-is-enabled', 'false');
   }
 
-  $('#bookmark-list-panel').bind('scroll', function (e) {
-    window.stackHeads();
-  });
+  //We do not enable the fixed position bookmark headers on iOS due to jank.
+  if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+    $('#bookmark-list-panel').bind('scroll', function (e) {
+      window.stackHeads();
+    });
+  }
+
 
   window.stackHeads = function (e) {
     var fixedHeaders = document.getElementsByClassName('fixedheader');
@@ -31,15 +35,12 @@ $(function appStart() {
       var placeholder = getPrevNext(currentHeader)[0];
       var currentScrollPosY = panel.scrollTop;
       var placeholderPosY = findPosY(placeholder);
-      console.log('currentScrollPosY: %s. findPosY(placeholder): %s', currentScrollPosY, findPosY(placeholder));
 
       if (currentScrollPosY > placeholderPosY) {
         //if our scroll position in the panel is father than the placeholder of the current header's position in the DOM...
         if (typeof nextHeader != 'undefined') {
           //If this isn't the last header.
           var distanceToNextHeader = findPosY(nextHeader) - currentScrollPosY;
-          console.log('findPosY(nextHeader): %s', findPosY(nextHeader));
-          console.log('distanceToNextHeader: %s', distanceToNextHeader);
           //the difference between our scroll position and the header's placeholder's position
           if (distanceToNextHeader < currentHeader.offsetHeight) { //offsetHeight ===  height of element inc padding, border
             //if we have less distance between the placeholder of the next element and the top of of the page than the height of the current header, we push the header up so it doesn't overlap.

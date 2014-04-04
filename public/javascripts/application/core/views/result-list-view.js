@@ -86,43 +86,47 @@
     };
 
     function init() {
-      if (!model) {
-        throw 'ResultListView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ResultListView::init model not supplied';
+        }
+
+        if (!resultViewFactory) {
+          throw 'ResultListView::init resultViewFactory not supplied';
+        }
+
+        if (!itemModelPack) {
+          throw 'ResultListView::init itemModelPack not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _resultViewFactory = resultViewFactory;
+
+        _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setMode, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'ResultListView::init ' + e;
       }
-
-      if (!resultViewFactory) {
-        throw 'ResultListView::init resultViewFactory not supplied';
-      }
-
-      if (!itemModelPack) {
-        throw 'ResultListView::init itemModelPack not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _resultViewFactory = resultViewFactory;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
-
-      return that;
     }
 
     return init();

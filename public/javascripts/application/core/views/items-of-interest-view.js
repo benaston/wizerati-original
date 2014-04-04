@@ -189,7 +189,7 @@
       $frmPin.find('.btn').removeClass('checked');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
-      if($item.find('.frm-hide .btn.checked').length) {
+      if ($item.find('.frm-hide .btn.checked').length) {
         $frmPin.find('.btn').attr('disabled', 'disabled');
       }
 
@@ -203,58 +203,62 @@
     };
 
     function init() {
-      if (!model) {
-        throw 'ItemsOfInterestView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ItemsOfInterestView::init model not supplied';
+        }
+
+        if (!itemOfInterestViewFactory) {
+          throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
+        }
+
+        if (!itemModelPack) {
+          throw 'ItemsOfInterestView::init itemModelPack not supplied';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
+        }
+
+        if (!uiRootModel) {
+          throw 'ItemsOfInterestView::init uiRootModel not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _itemModelPack = itemModelPack;
+        _itemOfInterestViewFactory = itemOfInterestViewFactory;
+        _layoutCoordinator = layoutCoordinator;
+        _uiRootModel = uiRootModel;
+
+        _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
+        _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+        _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setMode, that.render);
+        $.subscribe(that.Model.eventUris.setLayout, that.render);
+        $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
+        $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
+        $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+
+        that.Model = model;
+
+        return that;
+      } catch (e) {
+        throw 'ItemsOfInterestView::init ' + e;
       }
-
-      if (!itemOfInterestViewFactory) {
-        throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
-      }
-
-      if (!itemModelPack) {
-        throw 'ItemsOfInterestView::init itemModelPack not supplied';
-      }
-
-      if (!layoutCoordinator) {
-        throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
-      }
-
-      if (!uiRootModel) {
-        throw 'ItemsOfInterestView::init uiRootModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _itemModelPack = itemModelPack;
-      _itemOfInterestViewFactory = itemOfInterestViewFactory;
-      _layoutCoordinator = layoutCoordinator;
-      _uiRootModel = uiRootModel;
-
-      _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.setLayout, that.render);
-      $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
-      $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
-      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
-
-      that.Model = model;
-
-      return that;
     }
 
     return init();

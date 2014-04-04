@@ -66,7 +66,7 @@ body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-
     vertical-align: middle;
 }
 
-.bookmark-list-panel-summary {
+#bookmark-list-panel-summary {
     padding: 15px 10px 14px 10px;
     box-sizing: border-box; /*because we are applying padding*/
     color: #999;
@@ -77,15 +77,17 @@ body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-
 /*what is this*/
 .bookmark-list-summary {
     background-color: rgba(246, 246, 246, 1);
-    padding: 15px 10px 14px 10px;
-    box-sizing: border-box; /*because we are applying padding*/
+    padding: 10px;
+    /*box-sizing: border-box; *//*because we are applying padding*/
     line-height: 1rem;
     color: #333;
-    font-family: helvetica-bold;
+    /*font-family: helvetica-bold;*/
     width: 100%;
     z-index: 1; /*ensure remains over results*/
 
 }
+
+
 
 /*"narrow-screen" devices like iphone*/
 @media only screen and (max-device-width: 568px) {

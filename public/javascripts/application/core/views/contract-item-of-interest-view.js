@@ -35,14 +35,18 @@
     };
 
     function init() {
-      if (!model) {
-        throw 'ContractItemOfInterestView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ContractItemOfInterestView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        return that;
+      } catch (e) {
+        throw 'ContractItemOfInterestView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
     }
 
     return init();

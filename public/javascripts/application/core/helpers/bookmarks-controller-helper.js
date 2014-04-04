@@ -40,7 +40,7 @@
       //this must occur *after the search panel mode is set* to its eventual value, to
       //ensure the initial width rendering of items of interest is the correct one
       // (avoiding a repaint)
-      _uiModelPack.itemsOfInterestModel.setSelectedItemId(_bookmarkListModel.getSelectedItemId() || bookmarks[0].id);
+//      _uiModelPack.itemsOfInterestModel.setSelectedItemId(_bookmarkListModel.getSelectedItemId() || bookmarks[0].id);
     };
 
     function init() {

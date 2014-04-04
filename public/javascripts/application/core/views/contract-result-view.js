@@ -30,19 +30,19 @@
       }
 
       //only apply the attributes in the positive case to save clutter in the DOM
-      if(that.Model.isRead) {
+      if (that.Model.isRead) {
         that.$el.attr('data-is-unread', !that.Model.isRead);
       }
 
-      if(that.Model.isActioned) {
+      if (that.Model.isActioned) {
         that.$el.attr('data-is-actioned', that.Model.isActioned);
       }
 
-      if(!!(that.Model.bookmarkDateTime)) {
+      if (!!(that.Model.bookmarkDateTime)) {
         that.$el.attr('data-is-bookmark', !!(that.Model.bookmarkDateTime));
       }
 
-      if(that.Model.isPinned) {
+      if (that.Model.isPinned) {
         that.$el.attr('data-is-in-comparison-list', that.Model.isInComparisonList);
       }
 
@@ -55,14 +55,18 @@
     };
 
     function init() {
-      if (!model) {
-        throw 'ContractResultView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ContractResultView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        return that;
+      } catch (e) {
+        throw 'ContractResultView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
     }
 
     return init();

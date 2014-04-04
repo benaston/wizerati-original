@@ -15,11 +15,11 @@
         _mode = _bookmarkPanelModeEnum.Minimized;
 
     this.eventUris = {
-      default: 'update://bookmarkbookmodel',
-      addBookmark: 'update://bookmarkbookmodel/addbookmark',
-      removeBookmark: 'update://bookmarkbookmodel/removebookmark',
-      setIsWaiting: 'update://bookmarkbookmodel/setiswaiting',
-      setMode: 'update://bookmarkbookmodel/setmode'
+      default: 'update://bookmarklistmodel',
+      addBookmark: 'update://bookmarklistmodel/addbookmark',
+      removeBookmark: 'update://bookmarklistmodel/removebookmark',
+      setIsWaiting: 'update://bookmarklistmodel/setiswaiting',
+      setMode: 'update://bookmarklistmodel/setmode'
     };
 
     this.getMode = function () {
@@ -68,6 +68,7 @@
       if (that.isBookmark(bookmark.id)) {
         return;
       }
+
       _bookmarks.push(bookmark);
 
       $.publish(that.eventUris.addBookmark, bookmark);
@@ -75,17 +76,17 @@
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
     this.removeBookmark = function (id) {
-      if (!that.isBookmark(id)) {
-        return;
-      }
+//      if (!that.isBookmark(id)) {
+//        return;
+//      }
       _bookmarks = _.reject(_bookmarks, function(b){ return b.id === id; });
 
       $.publish(that.eventUris.removeBookmark, id);
     };
 
     this.isBookmark = function (id) {
-      return _.find(_bookmarks, function (i) {
-        return i === id;
+      return _.any(_bookmarks, function (b) {
+        return b.id === id;
       });
     };
 

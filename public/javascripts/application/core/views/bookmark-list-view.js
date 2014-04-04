@@ -11,6 +11,7 @@
         _el = '#bookmark-list-panel',
         _elContainer = '#bookmark-list-panel-container',
         _elList = '#bookmark-list',
+        _elSummary = '#bookmark-list-panel-summary',
         _resultViewFactory = null,
         _renderOptimizations = {};
 
@@ -22,6 +23,7 @@
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
       that.$elList = $(_elList);
+      that.$elSummary = $(_elSummary);
     };
 
     this.render = function (e) {
@@ -33,24 +35,35 @@
       //group by period (e.g. everything today, everything yesterday...)
       var grouped = {};
 
-      that.Model.getBookmarks().forEach(function(b){
+      that.Model.getBookmarks().forEach(function (b) {
         var key = moment(b.bookmarkDateTime).fromNow();
         key = (/hour|minute|second/g).test(key) ? 'today' : key;
-        if(grouped[key]) {
+        if (grouped[key]) {
           grouped[key].push(b);
-        }  else {
+        } else {
           grouped[key] = [b]
         }
       });
 
+      //Note the sort into reverse chrono. order.
       that.$elList.empty();
-      Object.keys(grouped).forEach(function (key) {
-        that.$elList.append(new app.BookmarkPeriodView({key: key, bookmarkArr: grouped[key]}, _resultViewFactory).render().$el);
-      });
+      Object.keys(grouped)
+          .sort(function (k1, k2) {
+            return -(+Date.parse(grouped[k1][0].bookmarkDateTime) - +Date.parse(grouped[k2][0].bookmarkDateTime));
+          })
+          .forEach(function (key) {
+            that.$elList.append(new app.BookmarkPeriodView({key: key, bookmarkArr: grouped[key]}, _resultViewFactory).render().$el);
+          });
 
       that.$el.scrollTop(0);
       that.renderSetMode();
+      renderCount();
     };
+
+    function renderCount() {
+      var count = that.Model.getBookmarks().length || 'no';
+      that.$elSummary.html('<h1>You have ' + count + ' bookmarks.</h1>');
+    }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
@@ -84,6 +97,7 @@
     this.renderRemoveBookmark = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
       $(_el).find(selector).remove();
+      renderCount();
     };
 
     this.renderSetMode = function (mode) {
@@ -92,43 +106,47 @@
     };
 
     function init() {
-      if (!model) {
-        throw 'BookmarkListView::init model not supplied';
-      }
+      try {
+        if (!model) {
+          throw 'BookmarkListView::init model not supplied';
+        }
 
-      if (!resultViewFactory) {
-        throw 'BookmarkListView::init resultViewFactory not supplied';
-      }
+        if (!resultViewFactory) {
+          throw 'BookmarkListView::init resultViewFactory not supplied';
+        }
 
-      if (!itemModelPack) {
-        throw 'BookmarkListView::init itemModelPack not supplied';
-      }
+        if (!itemModelPack) {
+          throw 'BookmarkListView::init itemModelPack not supplied';
+        }
 
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _resultViewFactory = resultViewFactory;
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _resultViewFactory = resultViewFactory;
 
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+        _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
 //      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setMode, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
-      return that;
+        return that;
+      } catch (e) {
+        throw 'BookmarkListView::init ' + e;
+      }
     }
 
     return init();

@@ -31,48 +31,52 @@
       that.$el.attr('data-modal', that.Model.getModal());
     };
 
-    this.renderSetVisibilityMode = function(mode) {
+    this.renderSetVisibilityMode = function (mode) {
       that.$mainContainer.attr('data-visibility-mode', mode);
     };
 
-    this.renderSetAreTransitionsEnabled = function() {
-        that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    this.renderSetAreTransitionsEnabled = function () {
+      that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
     };
 
-    this.renderSetModal = function(modal) {
-        that.$el.attr('data-modal', modal);
+    this.renderSetModal = function (modal) {
+      that.$el.attr('data-modal', modal);
     };
 
-    this.renderSetUIMode = function(uiMode) {
-        that.$el.attr('data-ui-mode', uiMode);
+    this.renderSetUIMode = function (uiMode) {
+      that.$el.attr('data-ui-mode', uiMode);
     };
 
-    this.renderSetScrollLeft = function(left) {
+    this.renderSetScrollLeft = function (left) {
       that.$el.scrollToX({endX: left, duration: 1000});
     };
 
     function init() {
-      if (!model) {
-        throw 'UIRootView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'UIRootView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
+        _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
+        _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
+        _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+        _renderOptimizations[that.Model.eventUris.setScrollLeft] = that.renderSetScrollLeft;
+
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
+        $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
+        $.subscribe(that.Model.eventUris.setModal, that.render);
+        $.subscribe(that.Model.eventUris.setUIMode, that.render);
+        $.subscribe(that.Model.eventUris.setScrollLeft, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'UIRootView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
-      _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
-      _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
-      _renderOptimizations[that.Model.eventUris.setScrollLeft] = that.renderSetScrollLeft;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
-      $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
-      $.subscribe(that.Model.eventUris.setModal, that.render);
-      $.subscribe(that.Model.eventUris.setUIMode, that.render);
-      $.subscribe(that.Model.eventUris.setScrollLeft, that.render);
-
-      return that;
     }
 
     return init();

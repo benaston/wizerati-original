@@ -1,16 +1,16 @@
 (function (app) {
   'use strict';
 
-  function ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
+  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
+      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
     }
 
     var that = this;
 
     this.resultListModel = null;
-    this.bookmarkBookModel = null;
+    this.bookmarkListModel = null;
     this.itemsOfInterestModel = null;
     this.hiddenItemsModel = null;
     this.actionedItemsModel = null;
@@ -20,8 +20,8 @@
         throw 'ItemModelPack::init resultListModel not supplied.';
       }
 
-      if (!bookmarkBookModel) {
-        throw 'ItemModelPack::init bookmarkBookModel not supplied.';
+      if (!bookmarkListModel) {
+        throw 'ItemModelPack::init bookmarkListModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
@@ -37,7 +37,7 @@
       }
 
       that.resultListModel = resultListModel;
-      that.bookmarkBookModel = bookmarkBookModel;
+      that.bookmarkListModel = bookmarkListModel;
       that.itemsOfInterestModel = itemsOfInterestModel;
       that.hiddenItemsModel = hiddenItemsModel;
       that.actionedItemsModel = actionedItemsModel;

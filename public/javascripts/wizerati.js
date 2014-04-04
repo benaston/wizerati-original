@@ -4391,63 +4391,67 @@ window.wizerati = {
     };
 
     this.create = function (id, width, isSelectedItem, done) {
-      if (!id) {
-        throw 'ItemOfInterestViewFactory::create id not supplied.';
-      }
+      try {
+        if (!id) {
+          throw 'ItemOfInterestViewFactory::create id not supplied.';
+        }
 
-      if (!width) {
-        throw 'ItemOfInterestViewFactory::create width not supplied.';
-      }
+        if (!width) {
+          throw 'ItemOfInterestViewFactory::create width not supplied.';
+        }
 
-      if (isSelectedItem === undefined || isSelectedItem === null) {
-        throw 'ItemOfInterestViewFactory::create isSelectedItem not supplied.';
-      }
+        if (isSelectedItem === undefined || isSelectedItem === null) {
+          throw 'ItemOfInterestViewFactory::create isSelectedItem not supplied.';
+        }
 
-      if (!done) {
-        throw 'ItemOfInterestViewFactory::create done not supplied.';
-      }
+        if (!done) {
+          throw 'ItemOfInterestViewFactory::create done not supplied.';
+        }
 
-      var role = _signInIService.getCurrentRole();
-      switch (role) {
-        case _roleEnum.Employer:
-        case _roleEnum.EmployerStranger:
-          _itemRepository.getById(id, function (item) {
-            item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isBookmark = item['isBookmark'];
-            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isInComparisonList = !isSelectedItem;
-            item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
-            item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
-              return i === id;
+        var role = _signInIService.getCurrentRole();
+        switch (role) {
+          case _roleEnum.Employer:
+          case _roleEnum.EmployerStranger:
+            _itemRepository.getById(id, function (item) {
+              item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isBookmark = item['isBookmark'];
+              item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+              item.isInComparisonList = !isSelectedItem;
+              item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
+              item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+                return i === id;
+              });
+              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.width = width;
+              var $e = new app.ContractorItemOfInterestView(item).render().$el;
+              done($e);
             });
-            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id));
-            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
-            item.width = width;
-            var $e = new app.ContractorItemOfInterestView(item).render().$el;
-            done($e);
-          });
-          break;
-        case _roleEnum.Contractor:
-        case _roleEnum.ContractorStranger:
-          _itemRepository.getById(id, function (item) {
-            item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isBookmark = !!(item.bookmarkDateTime); //if it has a bmk date time it is a bmk
-            item.isSelected = isSelectedItem;
-            item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
-              return i === item.id;
-            }));
-            item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
-            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isHideable = !(_itemModelPack.bookmarkBookModel.isBookmark(item.id)) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
-            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
-            item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.width = width;
-            done(new app.ContractItemOfInterestView(item).render().$el);
-          });
-          break;
-        default:
-          throw 'ItemOfInterestViewFactory::create invalid user role "' + role + '"';
+            break;
+          case _roleEnum.Contractor:
+          case _roleEnum.ContractorStranger:
+            _itemRepository.getById(id, function (item) {
+              item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isBookmark = !!(item.bookmarkDateTime); //if it has a bmk date time it is a bmk
+              item.isSelected = isSelectedItem;
+              item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
+                return i === item.id;
+              }));
+              item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
+              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.width = width;
+              done(new app.ContractItemOfInterestView(item).render().$el);
+            });
+            break;
+          default:
+            throw 'ItemOfInterestViewFactory::create invalid user role "' + role + '"';
+        }
+      } catch (e) {
+        throw 'ItemOfInterestViewFactory::create ' + e;
       }
     };
 
@@ -4644,7 +4648,7 @@ window.wizerati = {
       //this must occur *after the search panel mode is set* to its eventual value, to
       //ensure the initial width rendering of items of interest is the correct one
       // (avoiding a repaint)
-      _uiModelPack.itemsOfInterestModel.setSelectedItemId(_bookmarkListModel.getSelectedItemId() || bookmarks[0].id);
+//      _uiModelPack.itemsOfInterestModel.setSelectedItemId(_bookmarkListModel.getSelectedItemId() || bookmarks[0].id);
     };
 
     function init() {
@@ -5216,11 +5220,11 @@ window.wizerati = {
         _mode = _bookmarkPanelModeEnum.Minimized;
 
     this.eventUris = {
-      default: 'update://bookmarkbookmodel',
-      addBookmark: 'update://bookmarkbookmodel/addbookmark',
-      removeBookmark: 'update://bookmarkbookmodel/removebookmark',
-      setIsWaiting: 'update://bookmarkbookmodel/setiswaiting',
-      setMode: 'update://bookmarkbookmodel/setmode'
+      default: 'update://bookmarklistmodel',
+      addBookmark: 'update://bookmarklistmodel/addbookmark',
+      removeBookmark: 'update://bookmarklistmodel/removebookmark',
+      setIsWaiting: 'update://bookmarklistmodel/setiswaiting',
+      setMode: 'update://bookmarklistmodel/setmode'
     };
 
     this.getMode = function () {
@@ -5269,6 +5273,7 @@ window.wizerati = {
       if (that.isBookmark(bookmark.id)) {
         return;
       }
+
       _bookmarks.push(bookmark);
 
       $.publish(that.eventUris.addBookmark, bookmark);
@@ -5276,17 +5281,17 @@ window.wizerati = {
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
     this.removeBookmark = function (id) {
-      if (!that.isBookmark(id)) {
-        return;
-      }
+//      if (!that.isBookmark(id)) {
+//        return;
+//      }
       _bookmarks = _.reject(_bookmarks, function(b){ return b.id === id; });
 
       $.publish(that.eventUris.removeBookmark, id);
     };
 
     this.isBookmark = function (id) {
-      return _.find(_bookmarks, function (i) {
-        return i === id;
+      return _.any(_bookmarks, function (b) {
+        return b.id === id;
       });
     };
 
@@ -6174,16 +6179,16 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
+  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
 
     if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkBookModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
+      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
     }
 
     var that = this;
 
     this.resultListModel = null;
-    this.bookmarkBookModel = null;
+    this.bookmarkListModel = null;
     this.itemsOfInterestModel = null;
     this.hiddenItemsModel = null;
     this.actionedItemsModel = null;
@@ -6193,8 +6198,8 @@ window.wizerati = {
         throw 'ItemModelPack::init resultListModel not supplied.';
       }
 
-      if (!bookmarkBookModel) {
-        throw 'ItemModelPack::init bookmarkBookModel not supplied.';
+      if (!bookmarkListModel) {
+        throw 'ItemModelPack::init bookmarkListModel not supplied.';
       }
 
       if (!itemsOfInterestModel) {
@@ -6210,7 +6215,7 @@ window.wizerati = {
       }
 
       that.resultListModel = resultListModel;
-      that.bookmarkBookModel = bookmarkBookModel;
+      that.bookmarkListModel = bookmarkListModel;
       that.itemsOfInterestModel = itemsOfInterestModel;
       that.hiddenItemsModel = hiddenItemsModel;
       that.actionedItemsModel = actionedItemsModel;
@@ -6990,6 +6995,7 @@ window.wizerati = {
         _el = '#bookmark-list-panel',
         _elContainer = '#bookmark-list-panel-container',
         _elList = '#bookmark-list',
+        _elSummary = '#bookmark-list-panel-summary',
         _resultViewFactory = null,
         _renderOptimizations = {};
 
@@ -7001,6 +7007,7 @@ window.wizerati = {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
       that.$elList = $(_elList);
+      that.$elSummary = $(_elSummary);
     };
 
     this.render = function (e) {
@@ -7012,24 +7019,35 @@ window.wizerati = {
       //group by period (e.g. everything today, everything yesterday...)
       var grouped = {};
 
-      that.Model.getBookmarks().forEach(function(b){
+      that.Model.getBookmarks().forEach(function (b) {
         var key = moment(b.bookmarkDateTime).fromNow();
         key = (/hour|minute|second/g).test(key) ? 'today' : key;
-        if(grouped[key]) {
+        if (grouped[key]) {
           grouped[key].push(b);
-        }  else {
+        } else {
           grouped[key] = [b]
         }
       });
 
+      //Note the sort into reverse chrono. order.
       that.$elList.empty();
-      Object.keys(grouped).forEach(function (key) {
-        that.$elList.append(new app.BookmarkPeriodView({key: key, bookmarkArr: grouped[key]}, _resultViewFactory).render().$el);
-      });
+      Object.keys(grouped)
+          .sort(function (k1, k2) {
+            return -(+Date.parse(grouped[k1][0].bookmarkDateTime) - +Date.parse(grouped[k2][0].bookmarkDateTime));
+          })
+          .forEach(function (key) {
+            that.$elList.append(new app.BookmarkPeriodView({key: key, bookmarkArr: grouped[key]}, _resultViewFactory).render().$el);
+          });
 
       that.$el.scrollTop(0);
       that.renderSetMode();
+      renderCount();
     };
+
+    function renderCount() {
+      var count = that.Model.getBookmarks().length || 'no';
+      that.$elSummary.html('<h1>You have ' + count + ' bookmarks.</h1>');
+    }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
@@ -7063,6 +7081,7 @@ window.wizerati = {
     this.renderRemoveBookmark = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
       $(_el).find(selector).remove();
+      renderCount();
     };
 
     this.renderSetMode = function (mode) {
@@ -7071,43 +7090,47 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'BookmarkListView::init model not supplied';
-      }
+      try {
+        if (!model) {
+          throw 'BookmarkListView::init model not supplied';
+        }
 
-      if (!resultViewFactory) {
-        throw 'BookmarkListView::init resultViewFactory not supplied';
-      }
+        if (!resultViewFactory) {
+          throw 'BookmarkListView::init resultViewFactory not supplied';
+        }
 
-      if (!itemModelPack) {
-        throw 'BookmarkListView::init itemModelPack not supplied';
-      }
+        if (!itemModelPack) {
+          throw 'BookmarkListView::init itemModelPack not supplied';
+        }
 
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _resultViewFactory = resultViewFactory;
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _resultViewFactory = resultViewFactory;
 
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+        _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
 //      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
 
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setMode, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
-      return that;
+        return that;
+      } catch (e) {
+        throw 'BookmarkListView::init ' + e;
+      }
     }
 
     return init();
@@ -7138,8 +7161,8 @@ window.wizerati = {
       app.instance.renderTemplate(that.$el, _templateName, that.Model, {});
 
       var $bookmarkListEl = that.$el.find('.bookmark-list');
-      that.Model.bookmarkArr.forEach(function(bookmark){
-        _resultViewFactory.create(bookmark.id, function done($v){
+      that.Model.bookmarkArr.forEach(function (bookmark) {
+        _resultViewFactory.create(bookmark.id, function done($v) {
           $bookmarkListEl.append($v);
         });
       });
@@ -7148,19 +7171,23 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'BookmarkPeriodView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'BookmarkPeriodView::init model not supplied';
+        }
+
+        if (!resultViewFactory) {
+          throw 'BookmarkPeriodView::init resultViewFactory not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _resultViewFactory = resultViewFactory;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarkPeriodView::init ' + e;
       }
-
-      if (!resultViewFactory) {
-        throw 'BookmarkPeriodView::init resultViewFactory not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _resultViewFactory = resultViewFactory;
-
-      return that;
     }
 
     return init();
@@ -7207,14 +7234,18 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'ContractItemOfInterestView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ContractItemOfInterestView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        return that;
+      } catch (e) {
+        throw 'ContractItemOfInterestView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
     }
 
     return init();
@@ -7256,19 +7287,19 @@ window.wizerati = {
       }
 
       //only apply the attributes in the positive case to save clutter in the DOM
-      if(that.Model.isRead) {
+      if (that.Model.isRead) {
         that.$el.attr('data-is-unread', !that.Model.isRead);
       }
 
-      if(that.Model.isActioned) {
+      if (that.Model.isActioned) {
         that.$el.attr('data-is-actioned', that.Model.isActioned);
       }
 
-      if(!!(that.Model.bookmarkDateTime)) {
+      if (!!(that.Model.bookmarkDateTime)) {
         that.$el.attr('data-is-bookmark', !!(that.Model.bookmarkDateTime));
       }
 
-      if(that.Model.isPinned) {
+      if (that.Model.isPinned) {
         that.$el.attr('data-is-in-comparison-list', that.Model.isInComparisonList);
       }
 
@@ -7281,14 +7312,18 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'ContractResultView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ContractResultView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        return that;
+      } catch (e) {
+        throw 'ContractResultView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
     }
 
     return init();
@@ -7489,7 +7524,7 @@ window.wizerati = {
       $frmPin.find('.btn').removeClass('checked');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
-      if($item.find('.frm-hide .btn.checked').length) {
+      if ($item.find('.frm-hide .btn.checked').length) {
         $frmPin.find('.btn').attr('disabled', 'disabled');
       }
 
@@ -7503,58 +7538,62 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'ItemsOfInterestView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ItemsOfInterestView::init model not supplied';
+        }
+
+        if (!itemOfInterestViewFactory) {
+          throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
+        }
+
+        if (!itemModelPack) {
+          throw 'ItemsOfInterestView::init itemModelPack not supplied';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
+        }
+
+        if (!uiRootModel) {
+          throw 'ItemsOfInterestView::init uiRootModel not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _itemModelPack = itemModelPack;
+        _itemOfInterestViewFactory = itemOfInterestViewFactory;
+        _layoutCoordinator = layoutCoordinator;
+        _uiRootModel = uiRootModel;
+
+        _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
+        _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+        _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setMode, that.render);
+        $.subscribe(that.Model.eventUris.setLayout, that.render);
+        $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
+        $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
+        $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+
+        that.Model = model;
+
+        return that;
+      } catch (e) {
+        throw 'ItemsOfInterestView::init ' + e;
       }
-
-      if (!itemOfInterestViewFactory) {
-        throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
-      }
-
-      if (!itemModelPack) {
-        throw 'ItemsOfInterestView::init itemModelPack not supplied';
-      }
-
-      if (!layoutCoordinator) {
-        throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
-      }
-
-      if (!uiRootModel) {
-        throw 'ItemsOfInterestView::init uiRootModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _itemModelPack = itemModelPack;
-      _itemOfInterestViewFactory = itemOfInterestViewFactory;
-      _layoutCoordinator = layoutCoordinator;
-      _uiRootModel = uiRootModel;
-
-      _renderOptimizations[that.Model.eventUris.setLayout] = that.renderLayout;
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[that.Model.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[that.Model.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.setLayout, that.render);
-      $.subscribe(that.Model.eventUris.setSelectedItemId, that.render);
-      $.subscribe(that.Model.eventUris.addItemOfInterest, that.render);
-      $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
-
-      that.Model = model;
-
-      return that;
     }
 
     return init();
@@ -8293,43 +8332,47 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'ResultListView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'ResultListView::init model not supplied';
+        }
+
+        if (!resultViewFactory) {
+          throw 'ResultListView::init resultViewFactory not supplied';
+        }
+
+        if (!itemModelPack) {
+          throw 'ResultListView::init itemModelPack not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+        _resultViewFactory = resultViewFactory;
+
+        _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
+        _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setMode, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+        $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'ResultListView::init ' + e;
       }
-
-      if (!resultViewFactory) {
-        throw 'ResultListView::init resultViewFactory not supplied';
-      }
-
-      if (!itemModelPack) {
-        throw 'ResultListView::init itemModelPack not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _resultViewFactory = resultViewFactory;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
-      _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
-      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-      _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.addBookmark, that.render);
-      $.subscribe(itemModelPack.bookmarkBookModel.eventUris.removeBookmark, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-      $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
-      $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
-
-      return that;
     }
 
     return init();
@@ -8455,25 +8498,29 @@ window.wizerati = {
     };
 
     function init() {
-      if (!model) {
-        throw 'SearchFormView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'SearchFormView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.model = model;
+
+        _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
+        _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
+        _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
+
+        $.subscribe(that.model.eventUris.default, that.render);
+        $.subscribe(that.model.eventUris.setIsWaiting, that.render);
+        $.subscribe(that.model.eventUris.setMode, that.render);
+        $.subscribe(that.model.eventUris.setKeywords, that.render);
+        $.subscribe(that.model.eventUris.setRate, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'SearchFormView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.model = model;
-
-      _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
-      _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
-      _renderOptimizations[that.model.eventUris.setKeywords] = that.renderSetKeywords;
-      _renderOptimizations[that.model.eventUris.setRate] = that.renderSetRate;
-
-      $.subscribe(that.model.eventUris.default, that.render);
-      $.subscribe(that.model.eventUris.setIsWaiting, that.render);
-      $.subscribe(that.model.eventUris.setMode, that.render);
-      $.subscribe(that.model.eventUris.setKeywords, that.render);
-      $.subscribe(that.model.eventUris.setRate, that.render);
-
-      return that;
     }
 
     return init();
@@ -8513,44 +8560,48 @@ window.wizerati = {
       that.renderSetSelectedTab(that.Model.getSelectedTab())
     };
 
-    this.renderSetSelectedTab = function(tab) {
+    this.renderSetSelectedTab = function (tab) {
       that.$el.attr('data-selected-tab', tab);
     };
 
-    this.renderAddOrRemoveItemOfInterest = function(id, count) {
+    this.renderAddOrRemoveItemOfInterest = function (id, count) {
       $('#btn-nav-comparison-list').attr('data-count', count || '');
 
-      if(count === 1) {
+      if (count === 1) {
         $('#btn-nav-comparison-list').addClass('pulse');
-        setTimeout(function(){
+        setTimeout(function () {
           $('#btn-nav-comparison-list').removeClass('pulse');
         }, 300);
       }
     };
 
     function init() {
-      if (!model) {
-        throw 'TabBarView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'TabBarView::init model not supplied';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'TabBarView::init itemsOfInterestModel not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        _itemsOfInterestModel = itemsOfInterestModel;
+
+        _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
+        _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
+        _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
+
+        $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
+        $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
+        $.subscribe(_itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'TabBarView::init ' + e;
       }
-
-      if (!itemsOfInterestModel) {
-        throw 'TabBarView::init itemsOfInterestModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
-      _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
-      _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
-
-      $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-
-      return that;
     }
 
     return init();
@@ -8593,48 +8644,52 @@ window.wizerati = {
       that.$el.attr('data-modal', that.Model.getModal());
     };
 
-    this.renderSetVisibilityMode = function(mode) {
+    this.renderSetVisibilityMode = function (mode) {
       that.$mainContainer.attr('data-visibility-mode', mode);
     };
 
-    this.renderSetAreTransitionsEnabled = function() {
-        that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
+    this.renderSetAreTransitionsEnabled = function () {
+      that.$el.attr('data-are-transitions-enabled', that.Model.getAreTransitionsEnabled());
     };
 
-    this.renderSetModal = function(modal) {
-        that.$el.attr('data-modal', modal);
+    this.renderSetModal = function (modal) {
+      that.$el.attr('data-modal', modal);
     };
 
-    this.renderSetUIMode = function(uiMode) {
-        that.$el.attr('data-ui-mode', uiMode);
+    this.renderSetUIMode = function (uiMode) {
+      that.$el.attr('data-ui-mode', uiMode);
     };
 
-    this.renderSetScrollLeft = function(left) {
+    this.renderSetScrollLeft = function (left) {
       that.$el.scrollToX({endX: left, duration: 1000});
     };
 
     function init() {
-      if (!model) {
-        throw 'UIRootView::init model not supplied';
+      try {
+        if (!model) {
+          throw 'UIRootView::init model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.Model = model;
+
+        _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
+        _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
+        _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
+        _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
+        _renderOptimizations[that.Model.eventUris.setScrollLeft] = that.renderSetScrollLeft;
+
+        $.subscribe(that.Model.eventUris.default, that.render);
+        $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
+        $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
+        $.subscribe(that.Model.eventUris.setModal, that.render);
+        $.subscribe(that.Model.eventUris.setUIMode, that.render);
+        $.subscribe(that.Model.eventUris.setScrollLeft, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'UIRootView::init ' + e;
       }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setVisibilityMode] = that.renderSetVisibilityMode;
-      _renderOptimizations[that.Model.eventUris.setAreTransitionsEnabled] = that.renderSetAreTransitionsEnabled;
-      _renderOptimizations[that.Model.eventUris.setModal] = that.renderSetModal;
-      _renderOptimizations[that.Model.eventUris.setUIMode] = that.renderSetUIMode;
-      _renderOptimizations[that.Model.eventUris.setScrollLeft] = that.renderSetScrollLeft;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-      $.subscribe(that.Model.eventUris.setVisibilityMode, that.render);
-      $.subscribe(that.Model.eventUris.setAreTransitionsEnabled, that.render);
-      $.subscribe(that.Model.eventUris.setModal, that.render);
-      $.subscribe(that.Model.eventUris.setUIMode, that.render);
-      $.subscribe(that.Model.eventUris.setScrollLeft, that.render);
-
-      return that;
     }
 
     return init();
@@ -9016,9 +9071,13 @@ window.wizerati = {
     $('body').attr('data-hover-is-enabled', 'false');
   }
 
-  $('#bookmark-list-panel').bind('scroll', function (e) {
-    window.stackHeads();
-  });
+  //We do not enable the fixed position bookmark headers on iOS due to jank.
+  if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+    $('#bookmark-list-panel').bind('scroll', function (e) {
+      window.stackHeads();
+    });
+  }
+
 
   window.stackHeads = function (e) {
     var fixedHeaders = document.getElementsByClassName('fixedheader');
@@ -9029,15 +9088,12 @@ window.wizerati = {
       var placeholder = getPrevNext(currentHeader)[0];
       var currentScrollPosY = panel.scrollTop;
       var placeholderPosY = findPosY(placeholder);
-      console.log('currentScrollPosY: %s. findPosY(placeholder): %s', currentScrollPosY, findPosY(placeholder));
 
       if (currentScrollPosY > placeholderPosY) {
         //if our scroll position in the panel is father than the placeholder of the current header's position in the DOM...
         if (typeof nextHeader != 'undefined') {
           //If this isn't the last header.
           var distanceToNextHeader = findPosY(nextHeader) - currentScrollPosY;
-          console.log('findPosY(nextHeader): %s', findPosY(nextHeader));
-          console.log('distanceToNextHeader: %s', distanceToNextHeader);
           //the difference between our scroll position and the header's placeholder's position
           if (distanceToNextHeader < currentHeader.offsetHeight) { //offsetHeight ===  height of element inc padding, border
             //if we have less distance between the placeholder of the next element and the top of of the page than the height of the current header, we push the header up so it doesn't overlap.
