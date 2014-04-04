@@ -19,18 +19,6 @@
           c.homeController.index();
         });
 
-//        router.registerRoute('/session/create', function (model) {
-//          c.sessionController.create(model);
-//        });
-//
-//        router.registerRoute('/login', function () {
-//          c.loginController.index();
-//        });
-//
-//        router.registerRoute('/advertisers', function () {
-//          c.advertisersController.index();
-//        });
-
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
         }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
@@ -54,10 +42,6 @@
         router.registerRoute('/comparisonlist', function (dto) {
           c.comparisonListController.index(dto);
         });
-
-//        router.registerRoute('/selectedcubeface/update', function (dto) {
-//          c.selectedCubeFaceController.update(dto);
-//        }, { silent: true });
 
         router.registerRoute('/itemsofinterest/create', function (dto) {
           c.itemsOfInterestController.create(dto);
@@ -99,34 +83,6 @@
           c.searchFormModeController.update(dto);
         }, { silent: true });
 
-//        router.registerRoute('/selectednavbaritem/update', function (dto) {
-//          c.selectedNavbarItemController.update(dto);
-//        }, { silent: true });
-
-//        router.registerRoute('/purchasepanel', function (dto) {
-//          c.purchasePanelController.index(dto);
-//        });
-//
-//        router.registerRoute('/purchasepanel/destroy', function (dto) {
-//          c.purchasePanelController.destroy(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/accountactivationpanel', function (dto) {
-//          c.accountActivationPanelController.index(dto);
-//        });
-//
-//        router.registerRoute('/accountactivationpanel/destroy', function (dto) {
-//          c.accountActivationPanelController.destroy(dto);
-//        });
-//
-//        router.registerRoute('/accountactivation/create', function (dto) {
-//          c.accountActivationController.create(dto);
-//        });
-//
-//        router.registerRoute('/purchasepanelaccounts/create', function (dto) {
-//          c.purchasePanelAccountsController.create(dto);
-//        });
-//
         router.registerRoute('/searchpanelmode/update', function (dto) {
           c.searchPanelModeController.update(dto);
         }, { silent: true });
@@ -134,30 +90,6 @@
         router.registerRoute('/search/edit', function (dto) {
           c.searchController.edit(dto);
         });
-//
-//        router.registerRoute('/resultlistmode/update', function (dto) {
-//          c.resultListModeController.update(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/favoritegroup/create', function (dto) {
-//          c.favoriteGroupController.create(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/favoritegroup/destroy', function (dto) {
-//          c.favoriteGroupController.destroy(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/favoritescubemode/update', function (dto) {
-//          c.favoritesCubeModeController.update(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/deletefavoritegroupconfirmationdialog', function (dto) {
-//          c.deleteFavoriteGroupConfirmationDialogController.index(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/deletefavoritegroupconfirmationdialog/destroy', function (dto) {
-//          c.deleteFavoriteGroupConfirmationDialogController.destroy(dto);
-//        }, { silent: true });
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;

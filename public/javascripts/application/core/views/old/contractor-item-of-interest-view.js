@@ -1,53 +1,53 @@
-(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorItemOfInterestView(model) {
-
-    if (!(this instanceof app.ContractorItemOfInterestView)) {
-      return new app.ContractorItemOfInterestView(model);
-    }
-
-    var that = this,
-        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
-        _templateName = 'item-of-interest.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-id', that.Model.id);
-
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      }
-
-      if (that.Model.shouldAnimateIn) {
-        that.$el.css({ left: '-' + model.width});
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorItemOfInterestView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
-  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
-
-}(wizerati, $, invertebrate));
+//(function (app, $, invertebrate) {
+//  'use strict';
+//
+//  function ContractorItemOfInterestView(model) {
+//
+//    if (!(this instanceof app.ContractorItemOfInterestView)) {
+//      return new app.ContractorItemOfInterestView(model);
+//    }
+//
+//    var that = this,
+//        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
+//        _templateName = 'item-of-interest.html';
+//
+//    this.$el = $(_el);
+//    this.Model = null;
+//
+//    this.render = function () {
+//      that.$el.attr('data-id', that.Model.id);
+//
+//      if (that.Model.isSelected) {
+//        that.$el.addClass('selected');
+//      }
+//
+//      if (that.Model.shouldAnimateIn) {
+//        that.$el.css({ left: '-' + model.width});
+//      }
+//
+//      app.instance.renderTemplate(that.$el,
+//          _templateName,
+//          that.Model,
+//          {});
+//
+//      return that;
+//    };
+//
+//    function init() {
+//      if (!model) {
+//        throw 'ContractorItemOfInterestView::init model not supplied';
+//      }
+//
+//      that = $.decorate(that, app.mod('decorators').decorators.trace);
+//      that.Model = model;
+//
+//      return that;
+//    }
+//
+//    return init();
+//  }
+//
+//  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
+//  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
+//
+//}(wizerati, $, invertebrate));

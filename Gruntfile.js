@@ -23,6 +23,7 @@ module.exports = function (grunt) {
           'public/javascripts/vendor/invertebrate/**.js',
           'public/javascripts/application/wizerati.js',
           'public/javascripts/application/core/**/*.js',
+          '!public/javascripts/application/core/**/old/*.js',
           'public/javascripts/application/module-registry.js',
           'public/javascripts/application/env.js',
           'public/javascripts/application/app-start.js'

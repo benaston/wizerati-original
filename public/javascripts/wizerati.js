@@ -2951,6 +2951,49 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function ActionedItemsController(actionedItemsModel) {
+
+    if (!(this instanceof app.ActionedItemsController)) {
+      return new app.ActionedItemsController(actionedItemsModel);
+    }
+
+    var that = this,
+        _actionedItemsModel = null,
+        _modalEnum = app.mod('enum').Modal;
+
+    this.create = function (dto) {
+      if (!dto) {
+        throw 'dto not supplied.';
+      }
+
+      _uiRootModel.setModal(_modalEnum.ActionItem);
+//      _actionedItemsModel.addActionedItemId(dto.id);
+    };
+
+    this.destroy = function (dto) {
+
+      _actionedItemsModel.removeActionedItemId(dto.id);
+    };
+
+    function init() {
+      if (!actionedItemsModel) {
+        throw 'ActionedItemsController::init actionedItemsModel not supplied.';
+      }
+
+      _actionedItemsModel = actionedItemsModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ActionedItemsController = ActionedItemsController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function ApplyToContractDialogController(service) {
 
     if (!(this instanceof app.ApplyToContractDialogController)) {
@@ -3273,670 +3316,6 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ItemsOfInterestPanelModeController(itemsOfInterestModel) {
-
-    if (!(this instanceof app.ItemsOfInterestPanelModeController)) {
-      return new app.ItemsOfInterestPanelModeController(itemsOfInterestModel);
-    }
-
-    var that = this,
-        _itemsOfInterestModel = null;
-
-    this.update = function (dto) {
-      try {
-        if (itemsOfInterestModel.getMode() !== dto.mode) {
-          _itemsOfInterestModel.setMode(dto.mode);
-        }
-      } catch (err) {
-        console.log('error: ItemsOfInterestPanelModeController.update. ' + err);
-      }
-    };
-
-    function init() {
-      if (!itemsOfInterestModel) {
-        throw 'ItemsOfInterestPanelModeController::init itemsOfInterestModel not supplied.';
-      }
-
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ItemsOfInterestPanelModeController = ItemsOfInterestPanelModeController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function LoginController(loginPanelModel, uiRootModel) {
-
-    if (!(this instanceof app.LoginController)) {
-      return new app.LoginController(loginPanelModel, uiRootModel);
-    }
-
-    var that = this,
-        _loginPanelModel = null,
-        _uiRootModel = null,
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.index = function () {
-      try {
-        _uiRootModel.setUIMode(_uiModeEnum.LogIn);
-        _loginPanelModel.setIsVisible(true);
-      } catch (err) {
-        console.log('error: LoginController.index');
-      }
-    };
-
-    function init() {
-      if (!loginPanelModel) {
-        throw 'LoginController::init loginPanelModel not supplied.';
-      }
-      if (!uiRootModel) {
-        throw 'LoginController::init uiRootModel not supplied.';
-      }
-
-      _loginPanelModel = loginPanelModel;
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.LoginController = LoginController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function AccountActivationController(uiRootModel) {
-
-    if (!(this instanceof app.AccountActivationController)) {
-      return new app.AccountActivationController(uiRootModel);
-    }
-
-    var that = this,
-        _uiRootModel = null;
-
-    this.create = function (dto) {
-
-      //send the key to the server and render the result
-    };
-
-    function init() {
-      if (!uiRootModel) {
-        throw 'AccountActivationController::init uiRootModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AccountActivationController = AccountActivationController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function AccountActivationPanelController(uiRootModel) {
-
-    if (!(this instanceof app.AccountActivationPanelController)) {
-      return new app.AccountActivationPanelController(uiRootModel);
-    }
-
-    var that = this,
-        _uiRootModel = null,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _modalEnum = app.mod('enum').Modal;
-
-    this.index = function () {
-      _uiRootModel.setModal(_modalEnum.AccountActivation);
-    };
-
-    this.destroy = function (dto) {
-      try {
-        _uiRootModel.setModal(null);
-      } catch (e) {
-        console.log('error: AccountActivationPanelController.destroy. ' + e);
-      }
-
-      var uiMode = _uiRootModel.getUIMode();
-
-      //refactor?
-      if (uiMode === _uiModeEnum.Start) {
-        app.instance.router.redirect('/');
-      } else if (uiMode === _uiModeEnum.InUse) {
-        app.instance.router.redirect('/search');
-      } else {
-        throw 'invalid UI mode';
-      }
-    };
-
-    function init() {
-      if (!uiRootModel) {
-        throw 'AccountActivationPanelController::init uiRootModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AccountActivationPanelController = AccountActivationPanelController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ActionedItemsController(actionedItemsModel) {
-
-    if (!(this instanceof app.ActionedItemsController)) {
-      return new app.ActionedItemsController(actionedItemsModel);
-    }
-
-    var that = this,
-        _actionedItemsModel = null,
-        _modalEnum = app.mod('enum').Modal;
-
-    this.create = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
-
-      _uiRootModel.setModal(_modalEnum.ActionItem);
-//      _actionedItemsModel.addActionedItemId(dto.id);
-    };
-
-    this.destroy = function (dto) {
-
-      _actionedItemsModel.removeActionedItemId(dto.id);
-    };
-
-    function init() {
-      if (!actionedItemsModel) {
-        throw 'ActionedItemsController::init actionedItemsModel not supplied.';
-      }
-
-      _actionedItemsModel = actionedItemsModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ActionedItemsController = ActionedItemsController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function AdvertisersController(uiRootModel) {
-
-    if (!(this instanceof app.AdvertisersController)) {
-      return new app.AdvertisersController(uiRootModel);
-    }
-
-    var that = this,
-        _uiRootModel = null,
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.index = function () {
-      try {
-        _uiRootModel.setUIMode(_uiModeEnum.Purchase);
-      } catch (err) {
-        console.log('error: AdvertisersController.index');
-      }
-    };
-
-    function init() {
-      if (!uiRootModel) {
-        throw 'AdvertisersController::init uiRootModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AdvertisersController = AdvertisersController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogController(deleteFavoriteGroupConfirmationDialogModel, uiRootModel) {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogController)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogController(deleteFavoriteGroupConfirmationDialogModel, uiRootModel);
-    }
-
-    var that = this,
-        _deleteFavoriteGroupConfirmationDialogModel = null,
-        _uiRootModel = null,
-        _modalEnum = app.mod('enum').Modal;
-
-    this.index = function (dto) {
-      if (dto.__isInvertebrateExternal__) {
-        app.instance.router.redirect('/');
-        return;
-      }
-
-      _deleteFavoriteGroupConfirmationDialogModel.setFavoriteGroupId(dto.id);
-
-      if (_uiRootModel.getModal() != _modalEnum.DeleteFavoriteGroupConfirmationDialog) {
-        _uiRootModel.setModal(_modalEnum.DeleteFavoriteGroupConfirmationDialog);
-      }
-    };
-
-    this.destroy = function (dto) {
-      try {
-        _uiRootModel.setModal(null);
-      } catch (err) {
-        console.log('error: DeleteFavoriteGroupConfirmationDialogController.destroy. ' + err);
-      }
-    };
-
-    function init() {
-      if (!deleteFavoriteGroupConfirmationDialogModel) {
-        throw 'DeleteFavoriteGroupConfirmationDialogController::init deleteFavoriteGroupConfirmationDialogModel not supplied.';
-      }
-
-      if (!uiRootModel) {
-        throw 'DeleteFavoriteGroupConfirmationDialogController::init uiRootModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-      _deleteFavoriteGroupConfirmationDialogModel = deleteFavoriteGroupConfirmationDialogModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogController = DeleteFavoriteGroupConfirmationDialogController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function FavoriteGroupController(favoritesCubeModel, uiRootModel) {
-
-    if (!(this instanceof app.FavoriteGroupController)) {
-      return new app.FavoriteGroupController(favoritesCubeModel, uiRootModel);
-    }
-
-    var that = this,
-        _favoritesCubeModel = null,
-        _uiRootModel = null;
-
-    this.create = function () {
-      var faceStatuses = _favoritesCubeModel.getFaceStatuses();
-      if (faceStatuses.indexOf(false) === -1) {
-        throw 'Up to six favorite groups may be created.';
-      }
-
-      faceStatuses[faceStatuses.indexOf(false)] = true;
-      _favoritesCubeModel.setFaceStatuses(faceStatuses);
-    };
-
-    this.destroy = function (dto) {
-      if (dto.id == null) {
-        throw 'id not supplied.';
-      }
-
-      _favoritesCubeModel.deactivateFace(dto.id);
-      _uiRootModel.setModal(null);
-    };
-
-    function init() {
-      if (!favoritesCubeModel) {
-        throw 'FavoriteGroupController::init favoritesCubeModel not supplied.';
-      }
-
-      if (!uiRootModel) {
-        throw 'FavoriteGroupController::init uiRootModel not supplied.';
-      }
-
-      _favoritesCubeModel = favoritesCubeModel;
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.FavoriteGroupController = FavoriteGroupController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function FavoritesController(favoritesCubeModel, selectedCubeFaceModel) {
-
-    if (!(this instanceof app.FavoritesController)) {
-      return new app.FavoritesController(favoritesCubeModel,
-          selectedCubeFaceModel);
-    }
-
-    var that = this,
-        _favoritesCubeModel = null,
-        _selectedCubeFaceModel = null;
-
-    this.create = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
-
-      var currentCubeFace = _selectedCubeFaceModel.getSelectedCubeFaceId();
-      if (_.find(_favoritesCubeModel.getFavorites[currentCubeFace], function (id) {
-        return id === dto.id;
-      })) {
-        return;
-      }
-
-      _favoritesCubeModel.addFavorite(dto.id, currentCubeFace);
-    };
-
-    this.destroy = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
-
-      _favoritesCubeModel.removeFavorite(dto.id, _selectedCubeFaceModel.getSelectedCubeFaceId());
-    };
-
-    function init() {
-      if (!favoritesCubeModel) {
-        throw 'FavoritesController::init favoritesCubeModel not supplied.';
-      }
-
-      if (!selectedCubeFaceModel) {
-        throw 'FavoritesController:selectedCubeFaceModel not supplied.';
-      }
-
-      _favoritesCubeModel = favoritesCubeModel;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.FavoritesController = FavoritesController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function FavoritesCubeModeController(favoritesCubeModel) {
-
-    if (!(this instanceof app.FavoritesCubeModeController)) {
-      return new app.FavoritesCubeModeController(favoritesCubeModel);
-    }
-
-    var that = this,
-        _favoritesCubeModel = null;
-
-    this.update = function (dto) {
-      _favoritesCubeModel.setMode(dto.mode);
-    };
-
-    function init() {
-      if (!favoritesCubeModel) {
-        throw 'FavoritesCubeModeController::init favoritesCubeModel not supplied.';
-      }
-
-      _favoritesCubeModel = favoritesCubeModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.FavoritesCubeModeController = FavoritesCubeModeController;
-
-}(wizerati));
-;//(function (app) {
-//  "use strict";
-//
-//  function ItemsController(uiRootModel, singleItemModel, itemRepository) {
-//
-//    if (!(this instanceof app.ItemsController)) {
-//      return new app.ItemsController(uiRootModel, singleItemModel, itemRepository);
-//    }
-//
-//    var that = this,
-//        _uiModeEnum = wizerati.mod("enum").UIMode,
-//        _uiRootModel = null,
-//        _singleItemModel = null,
-//        _itemRepository = null;
-//
-//    this.show = function (dto) {
-//      try {
-//        _uiRootModel.setUIMode(_uiModeEnum.SingleItem);
-//        _itemRepository.getById(dto.id, function (item) {
-//          _singleItemModel.setItem(item.id);
-//        });
-//      } catch (err) {
-//        console.log("error: ItemsController.show. " + err);
-//      }
-//    };
-//
-//    this.uriTransformShow = function (uri, dto) {
-//      return uri + '?id=' + encodeURIComponent(dto.id);
-//    };
-//
-//    function init() {
-//      if (!uiRootModel) {
-//        throw "uiRootModel not supplied.";
-//      }
-//
-//      if (!searchFormModel) {
-//        throw "searchFormModel not supplied.";
-//      }
-//
-//      if (!searchService) {
-//        throw "searchService not supplied.";
-//      }
-//
-//      if (!resultListModel) {
-//        throw "resultListModel not supplied.";
-//      }
-//
-//      _uiRootModel = uiRootModel;
-//      _searchFormModel = searchFormModel;
-//      _searchService = searchService;
-//      _resultListModel = resultListModel;
-//
-//      return that;
-//    }
-//
-//    return init();
-//  }
-//
-//  app.ItemsController = ItemsController;
-//
-//}(wizerati));
-//
-//
-////throw "script downloaded to be assigned to an object in a known location and then subsequently invoked by the search controller for wait, success, fail, timeout";
-;(function (app) {
-  'use strict';
-
-  //for account entity manipulation for the purchase panel
-  function PurchasePanelAccountsController(purchasePanelModel, accountService) {
-
-    if (!(this instanceof app.PurchasePanelAccountsController)) {
-      return new app.PurchasePanelAccountsController(purchasePanelModel, accountService);
-    }
-
-    var that = this,
-        _accountService = null,
-        _purchasePanelModel = null,
-        _modalEnum = app.mod('enum').Modal;
-
-    this.create = function (dto) {
-      try {
-        _accountService.create(dto.name, dto.email,
-            { success: function () {
-              _purchasePanelModel.setIsWaiting(' ');
-              app.instance.router.redirect('/purchasepanel?tab=3');
-            },
-              fail: function () {
-                _purchasePanelModel.setIsWaiting(' ');
-                var notifications = _purchasePanelModel.getNotifications();
-                notifications.push({type: 'error', message: 'An error occurred while creating your account.'});
-                _purchasePanelModel.setNotifications(notifications);
-              },
-              wait: function () {
-                _purchasePanelModel.setIsWaiting('success');
-              },
-              timeout: function () {
-                _purchasePanelModel.setIsTimedOut('success');
-              } });
-      }
-      catch (e) {
-        throw 'error in PurchasePanelAccountsController.create. ' + e;
-      }
-    };
-
-    function init() {
-      if (!purchasePanelModel) {
-        throw 'PurchasePanelAccountsController::init purchasePanelModel not supplied.';
-      }
-
-      if (!accountService) {
-        throw 'PurchasePanelAccountsController:init accountService not supplied.';
-      }
-
-      _purchasePanelModel = purchasePanelModel;
-      _accountService = accountService;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.PurchasePanelAccountsController = PurchasePanelAccountsController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function PurchasePanelController(purchasePanelModel, uiRootModel) {
-
-    if (!(this instanceof app.PurchasePanelController)) {
-      return new app.PurchasePanelController(purchasePanelModel, uiRootModel);
-    }
-
-    var that = this,
-        _purchasePanelModel = null,
-        _uiRootModel = null,
-        _modalEnum = app.mod('enum').Modal;
-
-    this.index = function (dto) {
-      try {
-        if (_uiRootModel.getModal() != _modalEnum.Purchase) {
-          _uiRootModel.setModal(_modalEnum.Purchase);
-        }
-
-        _purchasePanelModel.setActiveTab(dto.tab);
-      } catch (err) {
-        console.log('PurchasePanelController::index error.' + err);
-      }
-    };
-
-    this.destroy = function (dto) {
-      try {
-        _uiRootModel.setModal(null);
-      } catch (err) {
-        console.log('PurchasePanelController::destroy error.' + err);
-      }
-    };
-
-    function init() {
-      if (!purchasePanelModel) {
-        throw 'PurchasePanelController::init purchasePanelModel not supplied.';
-      }
-
-      if (!uiRootModel) {
-        throw 'PurchasePanelController::init uiRootModel not supplied.';
-      }
-
-      _purchasePanelModel = purchasePanelModel;
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.PurchasePanelController = PurchasePanelController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ResultListModeController(resultListModel) {
-
-    if (!(this instanceof app.ResultListModeController)) {
-      return new app.ResultListModeController(resultListModel);
-    }
-
-    var that = this,
-        _resultListModel = null;
-
-    this.update = function (dto) {
-      try {
-        if (_resultListModel.getMode() !== dto.mode) {
-          _resultListModel.setMode(dto.mode);
-        }
-      } catch (err) {
-        console.log('error: ResultListModeController.update. ' + err);
-      }
-    };
-
-    function init() {
-      if (!resultListModel) {
-        throw 'ResultListModeController::init resultListModel not supplied.';
-      }
-
-      _resultListModel = resultListModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ResultListModeController = ResultListModeController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
   function SearchController(uiModelPack, searchService, searchControllerHelper) {
 
     if (!(this instanceof app.SearchController)) {
@@ -4078,42 +3457,6 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SelectedCubeFaceController(selectedCubeFaceModel) {
-
-    if (!(this instanceof app.SelectedCubeFaceController)) {
-      return new app.SelectedCubeFaceController(selectedCubeFaceModel);
-    }
-
-    var that = this,
-        _selectedCubeFaceModel = null;
-
-    this.update = function (dto) {
-      try {
-        _selectedCubeFaceModel.setSelectedCubeFaceId(dto.id);
-      } catch (err) {
-        console.log('SelectedCubeFaceController::update ' + err);
-      }
-    };
-
-    function init() {
-      if (!selectedCubeFaceModel) {
-        throw 'SelectedCubeFaceController:init selectedCubeFaceModel not supplied.';
-      }
-
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SelectedCubeFaceController = SelectedCubeFaceController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
   function SelectedItemController(resultListModel, itemsOfInterestModel) {
 
     if (!(this instanceof app.SelectedItemController)) {
@@ -4163,91 +3506,6 @@ window.wizerati = {
   app.SelectedItemController = SelectedItemController;
 
 }(wizerati));
-;//(function (app) {
-//  'use strict';
-//
-//  function SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel) {
-//
-//    if (!(this instanceof app.SelectedNavbarItemController)) {
-//      return new app.SelectedNavbarItemController(model, searchPanelModel, bookmarkPanelModel, itemsOfInterestModel);
-//    }
-//
-//    var that = this,
-//        _model = null,
-//        _searchPanelModel = null,
-//        _bookmarkPanelModel = null,
-//        _itemsOfInterestModel = null,
-//        _resultListPanelModel = null,
-//        _tabEnum = app.mod('enum').Tab,
-//        _searchPanelModeEnum = app.mod('enum').SearchPanelMode,
-//        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-//        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-//        _resultListPanelModeEnum = app.mod('enum').ResultListMode;
-//
-//    this.update = function (dto) {
-//      try {
-//        if (_model.getSelectedTab() === dto.navbarItem) {
-//          return;
-//        }
-//
-//        _model.setSelectedTab(dto.navbarItem);
-//
-//        //move coordination of minimization etc into controllers redirected to
-//        if (dto.navbarItem === _tabEnum.Search) {
-//          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-//          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
-//          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-//          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-//
-//          app.instance.router.redirect('/search', { keywords: _searchPanelModel.getKeywords(), r: _searchPanelModel.getRate() }); //consider avoiding the running of new search unnecessarily
-//        } else if (dto.navbarItem === _tabEnum.Bookmark) {
-//          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-//          _resultListPanelModel.setMode(_resultListPanelModeEnum.Default);
-//          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-//          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-//          app.instance.router.redirect('/bookmarks');
-//        } else if (dto.navbarItem === _tabEnum.ComparisonList) {
-//          _searchPanelModel.setMode(_searchPanelModeEnum.Minimized);
-//          _bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-//          _itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-//          app.instance.router.redirect('/comparisonlist');
-//        }
-//      } catch (err) {
-//        console.log('SelectedNavbarItemController::update ' + err);
-//      }
-//    };
-//
-//    function init() {
-//      if (!model) {
-//        throw 'SelectedNavbarItemController::init model not supplied.';
-//      }
-//
-//      if (!searchPanelModel) {
-//        throw 'SelectedNavbarItemController::init searchPanelModel not supplied.';
-//      }
-//
-//      if (!bookmarkPanelModel) {
-//        throw 'SelectedNavbarItemController::init bookmarkPanelModel not supplied.';
-//      }
-//
-//      if (!itemsOfInterestModel) {
-//        throw 'SelectedNavbarItemController::init itemsOfInterestModel not supplied.';
-//      }
-//
-//      _model = model;
-//      _searchPanelModel = searchPanelModel;
-//      _bookmarkPanelModel = bookmarkPanelModel;
-//      _itemsOfInterestModel = itemsOfInterestModel;
-//
-//      return that;
-//    }
-//
-//    return init();
-//  }
-//
-//  app.SelectedNavbarItemController = SelectedNavbarItemController;
-//
-//}(wizerati));
 ;(function (app) {
   'use strict';
 
@@ -5568,85 +4826,6 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function AdvertisersPanelModel() {
-
-    if (!(this instanceof app.AdvertisersPanelModel)) {
-      return new app.AdvertisersPanelModel();
-    }
-
-    var that = this,
-        _isVisible = false;
-
-    this.updateEventUri = 'update://advertiserspanelmodel';
-
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AdvertisersPanelModel = AdvertisersPanelModel;
-  invertebrate.Model.isExtendedBy(app.AdvertisersPanelModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $) {
-  'use strict';
-
-  function BookmarkPanelModel() {
-
-    if (!(this instanceof app.BookmarkPanelModel)) {
-      return new app.BookmarkPanelModel();
-    }
-
-    var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _mode = _bookmarkPanelModeEnum.Minimized;
-
-    this.eventUris = {
-      default: 'update://bookmarkpanelmodel/',
-      setMode: 'update://bookmarkpanelmodel/setmode'
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value, options) {
-      if (_mode === value) {
-        return;
-      }
-
-      options = options || { silent: false };
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, _mode);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkPanelModel = BookmarkPanelModel;
-
-}(wizerati, $));
-;(function (app, $, invertebrate) {
-  'use strict';
-
   function PurchasePanelModel() {
 
     if (!(this instanceof app.PurchasePanelModel)) {
@@ -6452,18 +5631,6 @@ window.wizerati = {
           c.homeController.index();
         });
 
-//        router.registerRoute('/session/create', function (model) {
-//          c.sessionController.create(model);
-//        });
-//
-//        router.registerRoute('/login', function () {
-//          c.loginController.index();
-//        });
-//
-//        router.registerRoute('/advertisers', function () {
-//          c.advertisersController.index();
-//        });
-
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
         }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
@@ -6487,10 +5654,6 @@ window.wizerati = {
         router.registerRoute('/comparisonlist', function (dto) {
           c.comparisonListController.index(dto);
         });
-
-//        router.registerRoute('/selectedcubeface/update', function (dto) {
-//          c.selectedCubeFaceController.update(dto);
-//        }, { silent: true });
 
         router.registerRoute('/itemsofinterest/create', function (dto) {
           c.itemsOfInterestController.create(dto);
@@ -6532,34 +5695,6 @@ window.wizerati = {
           c.searchFormModeController.update(dto);
         }, { silent: true });
 
-//        router.registerRoute('/selectednavbaritem/update', function (dto) {
-//          c.selectedNavbarItemController.update(dto);
-//        }, { silent: true });
-
-//        router.registerRoute('/purchasepanel', function (dto) {
-//          c.purchasePanelController.index(dto);
-//        });
-//
-//        router.registerRoute('/purchasepanel/destroy', function (dto) {
-//          c.purchasePanelController.destroy(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/accountactivationpanel', function (dto) {
-//          c.accountActivationPanelController.index(dto);
-//        });
-//
-//        router.registerRoute('/accountactivationpanel/destroy', function (dto) {
-//          c.accountActivationPanelController.destroy(dto);
-//        });
-//
-//        router.registerRoute('/accountactivation/create', function (dto) {
-//          c.accountActivationController.create(dto);
-//        });
-//
-//        router.registerRoute('/purchasepanelaccounts/create', function (dto) {
-//          c.purchasePanelAccountsController.create(dto);
-//        });
-//
         router.registerRoute('/searchpanelmode/update', function (dto) {
           c.searchPanelModeController.update(dto);
         }, { silent: true });
@@ -6567,30 +5702,6 @@ window.wizerati = {
         router.registerRoute('/search/edit', function (dto) {
           c.searchController.edit(dto);
         });
-//
-//        router.registerRoute('/resultlistmode/update', function (dto) {
-//          c.resultListModeController.update(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/favoritegroup/create', function (dto) {
-//          c.favoriteGroupController.create(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/favoritegroup/destroy', function (dto) {
-//          c.favoriteGroupController.destroy(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/favoritescubemode/update', function (dto) {
-//          c.favoritesCubeModeController.update(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/deletefavoritegroupconfirmationdialog', function (dto) {
-//          c.deleteFavoriteGroupConfirmationDialogController.index(dto);
-//        }, { silent: true });
-//
-//        router.registerRoute('/deletefavoritegroupconfirmationdialog/destroy', function (dto) {
-//          c.deleteFavoriteGroupConfirmationDialogController.destroy(dto);
-//        }, { silent: true });
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;
@@ -6991,6 +6102,51 @@ window.wizerati = {
 //                _.each(results, function (r) {
 //                    resultModels.push(_resultModelFactory.create(r));
 //                });
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ApplyToContractDialogView(model) {
+
+    if (!(this instanceof app.ApplyToContractDialogView)) {
+      return new app.ApplyToContractDialogView(model);
+    }
+
+    var that = this,
+        _el = '#apply-to-contract-dialog',
+        _jobTitleEl = '.job-title',
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.$el = null;
+    this.Model = null;
+
+    this.render = function () {
+      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
+    };
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+    };
+
+    function init() {
+      if (!model) {
+        throw 'ApplyToContractDialogView::init model not supplied';
+      }
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      that.Model = model;
+
+      $.subscribe(that.Model.eventUris.default, that.render);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogView = ApplyToContractDialogView;
+  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
+
+}(wizerati, $, invertebrate));
 ;(function (app, $, inv) {
   'use strict';
 
@@ -7056,7 +6212,8 @@ window.wizerati = {
     function renderCount() {
       var count = that.Model.getBookmarks().length || 'no';
       var noun = count === 1 ? 'bookmark' : 'bookmarks';
-      that.$elSummary.html('<h1>You have ' + count + ' ' + noun + '.</h1>');
+      var postscript = count === 'no' ? ' Create bookmarks using the "bookmark" button.' : '';
+      that.$elSummary.html('<h1>You have ' + count + ' ' + noun + '.' + postscript + '</h1>');
     }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
@@ -7619,647 +6776,6 @@ window.wizerati = {
 
   app.ItemsOfInterestView = ItemsOfInterestView;
   invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function AccountActivationView(model) {
-
-    if (!(this instanceof app.AccountActivationView)) {
-      return new app.AccountActivationView(model);
-    }
-
-    var that = this,
-        _el = '#activation-panel';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'AccountActivationView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.AccountActivationView = AccountActivationView;
-  invertebrate.View.isExtendedBy(app.AccountActivationView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ApplyToContractDialogView(model) {
-
-    if (!(this instanceof app.ApplyToContractDialogView)) {
-      return new app.ApplyToContractDialogView(model);
-    }
-
-    var that = this,
-        _el = '#apply-to-contract-dialog',
-        _jobTitleEl = '.job-title',
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.find(_jobTitleEl).html(that.Model.getItem().title);
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ApplyToContractDialogView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ApplyToContractDialogView = ApplyToContractDialogView;
-  invertebrate.View.isExtendedBy(app.ApplyToContractDialogView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, _) {
-  'use strict';
-
-  function BookmarkBookView(model) {
-
-    if (!(this instanceof app.BookmarkBookView)) {
-      return new app.BookmarkBookView(model);
-    }
-
-    var that = this,
-        _el = '#favorites-cube',
-        _favoriteViewFactory = null,
-        _selectedCubeFaceModel = null,
-        _actionedItemsModel = null,
-        _hiddenItemsModel = null,
-        _itemsOfInterestModel = null,
-        _bookmarkService = null,
-        _labelEls = [ '.cube-face-labels li:nth-child(1)',   //top
-          '.cube-face-labels li:nth-child(2)',   //left
-          '.cube-face-labels li:nth-child(3)',   //front
-          '.cube-face-labels li:nth-child(4)',   //right
-          '.cube-face-labels li:nth-child(5)',   //bottom
-          '.cube-face-labels li:nth-child(6)' ], //back
-        _faceEls = ['.top', '.left', '.front', '.right', '.bottom', '.back' ],
-        _modeEnum = app.mod('enum').FavoritesCubeMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var mode = that.Model.getMode();
-      that.$el.attr('data-mode', mode);
-      that.$el.find('.favorites-cube-edit-link').attr('href', '/favoritescubemode/update?mode=' + (mode === _modeEnum.Default ? _modeEnum.Edit : _modeEnum.Default));
-      that.$el.find('.favorites-cube-edit-link').text((mode === _modeEnum.Default ? 'edit' : 'done'));
-      that.$el.find('.cube-controls').attr('data-active-faces', that.Model.getFaceStatuses().reduce(function (previousValue, currentValue, index, array) {
-        return previousValue + (currentValue ? '1' : '0');
-      }, ''));
-
-      if (_.flatten(that.Model.getFavorites(), true).length === 0) {
-        that.$el.addClass('hide');
-        return;
-      } else {
-        that.$el.removeClass('hide');
-      }
-
-      $.each(that.Model.getFavorites(), function (index1, faceFavorites) {
-        var $face = that.$el.find(_faceEls[index1]);
-        var $faceSelectorSpots = that.$el.find('.face-selector:nth-child(' + (index1 + 1) + ') .spot'); //plus 1 because 1-based in DOM
-        $face.find('*').not('.face-empty-message').remove();
-        $faceSelectorSpots.removeClass('filled');
-        $.each(faceFavorites, function (index2, f) {
-          _favoriteViewFactory.create(f, _selectedCubeFaceModel.getSelectedCubeFaceId(), function ($v) {
-            $face.append($v);
-            $($faceSelectorSpots[index2]).addClass('filled');
-          });
-        });
-      });
-
-      that.$el.attr('data-selected-face-id',
-          _selectedCubeFaceModel.getSelectedCubeFaceId());
-
-      var faceLabels = that.Model.getFaceLabels();
-      $.each(_labelEls, function (index, el) {
-        $(el).text(faceLabels[index]);
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.render();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'FavoritesCubeView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoriteViewFactory = favoriteViewFactory;
-      _selectedCubeFaceModel = selectedCubeFaceModel;
-      _hiddenItemsModel = hiddenItemsModel;
-      _actionedItemsModel = actionedItemsModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _bookmarkService = bookmarkService;
-
-      $.subscribe(that.Model.updateEventUriPrivate, that.render);
-      $.subscribe(that.Model.updateEventUri, that.render);
-      $.subscribe(_selectedCubeFaceModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.render);
-      $.subscribe(_hiddenItemsModel.updateEventUri, that.render);
-      $.subscribe(_actionedItemsModel.updateEventUri, that.render);
-      $.subscribe(_itemsOfInterestModel.eventUris.default, that.render);
-      $.subscribe(_bookmarkService.eventUris.addFavorite, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkBookView = BookmarkBookView;
-  invertebrate.View.isExtendedBy(app.BookmarkBookView);
-
-}(wizerati, $, invertebrate, _));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function BookmarkPanelView(model) {
-
-    if (!(this instanceof app.BookmarkPanelView)) {
-      return new app.BookmarkPanelView(model);
-    }
-
-    var that = this,
-        _el = '#bookmark-panel-container',
-        _renderOptimizations = {};
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (e) {
-      if (e && _renderOptimizations[e.type]) {
-        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
-        return;
-      }
-
-      that.renderSetMode();
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$navPanel = $('#nav-panel');
-    };
-
-    this.renderSetMode = function(mode) {
-      that.$el.attr('data-mode', that.Model.getMode());
-    };
-
-    function init() {
-      if (!model) {
-        throw 'BookmarkPanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
-
-      $.subscribe(that.Model.eventUris.setMode, that.render);
-      $.subscribe(that.Model.eventUris.default, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarkPanelView = BookmarkPanelView;
-  invertebrate.View.isExtendedBy(app.BookmarkPanelView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractFavoriteView(model) {
-
-    if (!(this instanceof app.ContractFavoriteView)) {
-      return new app.ContractFavoriteView(model);
-    }
-
-    var that = this,
-        _el = '<div class="thumbnail thumbnail-108"></div>',
-        _templateName = 'favorite.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      } else {
-        that.$el.removeClass('selected');
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractFavoriteView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractFavoriteView = ContractFavoriteView;
-  invertebrate.View.isExtendedBy(app.ContractFavoriteView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorFavoriteView(model) {
-
-    if (!(this instanceof app.ContractorFavoriteView)) {
-      return new app.ContractorFavoriteView(model);
-    }
-
-    var that = this,
-        _el = '<div class="thumbnail thumbnail-108"></div>',
-        _templateName = 'favorite.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorFavoriteView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      that.render();
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorFavoriteView = ContractorFavoriteView;
-  invertebrate.View.isExtendedBy(app.ContractorFavoriteView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorItemOfInterestView(model) {
-
-    if (!(this instanceof app.ContractorItemOfInterestView)) {
-      return new app.ContractorItemOfInterestView(model);
-    }
-
-    var that = this,
-        _el = '<article id="selected-item" class="overflow-y-scroll lucid-column"></article>',
-        _templateName = 'item-of-interest.html';
-
-    this.$el = $(_el);
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-id', that.Model.id);
-
-      if (that.Model.isSelected) {
-        that.$el.addClass('selected');
-      }
-
-      if (that.Model.shouldAnimateIn) {
-        that.$el.css({ left: '-' + model.width});
-      }
-
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorItemOfInterestView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorItemOfInterestView = ContractorItemOfInterestView;
-  invertebrate.View.isExtendedBy(app.ContractorItemOfInterestView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function ContractorResultView(model) {
-
-    if (!(this instanceof app.ContractorResultView)) {
-      return new app.ContractorResultView(model);
-    }
-
-    var that = this,
-        _templateName = 'result.html';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function (options) {
-      app.instance.renderTemplate(that.$el,
-          _templateName,
-          that.Model,
-          {});
-
-      return that;
-    };
-
-    function init() {
-      if (!model) {
-        throw 'ContractorResultView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ContractorResultView = ContractorResultView;
-  invertebrate.View.isExtendedBy(app.ContractorResultView);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate, document) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel) {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogView)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogView(model, favoritesCubeModel);
-    }
-
-    var that = this,
-        _el = '#delete-favorite-group-confirmation-dialog',
-        _messageContainerEl = '.message-container',
-        _deleteButtonEl = '.btn-danger',
-        _favoritesCubeModel = null,
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      var favoriteGroupId = that.Model.getFavoriteGroupId();
-      var favoriteGroupName = _favoritesCubeModel.getFavoriteGroupName(favoriteGroupId);
-      that.$el.find(_messageContainerEl).html('<p>You have chosen to delete the following group of favorites:</p><blockquote><em>' + favoriteGroupName + '</em></blockquote><p>This cannot be undone.</p><p>Are you sure you want to delete this group?</p>')
-      that.$el.find(_deleteButtonEl).attr('href', '/favoritegroup/destroy?id=' + favoriteGroupId);
-    };
-
-    this.bindEvents = function () {
-      $(document).keyup(function (e) {
-        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getModal() === _uiModeEnum.DeleteFavoriteGroupConfirmationDialog) {
-          that.Model.setIsVisible(false);
-        }
-      });
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.bindEvents();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'DeleteFavoriteGroupConfirmationDialogView::init model not supplied';
-      }
-
-      if (!favoritesCubeModel) {
-        throw 'DeleteFavoriteGroupConfirmationDialogView::init favoritesCubeModel not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-      _favoritesCubeModel = favoritesCubeModel;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogView = DeleteFavoriteGroupConfirmationDialogView;
-  invertebrate.View.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogView);
-
-}(wizerati, $, invertebrate, document));
-;(function (app, $, invertebrate, document) {
-  'use strict';
-
-  function LoginPanelView(model) {
-
-    if (!(this instanceof app.LoginPanelView)) {
-      return new app.LoginPanelView(model);
-    }
-
-    var that = this,
-        _el = '#log-in-panel',
-        _cancelButtonEl = '.btn-cancel',
-        _successButtonEl = '.log-in .btn-success',
-        _usernameEl = '.username',
-        _passwordEl = '.password',
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.$el = null,
-        this.$cancelButton = null,
-        this.$successButton = null,
-        this.$username = null,
-        this.$password = null,
-        this.Model = null;
-
-    this.render = function () {
-      if (that.Model.getIsVisible()) {
-        that.$el.removeClass('hide');
-      }
-
-      if (that.Model.getIsLoginFailedMessageVisible()) {
-        that.$el.addClass('login-error');
-      }
-    };
-
-    this.bindEvents = function () {
-      that.$username.on('change', function () {
-        that.Model.setUsername(that.$username.val());
-      });
-
-      that.$password.on('change', function () {
-        that.Model.setPassword(that.$password.val());
-      });
-
-      that.$cancelButton.on('click', function () {
-        cancel();
-      });
-
-      that.$successButton.on('click', function () {
-        app.instance.router.route('/session/create', { $parentDomNode: that.$el });
-      });
-
-      $(document).keyup(function (e) {
-        if (e.keyCode === 27 && app.mod('views').uiRootView.Model.getUIMode() === _uiModeEnum.LogIn) {
-          cancel();
-        }
-      });
-    };
-
-    function cancel() {
-      app.instance.router.route('/');
-    }
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-      that.$cancelButton = that.$el.find(_cancelButtonEl);
-      that.$password = that.$el.find(_passwordEl);
-      that.$username = that.$el.find(_usernameEl);
-      that.$successButton = that.$el.find(_successButtonEl);
-      that.bindEvents();
-    };
-
-    function init() {
-      if (!model) {
-        throw 'LoginPanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.LoginPanelView = LoginPanelView;
-  invertebrate.View.isExtendedBy(app.LoginPanelView);
-
-}(wizerati, $, invertebrate, document));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function PurchasePanelView(model) {
-
-    if (!(this instanceof app.PurchasePanelView)) {
-      return new app.PurchasePanelView(model);
-    }
-
-    var that = this,
-        _el = '#purchase-panel';
-
-    this.$el = null;
-    this.Model = null;
-
-    this.render = function () {
-      that.$el.attr('data-state', that.Model.getActiveTab());
-      that.$el.attr('data-is-waiting', that.Model.getIsWaiting());
-    };
-
-    this.bindEvents = function () {
-    };
-
-    this.onDomReady = function () {
-      that.$el = $(_el);
-    };
-
-    function init() {
-      if (!model) {
-        throw 'PurchasePanelView::init model not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      that.Model = model;
-
-      $.subscribe(that.Model.updateEventUri, that.render);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.PurchasePanelView = PurchasePanelView;
-  invertebrate.View.isExtendedBy(app.PurchasePanelView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, inv) {
@@ -9047,7 +7563,7 @@ window.wizerati = {
     mod.hiddenItemsController = new w.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
-    mod.itemsOfInterestPanelModeController = new w.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
+//    mod.itemsOfInterestPanelModeController = new w.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
     mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
     mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
     mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel);
