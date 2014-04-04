@@ -18,7 +18,6 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     box-shadow: none;
 }
 
-
 #bookmark-list-panel-container {
     width: 0;
     height: 100%;
@@ -31,7 +30,7 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     display: inline-block;
     position: relative; /*required to ensure correct horizontal scrolling behavior*/
     top: 0;
-    left: -480px; /*avoid scroll events falling onto this element*/
+    left: -480px; /*IMPORTANT: avoid scroll events falling onto this element*/
     height: 100%;
     width: 480px;
     margin-left: 74px;
@@ -46,7 +45,6 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     pointer-events: none;
     -webkit-overflow-scrolling: touch;
 }
-
 
 
 body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-list-panel {
@@ -83,9 +81,8 @@ body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-
     font-family: helvetica-bold;
     width: 100%;
     z-index: 1; /*ensure remains over results*/
+    box-sizing: border-box;
 }
-
-
 
 /*"narrow-screen" devices like iphone*/
 @media only screen and (max-device-width: 568px) {
