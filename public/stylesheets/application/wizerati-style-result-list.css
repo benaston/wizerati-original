@@ -134,7 +134,7 @@ body[data-ui-mode='1'] #result-list-panel {
 
 label[for='btn-change-search'] {
     line-height: 70px; /*empirical v centering*/
-    padding: 0 15px 0 0;
+    padding: 0 15px 0 15px;
 }
 
 .result-list-search-summary-container {

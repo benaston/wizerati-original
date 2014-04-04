@@ -144,6 +144,11 @@ body[data-ui-mode='0'] form[name='search-form'] {
     border: none;
 }
 
+body[data-hover-is-enabled='true'] .search-button-container:hover .button-icon,
+body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
+    text-decoration: underline;
+}
+
 #btn-search {
     width: 100px;
     height: 100px;
