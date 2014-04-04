@@ -101,7 +101,6 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     left: -3px;
 }
 
-
 /*#btn-nav-comparison-list.pulse::before {*/
 #btn-nav-comparison-list.pulse {
     -webkit-animation: pulse .2s 1 0;

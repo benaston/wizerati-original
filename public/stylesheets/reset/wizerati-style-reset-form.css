@@ -30,8 +30,9 @@ input[type="search"] {
 
 input[type="radio"] {
     position: absolute;
-    opacity: 0; /*we avoid display none, because it suppresses the built-in required validation message*/
+    opacity: 1; /*we avoid display none, because it suppresses the built-in required validation message*/
     cursor: pointer;
+    top: 10px;
 }
 
 label, .lbl {
