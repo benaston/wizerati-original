@@ -75,10 +75,8 @@
     };
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
+    //We do not check to see whether this is a bookmark on the client side here before proceeding, because client-side bookmark information might not have been loaded.
     this.removeBookmark = function (id) {
-//      if (!that.isBookmark(id)) {
-//        return;
-//      }
       _bookmarks = _.reject(_bookmarks, function(b){ return b.id === id; });
 
       $.publish(that.eventUris.removeBookmark, id);

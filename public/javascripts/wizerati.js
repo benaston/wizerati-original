@@ -5280,10 +5280,8 @@ window.wizerati = {
     };
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
+    //We do not check to see whether this is a bookmark on the client side here before proceeding, because client-side bookmark information might not have been loaded.
     this.removeBookmark = function (id) {
-//      if (!that.isBookmark(id)) {
-//        return;
-//      }
       _bookmarks = _.reject(_bookmarks, function(b){ return b.id === id; });
 
       $.publish(that.eventUris.removeBookmark, id);
@@ -7489,6 +7487,7 @@ window.wizerati = {
       //Non-bookmarked items can be hidden.
       var $hFrm = $frms.find('.frm-hide');
       $hFrm.find('.btn').removeAttr('disabled');
+      $hFrm.find('.btn').removeClass('disabled');
     };
 
     this.renderAddHiddenItem = function (itemId) {
@@ -8541,16 +8540,17 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function TabBarView(model, itemsOfInterestModel) {
+  function TabBarView(model, itemsOfInterestModel, bookmarkListModel) {
 
     if (!(this instanceof app.TabBarView)) {
-      return new app.TabBarView(model, itemsOfInterestModel);
+      return new app.TabBarView(model, itemsOfInterestModel, bookmarkListModel);
     }
 
     var that = this,
         _el = '#tab-bar',
         _renderOptimizations = {},
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _bookmarkListModel = null;
 
     this.$el = null;
     this.Model = null;
@@ -8572,39 +8572,53 @@ window.wizerati = {
       that.$el.attr('data-selected-tab', tab);
     };
 
-    this.renderAddOrRemoveItemOfInterest = function (id, count) {
-      $('#btn-nav-comparison-list').attr('data-count', count || '');
+    this.renderAddOrRemoveBookmark = function () {
+      $('#btn-nav-bookmarks').addClass('pulse');
+      setTimeout(function () {
+        $('#btn-nav-bookmarks').removeClass('pulse');
+      }, 300);
+    };
 
-      if (count === 1) {
-        $('#btn-nav-comparison-list').addClass('pulse');
-        setTimeout(function () {
-          $('#btn-nav-comparison-list').removeClass('pulse');
-        }, 300);
-      }
+    this.renderAddOrRemoveItemOfInterest = function (id, count) {
+      $('#btn-nav-comparison-list').attr('data-count', (count ? count + '/4' : ''));
+
+      $('#btn-nav-comparison-list').addClass('pulse');
+      setTimeout(function () {
+        $('#btn-nav-comparison-list').removeClass('pulse');
+      }, 300);
     };
 
     function init() {
       try {
         if (!model) {
-          throw 'TabBarView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!itemsOfInterestModel) {
-          throw 'TabBarView::init itemsOfInterestModel not supplied';
+          throw 'itemsOfInterestModel not supplied';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
 
         _itemsOfInterestModel = itemsOfInterestModel;
+        _bookmarkListModel = bookmarkListModel;
 
         _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
         _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
         _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
+        _renderOptimizations[_bookmarkListModel.eventUris.addBookmark] = that.renderAddOrRemoveBookmark;
+        _renderOptimizations[_bookmarkListModel.eventUris.removeBookmark] = that.renderAddOrRemoveBookmark;
 
         $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
         $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
         $.subscribe(_itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
+        $.subscribe(_bookmarkListModel.eventUris.addBookmark, that.render);
+        $.subscribe(_bookmarkListModel.eventUris.removeBookmark, that.render);
 
         return that;
       } catch (e) {
@@ -8987,7 +9001,7 @@ window.wizerati = {
     mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new w.SearchFormView(m.searchFormModel);
-    mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel);
+    mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
     mod.uiRootView = new w.UIRootView(m.uiRootModel);
   }
   catch (e) {

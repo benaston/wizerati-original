@@ -146,6 +146,7 @@
       //Non-bookmarked items can be hidden.
       var $hFrm = $frms.find('.frm-hide');
       $hFrm.find('.btn').removeAttr('disabled');
+      $hFrm.find('.btn').removeClass('disabled');
     };
 
     this.renderAddHiddenItem = function (itemId) {

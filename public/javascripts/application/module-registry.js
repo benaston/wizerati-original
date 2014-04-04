@@ -278,7 +278,7 @@
     mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
     mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack);
     mod.searchFormView = new w.SearchFormView(m.searchFormModel);
-    mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel);
+    mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
     mod.uiRootView = new w.UIRootView(m.uiRootModel);
   }
   catch (e) {
