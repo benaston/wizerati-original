@@ -308,7 +308,7 @@
   try {
     mod.actionedItemsController = new w.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository);
+    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
     mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new w.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);

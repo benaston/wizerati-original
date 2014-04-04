@@ -26,6 +26,7 @@
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
+        _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         var currentSearchHash = '' + dto.keywords + dto.r;
 
         if(_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {

@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository) {
+  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository);
+      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel);
     }
 
     var that = this,
@@ -12,11 +12,13 @@
         _bookmarkBookModel = null,
         _helper = null,
         _userModel = null,
+        _uiRootModel = null,
         _bookmarksHavePreviouslyBeenRetrieved = false,
         _bookmarkRepository = false;
 
     this.index = function (dto) {
       try {
+        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_bookmarksHavePreviouslyBeenRetrieved) {
           _bookmarksHavePreviouslyBeenRetrieved = true;
           _bookmarkBookModel.setIsWaiting('true');
@@ -46,35 +48,44 @@
     };
 
     function init() {
-      if (!bookmarkService) {
-        throw 'BookmarksController::init bookmarkService not supplied.';
+      try {
+        if (!bookmarkService) {
+          throw 'bookmarkService not supplied.';
+        }
+
+        if (!bookmarkBookModel) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!helper) {
+          throw 'helper not supplied.';
+        }
+
+        if (!userModel) {
+          throw 'userModel not supplied.';
+        }
+
+        if (!bookmarkRepository) {
+          throw 'bookmarkRepository not supplied.';
+        }
+
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _bookmarkService = bookmarkService;
+        _bookmarkBookModel = bookmarkBookModel;
+        _helper = helper;
+        _userModel = userModel;
+        _bookmarkRepository = bookmarkRepository;
+        _uiRootModel = uiRootModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'BookmarksController::init ' + e;
       }
-
-      if (!bookmarkBookModel) {
-        throw 'BookmarksController::init uiModelPack not supplied.';
-      }
-
-      if (!helper) {
-        throw 'BookmarksController::init helper not supplied.';
-      }
-
-      if (!userModel) {
-        throw 'BookmarksController::init userModel not supplied.';
-      }
-
-      if (!bookmarkRepository) {
-        throw 'BookmarksController::init bookmarkRepository not supplied.';
-      }
-
-      _bookmarkService = bookmarkService;
-      _bookmarkBookModel = bookmarkBookModel;
-      _helper = helper;
-      _userModel = userModel;
-      _bookmarkRepository = bookmarkRepository;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
     }
 
     return init();

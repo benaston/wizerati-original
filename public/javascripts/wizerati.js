@@ -2951,6 +2951,409 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function ApplyToContractDialogController(service) {
+
+    if (!(this instanceof app.ApplyToContractDialogController)) {
+      return new app.ApplyToContractDialogController(service);
+    }
+
+    var that = this,
+       _service = null;
+
+    this.create = function (dto) {
+      _service.show(dto.id); //will show the relevant screens given the user's logged-in status
+    };
+
+    this.destroy = function () {
+      _service.hide();
+    };
+
+    function init() {
+      if (!service) {
+        throw 'ApplyToContractDialogController::init service not supplied.';
+      }
+
+      _service = service;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ApplyToContractDialogController = ApplyToContractDialogController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel) {
+
+    if (!(this instanceof app.BookmarksController)) {
+      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel);
+    }
+
+    var that = this,
+        _bookmarkService = null,
+        _bookmarkBookModel = null,
+        _helper = null,
+        _userModel = null,
+        _uiRootModel = null,
+        _bookmarksHavePreviouslyBeenRetrieved = false,
+        _bookmarkRepository = false;
+
+    this.index = function (dto) {
+      try {
+        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
+        if (!_bookmarksHavePreviouslyBeenRetrieved) {
+          _bookmarksHavePreviouslyBeenRetrieved = true;
+          _bookmarkBookModel.setIsWaiting('true');
+          _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
+        } else {
+          _helper.resetUIForBookmarks();
+        }
+      } catch (err) {
+        console.log('BookmarksController::index exception: ' + err);
+      }
+    };
+
+    this.create = function (dto) {
+      if (!dto) {
+        throw 'BookmarksController::create dto not supplied.';
+      }
+
+      _bookmarkService.addBookmark(dto.id);
+    };
+
+    this.destroy = function (dto) {
+      if (!dto) {
+        throw 'BookmarksController::destroy dto not supplied.';
+      }
+
+      _bookmarkService.removeBookmark(dto.id);
+    };
+
+    function init() {
+      try {
+        if (!bookmarkService) {
+          throw 'bookmarkService not supplied.';
+        }
+
+        if (!bookmarkBookModel) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!helper) {
+          throw 'helper not supplied.';
+        }
+
+        if (!userModel) {
+          throw 'userModel not supplied.';
+        }
+
+        if (!bookmarkRepository) {
+          throw 'bookmarkRepository not supplied.';
+        }
+
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _bookmarkService = bookmarkService;
+        _bookmarkBookModel = bookmarkBookModel;
+        _helper = helper;
+        _userModel = userModel;
+        _bookmarkRepository = bookmarkRepository;
+        _uiRootModel = uiRootModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'BookmarksController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.BookmarksController = BookmarksController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ComparisonListController(uiModelPack, layoutCoordinator) {
+
+    if (!(this instanceof app.ComparisonListController)) {
+      return new app.ComparisonListController(uiModelPack, layoutCoordinator);
+    }
+
+    var that = this,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _tabEnum = app.mod('enum').Tab,
+        _uiModelPack = null,
+        _layoutCoordinator = null;
+
+    this.index = function (dto) {
+       //if external get state from local storage...
+      _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
+      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+    };
+
+    function init() {
+      if (!uiModelPack) {
+        throw 'ComparisonListController::init uiModelPack not supplied.';
+      }
+
+      if (!layoutCoordinator) {
+        throw 'ComparisonListController::init layoutCoordinator not supplied.';
+      }
+
+      _uiModelPack = uiModelPack;
+      _layoutCoordinator = layoutCoordinator;
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ComparisonListController = ComparisonListController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function HiddenItemsController(hiddenItemsModel) {
+
+    if (!(this instanceof app.HiddenItemsController)) {
+      return new app.HiddenItemsController(hiddenItemsModel);
+    }
+
+    var that = this,
+        _hiddenItemsModel = null;
+
+    this.create = function (dto) {
+      if (!dto) {
+        throw 'dto not supplied.';
+      }
+
+      //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
+      //this avoids massive memory use when rendering (which crashes ios safari)
+      _hiddenItemsModel.addHiddenItemId(dto.id);
+    };
+
+    this.destroy = function (dto) {
+
+      _hiddenItemsModel.removeHiddenItemId(dto.id);
+    };
+
+    function init() {
+      if (!hiddenItemsModel) {
+        throw 'HiddenItemsController::init hiddenItemsModel not supplied.';
+      }
+
+      _hiddenItemsModel = hiddenItemsModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.HiddenItemsController = HiddenItemsController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function HomeController(uiRootModel, resultListModel, searchFormModel) {
+
+    if (!(this instanceof app.HomeController)) {
+      return new app.HomeController(uiRootModel, resultListModel, searchFormModel);
+    }
+
+    var that = this,
+        _uiRootModel = null,
+        _resultListModel = null,
+        _searchFormModel = null,
+        _modalEnum = wizerati.mod('enum').Modal,
+        _uiModeEnum = wizerati.mod('enum').UIMode,
+        _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
+        _resultListModeEnum = wizerati.mod('enum').ResultListMode;
+
+    this.index = function () {
+      try {
+        _uiRootModel.setUIMode(_uiModeEnum.Start); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
+        _resultListModel.setMode(_resultListModeEnum.Default);
+        _uiRootModel.setModal(_modalEnum.None);
+        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      } catch (err) {
+        console.log('HomeController::index exception: ' + err);
+      }
+    };
+
+    function init() {
+      if (!uiRootModel) {
+        throw 'HomeController::init uiRootModel not supplied.';
+      }
+
+      if (!resultListModel) {
+        throw 'HomeController::init resultListModel not supplied.';
+      }
+
+      if (!searchFormModel) {
+        throw 'HomeController::init searchFormModel not supplied.';
+      }
+
+      _uiRootModel = uiRootModel;
+      _resultListModel = resultListModel;
+      _searchFormModel = searchFormModel;
+
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.HomeController = HomeController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ItemsOfInterestController(itemsOfInterestModel) {
+
+    if (!(this instanceof app.ItemsOfInterestController)) {
+      return new app.ItemsOfInterestController(itemsOfInterestModel);
+    }
+
+    var that = this,
+        _itemsOfInterestModel = null;
+
+    this.create = function (dto) {
+      if (!dto) {
+        throw 'dto not supplied.';
+      }
+
+      _itemsOfInterestModel.addItemOfInterest(dto.id);
+    };
+
+    //todo: result list items should be object literals like {id:'foo'}
+    this.destroy = function (dto) {
+      //take control of the rendering process here to avoid the jarring re-paint with a massively changed width
+
+      _itemsOfInterestModel.removeItemOfInterest(dto.id);
+    };
+
+    function init() {
+      if (!itemsOfInterestModel) {
+        throw 'ItemsOfInterestController::init itemsOfInterestModel not supplied.';
+      }
+
+      _itemsOfInterestModel = itemsOfInterestModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemsOfInterestController = ItemsOfInterestController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ItemsOfInterestPanelModeController(itemsOfInterestModel) {
+
+    if (!(this instanceof app.ItemsOfInterestPanelModeController)) {
+      return new app.ItemsOfInterestPanelModeController(itemsOfInterestModel);
+    }
+
+    var that = this,
+        _itemsOfInterestModel = null;
+
+    this.update = function (dto) {
+      try {
+        if (itemsOfInterestModel.getMode() !== dto.mode) {
+          _itemsOfInterestModel.setMode(dto.mode);
+        }
+      } catch (err) {
+        console.log('error: ItemsOfInterestPanelModeController.update. ' + err);
+      }
+    };
+
+    function init() {
+      if (!itemsOfInterestModel) {
+        throw 'ItemsOfInterestPanelModeController::init itemsOfInterestModel not supplied.';
+      }
+
+      _itemsOfInterestModel = itemsOfInterestModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.ItemsOfInterestPanelModeController = ItemsOfInterestPanelModeController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function LoginController(loginPanelModel, uiRootModel) {
+
+    if (!(this instanceof app.LoginController)) {
+      return new app.LoginController(loginPanelModel, uiRootModel);
+    }
+
+    var that = this,
+        _loginPanelModel = null,
+        _uiRootModel = null,
+        _uiModeEnum = app.mod('enum').UIMode;
+
+    this.index = function () {
+      try {
+        _uiRootModel.setUIMode(_uiModeEnum.LogIn);
+        _loginPanelModel.setIsVisible(true);
+      } catch (err) {
+        console.log('error: LoginController.index');
+      }
+    };
+
+    function init() {
+      if (!loginPanelModel) {
+        throw 'LoginController::init loginPanelModel not supplied.';
+      }
+      if (!uiRootModel) {
+        throw 'LoginController::init uiRootModel not supplied.';
+      }
+
+      _loginPanelModel = loginPanelModel;
+      _uiRootModel = uiRootModel;
+
+      return that;
+    }
+
+    return init();
+  }
+
+  app.LoginController = LoginController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function AccountActivationController(uiRootModel) {
 
     if (!(this instanceof app.AccountActivationController)) {
@@ -3112,176 +3515,6 @@ window.wizerati = {
   }
 
   app.AdvertisersController = AdvertisersController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ApplyToContractDialogController(service) {
-
-    if (!(this instanceof app.ApplyToContractDialogController)) {
-      return new app.ApplyToContractDialogController(service);
-    }
-
-    var that = this,
-       _service = null;
-
-    this.create = function (dto) {
-      _service.show(dto.id); //will show the relevant screens given the user's logged-in status
-    };
-
-    this.destroy = function () {
-      _service.hide();
-    };
-
-    function init() {
-      if (!service) {
-        throw 'ApplyToContractDialogController::init service not supplied.';
-      }
-
-      _service = service;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ApplyToContractDialogController = ApplyToContractDialogController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository) {
-
-    if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository);
-    }
-
-    var that = this,
-        _bookmarkService = null,
-        _bookmarkBookModel = null,
-        _helper = null,
-        _userModel = null,
-        _bookmarksHavePreviouslyBeenRetrieved = false,
-        _bookmarkRepository = false;
-
-    this.index = function (dto) {
-      try {
-        if (!_bookmarksHavePreviouslyBeenRetrieved) {
-          _bookmarksHavePreviouslyBeenRetrieved = true;
-          _bookmarkBookModel.setIsWaiting('true');
-          _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
-        } else {
-          _helper.resetUIForBookmarks();
-        }
-      } catch (err) {
-        console.log('BookmarksController::index exception: ' + err);
-      }
-    };
-
-    this.create = function (dto) {
-      if (!dto) {
-        throw 'BookmarksController::create dto not supplied.';
-      }
-
-      _bookmarkService.addBookmark(dto.id);
-    };
-
-    this.destroy = function (dto) {
-      if (!dto) {
-        throw 'BookmarksController::destroy dto not supplied.';
-      }
-
-      _bookmarkService.removeBookmark(dto.id);
-    };
-
-    function init() {
-      if (!bookmarkService) {
-        throw 'BookmarksController::init bookmarkService not supplied.';
-      }
-
-      if (!bookmarkBookModel) {
-        throw 'BookmarksController::init uiModelPack not supplied.';
-      }
-
-      if (!helper) {
-        throw 'BookmarksController::init helper not supplied.';
-      }
-
-      if (!userModel) {
-        throw 'BookmarksController::init userModel not supplied.';
-      }
-
-      if (!bookmarkRepository) {
-        throw 'BookmarksController::init bookmarkRepository not supplied.';
-      }
-
-      _bookmarkService = bookmarkService;
-      _bookmarkBookModel = bookmarkBookModel;
-      _helper = helper;
-      _userModel = userModel;
-      _bookmarkRepository = bookmarkRepository;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.BookmarksController = BookmarksController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ComparisonListController(uiModelPack, layoutCoordinator) {
-
-    if (!(this instanceof app.ComparisonListController)) {
-      return new app.ComparisonListController(uiModelPack, layoutCoordinator);
-    }
-
-    var that = this,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _tabEnum = app.mod('enum').Tab,
-        _uiModelPack = null,
-        _layoutCoordinator = null;
-
-    this.index = function (dto) {
-       //if external get state from local storage...
-      _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-//      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
-    };
-
-    function init() {
-      if (!uiModelPack) {
-        throw 'ComparisonListController::init uiModelPack not supplied.';
-      }
-
-      if (!layoutCoordinator) {
-        throw 'ComparisonListController::init layoutCoordinator not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ComparisonListController = ComparisonListController;
 
 }(wizerati));
 ;(function (app) {
@@ -3483,106 +3716,6 @@ window.wizerati = {
   app.FavoritesCubeModeController = FavoritesCubeModeController;
 
 }(wizerati));
-;(function (app) {
-  'use strict';
-
-  function HiddenItemsController(hiddenItemsModel) {
-
-    if (!(this instanceof app.HiddenItemsController)) {
-      return new app.HiddenItemsController(hiddenItemsModel);
-    }
-
-    var that = this,
-        _hiddenItemsModel = null;
-
-    this.create = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
-
-      //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
-      //this avoids massive memory use when rendering (which crashes ios safari)
-      _hiddenItemsModel.addHiddenItemId(dto.id);
-    };
-
-    this.destroy = function (dto) {
-
-      _hiddenItemsModel.removeHiddenItemId(dto.id);
-    };
-
-    function init() {
-      if (!hiddenItemsModel) {
-        throw 'HiddenItemsController::init hiddenItemsModel not supplied.';
-      }
-
-      _hiddenItemsModel = hiddenItemsModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.HiddenItemsController = HiddenItemsController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function HomeController(uiRootModel, resultListModel, searchFormModel) {
-
-    if (!(this instanceof app.HomeController)) {
-      return new app.HomeController(uiRootModel, resultListModel, searchFormModel);
-    }
-
-    var that = this,
-        _uiRootModel = null,
-        _resultListModel = null,
-        _searchFormModel = null,
-        _modalEnum = wizerati.mod('enum').Modal,
-        _uiModeEnum = wizerati.mod('enum').UIMode,
-        _mainContainerVisibilityModeEnum = wizerati.mod('enum').MainContainerVisibilityMode,
-        _resultListModeEnum = wizerati.mod('enum').ResultListMode;
-
-    this.index = function () {
-      try {
-        _uiRootModel.setUIMode(_uiModeEnum.Start); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
-        _resultListModel.setMode(_resultListModeEnum.Default);
-        _uiRootModel.setModal(_modalEnum.None);
-        _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-      } catch (err) {
-        console.log('HomeController::index exception: ' + err);
-      }
-    };
-
-    function init() {
-      if (!uiRootModel) {
-        throw 'HomeController::init uiRootModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'HomeController::init resultListModel not supplied.';
-      }
-
-      if (!searchFormModel) {
-        throw 'HomeController::init searchFormModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-      _resultListModel = resultListModel;
-      _searchFormModel = searchFormModel;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.HomeController = HomeController;
-
-}(wizerati));
 ;//(function (app) {
 //  "use strict";
 //
@@ -3647,130 +3780,6 @@ window.wizerati = {
 //
 //
 ////throw "script downloaded to be assigned to an object in a known location and then subsequently invoked by the search controller for wait, success, fail, timeout";
-;(function (app) {
-  'use strict';
-
-  function ItemsOfInterestController(itemsOfInterestModel) {
-
-    if (!(this instanceof app.ItemsOfInterestController)) {
-      return new app.ItemsOfInterestController(itemsOfInterestModel);
-    }
-
-    var that = this,
-        _itemsOfInterestModel = null;
-
-    this.create = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
-
-      _itemsOfInterestModel.addItemOfInterest(dto.id);
-    };
-
-    //todo: result list items should be object literals like {id:'foo'}
-    this.destroy = function (dto) {
-      //take control of the rendering process here to avoid the jarring re-paint with a massively changed width
-
-      _itemsOfInterestModel.removeItemOfInterest(dto.id);
-    };
-
-    function init() {
-      if (!itemsOfInterestModel) {
-        throw 'ItemsOfInterestController::init itemsOfInterestModel not supplied.';
-      }
-
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ItemsOfInterestController = ItemsOfInterestController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ItemsOfInterestPanelModeController(itemsOfInterestModel) {
-
-    if (!(this instanceof app.ItemsOfInterestPanelModeController)) {
-      return new app.ItemsOfInterestPanelModeController(itemsOfInterestModel);
-    }
-
-    var that = this,
-        _itemsOfInterestModel = null;
-
-    this.update = function (dto) {
-      try {
-        if (itemsOfInterestModel.getMode() !== dto.mode) {
-          _itemsOfInterestModel.setMode(dto.mode);
-        }
-      } catch (err) {
-        console.log('error: ItemsOfInterestPanelModeController.update. ' + err);
-      }
-    };
-
-    function init() {
-      if (!itemsOfInterestModel) {
-        throw 'ItemsOfInterestPanelModeController::init itemsOfInterestModel not supplied.';
-      }
-
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ItemsOfInterestPanelModeController = ItemsOfInterestPanelModeController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function LoginController(loginPanelModel, uiRootModel) {
-
-    if (!(this instanceof app.LoginController)) {
-      return new app.LoginController(loginPanelModel, uiRootModel);
-    }
-
-    var that = this,
-        _loginPanelModel = null,
-        _uiRootModel = null,
-        _uiModeEnum = app.mod('enum').UIMode;
-
-    this.index = function () {
-      try {
-        _uiRootModel.setUIMode(_uiModeEnum.LogIn);
-        _loginPanelModel.setIsVisible(true);
-      } catch (err) {
-        console.log('error: LoginController.index');
-      }
-    };
-
-    function init() {
-      if (!loginPanelModel) {
-        throw 'LoginController::init loginPanelModel not supplied.';
-      }
-      if (!uiRootModel) {
-        throw 'LoginController::init uiRootModel not supplied.';
-      }
-
-      _loginPanelModel = loginPanelModel;
-      _uiRootModel = uiRootModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.LoginController = LoginController;
-
-}(wizerati));
 ;(function (app) {
   'use strict';
 
@@ -3953,6 +3962,7 @@ window.wizerati = {
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
+        _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         var currentSearchHash = '' + dto.keywords + dto.r;
 
         if(_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
@@ -4711,7 +4721,6 @@ window.wizerati = {
       _uiModelPack.resultListModel.setResults(_.map(results, function (r) {
         return r.id;
       }), +new Date());
-//      }), _guidFactory.create());
       _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       var delayToRender = 0;
@@ -4728,9 +4737,11 @@ window.wizerati = {
         //this must occur *after the search panel mode is set* to its eventual value, to
         //ensure the initial width rendering of items of interest is the correct one
         // (avoiding a repaint)
-        if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
+
+          //Always reset the selected item when running a fresh search.
           _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
-        }
+
+//        }
 
         setTimeout(function () {
           _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
@@ -9031,7 +9042,7 @@ window.wizerati = {
   try {
     mod.actionedItemsController = new w.ActionedItemsController(m.actionedItemsModel);
     mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository);
+    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
     mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
     mod.hiddenItemsController = new w.HiddenItemsController(m.hiddenItemsModel);
     mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);

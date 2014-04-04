@@ -32,7 +32,6 @@
       _uiModelPack.resultListModel.setResults(_.map(results, function (r) {
         return r.id;
       }), +new Date());
-//      }), _guidFactory.create());
       _uiModelPack.searchFormModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       var delayToRender = 0;
@@ -49,9 +48,11 @@
         //this must occur *after the search panel mode is set* to its eventual value, to
         //ensure the initial width rendering of items of interest is the correct one
         // (avoiding a repaint)
-        if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
+
+          //Always reset the selected item when running a fresh search.
           _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
-        }
+
+//        }
 
         setTimeout(function () {
           _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);

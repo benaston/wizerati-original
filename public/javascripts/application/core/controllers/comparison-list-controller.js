@@ -9,7 +9,6 @@
 
     var that = this,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _tabEnum = app.mod('enum').Tab,
         _uiModelPack = null,
@@ -18,7 +17,6 @@
     this.index = function (dto) {
        //if external get state from local storage...
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-//      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
