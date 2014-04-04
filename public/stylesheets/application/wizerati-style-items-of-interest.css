@@ -25,12 +25,11 @@ body[data-items-of-interest-mode='1'] .s-i-content {
 }
 
 .menu .btn-s.checked {
-    background: rgba(14, 17, 19, 1);
-    color: rgba(126, 157, 173, 1);
+    background: rgba(149, 176 ,190 ,.8);
 }
 
-.menu .btn-s {
-    position: relative; /*ensure focus indicator works as expected*/
+    .menu .btn-s {
+        position: relative; /*ensure focus indicator works as expected*/
     color: rgba(255, 255, 255, 1);
     border-color: rgba(255, 255, 255, .2);
 }
@@ -238,6 +237,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 
 .m-i {
     width: 97px;
+    top: 5px;
     display: inline-block;
     text-align: right;
     vertical-align: top;
@@ -339,7 +339,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 
 .flex-item:nth-child(1) {
     -webkit-order: 0;
-    -webkit-flex: 0 0 67px; /*height of the menu on items of interest*/
+    -webkit-flex: 0 0 77px; /*height of the menu on items of interest*/
     -webkit-align-self: auto;
 }
 
