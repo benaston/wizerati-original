@@ -81,15 +81,16 @@ body[data-ui-mode='1'] #result-list-panel {
 #r-l-s-s-c-h1 {
     position: relative;
     width: 280px; /*empirical*/
-    height: 67px;
+    height: 77px;
     margin: 0;
-    padding: 10px 0 0 15px;
+    padding: 15px 0 0 15px;
     font-size: inherit;
     font-family: inherit;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     line-height: 1.5rem;
+    box-sizing: border-box;
 }
 
 #search-desc {
@@ -103,16 +104,15 @@ body[data-ui-mode='1'] #result-list-panel {
     position: absolute;
     top: 0;
     right: 0;
-    height: 100%;
 }
 
 label[for='btn-change-search'] {
-    line-height: 70px; /*empirical v centering*/
+    line-height: 76px; /*empirical v centering*/
     padding: 0 15px 0 15px;
 }
 
 .result-list-search-summary-container {
-    height: 67px; /*equal to ioi header*/
+    height: 77px; /*equal to ioi header*/
     display: inline-block;
     width: 100%;
     color: #999;
@@ -273,7 +273,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
 }
 
 #result-list-panel header {
-    height: 67px; /*This fixes what I believe to be a bug in webkit rendering whitespace when the overflow ellipsis is used inside.*/
+    height: 77px; /*This fixes what I believe to be a bug in webkit rendering whitespace when the overflow ellipsis is used inside.*/
 }
 
 /*"narrow-screen" devices like iphone*/

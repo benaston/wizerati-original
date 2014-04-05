@@ -37,8 +37,6 @@ body[data-ui-mode='1'] #search-form-panel-container[data-mode='1'] #search-form-
     -webkit-animation: shake .8s 1 0;
 }
 
-
-
 body[data-ui-mode='0'] #search-form-panel {
     position: absolute;
     height: 310px;
@@ -111,7 +109,7 @@ body[data-ui-mode='1'] [data-search-form-mode='1'] #search-form-panel {
 }
 
 /*body[data-ui-mode='1'] #search-form-panel input[type='search'] {*/
-    /*width: 439px;*/
+/*width: 439px;*/
 /*}*/
 
 body[data-ui-mode='0'] .cancel-button-container {
