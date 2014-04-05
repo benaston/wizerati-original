@@ -357,7 +357,6 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
     left: 65px;
     color: #999;
     margin-top: -58px;
-    line-height: 1rem;
     -webkit-backface-visibility: hidden;
 }
 
