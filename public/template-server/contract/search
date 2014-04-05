@@ -19,7 +19,8 @@
     "updatedDateTime": "2014-02-17T00:00:00Z",
     "skills": "Python, Oracle, R, SOA, .NET, JavaScript, Backbone",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
-    "bookmarkDateTime": "2014-01-11T12:00:00Z"
+    "bookmarkDateTime": "2014-01-11T12:00:00Z",
+    "readDateTime": "2014-02-16T15:00:00Z"
     },
     {
     "id": "GUID2",
@@ -42,7 +43,8 @@
     "updatedDateTime": "2014-02-16T15:00:00Z",
     "skills": "C#, .NET 4.0, ASP.Net MVC 3, WCF services",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
-    "bookmarkDateTime": "2014-02-16T15:00:00Z"
+    "bookmarkDateTime": "2014-02-16T15:00:00Z",
+    "readDateTime": "2014-02-16T15:00:00Z"
     },
     {
     "id": "GUID3",
@@ -65,7 +67,8 @@
     "updatedDateTime": "2014-02-17T13:00:00Z",
     "skills": "C#, HTML5, JavaScript, CSS3",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
-    "hiddenDateTime": "2014-02-17T13:00:00Z"
+    "hiddenDateTime": "2014-02-17T13:00:00Z",
+    "readDateTime": "2014-02-16T15:00:00Z"
     },
     {
     "id": "GUID5",
@@ -88,7 +91,8 @@
     "updatedDateTime": "2014-02-18T14:00:00Z",
     "skills": "C#, HTML5, ASP.NET MVC, JavaScript",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
-    "bookmarkDateTime": "2014-01-19T15:00:00Z"
+    "bookmarkDateTime": "2014-01-19T15:00:00Z",
+    "readDateTime": "2014-02-16T15:00:00Z"
     },
     {
     "id": "GUID6",
@@ -111,7 +115,8 @@
     "updatedDateTime": "2014-01-19T15:00:00Z",
     "skills": "C#, D3, WPF, WF",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
-    "bookmarkDateTime": "2014-03-16T15:00:00Z"
+    "bookmarkDateTime": "2014-03-16T15:00:00Z",
+    "readDateTime": "2014-02-16T15:00:00Z"
     },
     {
     "id": "GUID7",
@@ -134,7 +139,8 @@
     "updatedDateTime": "2014-02-20T16:00:00Z",
     "skills": "JavaScript, HTTP, Backbone, JQuery, Knockout ",
     "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
-    "bookmarkDateTime": "2014-04-01T15:00:00Z"
+    "bookmarkDateTime": "2014-04-01T15:00:00Z",
+    "readDateTime": "2014-02-16T15:00:00Z"
     },
     {
     "id": "GUID8",

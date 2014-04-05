@@ -30,8 +30,8 @@
       }
 
       //only apply the attributes in the positive case to save clutter in the DOM
-      if (that.Model.isRead) {
-        that.$el.attr('data-is-unread', !that.Model.isRead);
+      if ((that.Model.readDateTime)) {
+        that.$el.attr('data-is-read', 'true');
       }
 
       if (that.Model.isActioned) {
@@ -39,7 +39,7 @@
       }
 
       if (!!(that.Model.bookmarkDateTime)) {
-        that.$el.attr('data-is-bookmark', !!(that.Model.bookmarkDateTime));
+        that.$el.attr('data-is-bookmark', 'true');
       }
 
       if (that.Model.isPinned) {
