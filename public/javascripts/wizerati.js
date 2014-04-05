@@ -6956,10 +6956,19 @@ window.wizerati = {
     this.bindEvents = function () {
       //We update the model only on click of search to enable trivial cancelling of unwanted changes.
       var $btn = that.$el.find('#btn-search');
-      $btn.on('click', function () {
-        that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
-        that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
-        $('body').scrollToX({duration: 100});
+      $btn.on('click', function (e) {
+        var $k = that.$el.find('#keywords');
+        if(!$k.val()) {
+          e.preventDefault();
+          $k.addClass('shake');
+          setTimeout(function(){
+            $k.removeClass('shake');
+          }, 1000);
+        } else {
+          that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
+          that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+          $('body').scrollToX({duration: 100});
+        }
       });
 
       //values in the form elements must be reset to those of the backing model

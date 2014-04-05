@@ -33,6 +33,10 @@ body[data-ui-mode='1'] #search-form-panel-container[data-mode='1'] #search-form-
     z-index: 3; /*4=tab-bar, 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
 }
 
+#keywords.shake {
+    -webkit-animation: shake .8s 1 0;
+}
+
 
 
 body[data-ui-mode='0'] #search-form-panel {
