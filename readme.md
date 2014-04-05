@@ -3,11 +3,11 @@ wizerati
 
 Wizerati is an ongoing project to test out user interface ideas and hone my skills developing JavaScript-heavy single-page web applications.
 
-You can find a version of it online here (please note it has not been made cross-browser compatible yet, please use Chrome or Safari):
+Please note it has not been made cross-browser compatible yet - please use Chrome or Safari.
 
-http://limitless-refuge-4707.herokuapp.com
+Wizerati may be slow to start because of the way Heroku works with quiet applications.
 
-http://intense-dusk-2508.herokuapp.com/
+http://www.wizerati.com
 
 ##Aims
 - To obsolete CWJobs and JobServe.
