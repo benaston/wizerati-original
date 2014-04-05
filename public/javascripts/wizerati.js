@@ -3767,38 +3767,44 @@ window.wizerati = {
         _roleEnum = app.mod('enum').UserRole;
 
     this.create = function (id, done) {
-      if (!id) {
-        throw 'ResultViewFactory::create id not supplied.';
-      }
+      try {
+        if (!id) {
+          throw 'id not supplied.';
+        }
 
-      if (!done) {
-        throw 'ResultViewFactory::create done not supplied.';
-      }
+        if (!done) {
+          throw 'done not supplied.';
+        }
 
-      var role = _signInIService.getCurrentRole();
-      switch (role) {
-        case _roleEnum.Employer:
-        case _roleEnum.EmployerStranger:
-          _itemRepository.getById(id, function (item) {
-            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
-            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
-            done(new app.ContractorResultView(item).render().$el);
-          });
-          break;
-        case _roleEnum.Contractor:
-        case _roleEnum.ContractorStranger:
-          _itemRepository.getById(id, function (item) {
-            item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-            item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
-            item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
-            item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
-            done(new app.ContractResultView(item).render().$el);
-          });
-          break;
-        default:
-          throw 'ResultViewFactory::create invalid user role "' + role + '"';
+        var role = _signInIService.getCurrentRole();
+        switch (role) {
+          case _roleEnum.Employer:
+          case _roleEnum.EmployerStranger:
+            _itemRepository.getById(id, function (item) {
+              item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
+              done(new app.ContractorResultView(item).render().$el);
+            });
+            break;
+          case _roleEnum.Contractor:
+          case _roleEnum.ContractorStranger:
+            _itemRepository.getById(id, function (item) {
+              item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
+              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
+              item.tweet = item.tld.length > 140 ? item.tld.substr(0,140) + '...' : item.tld;
+
+              done(new app.ContractResultView(item).render().$el);
+            });
+            break;
+          default:
+            throw 'invalid user role "' + role + '"';
+        }
+      } catch (e) {
+        throw 'ResultViewFactory::create ' + e;
       }
     };
 
@@ -4216,7 +4222,7 @@ window.wizerati = {
         _minWidthItemOfInterest = 424, /*empirical to stop line-wrap of top menu*/
         _minWidthItemOfInterestSmallScreen = 310,
 //        _effectiveWidthSearchPanelDefault = 74,//340 + 75, /*search panel width plus the width of the navbar*/
-        _effectiveWidthResultListPanel = 480,
+        _effectiveWidthResultListPanel = 400,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _widthTabBar = 74,
         _effectiveWidthResultListPanelMinimized = 0;
@@ -6829,7 +6835,8 @@ window.wizerati = {
 
     function renderCount() {
       var count = that.Model.getResults().length || 'No';
-      that.$elH1.text(count + ' results for "' + _searchFormModel.getKeywords().trim() + ' ' + _searchFormModel.getRate() + ' GBP/day"');
+      var searchDesc = htmlEncode(_searchFormModel.getKeywords().trim()) + ' ' + htmlEncode(_searchFormModel.getRate()) + ' GBP/day';
+      that.$elH1.html(count + ' results for: <br/><span id="search-desc" title="'+ searchDesc+'">' +searchDesc + '</span>');
     }
 
     this.renderSetSelectedItemId = function (selectedItemId) {

@@ -49,10 +49,10 @@
             <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
             <h4>Job Description</h4>
             {{= model.summary }}
-            <h4>About Us</h4>
-            {{= model.aboutOrganization }}
             <h4>About You</h4>
             {{= model.aboutYou }}
+            <h4>About Us</h4>
+            {{= model.aboutOrganization }}
             <h4>Contact</h4>
             <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }} (ref. {{= model.ref }})</div>
             <hr>

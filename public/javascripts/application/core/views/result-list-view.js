@@ -55,7 +55,8 @@
 
     function renderCount() {
       var count = that.Model.getResults().length || 'No';
-      that.$elH1.text(count + ' results for "' + _searchFormModel.getKeywords().trim() + ' ' + _searchFormModel.getRate() + ' GBP/day"');
+      var searchDesc = htmlEncode(_searchFormModel.getKeywords().trim()) + ' ' + htmlEncode(_searchFormModel.getRate()) + ' GBP/day';
+      that.$elH1.html(count + ' results for: <br/><span id="search-desc" title="'+ searchDesc+'">' +searchDesc + '</span>');
     }
 
     this.renderSetSelectedItemId = function (selectedItemId) {

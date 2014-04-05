@@ -14,7 +14,7 @@ body[data-items-of-interest-mode='0'] #bookmark-list-panel.translateToZero {
 
 /*pinned items expanded*/
 body[data-items-of-interest-mode='1'] #bookmark-list-panel {
-    -webkit-transform: translate3d(-480px, 0, 0);
+    -webkit-transform: translate3d(-400px, 0, 0);
     box-shadow: none;
 }
 
@@ -30,9 +30,9 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     display: inline-block;
     position: relative; /*required to ensure correct horizontal scrolling behavior*/
     top: 0;
-    left: -480px; /*IMPORTANT: avoid scroll events falling onto this element*/
+    left: -400px; /*IMPORTANT: avoid scroll events falling onto this element*/
     height: 100%;
-    width: 480px;
+    width: 400px;
     margin-left: 74px;
     vertical-align: top;
     overflow-x: hidden;

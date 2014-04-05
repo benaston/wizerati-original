@@ -12,7 +12,7 @@ body[data-hover-is-enabled='true'] a:hover, body[data-hover-is-enabled='true'] .
 a:focus, a:active, .a:focus, .a:active {
     outline: 0;
     outline-offset: 2px; /*why?*/
-    box-shadow: 0 0 0 4px #eee inset;
+    box-shadow: 0 0 0 2px #eee inset;
 }
 
 blockquote {

@@ -16,7 +16,7 @@
         _minWidthItemOfInterest = 424, /*empirical to stop line-wrap of top menu*/
         _minWidthItemOfInterestSmallScreen = 310,
 //        _effectiveWidthSearchPanelDefault = 74,//340 + 75, /*search panel width plus the width of the navbar*/
-        _effectiveWidthResultListPanel = 480,
+        _effectiveWidthResultListPanel = 400,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _widthTabBar = 74,
         _effectiveWidthResultListPanelMinimized = 0;
