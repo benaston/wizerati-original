@@ -5,7 +5,7 @@ Wizerati is an ongoing project to test out user interface ideas and hone my skil
 
 Please note:
 
- - this application has not been made cross-browser compatible yet - please use Chrome or Safari.
+ - This application has not been made cross-browser compatible yet - please use Chrome or Safari.
  - Wizerati may be slow to start because of the way Heroku works with quiet applications.
 
 http://www.wizerati.com
