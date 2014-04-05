@@ -215,9 +215,9 @@ body[data-hover-is-enabled='true'] .t a:hover {
 .t {
     box-sizing: border-box;
     position: relative;
-    border-radius: 5px;
-    background-size: cover;
-    background-repeat: no-repeat;
+    /*border-radius: 5px;*/
+    /*background-size: cover;*/
+    /*background-repeat: no-repeat;*/
     cursor: pointer;
     display: inline-block;
     vertical-align: top;
@@ -242,10 +242,11 @@ body[data-hover-is-enabled='true'] .t a:hover {
 }
 
 .t.hidden h3 {
-    white-space: nowrap;
+    white-space: nowrap !important; /*a rare occasion where !important is actually needed due to inability to get selector specificity high enough using normal means*/
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 100%;
+    width: 86%; /*empirical*/
+    color: #ccc;
 }
 
 .t.hidden .tld, .t.hidden .rate, .t.hidden .location-and-posted, .t.hidden .i-c {
