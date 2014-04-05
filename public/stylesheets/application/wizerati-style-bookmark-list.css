@@ -1,10 +1,10 @@
 /*We avoid the translate because it screws with the fixed position headers*/
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-list-panel-container[data-mode='0'] #bookmark-list-panel {
-    transition: -webkit-transform 1.5s cubic-bezier(0.2, 0.3, 0.25, 0.9), -webkit-filter .2s ease-out, left 0s linear 0s;
+    transition: -webkit-transform 1s cubic-bezier(0.2, 0.3, 0.25, 0.9), -webkit-filter .2s ease-out, left 0s linear 0s;
 }
 
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] #bookmark-list-panel-container[data-mode='1'] #bookmark-list-panel {
-    transition: -webkit-transform 1.5s cubic-bezier(0.2, 0.3, 0.25, 0.9), -webkit-filter .2s ease-out, left 0s linear .3s; /*delay dragging off to left*/
+    transition: -webkit-transform 1s cubic-bezier(0.2, 0.3, 0.25, 0.9), -webkit-filter .2s ease-out, left 0s linear .3s; /*delay dragging off to left*/
 }
 
 /*unlikely needed - check in safari first*/
