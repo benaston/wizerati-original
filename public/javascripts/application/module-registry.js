@@ -75,6 +75,18 @@
   'use strict';
 
   try {
+    mod.browserCompatibilityChecker = new wizerati.BrowserCompatibilityChecker();
+  }
+  catch (e) {
+    throw 'problem registering compatibility module. ' + e;
+  }
+
+}(wizerati.mod('compatibility')));
+
+(function (mod) {
+  'use strict';
+
+  try {
     mod.config = new wizerati.Config(window.env || invertebrate.env.dev);
   }
   catch (e) {

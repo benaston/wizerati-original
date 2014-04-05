@@ -2814,6 +2814,37 @@ window.wizerati = {
   app.WizeratiHttpClient = WizeratiHttpClient;
 
 }(wizerati));
+;(function (app) {
+  'use strict';
+
+  function BrowserCompatibilityChecker() {
+    if (!(this instanceof BrowserCompatibilityChecker)) {
+      return new BrowserCompatibilityChecker();
+    }
+
+    this.isBrowserCompatible = function () {
+      var ua = navigator.userAgent;
+      var iOS7iPad = /^Mozilla\/5\.0 \(iPad; CPU OS 7/g;
+      var chrome30PlusOSX = /^Mozilla\/5\.0 \(Macintosh; .* Chrome\/[3-9][0-9]/g;
+      var chrome30PlusWin = /^Mozilla\/5\.0 \(Windows .* Chrome\/[3-9][0-9]/g;
+      var safariMavericks = /^Mozilla\/5\.0 \(Macintosh; .* Safari\/[5-9][0-9][0-9]/g;
+
+      var supportedUAs  = [ iOS7iPad, chrome30PlusOSX, chrome30PlusWin, safariMavericks ];
+
+      return supportedUAs.reduce(function(previousValue, currentValue, index, array) {
+          return previousValue || currentValue.test(ua);
+       }, false);
+    };
+
+    function init() {
+    }
+
+    init();
+  }
+
+  app.BrowserCompatibilityChecker = BrowserCompatibilityChecker;
+
+}(wizerati));
 ;(function (app, invertebrate, _) {
   'use strict';
 
@@ -7039,6 +7070,12 @@ window.wizerati = {
       }
     };
 
+    function keyUpFunction(e) {
+      if (e.keyCode == 27) {
+        app.instance.router.redirect('/searchformmode/update', {mode: _modeEnum.Minimized});
+      }
+    }
+
     //When rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
     //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
     //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
@@ -7047,7 +7084,11 @@ window.wizerati = {
         //ensure UI matches model values
         this.renderSetKeywords();
         this.renderSetRate();
+        $(document).keyup(keyUpFunction);
+      } else if(mode === _modeEnum.Minimized) {
+        $(document).unbind('keyup', keyUpFunction);
       }
+
 
       that.$elContainer.attr('data-mode', mode);
     };
@@ -7357,6 +7398,18 @@ window.wizerati = {
   'use strict';
 
   try {
+    mod.browserCompatibilityChecker = new wizerati.BrowserCompatibilityChecker();
+  }
+  catch (e) {
+    throw 'problem registering compatibility module. ' + e;
+  }
+
+}(wizerati.mod('compatibility')));
+
+(function (mod) {
+  'use strict';
+
+  try {
     mod.config = new wizerati.Config(window.env || invertebrate.env.dev);
   }
   catch (e) {
@@ -7635,29 +7688,34 @@ window.wizerati = {
 ;$(function appStart() {
   'use strict';
 
-  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
-  for (var v in window.wizerati.mod('views')) {
-    window.wizerati.mod('views')[v].onDomReady();
-  }
-  //TODO read application state from local storage, before applying this first layout calculation
-  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
-  window.addEventListener('resize', function () {
+  if(wizerati.mod('compatibility').browserCompatibilityChecker.isBrowserCompatible()) {
+    window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
+    for (var v in window.wizerati.mod('views')) {
+      window.wizerati.mod('views')[v].onDomReady();
+    }
+    //TODO read application state from local storage, before applying this first layout calculation
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
-  });
-
-  wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
-
-  //disable hover states in touch devices
-  if ('ontouchstart' in window) {
-    $('body').attr('data-hover-is-enabled', 'false');
-  }
-
-  //We do not enable the fixed position bookmark headers on iOS due to jank.
-  if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
-    $('#bookmark-list-panel').bind('scroll', function (e) {
-      window.stackHeads();
+    window.addEventListener('resize', function () {
+      window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
     });
+
+    wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
+
+    //disable hover states in touch devices
+    if ('ontouchstart' in window) {
+      $('body').attr('data-hover-is-enabled', 'false');
+    }
+
+    //We do not enable the fixed position bookmark headers on iOS due to jank.
+    if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+      $('#bookmark-list-panel').bind('scroll', function (e) {
+        window.stackHeads();
+      });
+    }
+  } else {
+    $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">')
   }
+
 
 
   window.stackHeads = function (e) {

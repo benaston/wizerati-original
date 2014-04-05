@@ -1,29 +1,34 @@
 $(function appStart() {
   'use strict';
 
-  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
-  for (var v in window.wizerati.mod('views')) {
-    window.wizerati.mod('views')[v].onDomReady();
-  }
-  //TODO read application state from local storage, before applying this first layout calculation
-  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
-  window.addEventListener('resize', function () {
+  if(wizerati.mod('compatibility').browserCompatibilityChecker.isBrowserCompatible()) {
+    window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
+    for (var v in window.wizerati.mod('views')) {
+      window.wizerati.mod('views')[v].onDomReady();
+    }
+    //TODO read application state from local storage, before applying this first layout calculation
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
-  });
-
-  wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
-
-  //disable hover states in touch devices
-  if ('ontouchstart' in window) {
-    $('body').attr('data-hover-is-enabled', 'false');
-  }
-
-  //We do not enable the fixed position bookmark headers on iOS due to jank.
-  if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
-    $('#bookmark-list-panel').bind('scroll', function (e) {
-      window.stackHeads();
+    window.addEventListener('resize', function () {
+      window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
     });
+
+    wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
+
+    //disable hover states in touch devices
+    if ('ontouchstart' in window) {
+      $('body').attr('data-hover-is-enabled', 'false');
+    }
+
+    //We do not enable the fixed position bookmark headers on iOS due to jank.
+    if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+      $('#bookmark-list-panel').bind('scroll', function (e) {
+        window.stackHeads();
+      });
+    }
+  } else {
+    $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">')
   }
+
 
 
   window.stackHeads = function (e) {
