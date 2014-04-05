@@ -1,15 +1,16 @@
 (function (app) {
   'use strict';
 
-  function SelectedItemController(resultListModel, itemsOfInterestModel) {
+  function SelectedItemController(resultListModel, itemsOfInterestModel, readItemService) {
 
     if (!(this instanceof app.SelectedItemController)) {
-      return new app.SelectedItemController(resultListModel, itemsOfInterestModel);
+      return new app.SelectedItemController(resultListModel, itemsOfInterestModel, readItemService);
     }
 
     var that = this,
         _resultListModel = null,
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _readItemService = null;
 
     this.update = function (dto) {
       try {
@@ -22,6 +23,7 @@
           return;
         }
 
+        _readItemService.addReadItem(dto.id);
         //this has to be set before the mode change to ensure correct layout calculation
         _itemsOfInterestModel.setSelectedItemId(dto.id);
       } catch (err) {
@@ -30,18 +32,27 @@
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'SelectedItemController::init resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        _resultListModel = resultListModel;
+        _itemsOfInterestModel = itemsOfInterestModel;
+        _readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'SelectedItemController::init ' + e;
       }
-
-      if (!itemsOfInterestModel) {
-        throw 'SelectedItemController::init itemsOfInterestModel not supplied.';
-      }
-
-      _resultListModel = resultListModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
     }
 
     return init();

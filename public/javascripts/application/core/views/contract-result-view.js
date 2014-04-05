@@ -23,7 +23,7 @@
         that.$el.removeClass('selected');
       }
 
-      if (that.Model.isHidden) {
+      if (that.Model.hiddenDateTime) {
         that.$el.addClass('hidden');
       } else {
         that.$el.removeClass('hidden');

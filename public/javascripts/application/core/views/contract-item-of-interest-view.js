@@ -23,7 +23,7 @@
         that.$el.addClass('p-i');
       }
 
-      if (that.Model.isHidden) {
+      if (that.Model.hiddenDateTime) {
         that.$el.addClass('hidden');
       } else {
         that.$el.removeClass('hidden');

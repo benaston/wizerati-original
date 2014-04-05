@@ -52,9 +52,9 @@
     "location": "Bruges",
     "country": "Brussels",
     "organization": "Harvey Nash plc",
-    "aboutOrganization": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
+    "aboutOrganization": "<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>",
     "tld": "Senior C# Web Developer required for a Greenfield Fixed Income Front Office trading development team.",
-    "summary": "The successful candidate will be responsible for managing the development team responsible for various front end applications for the Fixed Income business. These applications support our users' workflow allowing them to prepare a trade by Monitoring the market, Searching specific reference data, Run what-if scenarios analysis.",
+    "summary": "<p>The successful candidate will be responsible for managing the development team responsible for various front end applications for the Fixed Income business. These applications support our users' workflow allowing them to prepare a trade by Monitoring the market, Searching specific reference data, Run what-if scenarios analysis.</p>",
     "jobType": "contract",
     "contact": "Jesse Gray",
     "telephoneNumber": "+44 (0)7742 157 185",
@@ -64,7 +64,8 @@
     "postedDatetime": "2013-01-01T00:00:00Z",
     "updatedDateTime": "2014-02-17T13:00:00Z",
     "skills": "C#, HTML5, JavaScript, CSS3",
-    "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ]
+    "externalLinks": [ { "uri": "http://www.example.com", "title": "Company Website" } ],
+    "hiddenDateTime": "2014-02-17T13:00:00Z"
     },
     {
     "id": "GUID5",

@@ -167,6 +167,7 @@
       $frmsHide.find('.btn').removeClass('checked');
       $items.removeClass('hidden');
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
+      $items.find('.btn:not(.btn-hide)').removeClass('disabled');
     };
 
     this.renderAddItemOfInterest = function (id) {
@@ -239,8 +240,8 @@
         _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.addHiddenItem] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.removeHiddenItem] = that.renderRemoveHiddenItem;
 
         $.subscribe(that.Model.eventUris.default, that.render);
         $.subscribe(that.Model.eventUris.setMode, that.render);
@@ -250,8 +251,8 @@
         $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
         $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
         that.Model = model;

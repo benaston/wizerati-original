@@ -1,14 +1,14 @@
 (function (app) {
   'use strict';
 
-  function HiddenItemsController(hiddenItemsModel) {
+  function HiddenItemsController(service) {
 
     if (!(this instanceof app.HiddenItemsController)) {
-      return new app.HiddenItemsController(hiddenItemsModel);
+      return new app.HiddenItemsController(service);
     }
 
     var that = this,
-        _hiddenItemsModel = null;
+        _service = null;
 
     this.create = function (dto) {
       if (!dto) {
@@ -17,20 +17,19 @@
 
       //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
       //this avoids massive memory use when rendering (which crashes ios safari)
-      _hiddenItemsModel.addHiddenItemId(dto.id);
+      _service.addHiddenItem(dto.id);
     };
 
     this.destroy = function (dto) {
-
-      _hiddenItemsModel.removeHiddenItemId(dto.id);
+      _service.removeHiddenItem(dto.id);
     };
 
     function init() {
-      if (!hiddenItemsModel) {
-        throw 'HiddenItemsController::init hiddenItemsModel not supplied.';
+      if (!service) {
+        throw 'HiddenItemsController::init hiddenItemService not supplied.';
       }
 
-      _hiddenItemsModel = hiddenItemsModel;
+      _service = service;
 
       return that;
     }

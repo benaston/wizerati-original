@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function SearchControllerHelper(uiModelPack, layoutCoordinator) {
+  function SearchControllerHelper(uiModelPack, layoutCoordinator, readItemService) {
 
     if (!(this instanceof app.SearchControllerHelper)) {
-      return new app.SearchControllerHelper(uiModelPack, layoutCoordinator);
+      return new app.SearchControllerHelper(uiModelPack, layoutCoordinator, readItemService);
     }
 
     var that = this,
@@ -16,7 +16,8 @@
         _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
-        _layoutCoordinator = null;
+        _layoutCoordinator = null,
+        _readItemService = null;
 
     this.resetUIForSearch = function () {
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
@@ -49,10 +50,9 @@
         //ensure the initial width rendering of items of interest is the correct one
         // (avoiding a repaint)
 
-          //Always reset the selected item when running a fresh search.
-          _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
-
-//        }
+        //Always reset the selected item when running a fresh search.
+        _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
+        _readItemService.addReadItem(results[0].id);
 
         setTimeout(function () {
           _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
@@ -66,18 +66,27 @@
     };
 
     function init() {
-      if (!uiModelPack) {
-        throw 'SearchControllerHelper::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+        _readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'SearchControllerHelper::init ' + e;
       }
-
-      if (!layoutCoordinator) {
-        throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-
-      return that;
     }
 
     return init();

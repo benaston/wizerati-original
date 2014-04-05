@@ -3204,14 +3204,14 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function HiddenItemsController(hiddenItemsModel) {
+  function HiddenItemsController(service) {
 
     if (!(this instanceof app.HiddenItemsController)) {
-      return new app.HiddenItemsController(hiddenItemsModel);
+      return new app.HiddenItemsController(service);
     }
 
     var that = this,
-        _hiddenItemsModel = null;
+        _service = null;
 
     this.create = function (dto) {
       if (!dto) {
@@ -3220,20 +3220,19 @@ window.wizerati = {
 
       //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
       //this avoids massive memory use when rendering (which crashes ios safari)
-      _hiddenItemsModel.addHiddenItemId(dto.id);
+      _service.addHiddenItem(dto.id);
     };
 
     this.destroy = function (dto) {
-
-      _hiddenItemsModel.removeHiddenItemId(dto.id);
+      _service.removeHiddenItem(dto.id);
     };
 
     function init() {
-      if (!hiddenItemsModel) {
-        throw 'HiddenItemsController::init hiddenItemsModel not supplied.';
+      if (!service) {
+        throw 'HiddenItemsController::init hiddenItemService not supplied.';
       }
 
-      _hiddenItemsModel = hiddenItemsModel;
+      _service = service;
 
       return that;
     }
@@ -3488,15 +3487,16 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SelectedItemController(resultListModel, itemsOfInterestModel) {
+  function SelectedItemController(resultListModel, itemsOfInterestModel, readItemService) {
 
     if (!(this instanceof app.SelectedItemController)) {
-      return new app.SelectedItemController(resultListModel, itemsOfInterestModel);
+      return new app.SelectedItemController(resultListModel, itemsOfInterestModel, readItemService);
     }
 
     var that = this,
         _resultListModel = null,
-        _itemsOfInterestModel = null;
+        _itemsOfInterestModel = null,
+        _readItemService = null;
 
     this.update = function (dto) {
       try {
@@ -3509,6 +3509,7 @@ window.wizerati = {
           return;
         }
 
+        _readItemService.addReadItem(dto.id);
         //this has to be set before the mode change to ensure correct layout calculation
         _itemsOfInterestModel.setSelectedItemId(dto.id);
       } catch (err) {
@@ -3517,18 +3518,27 @@ window.wizerati = {
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'SelectedItemController::init resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        _resultListModel = resultListModel;
+        _itemsOfInterestModel = itemsOfInterestModel;
+        _readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'SelectedItemController::init ' + e;
       }
-
-      if (!itemsOfInterestModel) {
-        throw 'SelectedItemController::init itemsOfInterestModel not supplied.';
-      }
-
-      _resultListModel = resultListModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
     }
 
     return init();
@@ -3692,19 +3702,19 @@ window.wizerati = {
     this.create = function (id, width, isSelectedItem, done) {
       try {
         if (!id) {
-          throw 'ItemOfInterestViewFactory::create id not supplied.';
+          throw 'create id not supplied.';
         }
 
         if (!width) {
-          throw 'ItemOfInterestViewFactory::create width not supplied.';
+          throw 'width not supplied.';
         }
 
         if (isSelectedItem === undefined || isSelectedItem === null) {
-          throw 'ItemOfInterestViewFactory::create isSelectedItem not supplied.';
+          throw 'isSelectedItem not supplied.';
         }
 
         if (!done) {
-          throw 'ItemOfInterestViewFactory::create done not supplied.';
+          throw 'done not supplied.';
         }
 
         var role = _signInIService.getCurrentRole();
@@ -3712,7 +3722,7 @@ window.wizerati = {
           case _roleEnum.Employer:
           case _roleEnum.EmployerStranger:
             _itemRepository.getById(id, function (item) {
-              item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isBookmarkable = !_itemModelPack.hiddenItemService.isHidden(item.id);
               item.isBookmark = item['isBookmark'];
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
               item.isInComparisonList = !isSelectedItem;
@@ -3720,7 +3730,7 @@ window.wizerati = {
               item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === id;
               });
-              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.width = width;
@@ -3731,23 +3741,23 @@ window.wizerati = {
           case _roleEnum.Contractor:
           case _roleEnum.ContractorStranger:
             _itemRepository.getById(id, function (item) {
-              item.isBookmarkable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isBookmarkable = !item.hiddenDateTime;
               item.isBookmark = !!(item.bookmarkDateTime); //if it has a bmk date time it is a bmk
               item.isSelected = isSelectedItem;
               item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === item.id;
               }));
-              item.canAddToComparisonList = !_itemModelPack.hiddenItemsModel.isHidden(item.id) && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
-              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.canAddToComparisonList = !item.hiddenDateTime && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
+              item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
-              item.isActionable = !_itemModelPack.hiddenItemsModel.isHidden(item.id);
+              item.isActionable = !item.hiddenDateTime;
               item.width = width;
               done(new app.ContractItemOfInterestView(item).render().$el);
             });
             break;
           default:
-            throw 'ItemOfInterestViewFactory::create invalid user role "' + role + '"';
+            throw 'invalid user role "' + role + '"';
         }
       } catch (e) {
         throw 'ItemOfInterestViewFactory::create ' + e;
@@ -3813,7 +3823,7 @@ window.wizerati = {
           case _roleEnum.EmployerStranger:
             _itemRepository.getById(id, function (item) {
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
               item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
               done(new app.ContractorResultView(item).render().$el);
@@ -3823,7 +3833,7 @@ window.wizerati = {
           case _roleEnum.ContractorStranger:
             _itemRepository.getById(id, function (item) {
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-              item.isHidden = _itemModelPack.hiddenItemsModel.isHidden(item.id);
+//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
               item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
               item.tweet = item.tld.length > 140 ? item.tld.substr(0,140) + '...' : item.tld;
@@ -3985,10 +3995,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function SearchControllerHelper(uiModelPack, layoutCoordinator) {
+  function SearchControllerHelper(uiModelPack, layoutCoordinator, readItemService) {
 
     if (!(this instanceof app.SearchControllerHelper)) {
-      return new app.SearchControllerHelper(uiModelPack, layoutCoordinator);
+      return new app.SearchControllerHelper(uiModelPack, layoutCoordinator, readItemService);
     }
 
     var that = this,
@@ -4000,7 +4010,8 @@ window.wizerati = {
         _navbarItemEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
-        _layoutCoordinator = null;
+        _layoutCoordinator = null,
+        _readItemService = null;
 
     this.resetUIForSearch = function () {
       _uiModelPack.resultListModel.setMode(_resultListModeEnum.Default);
@@ -4033,10 +4044,9 @@ window.wizerati = {
         //ensure the initial width rendering of items of interest is the correct one
         // (avoiding a repaint)
 
-          //Always reset the selected item when running a fresh search.
-          _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
-
-//        }
+        //Always reset the selected item when running a fresh search.
+        _uiModelPack.itemsOfInterestModel.setSelectedItemId(results[0].id);
+        _readItemService.addReadItem(results[0].id);
 
         setTimeout(function () {
           _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
@@ -4050,18 +4060,27 @@ window.wizerati = {
     };
 
     function init() {
-      if (!uiModelPack) {
-        throw 'SearchControllerHelper::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+        _readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'SearchControllerHelper::init ' + e;
       }
-
-      if (!layoutCoordinator) {
-        throw 'SearchControllerHelper::init layoutCoordinator not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-
-      return that;
     }
 
     return init();
@@ -4673,52 +4692,6 @@ window.wizerati = {
 
   app.DeleteFavoriteGroupConfirmationDialogModel = DeleteFavoriteGroupConfirmationDialogModel;
   invertebrate.Model.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function HiddenItemsModel() {
-
-    if (!(this instanceof app.HiddenItemsModel)) {
-      return new app.HiddenItemsModel();
-    }
-
-    var that = this,
-        _hiddenItems = {};
-
-    this.eventUris = { default: 'update://hiddenitemsmodel',
-                       addHiddenItemId: 'update://hiddenitemsmodel/addHiddenItemId',
-                       removeHiddenItemId: 'update://hiddenitemsmodel/removeHiddenItemId' };
-    this.updateEventUri = 'update://hiddenitemsmodel/';
-
-    this.isHidden = function (id) {
-
-      return !!_hiddenItems[id];
-    };
-
-    this.addHiddenItemId = function (value) {
-      _hiddenItems[value] = value;
-
-      $.publish(that.eventUris.addHiddenItemId, _hiddenItems[value]);
-    };
-
-    this.removeHiddenItemId = function (value) {
-      delete _hiddenItems[value];
-
-      $.publish(that.eventUris.removeHiddenItemId, value);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.HiddenItemsModel = HiddenItemsModel;
-  invertebrate.Model.isExtendedBy(app.HiddenItemsModel);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $) {
@@ -5398,10 +5371,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel) {
+  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemService, actionedItemsModel, readItemService) {
 
     if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemsModel, actionedItemsModel);
+      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemService, actionedItemsModel, readItemService);
     }
 
     var that = this;
@@ -5409,8 +5382,9 @@ window.wizerati = {
     this.resultListModel = null;
     this.bookmarkListModel = null;
     this.itemsOfInterestModel = null;
-    this.hiddenItemsModel = null;
+    this.hiddenItemService = null;
     this.actionedItemsModel = null;
+    this.readItemService = null;
 
     function init() {
       if (!resultListModel) {
@@ -5425,19 +5399,24 @@ window.wizerati = {
         throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
       }
 
-      if (!hiddenItemsModel) {
-        throw 'ItemModelPack::init hiddenItemsModel not supplied.';
+      if (!hiddenItemService) {
+        throw 'ItemModelPack::init hiddenItemService not supplied.';
       }
 
       if (!actionedItemsModel) {
         throw 'ItemModelPack::init actionedItemsModel not supplied.';
       }
 
+      if (!readItemService) {
+        throw 'ItemModelPack::init readItemService not supplied.';
+      }
+
       that.resultListModel = resultListModel;
       that.bookmarkListModel = bookmarkListModel;
       that.itemsOfInterestModel = itemsOfInterestModel;
-      that.hiddenItemsModel = hiddenItemsModel;
+      that.hiddenItemService = hiddenItemService;
       that.actionedItemsModel = actionedItemsModel;
+      that.readItemService = readItemService;
 
       return that;
     }
@@ -6032,6 +6011,142 @@ window.wizerati = {
   app.BookmarkService = BookmarkService;
 
 }(wizerati));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function HiddenItemService(itemRepository) {
+
+    if (!(this instanceof app.HiddenItemService)) {
+      return new app.HiddenItemService(itemRepository);
+    }
+
+    var that = this,
+        _itemRepository = null;
+
+    this.eventUris = { default: 'update://hiddenitemservice',
+      addHiddenItem: 'update://hiddenitemservice/addHiddenItem',
+      removeHiddenItem: 'update://hiddenitemservice/removeHiddenItem' };
+
+    this.addHiddenItem = function (id) {
+      try {
+        if (id == null) {
+          throw 'id not supplied.';
+        }
+
+        _itemRepository.getById(id, function (item) {
+          if (item.hiddenDateTime) {
+            return;
+          }
+
+          item.hiddenDateTime = new Date().toISOString();
+          $.publish(that.eventUris.addHiddenItem, id);
+        });
+      } catch (e) {
+        throw 'HiddenItemService::addHiddenItem ' + e;
+      }
+    };
+
+    this.removeHiddenItem = function (id) {
+      try {
+        if (id == null) {
+          throw 'id not supplied.';
+        }
+
+        _itemRepository.getById(id, function (item) {
+          if (!item.hiddenDateTime) {
+            return;
+          }
+
+          item.hiddenDateTime = null;
+          $.publish(that.eventUris.removeHiddenItem, id);
+        });
+      } catch (e) {
+        throw 'HiddenItemService::removeHiddenItem ' + e;
+      }
+    };
+
+    function init() {
+      try {
+        if (itemRepository == null) {
+          throw 'itemRepository not supplied.';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        _itemRepository = itemRepository;
+
+        return that;
+      } catch (e) {
+        throw 'HiddenItemService::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.HiddenItemService = HiddenItemService;
+  invertebrate.Model.isExtendedBy(app.HiddenItemService);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function ReadItemService(itemRepository) {
+
+    if (!(this instanceof app.ReadItemService)) {
+      return new app.ReadItemService(itemRepository);
+    }
+
+    var that = this,
+        _itemRepository = null;
+
+    this.eventUris = { default: 'update://readitemservice',
+      addReadItem: 'update://readitemservice/addreaditem' };
+
+    this.addReadItem = function (id) {
+      try {
+        if (id == null) {
+          throw 'id not supplied.';
+        }
+
+        _itemRepository.getById(id, function (item) {
+          if (item.readDateTime) {
+            return;
+          }
+
+          item.readDateTime = new Date().toISOString();
+          $.publish(that.eventUris.addReadItem, id);
+        });
+      } catch (e) {
+        throw 'ReadItemService::addHiddenItem ' + e;
+      }
+    };
+
+    function init() {
+      try {
+        if (itemRepository == null) {
+          throw 'itemRepository not supplied.';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        _itemRepository = itemRepository;
+
+//        $.subscribe(_itemsOfInterestModel.eventUris.setSelectedItemId, that.addReadItem));
+
+        return that;
+      } catch (e) {
+        throw 'ReadItemService::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.ReadItemService = ReadItemService;
+  invertebrate.Model.isExtendedBy(app.ReadItemService);
+
+}(wizerati, $, invertebrate));
 ;//try forcing service types to communicate with the UI only via routing and local storage?
 (function (app, $) {
   'use strict';
@@ -6294,6 +6409,11 @@ window.wizerati = {
       that.$elContainer.attr('data-mode', mode);
     };
 
+    this.renderAddReadItem = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-read', 'true');
+    };
+
     function init() {
       try {
         if (!model) {
@@ -6316,10 +6436,10 @@ window.wizerati = {
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
-//      _renderOptimizations[itemModelPack.bookmarkBookModel.eventUris.addBookmark] = that.renderAddBookmark;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.addHiddenItem] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.removeHiddenItem] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.readItemService.eventUris.addReadItem] = that.renderAddReadItem;
 
         $.subscribe(that.Model.eventUris.default, that.render);
         $.subscribe(that.Model.eventUris.setMode, that.render);
@@ -6328,9 +6448,10 @@ window.wizerati = {
         $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
         $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+        $.subscribe(itemModelPack.readItemService.eventUris.addReadItem, that.render);
 
         return that;
       } catch (e) {
@@ -6427,7 +6548,7 @@ window.wizerati = {
         that.$el.addClass('p-i');
       }
 
-      if (that.Model.isHidden) {
+      if (that.Model.hiddenDateTime) {
         that.$el.addClass('hidden');
       } else {
         that.$el.removeClass('hidden');
@@ -6485,7 +6606,7 @@ window.wizerati = {
         that.$el.removeClass('selected');
       }
 
-      if (that.Model.isHidden) {
+      if (that.Model.hiddenDateTime) {
         that.$el.addClass('hidden');
       } else {
         that.$el.removeClass('hidden');
@@ -6707,6 +6828,7 @@ window.wizerati = {
       $frmsHide.find('.btn').removeClass('checked');
       $items.removeClass('hidden');
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
+      $items.find('.btn:not(.btn-hide)').removeClass('disabled');
     };
 
     this.renderAddItemOfInterest = function (id) {
@@ -6779,8 +6901,8 @@ window.wizerati = {
         _renderOptimizations[that.Model.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.addHiddenItem] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.removeHiddenItem] = that.renderRemoveHiddenItem;
 
         $.subscribe(that.Model.eventUris.default, that.render);
         $.subscribe(that.Model.eventUris.setMode, that.render);
@@ -6790,8 +6912,8 @@ window.wizerati = {
         $.subscribe(that.Model.eventUris.removeItemOfInterest, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
         $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
         that.Model = model;
@@ -6886,15 +7008,15 @@ window.wizerati = {
       $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
     };
 
-    this.renderAddHiddenItem = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
+    this.renderAddHiddenItem = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
 
       var $selector = $(_el).find(selector);
       $selector.addClass('hidden');
     };
 
-    this.renderRemoveHiddenItem = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
+    this.renderRemoveHiddenItem = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
       var $selector = $(_el).find(selector);
       $selector.removeClass('hidden');
     };
@@ -6912,6 +7034,11 @@ window.wizerati = {
     this.renderSetMode = function (mode) {
       mode = mode || that.Model.getMode();
       that.$elContainer.attr('data-mode', mode);
+    };
+
+    this.renderAddReadItem = function (id) {
+      var selector = '.t[data-id="' + id + '"]';
+      $(_el).find(selector).attr('data-is-read', 'true');
     };
 
     function init() {
@@ -6943,8 +7070,9 @@ window.wizerati = {
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.addBookmark] = that.renderAddBookmark;
         _renderOptimizations[itemModelPack.bookmarkListModel.eventUris.removeBookmark] = that.renderRemoveBookmark;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId] = that.renderAddHiddenItem;
-        _renderOptimizations[itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.addHiddenItem] = that.renderAddHiddenItem;
+        _renderOptimizations[itemModelPack.hiddenItemService.eventUris.removeHiddenItem] = that.renderRemoveHiddenItem;
+        _renderOptimizations[itemModelPack.readItemService.eventUris.addReadItem] = that.renderAddReadItem;
 
         $.subscribe(that.Model.eventUris.default, that.render);
         $.subscribe(that.Model.eventUris.setMode, that.render);
@@ -6953,9 +7081,10 @@ window.wizerati = {
         $.subscribe(itemModelPack.itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.addBookmark, that.render);
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.addHiddenItemId, that.render);
-        $.subscribe(itemModelPack.hiddenItemsModel.eventUris.removeHiddenItemId, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
+        $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
         $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
+        $.subscribe(itemModelPack.readItemService.eventUris.addReadItem, that.render);
 
         return that;
       } catch (e) {
@@ -7467,7 +7596,6 @@ window.wizerati = {
     mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
     mod.bookmarkListModel = new w.BookmarkListModel();
     mod.deleteFavoriteGroupConfirmationDialogModel = new w.DeleteFavoriteGroupConfirmationDialogModel();
-    mod.hiddenItemsModel = new w.HiddenItemsModel();
     mod.purchasePanelModel = new w.PurchasePanelModel();
     mod.resultListModel = new w.ResultListModel();
     mod.searchFormModel = new w.SearchFormModel();
@@ -7484,18 +7612,7 @@ window.wizerati = {
 
 }(wizerati, wizerati.mod('models')));
 
-(function (w, mod, m) {
-  'use strict';
 
-  try {
-    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, m.hiddenItemsModel, m.actionedItemsModel);
-    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel);
-  }
-  catch (e) {
-    throw 'problem registering packs module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('packs'), wizerati.mod('models')));
 
 //infrastructure services are services that are sufficiently
 // de-coupled from the domain logic that they can be initialized
@@ -7548,10 +7665,11 @@ window.wizerati = {
   try {
     mod.accountService = new w.AccountService(c.wizeratiHttpClient);
     mod.authenticationService = new w.AuthenticationService();
-    mod.bookmarkService = new w.BookmarkService(m.bookmarkListModel, r.bookmarkRepository, r.itemRepository, ca.itemCache);
-
     mod.authorizationService = new w.AuthorizationService(i.cookieIService);
     mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
+    mod.bookmarkService = new w.BookmarkService(m.bookmarkListModel, r.bookmarkRepository, r.itemRepository, ca.itemCache);
+    mod.hiddenItemService = new w.HiddenItemService(r.itemRepository);
+    mod.readItemService = new w.ReadItemService(r.itemRepository);
     mod.searchService = new w.SearchService(i.croniclIService, ca.itemCache);
   }
   catch (e) {
@@ -7559,6 +7677,20 @@ window.wizerati = {
   }
 
 }(wizerati, wizerati.mod('services'), wizerati.mod('clients'), wizerati.mod('caches'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
+
+
+(function (w, mod, m, s) {
+  'use strict';
+
+  try {
+    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, s.hiddenItemService, m.actionedItemsModel, s.readItemService);
+    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel);
+  }
+  catch (e) {
+    throw 'problem registering packs module. ' + e;
+  }
+
+}(wizerati, wizerati.mod('packs'), wizerati.mod('models'), wizerati.mod('services')));
 
 
 (function (w, mod, i, m, r, p) {
@@ -7623,18 +7755,18 @@ window.wizerati = {
 }(wizerati, wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('packs')));
 
 
-(function (w, mod, p, f, l, m) {
+(function (w, mod, p, f, l, m, s) {
   'use strict';
 
   try {
-    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator);
+    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator, s.readItemService);
     mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
   }
   catch (e) {
     throw 'problem registering helpers module. ' + e;
   }
 
-}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models')));
+}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
 
 
 (function (w, mod, f, l, m, s, p, h, r) {
@@ -7645,13 +7777,13 @@ window.wizerati = {
     mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
     mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
     mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
-    mod.hiddenItemsController = new w.HiddenItemsController(m.hiddenItemsModel);
+    mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
     mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
     mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
 //    mod.itemsOfInterestPanelModeController = new w.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
     mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
     mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
-    mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel);
+    mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
   }
   catch (e) {
     throw 'problem registering controllers module. ' + e;

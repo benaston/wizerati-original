@@ -146,8 +146,9 @@ label[for='btn-change-search'] {
 .i-c {
     position: absolute;
     left: 7px;
-    top: 25px;
+    top: 21px;
     width: 22px;
+    font-size: 1.2rem;
 }
 
 .is-bookmark, .is-in-comparison-list, .actioned {

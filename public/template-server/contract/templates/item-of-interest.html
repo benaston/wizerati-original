@@ -15,14 +15,14 @@
                 <div class="m-i">
                     <button id="btn-hide-{{= model.id}}" class="btn btn-s {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
                             title="{{=model.isHideable ? 'Hide this from future results' : '' }}" {{=model.isHideable || model.isHidden ? '' : 'disabled' }}>&#xf30f;</button>
-                    <label class="lbl" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'un-hide' : 'hide' }}</label>
+                    <label class="lbl" for="btn-hide-{{= model.id}}">hide</label>
                 </div>
             </form></li>
             <li><form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-action-{{= model.id}}" class="btn btn-s {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
-                            title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable || model.isHidden ? '' : 'disabled' }}>&#xf16c;</button>
+                            title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable ? '' : 'disabled' }}>&#xf16c;</button>
                     <label class="lbl" for="btn-action-{{= model.id}}">apply</label>
                 </div>
             </form></li>
