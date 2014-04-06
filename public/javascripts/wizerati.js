@@ -7848,6 +7848,8 @@ window.wizerati = {
 
     //We do not enable the fixed position bookmark headers on iOS due to jank.
     if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+      $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
+
       $('#bookmark-list-panel').bind('scroll', function (e) {
         window.stackHeads();
       });
