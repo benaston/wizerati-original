@@ -3214,13 +3214,17 @@ window.wizerati = {
         _service = null;
 
     this.create = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
+      try {
+        if (!dto) {
+          throw 'dto not supplied.';
+        }
 
-      //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
-      //this avoids massive memory use when rendering (which crashes ios safari)
-      _service.addHiddenItem(dto.id);
+        //view should add class to add -webkit-filter: opacity(100%) and -webkit-backface-visibility:hidden;, then add another class to set -webkit-filter: opacity(10%)
+        //this avoids massive memory use when rendering (which crashes ios safari)
+        _service.addHiddenItem(dto.id);
+      } catch (e) {
+        throw 'HiddenItemsController::create ' + e;
+      }
     };
 
     this.destroy = function (dto) {
@@ -3228,13 +3232,17 @@ window.wizerati = {
     };
 
     function init() {
-      if (!service) {
-        throw 'HiddenItemsController::init hiddenItemService not supplied.';
+      try {
+        if (!service) {
+          throw 'hiddenItemService not supplied.';
+        }
+
+        _service = service;
+
+        return that;
+      } catch (e) {
+        throw 'HiddenItemsController::init ' + e;
       }
-
-      _service = service;
-
-      return that;
     }
 
     return init();
