@@ -7943,7 +7943,7 @@ window.wizerati = {
 }(wizerati, $, invertebrate));
 ;'use strict';
 
-(function runModules(w){
+(function registerModules(w){
   with(w) {
     enumRegistrar.run(w);
     compatibilityRegistrar.run(w);
