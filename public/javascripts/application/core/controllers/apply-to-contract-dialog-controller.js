@@ -8,7 +8,7 @@
     }
 
     var that = this,
-       _service = null;
+        _service = null;
 
     this.create = function (dto) {
       _service.show(dto.id); //will show the relevant screens given the user's logged-in status
@@ -19,13 +19,17 @@
     };
 
     function init() {
-      if (!service) {
-        throw 'ApplyToContractDialogController::init service not supplied.';
+      try {
+        if (!service) {
+          throw 'service not supplied.';
+        }
+
+        _service = service;
+
+        return that;
+      } catch (e) {
+        throw 'ApplyToContractDialogController::init ' + e;
       }
-
-      _service = service;
-
-      return that;
     }
 
     return init();

@@ -16,17 +16,21 @@
     };
 
     function init() {
-      if (!signInService) {
-        throw 'signInService not supplied';
-      }
-      if (!config) {
-        throw 'config not supplied';
-      }
+      try {
+        if (!signInService) {
+          throw 'signInService not supplied';
+        }
+        if (!config) {
+          throw 'config not supplied';
+        }
 
-      _signInService = signInService;
-      _config = config;
+        _signInService = signInService;
+        _config = config;
 
-      return that;
+        return that;
+      } catch (e) {
+        throw 'CroniclIService::init ' + e;
+      }
     }
 
     return init();

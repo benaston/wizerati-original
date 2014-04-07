@@ -34,7 +34,6 @@
     };
 
     function init() {
-
       return that;
     }
 

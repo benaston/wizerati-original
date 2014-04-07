@@ -54,7 +54,7 @@
               item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === id;
               });
-//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
+              item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
 //              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.width = width;
@@ -90,23 +90,27 @@
     };
 
     function init() {
-      if (!signInIService) {
-        throw 'ItemOfInterestViewFactory::init loginService not supplied.';
+      try {
+        if (!signInIService) {
+          throw 'loginService not supplied.';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied.';
+        }
+
+        if (!itemModelPack) {
+          throw 'itemModelPack not supplied.';
+        }
+
+        _signInIService = signInIService;
+        _itemRepository = itemRepository;
+        _itemModelPack = itemModelPack;
+
+        return that;
+      } catch (e) {
+        throw 'ItemOfInterestViewFactory::init ' + e;
       }
-
-      if (!itemRepository) {
-        throw 'ItemOfInterestViewFactory::init itemRepository not supplied.';
-      }
-
-      if (!itemModelPack) {
-        throw 'ItemOfInterestViewFactory::init itemModelPack not supplied.';
-      }
-
-      _signInIService = signInIService;
-      _itemRepository = itemRepository;
-      _itemModelPack = itemModelPack;
-
-      return that;
     }
 
     return init();

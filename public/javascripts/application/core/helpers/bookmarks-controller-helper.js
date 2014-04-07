@@ -34,7 +34,7 @@
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       //If nothing is currently selected then set select the first bookmark (occurs with external visits to bookmarks).
-      if(!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
+      if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
         var sortedBookmarks = bookmarks.sort(function (b1, b2) {
           return -(+Date.parse(b1.bookmarkDateTime) - +Date.parse(b2.bookmarkDateTime));
         });
@@ -49,23 +49,27 @@
     };
 
     function init() {
-      if (!uiModelPack) {
-        throw 'BookmarksControllerHelper::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+        _bookmarkListModel = bookmarkListModel;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarksControllerHelper::init ' + e;
       }
-
-      if (!layoutCoordinator) {
-        throw 'BookmarksControllerHelper::init layoutCoordinator not supplied.';
-      }
-
-      if (!bookmarkListModel) {
-        throw 'BookmarksControllerHelper::init bookmarkListModel not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-      _bookmarkListModel = bookmarkListModel;
-
-      return that;
     }
 
     return init();

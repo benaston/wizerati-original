@@ -28,25 +28,29 @@
     };
 
     function init() {
-      if (!uiRootModel) {
-        throw 'HomeController::init uiRootModel not supplied.';
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        _uiRootModel = uiRootModel;
+        _resultListModel = resultListModel;
+        _searchFormModel = searchFormModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'HomeController::init ' + e;
       }
-
-      if (!resultListModel) {
-        throw 'HomeController::init resultListModel not supplied.';
-      }
-
-      if (!searchFormModel) {
-        throw 'HomeController::init searchFormModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-      _resultListModel = resultListModel;
-      _searchFormModel = searchFormModel;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
     }
 
     return init();

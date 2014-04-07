@@ -16,7 +16,6 @@
         _previousSearchHash = null;
 
     this.urlTransforms = {};
-
     this.dtoPopulators = {};
 
     this.show = function (dto) {
@@ -29,7 +28,7 @@
         _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         var currentSearchHash = '' + dto.keywords + dto.r;
 
-        if(_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
+        if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
           _previousSearchHash = currentSearchHash;
           _uiModelPack.searchFormModel.setIsWaiting('true');
           _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
@@ -61,26 +60,30 @@
     }
 
     function init() {
-      if (!uiModelPack) {
-        throw 'SearchController::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!searchService) {
+          throw 'searchService not supplied.';
+        }
+
+        if (!searchControllerHelper) {
+          throw 'searchControllerHelper not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _searchService = searchService;
+        _helper = searchControllerHelper;
+
+        that.urlTransforms['/search'] = uriTransformShow;
+        that.dtoPopulators['/search'] = dtoPopulatorShow;
+
+        return that;
+      } catch (e) {
+        throw 'SearchController::init ' + e;
       }
-
-      if (!searchService) {
-        throw 'SearchController::init searchService not supplied.';
-      }
-
-      if (!searchControllerHelper) {
-        throw 'SearchController::init searchControllerHelper not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _searchService = searchService;
-      _helper = searchControllerHelper;
-
-      that.urlTransforms['/search'] = uriTransformShow;
-      that.dtoPopulators['/search'] = dtoPopulatorShow;
-
-      return that;
     }
 
     return init();

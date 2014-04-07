@@ -33,13 +33,17 @@
     };
 
     function init() {
-      if (!searchFormModel) {
-        throw 'SearchFormModeController::init searchFormModel not supplied.';
+      try {
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        _searchFormModel = searchFormModel;
+
+        return that;
+      } catch (e) {
+        throw 'SearchFormModeController::init ' + e;
       }
-
-      _searchFormModel = searchFormModel;
-
-      return that;
     }
 
     return init();

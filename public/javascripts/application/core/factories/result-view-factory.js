@@ -42,7 +42,7 @@
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
 //              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
-              item.tweet = item.tld.length > 140 ? item.tld.substr(0,140) + '...' : item.tld;
+              item.tweet = item.tld.length > 140 ? item.tld.substr(0, 140) + '...' : item.tld;
 
               done(new app.ContractResultView(item).render().$el);
             });
@@ -56,23 +56,27 @@
     };
 
     function init() {
-      if (!signInIService) {
-        throw 'ResultViewFactory::init loginService not supplied.';
+      try {
+        if (!signInIService) {
+          throw 'loginService not supplied.';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied.';
+        }
+
+        if (!itemModelPack) {
+          throw 'itemModelPack not supplied.';
+        }
+
+        _signInIService = signInIService;
+        _itemRepository = itemRepository;
+        _itemModelPack = itemModelPack;
+
+        return that;
+      } catch (e) {
+        throw 'ResultViewFactory::init ' + e;
       }
-
-      if (!itemRepository) {
-        throw 'ResultViewFactory::init itemRepository not supplied.';
-      }
-
-      if (!itemModelPack) {
-        throw 'ResultViewFactory::init itemModelPack not supplied.';
-      }
-
-      _signInIService = signInIService;
-      _itemRepository = itemRepository;
-      _itemModelPack = itemModelPack;
-
-      return that;
     }
 
     return init();

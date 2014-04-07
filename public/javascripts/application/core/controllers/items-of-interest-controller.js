@@ -26,13 +26,17 @@
     };
 
     function init() {
-      if (!itemsOfInterestModel) {
-        throw 'ItemsOfInterestController::init itemsOfInterestModel not supplied.';
+      try {
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        _itemsOfInterestModel = itemsOfInterestModel;
+
+        return that;
+      } catch (e) {
+        throw 'ItemsOfInterestController::init ' + e;
       }
-
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
     }
 
     return init();

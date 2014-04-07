@@ -2985,7 +2985,7 @@ window.wizerati = {
     }
 
     var that = this,
-       _service = null;
+        _service = null;
 
     this.create = function (dto) {
       _service.show(dto.id); //will show the relevant screens given the user's logged-in status
@@ -2996,13 +2996,17 @@ window.wizerati = {
     };
 
     function init() {
-      if (!service) {
-        throw 'ApplyToContractDialogController::init service not supplied.';
+      try {
+        if (!service) {
+          throw 'service not supplied.';
+        }
+
+        _service = service;
+
+        return that;
+      } catch (e) {
+        throw 'ApplyToContractDialogController::init ' + e;
       }
-
-      _service = service;
-
-      return that;
     }
 
     return init();
@@ -3125,7 +3129,7 @@ window.wizerati = {
         _layoutCoordinator = null;
 
     this.index = function (dto) {
-       //if external get state from local storage...
+      //if external get state from local storage...
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
@@ -3133,20 +3137,24 @@ window.wizerati = {
     };
 
     function init() {
-      if (!uiModelPack) {
-        throw 'ComparisonListController::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'ComparisonListController::init ' + e;
       }
-
-      if (!layoutCoordinator) {
-        throw 'ComparisonListController::init layoutCoordinator not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
     }
 
     return init();
@@ -3235,25 +3243,29 @@ window.wizerati = {
     };
 
     function init() {
-      if (!uiRootModel) {
-        throw 'HomeController::init uiRootModel not supplied.';
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        _uiRootModel = uiRootModel;
+        _resultListModel = resultListModel;
+        _searchFormModel = searchFormModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'HomeController::init ' + e;
       }
-
-      if (!resultListModel) {
-        throw 'HomeController::init resultListModel not supplied.';
-      }
-
-      if (!searchFormModel) {
-        throw 'HomeController::init searchFormModel not supplied.';
-      }
-
-      _uiRootModel = uiRootModel;
-      _resultListModel = resultListModel;
-      _searchFormModel = searchFormModel;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
     }
 
     return init();
@@ -3290,13 +3302,17 @@ window.wizerati = {
     };
 
     function init() {
-      if (!itemsOfInterestModel) {
-        throw 'ItemsOfInterestController::init itemsOfInterestModel not supplied.';
+      try {
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        _itemsOfInterestModel = itemsOfInterestModel;
+
+        return that;
+      } catch (e) {
+        throw 'ItemsOfInterestController::init ' + e;
       }
-
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
     }
 
     return init();
@@ -3381,7 +3397,6 @@ window.wizerati = {
         _previousSearchHash = null;
 
     this.urlTransforms = {};
-
     this.dtoPopulators = {};
 
     this.show = function (dto) {
@@ -3394,7 +3409,7 @@ window.wizerati = {
         _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         var currentSearchHash = '' + dto.keywords + dto.r;
 
-        if(_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
+        if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
           _previousSearchHash = currentSearchHash;
           _uiModelPack.searchFormModel.setIsWaiting('true');
           _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
@@ -3426,26 +3441,30 @@ window.wizerati = {
     }
 
     function init() {
-      if (!uiModelPack) {
-        throw 'SearchController::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!searchService) {
+          throw 'searchService not supplied.';
+        }
+
+        if (!searchControllerHelper) {
+          throw 'searchControllerHelper not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _searchService = searchService;
+        _helper = searchControllerHelper;
+
+        that.urlTransforms['/search'] = uriTransformShow;
+        that.dtoPopulators['/search'] = dtoPopulatorShow;
+
+        return that;
+      } catch (e) {
+        throw 'SearchController::init ' + e;
       }
-
-      if (!searchService) {
-        throw 'SearchController::init searchService not supplied.';
-      }
-
-      if (!searchControllerHelper) {
-        throw 'SearchController::init searchControllerHelper not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _searchService = searchService;
-      _helper = searchControllerHelper;
-
-      that.urlTransforms['/search'] = uriTransformShow;
-      that.dtoPopulators['/search'] = dtoPopulatorShow;
-
-      return that;
     }
 
     return init();
@@ -3489,13 +3508,17 @@ window.wizerati = {
     };
 
     function init() {
-      if (!searchFormModel) {
-        throw 'SearchFormModeController::init searchFormModel not supplied.';
+      try {
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        _searchFormModel = searchFormModel;
+
+        return that;
+      } catch (e) {
+        throw 'SearchFormModeController::init ' + e;
       }
-
-      _searchFormModel = searchFormModel;
-
-      return that;
     }
 
     return init();
@@ -3589,18 +3612,22 @@ window.wizerati = {
     };
 
     function init() {
-      if (!loginPanelModel) {
-        throw 'SessionController::init loginPanelModel not supplied.';
+      try {
+        if (!loginPanelModel) {
+          throw 'SessionController::init loginPanelModel not supplied.';
+        }
+
+        if (!authenticationService) {
+          throw 'SessionController::init authenticationService not supplied.';
+        }
+
+        _loginPanelModel = loginPanelModel;
+        _authenticationService = authenticationService;
+
+        return that;
+      } catch (e) {
+        throw 'SessionController::init ' + e;
       }
-
-      if (!authenticationService) {
-        throw 'SessionController::init authenticationService not supplied.';
-      }
-
-      _loginPanelModel = loginPanelModel;
-      _authenticationService = authenticationService;
-
-      return that;
     }
 
     return init();
@@ -3750,7 +3777,7 @@ window.wizerati = {
               item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === id;
               });
-//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
+              item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
 //              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.width = width;
@@ -3786,23 +3813,27 @@ window.wizerati = {
     };
 
     function init() {
-      if (!signInIService) {
-        throw 'ItemOfInterestViewFactory::init loginService not supplied.';
+      try {
+        if (!signInIService) {
+          throw 'loginService not supplied.';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied.';
+        }
+
+        if (!itemModelPack) {
+          throw 'itemModelPack not supplied.';
+        }
+
+        _signInIService = signInIService;
+        _itemRepository = itemRepository;
+        _itemModelPack = itemModelPack;
+
+        return that;
+      } catch (e) {
+        throw 'ItemOfInterestViewFactory::init ' + e;
       }
-
-      if (!itemRepository) {
-        throw 'ItemOfInterestViewFactory::init itemRepository not supplied.';
-      }
-
-      if (!itemModelPack) {
-        throw 'ItemOfInterestViewFactory::init itemModelPack not supplied.';
-      }
-
-      _signInIService = signInIService;
-      _itemRepository = itemRepository;
-      _itemModelPack = itemModelPack;
-
-      return that;
     }
 
     return init();
@@ -3855,7 +3886,7 @@ window.wizerati = {
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
 //              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
-              item.tweet = item.tld.length > 140 ? item.tld.substr(0,140) + '...' : item.tld;
+              item.tweet = item.tld.length > 140 ? item.tld.substr(0, 140) + '...' : item.tld;
 
               done(new app.ContractResultView(item).render().$el);
             });
@@ -3869,23 +3900,27 @@ window.wizerati = {
     };
 
     function init() {
-      if (!signInIService) {
-        throw 'ResultViewFactory::init loginService not supplied.';
+      try {
+        if (!signInIService) {
+          throw 'loginService not supplied.';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied.';
+        }
+
+        if (!itemModelPack) {
+          throw 'itemModelPack not supplied.';
+        }
+
+        _signInIService = signInIService;
+        _itemRepository = itemRepository;
+        _itemModelPack = itemModelPack;
+
+        return that;
+      } catch (e) {
+        throw 'ResultViewFactory::init ' + e;
       }
-
-      if (!itemRepository) {
-        throw 'ResultViewFactory::init itemRepository not supplied.';
-      }
-
-      if (!itemModelPack) {
-        throw 'ResultViewFactory::init itemModelPack not supplied.';
-      }
-
-      _signInIService = signInIService;
-      _itemRepository = itemRepository;
-      _itemModelPack = itemModelPack;
-
-      return that;
     }
 
     return init();
@@ -3930,7 +3965,6 @@ window.wizerati = {
     };
 
     function init() {
-
       return that;
     }
 
@@ -3976,7 +4010,7 @@ window.wizerati = {
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       //If nothing is currently selected then set select the first bookmark (occurs with external visits to bookmarks).
-      if(!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
+      if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
         var sortedBookmarks = bookmarks.sort(function (b1, b2) {
           return -(+Date.parse(b1.bookmarkDateTime) - +Date.parse(b2.bookmarkDateTime));
         });
@@ -3991,23 +4025,27 @@ window.wizerati = {
     };
 
     function init() {
-      if (!uiModelPack) {
-        throw 'BookmarksControllerHelper::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+        _bookmarkListModel = bookmarkListModel;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarksControllerHelper::init ' + e;
       }
-
-      if (!layoutCoordinator) {
-        throw 'BookmarksControllerHelper::init layoutCoordinator not supplied.';
-      }
-
-      if (!bookmarkListModel) {
-        throw 'BookmarksControllerHelper::init bookmarkListModel not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-      _bookmarkListModel = bookmarkListModel;
-
-      return that;
     }
 
     return init();
@@ -4236,17 +4274,21 @@ window.wizerati = {
     };
 
     function init() {
-      if (!signInService) {
-        throw 'signInService not supplied';
-      }
-      if (!config) {
-        throw 'config not supplied';
-      }
+      try {
+        if (!signInService) {
+          throw 'signInService not supplied';
+        }
+        if (!config) {
+          throw 'config not supplied';
+        }
 
-      _signInService = signInService;
-      _config = config;
+        _signInService = signInService;
+        _config = config;
 
-      return that;
+        return that;
+      } catch (e) {
+        throw 'CroniclIService::init ' + e;
+      }
     }
 
     return init();
@@ -4332,15 +4374,19 @@ window.wizerati = {
 //    }
 
     function init() {
-      if (!cookieService) {
-        throw 'cookieService not supplied';
+      try {
+        if (!cookieService) {
+          throw 'cookieService not supplied';
+        }
+
+        _roleEnum = app.mod('enum').UserRole;
+
+        _cookieService = cookieService;
+
+        return that;
+      } catch (e) {
+        throw 'SignInIService::init ' + e;
       }
-
-      _roleEnum = app.mod('enum').UserRole;
-
-      _cookieService = cookieService;
-
-      return that;
     }
 
     return init();

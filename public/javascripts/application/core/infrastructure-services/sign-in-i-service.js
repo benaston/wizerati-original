@@ -75,15 +75,19 @@
 //    }
 
     function init() {
-      if (!cookieService) {
-        throw 'cookieService not supplied';
+      try {
+        if (!cookieService) {
+          throw 'cookieService not supplied';
+        }
+
+        _roleEnum = app.mod('enum').UserRole;
+
+        _cookieService = cookieService;
+
+        return that;
+      } catch (e) {
+        throw 'SignInIService::init ' + e;
       }
-
-      _roleEnum = app.mod('enum').UserRole;
-
-      _cookieService = cookieService;
-
-      return that;
     }
 
     return init();

@@ -20,18 +20,22 @@
     };
 
     function init() {
-      if (!loginPanelModel) {
-        throw 'SessionController::init loginPanelModel not supplied.';
+      try {
+        if (!loginPanelModel) {
+          throw 'SessionController::init loginPanelModel not supplied.';
+        }
+
+        if (!authenticationService) {
+          throw 'SessionController::init authenticationService not supplied.';
+        }
+
+        _loginPanelModel = loginPanelModel;
+        _authenticationService = authenticationService;
+
+        return that;
+      } catch (e) {
+        throw 'SessionController::init ' + e;
       }
-
-      if (!authenticationService) {
-        throw 'SessionController::init authenticationService not supplied.';
-      }
-
-      _loginPanelModel = loginPanelModel;
-      _authenticationService = authenticationService;
-
-      return that;
     }
 
     return init();

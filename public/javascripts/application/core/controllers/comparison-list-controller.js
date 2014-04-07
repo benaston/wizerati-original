@@ -15,7 +15,7 @@
         _layoutCoordinator = null;
 
     this.index = function (dto) {
-       //if external get state from local storage...
+      //if external get state from local storage...
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
@@ -23,20 +23,24 @@
     };
 
     function init() {
-      if (!uiModelPack) {
-        throw 'ComparisonListController::init uiModelPack not supplied.';
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'ComparisonListController::init ' + e;
       }
-
-      if (!layoutCoordinator) {
-        throw 'ComparisonListController::init layoutCoordinator not supplied.';
-      }
-
-      _uiModelPack = uiModelPack;
-      _layoutCoordinator = layoutCoordinator;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      return that;
     }
 
     return init();
