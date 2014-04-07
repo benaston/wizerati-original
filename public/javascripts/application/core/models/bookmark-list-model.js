@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _bookmarks = [],
+        _bookmarks = {},
         _isWaiting = false,
         _selectedItemId = false,
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
@@ -45,11 +45,16 @@
     };
 
     this.getBookmarks = function () {
-      return _bookmarks;
+      return Object.keys(_bookmarks).reduce(function(prev, curr){
+        prev.push(_bookmarks[curr]);
+        return prev;
+      }, []);
     };
 
-    this.setBookmarks = function (value) {
-      _bookmarks = value;
+    this.setBookmarks = function (arr) {
+      arr.forEach(function (i) {
+        _bookmarks[i.id] = _.extend({},  i, _bookmarks[i.id]); //Most important status is existing client knowledge to avoid inconsistencies.
+      });
 
       $.publish(that.eventUris.default);
     };
@@ -69,7 +74,7 @@
         return;
       }
 
-      _bookmarks.push(bookmark);
+      _bookmarks[bookmark.id] = bookmark;
 
       $.publish(that.eventUris.addBookmark, bookmark);
     };
@@ -77,15 +82,13 @@
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
     //We do not check to see whether this is a bookmark on the client side here before proceeding, because client-side bookmark information might not have been loaded.
     this.removeBookmark = function (id) {
-      _bookmarks = _.reject(_bookmarks, function(b){ return b.id === id; });
+      delete _bookmarks[id];
 
       $.publish(that.eventUris.removeBookmark, id);
     };
 
     this.isBookmark = function (id) {
-      return _.any(_bookmarks, function (b) {
-        return b.id === id;
-      });
+      return !!_bookmarks[id];
     };
 
     function init() {

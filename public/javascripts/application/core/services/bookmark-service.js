@@ -14,15 +14,19 @@
         _itemCache = null;
 
     this.addBookmark = function (id) {
-      if (!id) {
-        throw 'BookmarkService::addBookmark id not supplied.';
-      }
+      try {
+        if (!id) {
+          throw 'id not supplied.';
+        }
 
-      if (!_bookmarkListModel.isBookmark(id)) {
-        _itemRepository.getById(id, function (item) {
-          item.bookmarkDateTime = new Date().toISOString(); //Ensure local in-memory cache is updated with the change.
-          _bookmarkListModel.addBookmark({ id: id, bookmarkDateTime: item.bookmarkDateTime});
-        });
+        if (!_bookmarkListModel.isBookmark(id)) {
+          _itemRepository.getById(id, function (item) {
+            item.bookmarkDateTime = new Date().toISOString(); //Ensure local in-memory cache is updated with the change.
+            _bookmarkListModel.addBookmark({ id: id, bookmarkDateTime: item.bookmarkDateTime});
+          });
+        }
+      } catch (e) {
+        throw 'BookmarkService::addBookmark ' + e;
       }
     };
 
