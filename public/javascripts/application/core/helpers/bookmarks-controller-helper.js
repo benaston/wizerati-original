@@ -34,13 +34,19 @@
       _bookmarkListModel.setBookmarks(bookmarks);
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
+      //If nothing is currently selected then set select the first bookmark (occurs with external visits to bookmarks).
+      if(!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
+        var sortedBookmarks = bookmarks.sort(function (b1, b2) {
+          return -(+Date.parse(b1.bookmarkDateTime) - +Date.parse(b2.bookmarkDateTime));
+        });
+        _uiModelPack.itemsOfInterestModel.setSelectedItemId(sortedBookmarks[0].id);
+      }
+
+
       _layoutCoordinator.layOut();
       that.resetUIForBookmarks();
 
-      //this must occur *after the search panel mode is set* to its eventual value, to
-      //ensure the initial width rendering of items of interest is the correct one
-      // (avoiding a repaint)
-//      _uiModelPack.itemsOfInterestModel.setSelectedItemId(_bookmarkListModel.getSelectedItemId() || bookmarks[0].id);
+      _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 
     function init() {

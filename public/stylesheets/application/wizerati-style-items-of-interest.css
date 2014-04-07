@@ -364,6 +364,14 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
     -webkit-animation: pulse .2s 1 0;
 }
 
+.btn-action.applied {
+    font-family: helvetica-pro-light;
+    font-size: .8rem;
+    color: rgb(116, 148, 165);
+    background-color: rgba(149,176,190,.8);
+    border-color: rgba(255,255,255,.05);
+}
+
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {

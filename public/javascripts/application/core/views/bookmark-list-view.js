@@ -99,11 +99,28 @@
     this.renderRemoveBookmark = function (id) {
       var selectorOnlyChild = '.t[data-id="' + id + '"]:only-child';
       var $onlyChild = $(_el).find(selectorOnlyChild);
-      if($onlyChild.length) {
-        $onlyChild.parent().parent().remove(); //Remove the entire period if this is the only remaining bookmark within it.
+      if ($onlyChild.length) {
+        var $i = $onlyChild.parent().parent();
+        $onlyChild.addClass('hidden');
+
+
+        setTimeout(function () {
+          $i.addClass('newly-empty');
+          setTimeout(function () {
+          $i.addClass('hidden'); //Remove the entire period if this is the only remaining bookmark within it.
+          }, 1000);
+        }, 2000);
+        setTimeout(function () {
+          $i.remove(); //Remove the entire period if this is the only remaining bookmark within it.
+        }, 510000);
       } else {
         var selector = '.t[data-id="' + id + '"]';
-        $(_el).find(selector).remove();
+        var $i = $(_el).find(selector);
+        $i.addClass('hidden');
+
+        setTimeout(function () {
+          $i.find(selector).remove();
+        }, 400);
       }
 
       renderCount();
