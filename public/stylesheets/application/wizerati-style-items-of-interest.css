@@ -360,6 +360,10 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
     -webkit-backface-visibility: hidden;
 }
 
+.menu .lbl.pulse {
+    -webkit-animation: pulse .2s 1 0;
+}
+
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {

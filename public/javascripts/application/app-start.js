@@ -19,10 +19,13 @@ $(function appStart() {
       $('body').attr('data-hover-is-enabled', 'false');
     }
 
-    //We do not enable the fixed position bookmark headers on iOS due to jank.
-    if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
-      $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
 
+    //We do not enable the fixed position bookmark headers on iOS due to jank.
+    if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+      $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
+    }
+
+    if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
       $('#bookmark-list-panel').bind('scroll', function (e) {
         window.stackHeads();
       });

@@ -15,7 +15,7 @@
                 <div class="m-i">
                     <button id="btn-hide-{{= model.id}}" class="btn btn-s {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
                             title="{{=model.isHideable ? 'Hide this from future results' : '' }}" {{=model.isHideable || model.isHidden ? '' : 'disabled' }}>&#xf30f;</button>
-                    <label class="lbl" for="btn-hide-{{= model.id}}">hide</label>
+                    <label class="lbl" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'un-hide' : 'hide' }}</label>
                 </div>
             </form></li>
             <li><form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">

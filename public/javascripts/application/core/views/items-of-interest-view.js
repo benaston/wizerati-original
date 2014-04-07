@@ -151,13 +151,20 @@
 
     this.renderAddHiddenItem = function (itemId) {
       var $items = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]');
-      var $frm = $items.find('.frm-hide');
-      $frm.attr('action', '/hiddenitems/destroy');
-      $frm.find('.btn').addClass('checked');
+      var $frmsHide = $items.find('.frm-hide');
+      $frmsHide.attr('action', '/hiddenitems/destroy');
+      $frmsHide.find('.btn').addClass('checked');
+      var $label = $frmsHide.find('.btn ~ .lbl');
+      $label.text('un-hide');
       $items.addClass('hidden');
 
       $items.find('.menu .btn:not(.btn-hide):not(.btn-pin)').attr('disabled', 'disabled');
       $items.find('.menu .btn-pin:not(.checked)').attr('disabled', 'disabled');
+
+      $label.addClass('pulse');
+      setTimeout(function(){
+        $label.removeClass('pulse');
+      }, 300);
     };
 
     this.renderRemoveHiddenItem = function (itemId) {
@@ -165,6 +172,8 @@
       var $frmsHide = $items.find('.frm-hide');
       $frmsHide.attr('action', '/hiddenitems/create');
       $frmsHide.find('.btn').removeClass('checked');
+      var $label = $frmsHide.find('.btn ~ .lbl');
+      $label.text('hide');
       $items.removeClass('hidden');
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
       $items.find('.btn:not(.btn-hide)').removeClass('disabled');

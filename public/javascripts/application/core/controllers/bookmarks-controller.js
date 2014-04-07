@@ -1,6 +1,7 @@
 (function (app) {
   'use strict';
 
+  //On first request to the system, bookmarks should be retrieved for the user to avoid delay.
   function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel) {
 
     if (!(this instanceof app.BookmarksController)) {
