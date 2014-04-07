@@ -253,18 +253,6 @@ body[data-is-mobile-device='false'] .t.hidden {
     display: inline-block; /*required to ensure opacity takes effect on children*/
 }
 
-/*.t.hidden h3 {*/
-    /*white-space: nowrap !important; *//*a rare occasion where !important is actually needed due to inability to get selector specificity high enough using normal means*/
-    /*text-overflow: ellipsis;*/
-    /*overflow: hidden;*/
-    /*width: 86%; *//*empirical*/
-    /*color: #ccc;*/
-/*}*/
-
-/*.t.hidden .tld, .t.hidden .rate, .t.hidden .location-and-posted, .t.hidden .i-c {*/
-    /*visibility: hidden;*/
-/*}*/
-
 .t .tld {
     margin-bottom: 9px;
 }
