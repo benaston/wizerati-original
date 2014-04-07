@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemService, actionedItemsModel, readItemService) {
+  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService) {
 
     if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemService, actionedItemsModel, readItemService);
+      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService);
     }
 
     var that = this;
@@ -17,38 +17,37 @@
     this.readItemService = null;
 
     function init() {
-      if (!resultListModel) {
-        throw 'ItemModelPack::init resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!hiddenItemService) {
+          throw 'hiddenItemService not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        that.resultListModel = resultListModel;
+        that.bookmarkListModel = bookmarkListModel;
+        that.itemsOfInterestModel = itemsOfInterestModel;
+        that.hiddenItemService = hiddenItemService;
+        that.readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'ItemModelPack::init ' + e;
       }
-
-      if (!bookmarkListModel) {
-        throw 'ItemModelPack::init bookmarkListModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!hiddenItemService) {
-        throw 'ItemModelPack::init hiddenItemService not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'ItemModelPack::init actionedItemsModel not supplied.';
-      }
-
-      if (!readItemService) {
-        throw 'ItemModelPack::init readItemService not supplied.';
-      }
-
-      that.resultListModel = resultListModel;
-      that.bookmarkListModel = bookmarkListModel;
-      that.itemsOfInterestModel = itemsOfInterestModel;
-      that.hiddenItemService = hiddenItemService;
-      that.actionedItemsModel = actionedItemsModel;
-      that.readItemService = readItemService;
-
-      return that;
     }
 
     return init();

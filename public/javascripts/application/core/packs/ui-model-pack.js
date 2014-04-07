@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel) {
+  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel) {
 
     if (!(this instanceof app.UIModelPack)) {
-      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel);
+      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel);
     }
 
     var that = this;
@@ -17,38 +17,42 @@
     this.bookmarkPanelModel = null;
 
     function init() {
-      if (!uiRootModel) {
-        throw 'UIModelPack::init uiRootModel not supplied.';
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!tabBarModel) {
+          throw 'tabBarModel not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        that.uiRootModel = uiRootModel;
+        that.searchFormModel = searchFormModel;
+        that.resultListModel = resultListModel;
+        that.itemsOfInterestModel = itemsOfInterestModel;
+        that.tabBarModel = tabBarModel;
+        that.bookmarkPanelModel = bookmarkListModel;
+
+        return that;
+      } catch(e) {
+        throw 'UIModelPack::init ' + e;
       }
-
-      if (!searchFormModel) {
-        throw 'UIModelPack::init searchFormModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'UIModelPack::init resultListModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'UIModelPack::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!tabBarModel) {
-        throw 'UIModelPack::init tabBarModel not supplied.';
-      }
-
-      if (!bookmarkPanelModel) {
-        throw 'UIModelPack::init bookmarkPanelModel not supplied.';
-      }
-
-      that.uiRootModel = uiRootModel;
-      that.searchFormModel = searchFormModel;
-      that.resultListModel = resultListModel;
-      that.itemsOfInterestModel = itemsOfInterestModel;
-      that.tabBarModel = tabBarModel;
-      that.bookmarkPanelModel = bookmarkPanelModel;
-
-      return that;
     }
 
     return init();

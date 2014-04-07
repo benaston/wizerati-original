@@ -162,7 +162,7 @@
       $items.find('.menu .btn-pin:not(.checked)').attr('disabled', 'disabled');
 
       $label.addClass('pulse');
-      setTimeout(function(){
+      setTimeout(function () {
         $label.removeClass('pulse');
       }, 300);
     };
@@ -216,23 +216,23 @@
     function init() {
       try {
         if (!model) {
-          throw 'ItemsOfInterestView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!itemOfInterestViewFactory) {
-          throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
+          throw 'itemOfInterestViewFactory not supplied';
         }
 
         if (!itemModelPack) {
-          throw 'ItemsOfInterestView::init itemModelPack not supplied';
+          throw 'itemModelPack not supplied';
         }
 
         if (!layoutCoordinator) {
-          throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
+          throw 'layoutCoordinator not supplied';
         }
 
         if (!uiRootModel) {
-          throw 'ItemsOfInterestView::init uiRootModel not supplied';
+          throw 'uiRootModel not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -262,7 +262,6 @@
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
-        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
         that.Model = model;
 

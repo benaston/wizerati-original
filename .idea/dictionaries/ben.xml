@@ -2,6 +2,7 @@
   <dictionary name="ben">
     <words>
       <w>bezier</w>
+      <w>comparisonlist</w>
       <w>debounce</w>
       <w>debounced</w>
       <w>favoritable</w>
@@ -10,12 +11,14 @@
       <w>hiddenitems</w>
       <w>impactful</w>
       <w>infront</w>
+      <w>itemsofinterest</w>
       <w>jank</w>
       <w>javascripts</w>
       <w>navbar</w>
       <w>performant</w>
       <w>populator</w>
       <w>revalidate</w>
+      <w>selecteditem</w>
       <w>viewport</w>
       <w>zepto</w>
     </words>

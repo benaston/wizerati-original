@@ -19,13 +19,16 @@
 <body data-ui-mode="-1" data-are-transitions-enabled="false" data-modal="-1" data-hover-is-enabled="true" data-is-mobile-device="false">
 <div id="main-container" data-visibility-mode="1">
     <header>@@nav-panel</header>
-    <main>@@search-form-panel@@bookmark-list-panel@@result-list-panel@@items-of-interest-panel</main>
+    <main>@@search-form-panel@@bookmark-list-panel@@result-list-panel@@items-of-interest-panel@@my-account-panel</main>
     <footer class="f">@@footer</footer>
 </div>
 @@no-script
 @@no-compatibility
 <script type="text/template" data-template-uri="./template-server/contract/templates/apply-dialog.html-local">
 @@apply-dialog-contract
+</script>
+<script type="text/template" data-template-uri="./template-server/contract/templates/my-account.html-local">
+@@my-account-contract-template
 </script>
 <script type="text/template" data-template-uri="./template-server/contract/templates/search-form.html-local">
 @@search-form-contract-template

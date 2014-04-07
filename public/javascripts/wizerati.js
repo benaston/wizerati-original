@@ -2092,7 +2092,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
     try {
       o.on.apply(o, arguments);
     } catch (e) {
-      throw 'tinyPubSub::subscribe exception: ' + e + '. ENSURE YOU HAVE CREATED THE EVENT URIS FOR ANY NEW EVENTS IN THE PUBLISHING MODEL.';
+      throw 'tinyPubSub::subscribe exception: ' + e + '. Ensure you have created the event URIs for any newly created events in the publishing model.';
     }
   };
 
@@ -2105,12 +2105,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
   };
 
   $.publish = function () {
-    //"optimization"
-//    try {
       o.trigger.call(o, arguments[0], Array.prototype.slice.call(arguments, 1));
-//    } catch (e) {
-//      throw 'tinyPubSub::publish exception: ' + e;
-//    }
   };
 
 }($));
@@ -2680,6 +2675,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
   };
 }(invertebrate));;//order of declaration matters here.
 window.wizerati = {
+  //refactor away - clients should use equivalent functionality on instance
   mod: function () {
     var mods = {};
 
@@ -2982,49 +2978,6 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ActionedItemsController(actionedItemsModel) {
-
-    if (!(this instanceof app.ActionedItemsController)) {
-      return new app.ActionedItemsController(actionedItemsModel);
-    }
-
-    var that = this,
-        _actionedItemsModel = null,
-        _modalEnum = app.mod('enum').Modal;
-
-    this.create = function (dto) {
-      if (!dto) {
-        throw 'dto not supplied.';
-      }
-
-      _uiRootModel.setModal(_modalEnum.ActionItem);
-//      _actionedItemsModel.addActionedItemId(dto.id);
-    };
-
-    this.destroy = function (dto) {
-
-      _actionedItemsModel.removeActionedItemId(dto.id);
-    };
-
-    function init() {
-      if (!actionedItemsModel) {
-        throw 'ActionedItemsController::init actionedItemsModel not supplied.';
-      }
-
-      _actionedItemsModel = actionedItemsModel;
-
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ActionedItemsController = ActionedItemsController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
   function ApplyToContractDialogController(service) {
 
     if (!(this instanceof app.ApplyToContractDialogController)) {
@@ -3062,15 +3015,15 @@ window.wizerati = {
   'use strict';
 
   //On first request to the system, bookmarks should be retrieved for the user to avoid delay.
-  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel) {
+  function BookmarksController(bookmarkService, bookmarkListModel, helper, userModel, bookmarkRepository, uiRootModel) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel);
+      return new app.BookmarksController(bookmarkService, bookmarkListModel, helper, userModel, bookmarkRepository, uiRootModel);
     }
 
     var that = this,
         _bookmarkService = null,
-        _bookmarkBookModel = null,
+        _bookmarkListModel = null,
         _helper = null,
         _userModel = null,
         _uiRootModel = null,
@@ -3082,7 +3035,7 @@ window.wizerati = {
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_bookmarksHavePreviouslyBeenRetrieved) {
           _bookmarksHavePreviouslyBeenRetrieved = true;
-          _bookmarkBookModel.setIsWaiting('true');
+          _bookmarkListModel.setIsWaiting('true');
           _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
         } else {
           _helper.resetUIForBookmarks();
@@ -3114,7 +3067,7 @@ window.wizerati = {
           throw 'bookmarkService not supplied.';
         }
 
-        if (!bookmarkBookModel) {
+        if (!bookmarkListModel) {
           throw 'uiModelPack not supplied.';
         }
 
@@ -3135,7 +3088,7 @@ window.wizerati = {
         }
 
         _bookmarkService = bookmarkService;
-        _bookmarkBookModel = bookmarkBookModel;
+        _bookmarkListModel = bookmarkListModel;
         _helper = helper;
         _userModel = userModel;
         _bookmarkRepository = bookmarkRepository;
@@ -3350,6 +3303,64 @@ window.wizerati = {
   }
 
   app.ItemsOfInterestController = ItemsOfInterestController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function MyAccountController(uiModelPack, helper, accountRepository) {
+
+    if (!(this instanceof app.MyAccountController)) {
+      return new app.MyAccountController(uiModelPack, helper, accountRepository);
+    }
+
+    var that = this,
+        _uiModelPack = null,
+        _helper = null,
+        _myAccountHasPreviouslyBeenRetrieved = false;
+
+    this.urlTransforms = {};
+    this.dtoPopulators = {};
+
+    this.index = function (dto) {
+
+      try {
+        _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
+        if (!_myAccountHasPreviouslyBeenRetrieved) {
+          _myAccountHasPreviouslyBeenRetrieved = true;
+          _uiModelPack.myAccountModel.setIsWaiting('true');
+          _myAccountRepository.getByUserId(_userModel.getUserId(), _helper.myAccountRetrievalSuccess);
+        } else {
+          _helper.resetUIForMyAccount();
+        }
+      } catch (err) {
+        console.log('MyAccountController::index exception: ' + err);
+      }
+    };
+
+    function init() {
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!helper) {
+          throw 'helper not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _helper = helper;
+
+        return that;
+      } catch (e) {
+        throw 'MyAccountController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.MyAccountController = MyAccountController;
 
 }(wizerati));
 ;(function (app) {
@@ -3741,7 +3752,7 @@ window.wizerati = {
               });
 //              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
-              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.width = width;
               var $e = new app.ContractorItemOfInterestView(item).render().$el;
               done($e);
@@ -3759,7 +3770,8 @@ window.wizerati = {
               item.canAddToComparisonList = !item.hiddenDateTime && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
               item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
-              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isActioned = false;
               item.isActionable = !item.hiddenDateTime;
               item.width = width;
               done(new app.ContractItemOfInterestView(item).render().$el);
@@ -3832,8 +3844,7 @@ window.wizerati = {
           case _roleEnum.EmployerStranger:
             _itemRepository.getById(id, function (item) {
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
-              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
               done(new app.ContractorResultView(item).render().$el);
             });
@@ -3842,8 +3853,7 @@ window.wizerati = {
           case _roleEnum.ContractorStranger:
             _itemRepository.getById(id, function (item) {
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
-//              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
-              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isPinned = _itemModelPack.itemsOfInterestModel.isPinned(item.id);
               item.tweet = item.tld.length > 140 ? item.tld.substr(0,140) + '...' : item.tld;
 
@@ -3962,7 +3972,6 @@ window.wizerati = {
     };
 
     this.bookmarkRetrievalSuccess = function (bookmarks) {
-      console.log(bookmarks);
       _bookmarkListModel.setBookmarks(bookmarks);
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
@@ -4005,6 +4014,77 @@ window.wizerati = {
   }
 
   app.BookmarksControllerHelper = BookmarksControllerHelper;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function MyAccountControllerHelper(uiModelPack, layoutCoordinator, myAccountModel) {
+
+    if (!(this instanceof app.MyAccountControllerHelper)) {
+      return new app.MyAccountControllerHelper(uiModelPack, layoutCoordinator, myAccountModel);
+    }
+
+    var that = this,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _tabEnum = app.mod('enum').Tab,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiModelPack = null,
+        _layoutCoordinator = null,
+        _myAccountModel = null;
+
+    this.resetUIForMyAccount = function () {
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+    };
+
+    this.accountRetrievalSuccess = function (account) {
+      _myAccountModel.setAccount(account);
+      _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+      _layoutCoordinator.layOut();
+      that.resetUIForBookmarks();
+
+      _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
+    };
+
+    function init() {
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        if (!myAccountModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+        _myAccountModel = myAccountModel;
+
+        return that;
+      } catch (e) {
+        throw 'MyAccountControllerHelper::init bookmarkListModel not supplied.';
+      }
+    }
+
+    return init();
+  }
+
+  app.MyAccountControllerHelper = MyAccountControllerHelper;
 
 }(wizerati));
 ;(function (app) {
@@ -4437,48 +4517,6 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ActionedItemsModel() {
-
-    if (!(this instanceof app.ActionedItemsModel)) {
-      return new app.ActionedItemsModel();
-    }
-
-    var that = this,
-        _actionedItems = {};
-
-    this.eventUris = { default: 'update://actioneditemsmodel' };
-
-    this.isActioned = function (id) {
-      return !!_actionedItems[id];
-    };
-
-    this.addActionedItemId = function (value) {
-      _actionedItems[value] = value;
-
-      $.publish(that.eventUris.default);
-    };
-
-    this.removeActionedItemId = function (value) {
-      delete _actionedItems[value];
-
-      $.publish(that.eventUris.default);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.ActionedItemsModel = ActionedItemsModel;
-  invertebrate.Model.isExtendedBy(app.ActionedItemsModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
   function ApplyToContractDialogModel() {
 
     if (!(this instanceof app.ApplyToContractDialogModel)) {
@@ -4648,70 +4686,6 @@ window.wizerati = {
   invertebrate.Model.isExtendedBy(app.BookmarkListModel);
 
 }(wizerati, $, invertebrate, _));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function DeleteFavoriteGroupConfirmationDialogModel() {
-
-    if (!(this instanceof app.DeleteFavoriteGroupConfirmationDialogModel)) {
-      return new app.DeleteFavoriteGroupConfirmationDialogModel();
-    }
-
-    var that = this,
-        _favoriteGroupId = null,
-        _isWaiting = '', //should identify the dom element to indicate waiting
-        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
-
-    this.updateEventUri = 'update://deletefavoritegroupconfirmationdialogmodel/';
-
-    this.getFavoriteGroupId = function () {
-      return _favoriteGroupId;
-    };
-
-    this.setFavoriteGroupId = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _favoriteGroupId = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    this.getIsWaiting = function () {
-      return _isWaiting;
-    };
-
-    this.setIsWaiting = function (value, options) {
-      options = options || { silent: false };
-
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _isWaiting = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.DeleteFavoriteGroupConfirmationDialogModel = DeleteFavoriteGroupConfirmationDialogModel;
-  invertebrate.Model.isExtendedBy(app.DeleteFavoriteGroupConfirmationDialogModel);
-
-}(wizerati, $, invertebrate));
 ;(function (app, $) {
   'use strict';
 
@@ -4851,64 +4825,51 @@ window.wizerati = {
   app.ItemsOfInterestModel = ItemsOfInterestModel;
 
 }(wizerati, $));
-;(function (app, $, invertebrate) {
+;(function (app, $, invertebrate, _) {
   'use strict';
 
-  function PurchasePanelModel() {
+  function MyAccountModel() {
 
-    if (!(this instanceof app.PurchasePanelModel)) {
-      return new app.PurchasePanelModel();
+    if (!(this instanceof app.MyAccountModel)) {
+      return new app.MyAccountModel();
     }
 
     var that = this,
-        _activeTab = '0',
-        _isWaiting = '', //should identify the dom element to indicate waiting
-        _notifications = []; //eg. [{ type: 'formField', id: 'foo' }]
+        _isWaiting = false,
+        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _mode = _myAccountModeEnum.Minimized;
 
-    this.updateEventUri = 'update://purchasepanelmodel/';
-
-    this.getNotifications = function () {
-      return _notifications;
+    this.eventUris = {
+      default: 'update://myaccountmodel',
+      setMode: 'update://myaccountmodel/setmode',
+      setIsWaiting: 'update://myaccountmodel/setiswaiting'
     };
 
-    this.setNotifications = function (value) {
-      if (!value) {
-        throw 'value not supplied.';
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
       }
 
-      _notifications = value;
-      $.publish(that.updateEventUri);
-    };
-
-    this.getIsWaiting = function () {
-      return _isWaiting;
-    };
-
-    this.setIsWaiting = function (value, options) {
       options = options || { silent: false };
 
-      if (!value) {
-        throw 'value not supplied.';
-      }
-
-      _isWaiting = value;
+      _mode = value;
 
       if (!options.silent) {
-        $.publish(that.updateEventUri);
+        $.publish(that.eventUris.setMode, _mode);
       }
     };
 
-    this.getActiveTab = function () {
-      return _activeTab;
-    };
-
-    this.setActiveTab = function (value) {
-      if (!value) {
-        throw 'value not supplied.';
+    this.setIsWaiting= function (value) {
+      if (value === _isWaiting) {
+        return;
       }
+      _isWaiting = value;
 
-      _activeTab = value;
-      $.publish(that.updateEventUri);
+      $.publish(that.eventUris.setIsWaiting, value);
     };
 
     function init() {
@@ -4919,10 +4880,10 @@ window.wizerati = {
     return init();
   }
 
-  app.PurchasePanelModel = PurchasePanelModel;
-  invertebrate.Model.isExtendedBy(app.PurchasePanelModel);
+  app.MyAccountModel = MyAccountModel;
+  invertebrate.Model.isExtendedBy(app.MyAccountModel);
 
-}(wizerati, $, invertebrate));
+}(wizerati, $, invertebrate, _));
 ;(function (app, $) {
   'use strict';
 
@@ -5082,116 +5043,6 @@ window.wizerati = {
 
   app.SearchFormModel = SearchFormModel;
   invertebrate.Model.isExtendedBy(app.SearchFormModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SignInPanelModel() {
-
-    if (!(this instanceof app.SignInPanelModel)) {
-      return new app.SignInPanelModel();
-    }
-
-    var that = this,
-        _username = null,
-        _password = null,
-        _isLoginFailedMessageVisible = false,
-        _isVisible = false;
-
-    this.updateEventUri = 'update://signinpanelmodel/';
-
-    this.getUsername = function () {
-      return _username;
-    };
-
-    this.setUsername = function (value) {
-      _username = value;
-    };
-
-    this.getPassword = function () {
-      return _password;
-    };
-
-    this.setPassword = function (value) {
-      _password = value;
-    };
-
-    this.getIsLoginFailedMessageVisible = function () {
-      return _isLoginFailedMessageVisible;
-    };
-
-    this.setIsLoginFailedMessageVisible = function (value) {
-      _isLoginFailedMessageVisible = value;
-      $.publish(that.updateEventUri);
-    };
-
-    this.getIsVisible = function () {
-      return _isVisible;
-    };
-
-    this.setIsVisible = function (value) {
-      _isVisible = value;
-      $.publish(that.updateEventUri);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SignInPanelModel = SignInPanelModel;
-  invertebrate.Model.isExtendedBy(app.SignInPanelModel);
-
-}(wizerati, $, invertebrate));
-;(function (app, $, invertebrate) {
-  'use strict';
-
-  function SingleItemModel() {
-
-    if (!(this instanceof app.SingleItemModel)) {
-      return new app.SingleItemModel();
-    }
-
-    var that = this,
-        _selectedResultId = null,
-        _previouslySelectedResultId = null;
-
-    this.updateEventUri = 'update://singleitemmodel/';
-
-    this.getSelectedItemId = function () {
-      return _selectedResultId;
-    };
-
-    this.getPreviouslySelectedItemId = function () {
-
-      return _previouslySelectedResultId;
-    };
-
-    this.setSelectedItemId = function (value, options) {
-      options = options || { silent: false };
-
-      _previouslySelectedResultId = _selectedResultId;
-      _selectedResultId = value;
-
-      if (!options.silent) {
-        $.publish(that.updateEventUri);
-      }
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.SingleItemModel = SingleItemModel;
-  invertebrate.Model.isExtendedBy(app.SingleItemModel);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, invertebrate) {
@@ -5389,10 +5240,443 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemService, actionedItemsModel, readItemService) {
+  app.cacheRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('caches');
+        mod.itemCache = new w.ObjectCache();
+        mod.bookmarkCache = new w.ObjectCache();
+      }
+      catch (e) {
+        throw 'cacheRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.clientRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('clients');
+        mod.wizeratiHttpClient = new w.WizeratiHttpClient();
+      }
+      catch (e) {
+        throw 'clientRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.compatibilityRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('compatibility');
+        mod.browserCompatibilityChecker = new wizerati.BrowserCompatibilityChecker();
+      }
+      catch (e) {
+        throw 'compatibilityRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.configRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('config');
+        mod.config = new wizerati.Config(window.env || invertebrate.env.dev);
+      }
+      catch (e) {
+        throw 'configRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.connectorRegistrar =  {
+    run:  function(w, c, f) {
+      try {
+        var mod = w.mod('connectors');
+        mod.wizeratiConnector = new w.WizeratiConnector(c.wizeratiHttpClient, f.wizeratiRequestFactory);
+      }
+      catch (e) {
+        throw 'connectorRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.controllerRegistrar =  {
+    run:  function(w, f, l, m, s, p, h, r) {
+      try {
+        var mod = w.mod('controllers');
+        mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
+        mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
+        mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
+        mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
+        mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
+        mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
+        mod.myAccountController = new w.MyAccountController(p.uiModelPack, h.myAccountControllerHelper, r.accountRepository);
+        mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
+        mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
+        mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
+      }
+      catch (e) {
+        throw 'controllerRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.decoratorRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('decorators');
+        mod.decorators = new w.Decorators(w.mod('config').config.config);
+      }
+      catch (e) {
+        throw 'decoratorRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.enumRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('enum');
+
+        mod.ApplyToContractDialogPanel = {
+          CVSelection: '0',
+          SignInOrContinue: '1'
+        };
+
+        mod.BookmarkPanelMode = {
+          Default: '0',
+          Minimized: '1'
+        };
+
+        mod.ItemsOfInterestMode = {
+          Default: '0',
+          PinnedItemsExpanded: '1'
+        };
+
+        mod.MainContainerVisibilityMode = {
+          Hidden: '0',
+          HiddenNoBackgroundOrLoadingIndicator: '1',
+          Visible: '2'
+        };
+
+        mod.Modal = {
+          None: '-1',
+          Purchase: '0',
+          LogIn: '1',
+          MyAccount: '2',
+          AccountActivation: '3',
+          DeleteFavoriteGroupConfirmationDialog: '4',
+          ActionContract: '5'
+        };
+
+        mod.MyAccountMode = {
+          Default: '0',
+          Minimized: '1'
+        };
+
+        mod.Tab = {
+          Search: '0',
+          Bookmark: '1',
+          ComparisonList: '2',
+          MyAccount: '3'
+        };
+
+        mod.ResultListMode = {
+          Default: '0',
+          Minimized: '1'
+        };
+
+        mod.SearchFormMode = {
+          Default: '0',
+          Minimized: '1'
+        };
+
+        mod.UIMode = {
+          NotReady: '-1',
+          Start: '0',
+          InUse: '1'
+        };
+
+        mod.UserRole = {
+          Contractor: '1',
+          Employer: '2',
+          ContractorStranger: '3',
+          EmployerStranger: '4'
+        };
+      }
+      catch (e) {
+        throw 'enumRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.factoryRegistrar =  {
+    run:  function(w, i, m, r, p) {
+      try {
+        var mod = w.mod('factories');
+        mod.guidFactory = new w.GuidFactory();
+        mod.itemOfInterestViewFactory = new w.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
+        mod.resultViewFactory = new w.ResultViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
+        mod.wizeratiRequestFactory = new w.WizeratiRequestFactory();
+      }
+      catch (e) {
+        throw 'factoryRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.helperRegistrar =  {
+    run:  function(w, p, f, l, m, s) {
+      try {
+        var mod = w.mod('helpers');
+        mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator, s.readItemService);
+        mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
+        mod.myAccountControllerHelper = new w.MyAccountControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
+      }
+      catch (e) {
+        throw 'helperRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  //infrastructure services are services that are sufficiently
+  //de-coupled from the domain logic that they can be initialized
+  //before the repositories.
+  //This enables the use of specific services by repositories (which can be desirable).
+  app.iServiceRegistrar = {
+    run: function (w, c) {
+      try {
+        var mod = w.mod('i-services');
+        mod.cookieIService = new w.CookieIService();
+        mod.signInIService = new w.SignInIService(mod.cookieIService);
+        mod.croniclIService = new w.CroniclIService(mod.signInIService, c.config);
+      }
+      catch (e) {
+        throw 'iServiceRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.layoutRegistrar =  {
+    run:  function(w, m) {
+      try {
+        var mod = w.mod('layout');
+        mod.layoutCalculator = new w.LayoutCalculator(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel);
+        mod.layoutCoordinator = new w.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator);
+      }
+      catch (e) {
+        throw 'layoutRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.modelRegistrar = {
+    run: function (w) {
+      try {
+        var mod = w.mod('models');
+        mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
+        mod.bookmarkListModel = new w.BookmarkListModel();
+        mod.myAccountModel = new w.MyAccountModel();
+        mod.resultListModel = new w.ResultListModel();
+        mod.searchFormModel = new w.SearchFormModel();
+        mod.tabBarModel = new w.TabBarModel();
+        mod.uiRootModel = new w.UIRootModel();
+        mod.userModel = new w.UserModel();
+
+        mod.itemsOfInterestModel = new w.ItemsOfInterestModel(mod.resultListModel);
+      }
+      catch (e) {
+        throw 'modelRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.packRegistrar =  {
+    run:  function(w, m, s) {
+      try {
+        var mod = w.mod('packs');
+        mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, s.hiddenItemService, s.readItemService);
+        mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel);
+      }
+      catch (e) {
+        throw 'packRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.repositoryRegistrar =  {
+    run:  function(w, i) {
+      try {
+        var mod = w.mod('repositories');
+        mod.itemRepository = new w.ItemRepository(w.mod('caches').itemCache, i.croniclIService);
+        mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService, w.mod('caches').itemCache);
+        mod.accountRepository = new w.AccountRepository(i.croniclIService);
+      }
+      catch (e) {
+        throw 'repositoryRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.routingRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('routing');
+        mod.routeRegistry = new w.RouteRegistry();
+      }
+      catch (e) {
+        throw 'routingRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.serviceRegistrar =  {
+    run:  function(w, c, ca, i, m, r) {
+      try {
+        var mod = w.mod('services');
+        mod.accountService = new w.AccountService(c.wizeratiHttpClient);
+        mod.authenticationService = new w.AuthenticationService();
+        mod.authorizationService = new w.AuthorizationService(i.cookieIService);
+        mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
+        mod.bookmarkService = new w.BookmarkService(m.bookmarkListModel, r.bookmarkRepository, r.itemRepository, ca.itemCache);
+        mod.hiddenItemService = new w.HiddenItemService(r.itemRepository);
+        mod.readItemService = new w.ReadItemService(r.itemRepository);
+        mod.searchService = new w.SearchService(i.croniclIService, ca.itemCache);
+      }
+      catch (e) {
+        throw 'serviceRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.templateRegistrar =  {
+    run:  function(w, c, i) {
+      try {
+        var mod = w.mod('templates');
+        mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(c.config, i.croniclIService.getCroniclUri);
+      }
+      catch (e) {
+        throw 'templateRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.uiRegistrar =  {
+    run:  function(w) {
+      try {
+        var mod = w.mod('ui');
+        mod.postRenderActions = [];
+      }
+      catch (e) {
+        throw 'uiRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  app.viewRegistrar =  {
+    run:  function(w, f, l, m, p) {
+      try {
+        var mod = w.mod('views');
+        mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
+        mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel,f.resultViewFactory, p.itemModelPack);
+        mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
+        mod.myAccountView = new w.MyAccountView(m.myAccountModel);
+        mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
+        mod.searchFormView = new w.SearchFormView(m.searchFormModel);
+        mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
+        mod.uiRootView = new w.UIRootView(m.uiRootModel);
+      }
+      catch (e) {
+        throw 'viewRegistrar::run ' + e;
+      }
+    }
+  };
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService) {
 
     if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel,  hiddenItemService, actionedItemsModel, readItemService);
+      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService);
     }
 
     var that = this;
@@ -5405,38 +5689,37 @@ window.wizerati = {
     this.readItemService = null;
 
     function init() {
-      if (!resultListModel) {
-        throw 'ItemModelPack::init resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!hiddenItemService) {
+          throw 'hiddenItemService not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        that.resultListModel = resultListModel;
+        that.bookmarkListModel = bookmarkListModel;
+        that.itemsOfInterestModel = itemsOfInterestModel;
+        that.hiddenItemService = hiddenItemService;
+        that.readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'ItemModelPack::init ' + e;
       }
-
-      if (!bookmarkListModel) {
-        throw 'ItemModelPack::init bookmarkListModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'ItemModelPack::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!hiddenItemService) {
-        throw 'ItemModelPack::init hiddenItemService not supplied.';
-      }
-
-      if (!actionedItemsModel) {
-        throw 'ItemModelPack::init actionedItemsModel not supplied.';
-      }
-
-      if (!readItemService) {
-        throw 'ItemModelPack::init readItemService not supplied.';
-      }
-
-      that.resultListModel = resultListModel;
-      that.bookmarkListModel = bookmarkListModel;
-      that.itemsOfInterestModel = itemsOfInterestModel;
-      that.hiddenItemService = hiddenItemService;
-      that.actionedItemsModel = actionedItemsModel;
-      that.readItemService = readItemService;
-
-      return that;
     }
 
     return init();
@@ -5448,10 +5731,10 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel) {
+  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel) {
 
     if (!(this instanceof app.UIModelPack)) {
-      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkPanelModel);
+      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel);
     }
 
     var that = this;
@@ -5464,38 +5747,42 @@ window.wizerati = {
     this.bookmarkPanelModel = null;
 
     function init() {
-      if (!uiRootModel) {
-        throw 'UIModelPack::init uiRootModel not supplied.';
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!tabBarModel) {
+          throw 'tabBarModel not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        that.uiRootModel = uiRootModel;
+        that.searchFormModel = searchFormModel;
+        that.resultListModel = resultListModel;
+        that.itemsOfInterestModel = itemsOfInterestModel;
+        that.tabBarModel = tabBarModel;
+        that.bookmarkPanelModel = bookmarkListModel;
+
+        return that;
+      } catch(e) {
+        throw 'UIModelPack::init ' + e;
       }
-
-      if (!searchFormModel) {
-        throw 'UIModelPack::init searchFormModel not supplied.';
-      }
-
-      if (!resultListModel) {
-        throw 'UIModelPack::init resultListModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'UIModelPack::init itemsOfInterestModel not supplied.';
-      }
-
-      if (!tabBarModel) {
-        throw 'UIModelPack::init tabBarModel not supplied.';
-      }
-
-      if (!bookmarkPanelModel) {
-        throw 'UIModelPack::init bookmarkPanelModel not supplied.';
-      }
-
-      that.uiRootModel = uiRootModel;
-      that.searchFormModel = searchFormModel;
-      that.resultListModel = resultListModel;
-      that.itemsOfInterestModel = itemsOfInterestModel;
-      that.tabBarModel = tabBarModel;
-      that.bookmarkPanelModel = bookmarkPanelModel;
-
-      return that;
     }
 
     return init();
@@ -5504,6 +5791,64 @@ window.wizerati = {
   app.UIModelPack = UIModelPack;
 
 }(wizerati));
+;(function (app, $) {
+  'use strict';
+
+  function AccountRepository(croniclIService) {
+
+    if (!(this instanceof app.AccountRepository)) {
+      return new app.AccountRepository(croniclIService);
+    }
+
+    var that = this,
+        _croniclIService = null;
+
+    this.getByUserId = function (userId, done) {
+      try {
+        if (!userId) {
+          throw 'userId not supplied.'
+        }
+
+        if (!done) {
+          throw 'done not supplied.'
+        }
+
+        $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + userId,
+          success: success,
+          cache: false });
+      } catch (e) {
+        throw 'BookmarkRepository::getByUserId ' + e;
+      }
+
+      function success(data) {
+        if (!data) {
+          throw '::success data not supplied';
+        }
+
+        done($.parseJSON(data));
+      }
+    };
+
+    function init() {
+      try {
+        if (!croniclIService) {
+          throw 'croniclIService not supplied.';
+        }
+
+        _croniclIService = croniclIService;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarkRepository::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.AccountRepository = AccountRepository;
+
+}(wizerati, $));
 ;(function (app, $) {
   'use strict';
 
@@ -5663,6 +6008,10 @@ window.wizerati = {
           c.searchController.show(dto);
         }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
+        router.registerRoute('/search/edit', function (dto) {
+          c.searchController.edit(dto);
+        });
+
         router.registerRoute('/selecteditem/update', function (dto) {
           c.selectedItemController.update(dto);
         }, { silent: true });
@@ -5689,10 +6038,6 @@ window.wizerati = {
 
         router.registerRoute('/itemsofinterest/destroy', function (dto) {
           c.itemsOfInterestController.destroy(dto);
-        }, { silent: true });
-
-        router.registerRoute('/itemsofinterestpanelmode/update', function (dto) {
-          c.itemsOfInterestPanelModeController.update(dto);
         }, { silent: true });
 
         router.registerRoute('/hiddenitems/create', function (dto) {
@@ -5723,13 +6068,10 @@ window.wizerati = {
           c.searchFormModeController.update(dto);
         }, { silent: true });
 
-        router.registerRoute('/searchpanelmode/update', function (dto) {
-          c.searchPanelModeController.update(dto);
-        }, { silent: true });
-
-        router.registerRoute('/search/edit', function (dto) {
-          c.searchController.edit(dto);
+        router.registerRoute('/myaccount', function (dto) {
+          c.myAccountController.index(dto);
         });
+
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;
@@ -6456,15 +6798,15 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'BookmarkListView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!resultViewFactory) {
-          throw 'BookmarkListView::init resultViewFactory not supplied';
+          throw 'resultViewFactory not supplied';
         }
 
         if (!itemModelPack) {
-          throw 'BookmarkListView::init itemModelPack not supplied';
+          throw 'itemModelPack not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -6489,7 +6831,6 @@ window.wizerati = {
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
-        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
         $.subscribe(itemModelPack.readItemService.eventUris.addReadItem, that.render);
 
         return that;
@@ -6862,7 +7203,7 @@ window.wizerati = {
       $items.find('.menu .btn-pin:not(.checked)').attr('disabled', 'disabled');
 
       $label.addClass('pulse');
-      setTimeout(function(){
+      setTimeout(function () {
         $label.removeClass('pulse');
       }, 300);
     };
@@ -6916,23 +7257,23 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'ItemsOfInterestView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!itemOfInterestViewFactory) {
-          throw 'ItemsOfInterestView::init itemOfInterestViewFactory not supplied';
+          throw 'itemOfInterestViewFactory not supplied';
         }
 
         if (!itemModelPack) {
-          throw 'ItemsOfInterestView::init itemModelPack not supplied';
+          throw 'itemModelPack not supplied';
         }
 
         if (!layoutCoordinator) {
-          throw 'ItemsOfInterestView::init layoutCoordinator not supplied';
+          throw 'layoutCoordinator not supplied';
         }
 
         if (!uiRootModel) {
-          throw 'ItemsOfInterestView::init uiRootModel not supplied';
+          throw 'uiRootModel not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -6962,7 +7303,6 @@ window.wizerati = {
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
-        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
 
         that.Model = model;
 
@@ -6977,6 +7317,110 @@ window.wizerati = {
 
   app.ItemsOfInterestView = ItemsOfInterestView;
   invertebrate.View.isExtendedBy(app.ItemsOfInterestView);
+
+}(wizerati, $, invertebrate));
+;(function (app, $, invertebrate) {
+  'use strict';
+
+  function MyAccountView(model) {
+
+    if (!(this instanceof app.MyAccountView)) {
+      return new app.MyAccountView(model);
+    }
+
+    var that = this,
+        _el = '#my-account-panel',
+        _elContainer = '#my-account-panel-container',
+        _templateName = 'my-account.html-local',
+        _modeEnum = app.mod('enum').MyAccountMode,
+        _renderOptimizations = {},
+        _waitStateIsBeingMonitored = false;
+
+    this.$el = null;
+    this.$elContainer = null;
+    this.model = null;
+
+    this.bindEvents = function () {
+
+    };
+
+    this.postRender = function () {
+      that.bindEvents();
+    };
+
+    function monitorWaitState() {
+
+    }
+
+    this.onDomReady = function () {
+      that.$el = $(_el);
+      that.$elContainer = $(_elContainer);
+    };
+
+    this.render = function (e) {
+      var options = { done: that.postRender, postRenderScriptName: null };
+
+      if (e && _renderOptimizations[e.type]) {
+        _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
+        return;
+      }
+
+      app.instance.renderTemplate(that.$el, _templateName, that.model, options);
+      that.renderSetMode(that.model.getMode());
+    };
+
+    this.renderSetIsWaiting = function () {
+      that.$el.find('btn-search').attr('data-is-waiting', that.model.getIsWaiting());
+
+      if (!_waitStateIsBeingMonitored) {
+        monitorWaitState();
+      }
+    };
+
+    //When rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
+    //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
+    //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
+    this.renderSetMode = function (mode) {
+      if (mode === _modeEnum.Default) {
+        //ensure UI matches model values
+        this.renderSetKeywords();
+        this.renderSetRate();
+        $(document).keyup(keyUpFunction);
+      } else if(mode === _modeEnum.Minimized) {
+        $(document).unbind('keyup', keyUpFunction);
+      }
+
+
+      that.$elContainer.attr('data-mode', mode);
+    };
+
+    function init() {
+      try {
+        if (!model) {
+          throw 'model not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        that.model = model;
+
+        _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
+        _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+
+        $.subscribe(that.model.eventUris.default, that.render);
+        $.subscribe(that.model.eventUris.setIsWaiting, that.render);
+        $.subscribe(that.model.eventUris.setMode, that.render);
+
+        return that;
+      } catch (e) {
+        throw 'MyAccountView::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.MyAccountView = MyAccountView;
+  invertebrate.View.isExtendedBy(app.MyAccountView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, inv) {
@@ -7131,7 +7575,6 @@ window.wizerati = {
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
-        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
         $.subscribe(itemModelPack.readItemService.eventUris.addReadItem, that.render);
 
         return that;
@@ -7498,372 +7941,33 @@ window.wizerati = {
   invertebrate.View.isExtendedBy(app.UIRootView);
 
 }(wizerati, $, invertebrate));
-;//order of declaration matters here.
-(function (mod) {
-  'use strict';
+;'use strict';
 
-  try {
-
-    mod.ApplyToContractDialogPanel = {
-      CVSelection: '0',
-      SignInOrContinue: '1'
-    };
-
-    mod.BookmarkPanelMode = {
-      Default: '0',
-      Minimized: '1'
-    };
-
-    mod.ItemsOfInterestMode = {
-      Default: '0',
-      PinnedItemsExpanded: '1'
-    };
-
-    mod.MainContainerVisibilityMode = {
-      Hidden: '0',
-      HiddenNoBackgroundOrLoadingIndicator: '1',
-      Visible: '2'
-    };
-
-    mod.Modal = {
-      None: '-1',
-      Purchase: '0',
-      LogIn: '1',
-      MyAccount: '2',
-      AccountActivation: '3',
-      DeleteFavoriteGroupConfirmationDialog: '4',
-      ActionContract: '5'
-    };
-
-    mod.Tab = {
-      Search: '0',
-      Bookmark: '1',
-      ComparisonList: '2'
-    };
-
-    mod.ResultListMode = {
-      Default: '0',
-      Minimized: '1'
-    };
-
-    mod.SearchFormMode = {
-      Default: '0',
-      Minimized: '1'
-    };
-
-    mod.UIMode = {
-      NotReady: '-1',
-      Start: '0',
-      InUse: '1'
-    };
-
-    mod.UserRole = {
-      Contractor: '1',
-      Employer: '2',
-      ContractorStranger: '3',
-      EmployerStranger: '4'
-    };
-
-  } catch (e) {
-    throw 'problem registering enum module. ' + e;
+(function runModules(w){
+  with(w) {
+    enumRegistrar.run(w);
+    compatibilityRegistrar.run(w);
+    configRegistrar.run(w);
+    clientRegistrar.run(w);
+    cacheRegistrar.run(w);
+    decoratorRegistrar.run(w);
+    modelRegistrar.run(w);
+    iServiceRegistrar.run(w, mod('config'));
+    templateRegistrar.run(w, mod('config'), mod('i-services'));
+    repositoryRegistrar.run(w, mod('i-services'));
+    serviceRegistrar.run(w, mod('clients'), mod('caches'), mod('i-services'), mod('models'), mod('repositories'));
+    packRegistrar.run(w, mod('models'), mod('services'));
+    factoryRegistrar.run(w, mod('i-services'), mod('models'), mod('repositories'), mod('packs'));
+    connectorRegistrar.run(w, mod('clients'), mod('factories'));
+    layoutRegistrar.run(w, mod('models'));
+    viewRegistrar.run(w, mod('factories'), mod('layout'), mod('models'), mod('packs'));
+    helperRegistrar.run(w, mod('packs'), mod('factories'), mod('layout'), mod('models'), mod('services'));
+    controllerRegistrar.run(w, mod('factories'), mod('layout'), mod('models'), mod('services'), mod('packs'), mod('helpers'), mod('repositories'));
+    uiRegistrar.run(w);
+    routingRegistrar.run(w);
   }
+}(wizerati));
 
-}(wizerati.mod('enum')));
-
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.browserCompatibilityChecker = new wizerati.BrowserCompatibilityChecker();
-  }
-  catch (e) {
-    throw 'problem registering compatibility module. ' + e;
-  }
-
-}(wizerati.mod('compatibility')));
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.config = new wizerati.Config(window.env || invertebrate.env.dev);
-  }
-  catch (e) {
-    throw 'problem registering config module. ' + e;
-  }
-
-}(wizerati.mod('config')));
-
-
-(function (w, mod) {
-  'use strict';
-
-  try {
-    mod.wizeratiHttpClient = new w.WizeratiHttpClient();
-  }
-  catch (e) {
-    throw 'problem registering clients module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('clients')));
-
-
-(function (w, mod) {
-  'use strict';
-
-  try {
-    mod.itemCache = new w.ObjectCache();
-    mod.bookmarkCache = new w.ObjectCache();
-  }
-  catch (e) {
-    throw 'problem registering caches module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('caches')));
-
-
-(function (w, mod) {
-  'use strict';
-
-  try {
-    mod.decorators = new w.Decorators(wizerati.mod('config').config.config);
-  }
-  catch (e) {
-    throw 'problem registering decorators module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('decorators')));
-
-
-(function (w, mod) {
-  'use strict';
-
-  try {
-    mod.actionedItemsModel = new w.ActionedItemsModel();
-    mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
-    mod.bookmarkListModel = new w.BookmarkListModel();
-    mod.deleteFavoriteGroupConfirmationDialogModel = new w.DeleteFavoriteGroupConfirmationDialogModel();
-    mod.purchasePanelModel = new w.PurchasePanelModel();
-    mod.resultListModel = new w.ResultListModel();
-    mod.searchFormModel = new w.SearchFormModel();
-    mod.signInPanelModel = new w.SignInPanelModel();
-    mod.tabBarModel = new w.TabBarModel();
-    mod.uiRootModel = new w.UIRootModel();
-    mod.userModel = new w.UserModel();
-
-    mod.itemsOfInterestModel = new w.ItemsOfInterestModel(mod.resultListModel);
-  }
-  catch (e) {
-    throw 'problem registering models module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('models')));
-
-
-
-//infrastructure services are services that are sufficiently
-// de-coupled from the domain logic that they can be initialized
-// before the repositories.
-//This enables the use of specific services by repositories (which can be desirable).
-(function (w, mod, c) {
-  'use strict';
-
-  try {
-    mod.cookieIService = new w.CookieIService();
-    mod.signInIService = new w.SignInIService(mod.cookieIService);
-    mod.croniclIService = new w.CroniclIService(mod.signInIService, c.config);
-  }
-  catch (e) {
-    throw 'problem registering infrastructure services module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('infrastructure-services'), wizerati.mod('config')));
-
-
-(function (mod, c, i) {
-  'use strict';
-
-  try {
-    mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(c.config, i.croniclIService.getCroniclUri);
-  }
-  catch (e) {
-    throw 'problem registering templates module. ' + e;
-  }
-
-}(wizerati.mod('templates'), wizerati.mod('config'), wizerati.mod('infrastructure-services')));
-
-
-(function (w, mod, i) {
-
-  try {
-    mod.itemRepository = new w.ItemRepository(w.mod('caches').itemCache, i.croniclIService);
-    mod.bookmarkRepository = new w.BookmarkRepository(w.mod('caches').bookmarkCache, i.croniclIService, w.mod('caches').itemCache);
-  }
-  catch (e) {
-    throw 'problem registering repositories module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('repositories'), wizerati.mod('infrastructure-services')));
-
-
-(function (w, mod, c, ca, i, m, r) {
-  'use strict';
-
-  try {
-    mod.accountService = new w.AccountService(c.wizeratiHttpClient);
-    mod.authenticationService = new w.AuthenticationService();
-    mod.authorizationService = new w.AuthorizationService(i.cookieIService);
-    mod.applyToContractDialogService = new w.ApplyToContractDialogService(m.applyToContractDialogModel, m.uiRootModel, mod.authorizationService, r.itemRepository);
-    mod.bookmarkService = new w.BookmarkService(m.bookmarkListModel, r.bookmarkRepository, r.itemRepository, ca.itemCache);
-    mod.hiddenItemService = new w.HiddenItemService(r.itemRepository);
-    mod.readItemService = new w.ReadItemService(r.itemRepository);
-    mod.searchService = new w.SearchService(i.croniclIService, ca.itemCache);
-  }
-  catch (e) {
-    throw 'problem registering services module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('services'), wizerati.mod('clients'), wizerati.mod('caches'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories')));
-
-
-(function (w, mod, m, s) {
-  'use strict';
-
-  try {
-    mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, s.hiddenItemService, m.actionedItemsModel, s.readItemService);
-    mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel);
-  }
-  catch (e) {
-    throw 'problem registering packs module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('packs'), wizerati.mod('models'), wizerati.mod('services')));
-
-
-(function (w, mod, i, m, r, p) {
-  'use strict';
-
-  try {
-    mod.guidFactory = new w.GuidFactory();
-    mod.itemOfInterestViewFactory = new w.ItemOfInterestViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
-    mod.resultViewFactory = new w.ResultViewFactory(i.signInIService, r.itemRepository, p.itemModelPack);
-    mod.wizeratiRequestFactory = new w.WizeratiRequestFactory();
-  }
-  catch (e) {
-    throw 'problem registering factories module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('factories'), wizerati.mod('infrastructure-services'), wizerati.mod('models'), wizerati.mod('repositories'), wizerati.mod('packs')));
-
-
-(function (w, mod, c, f) {
-  'use strict';
-
-  try {
-    mod.wizeratiConnector = new w.WizeratiConnector(c.wizeratiHttpClient, f.wizeratiRequestFactory);
-  }
-  catch (e) {
-    throw 'problem registering connectors module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('connectors'), wizerati.mod('clients'), wizerati.mod('factories')));
-
-
-(function (w, mod, m) {
-  'use strict';
-
-  try {
-    mod.layoutCalculator = new w.LayoutCalculator(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel);
-    mod.layoutCoordinator = new w.LayoutCoordinator(m.itemsOfInterestModel, mod.layoutCalculator);
-  }
-  catch (e) {
-    throw 'problem registering layout module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('layout'), wizerati.mod('models')));
-
-
-(function (w, mod, f, l, m, p) {
-  'use strict';
-
-  try {
-    mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
-    mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel,f.resultViewFactory, p.itemModelPack);
-    mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
-    mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
-    mod.searchFormView = new w.SearchFormView(m.searchFormModel);
-    mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
-    mod.uiRootView = new w.UIRootView(m.uiRootModel);
-  }
-  catch (e) {
-    throw 'problem registering views module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('views'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('packs')));
-
-
-(function (w, mod, p, f, l, m, s) {
-  'use strict';
-
-  try {
-    mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator, s.readItemService);
-    mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
-  }
-  catch (e) {
-    throw 'problem registering helpers module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('helpers'), wizerati.mod('packs'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services')));
-
-
-(function (w, mod, f, l, m, s, p, h, r) {
-  'use strict';
-
-  try {
-    mod.actionedItemsController = new w.ActionedItemsController(m.actionedItemsModel);
-    mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
-    mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
-    mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
-    mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
-    mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
-    mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
-//    mod.itemsOfInterestPanelModeController = new w.ItemsOfInterestPanelModeController(m.itemsOfInterestModel);
-    mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
-    mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
-    mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
-  }
-  catch (e) {
-    throw 'problem registering controllers module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('controllers'), wizerati.mod('factories'), wizerati.mod('layout'), wizerati.mod('models'), wizerati.mod('services'), wizerati.mod('packs'), wizerati.mod('helpers'), wizerati.mod('repositories')));
-
-
-(function (mod) {
-  'use strict';
-
-  try {
-    mod.postRenderActions = [];
-  }
-  catch (e) {
-    throw 'problem registering ui module. ' + e;
-  }
-
-}(wizerati.mod('ui')));
-
-
-(function (w, mod) {
-  'use strict';
-
-  try {
-    mod.routeRegistry = new w.RouteRegistry();
-  }
-  catch (e) {
-    throw 'problem registering routing module. ' + e;
-  }
-
-}(wizerati, wizerati.mod('routing')));
 ;window.env = window.invertebrate.env.dev; //should be changed by the build process
 ;$(function appStart() {
   'use strict';

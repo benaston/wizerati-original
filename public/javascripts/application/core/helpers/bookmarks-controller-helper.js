@@ -30,7 +30,6 @@
     };
 
     this.bookmarkRetrievalSuccess = function (bookmarks) {
-      console.log(bookmarks);
       _bookmarkListModel.setBookmarks(bookmarks);
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 

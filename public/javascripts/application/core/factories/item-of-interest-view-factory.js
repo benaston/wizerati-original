@@ -56,7 +56,7 @@
               });
 //              item.isHidden = _itemModelPack.hiddenItemService.isHidden(item.id);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
-              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.width = width;
               var $e = new app.ContractorItemOfInterestView(item).render().$el;
               done($e);
@@ -74,7 +74,8 @@
               item.canAddToComparisonList = !item.hiddenDateTime && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
               item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
-              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+//              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isActioned = false;
               item.isActionable = !item.hiddenDateTime;
               item.width = width;
               done(new app.ContractItemOfInterestView(item).render().$el);

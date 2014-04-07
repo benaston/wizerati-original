@@ -158,6 +158,10 @@ module.exports = function (grunt) {
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/items-of-interest-panel.html") %>'
             },
             {
+              match: 'my-account-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/my-account-panel.html") %>'
+            },
+            {
               match: 'nav-panel',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/tab-bar.html") %>'
             },
@@ -176,19 +180,6 @@ module.exports = function (grunt) {
             {
               match: 'apply-dialog-contract',
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/apply-dialog.html") %>'
-            }
-          ]
-        },
-        files: [
-          {src: ['view-templates/_index-build-injected.ejs'], dest: 'view-templates/_index-build-injected.ejs'}
-        ]
-      },
-      injectFavoriteCube: {
-        options: {
-          patterns: [
-            {
-              match: 'favorite-cube',
-              replacement: '<%= grunt.file.read("public/template-server/shared/templates/favorite-cube.html") %>'
             }
           ]
         },

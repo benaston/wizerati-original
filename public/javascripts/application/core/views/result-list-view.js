@@ -150,7 +150,6 @@
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
-        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
         $.subscribe(itemModelPack.readItemService.eventUris.addReadItem, that.render);
 
         return that;

@@ -10,7 +10,7 @@
     try {
       o.on.apply(o, arguments);
     } catch (e) {
-      throw 'tinyPubSub::subscribe exception: ' + e + '. ENSURE YOU HAVE CREATED THE EVENT URIS FOR ANY NEW EVENTS IN THE PUBLISHING MODEL.';
+      throw 'tinyPubSub::subscribe exception: ' + e + '. Ensure you have created the event URIs for any newly created events in the publishing model.';
     }
   };
 
@@ -23,12 +23,7 @@
   };
 
   $.publish = function () {
-    //"optimization"
-//    try {
       o.trigger.call(o, arguments[0], Array.prototype.slice.call(arguments, 1));
-//    } catch (e) {
-//      throw 'tinyPubSub::publish exception: ' + e;
-//    }
   };
 
 }($));

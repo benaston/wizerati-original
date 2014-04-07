@@ -23,6 +23,10 @@
           c.searchController.show(dto);
         }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
+        router.registerRoute('/search/edit', function (dto) {
+          c.searchController.edit(dto);
+        });
+
         router.registerRoute('/selecteditem/update', function (dto) {
           c.selectedItemController.update(dto);
         }, { silent: true });
@@ -49,10 +53,6 @@
 
         router.registerRoute('/itemsofinterest/destroy', function (dto) {
           c.itemsOfInterestController.destroy(dto);
-        }, { silent: true });
-
-        router.registerRoute('/itemsofinterestpanelmode/update', function (dto) {
-          c.itemsOfInterestPanelModeController.update(dto);
         }, { silent: true });
 
         router.registerRoute('/hiddenitems/create', function (dto) {
@@ -83,13 +83,10 @@
           c.searchFormModeController.update(dto);
         }, { silent: true });
 
-        router.registerRoute('/searchpanelmode/update', function (dto) {
-          c.searchPanelModeController.update(dto);
-        }, { silent: true });
-
-        router.registerRoute('/search/edit', function (dto) {
-          c.searchController.edit(dto);
+        router.registerRoute('/myaccount', function (dto) {
+          c.myAccountController.index(dto);
         });
+
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;

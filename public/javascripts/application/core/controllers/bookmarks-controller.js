@@ -2,15 +2,15 @@
   'use strict';
 
   //On first request to the system, bookmarks should be retrieved for the user to avoid delay.
-  function BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel) {
+  function BookmarksController(bookmarkService, bookmarkListModel, helper, userModel, bookmarkRepository, uiRootModel) {
 
     if (!(this instanceof app.BookmarksController)) {
-      return new app.BookmarksController(bookmarkService, bookmarkBookModel, helper, userModel, bookmarkRepository, uiRootModel);
+      return new app.BookmarksController(bookmarkService, bookmarkListModel, helper, userModel, bookmarkRepository, uiRootModel);
     }
 
     var that = this,
         _bookmarkService = null,
-        _bookmarkBookModel = null,
+        _bookmarkListModel = null,
         _helper = null,
         _userModel = null,
         _uiRootModel = null,
@@ -22,7 +22,7 @@
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_bookmarksHavePreviouslyBeenRetrieved) {
           _bookmarksHavePreviouslyBeenRetrieved = true;
-          _bookmarkBookModel.setIsWaiting('true');
+          _bookmarkListModel.setIsWaiting('true');
           _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
         } else {
           _helper.resetUIForBookmarks();
@@ -54,7 +54,7 @@
           throw 'bookmarkService not supplied.';
         }
 
-        if (!bookmarkBookModel) {
+        if (!bookmarkListModel) {
           throw 'uiModelPack not supplied.';
         }
 
@@ -75,7 +75,7 @@
         }
 
         _bookmarkService = bookmarkService;
-        _bookmarkBookModel = bookmarkBookModel;
+        _bookmarkListModel = bookmarkListModel;
         _helper = helper;
         _userModel = userModel;
         _bookmarkRepository = bookmarkRepository;

@@ -139,15 +139,15 @@
     function init() {
       try {
         if (!model) {
-          throw 'BookmarkListView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!resultViewFactory) {
-          throw 'BookmarkListView::init resultViewFactory not supplied';
+          throw 'resultViewFactory not supplied';
         }
 
         if (!itemModelPack) {
-          throw 'BookmarkListView::init itemModelPack not supplied';
+          throw 'itemModelPack not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -172,7 +172,6 @@
         $.subscribe(itemModelPack.bookmarkListModel.eventUris.removeBookmark, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.addHiddenItem, that.render);
         $.subscribe(itemModelPack.hiddenItemService.eventUris.removeHiddenItem, that.render);
-        $.subscribe(itemModelPack.actionedItemsModel.eventUris.default, that.render);
         $.subscribe(itemModelPack.readItemService.eventUris.addReadItem, that.render);
 
         return that;
