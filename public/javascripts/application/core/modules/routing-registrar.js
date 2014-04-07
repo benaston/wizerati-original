@@ -6,8 +6,7 @@
       try {
         var mod = w.mod('routing');
         mod.routeRegistry = new w.RouteRegistry();
-      }
-      catch (e) {
+      } catch (e) {
         throw 'routingRegistrar::run ' + e;
       }
     }

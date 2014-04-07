@@ -31,11 +31,11 @@
     function init() {
       try {
         if (!model) {
-          throw 'BookmarkPeriodView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!resultViewFactory) {
-          throw 'BookmarkPeriodView::init resultViewFactory not supplied';
+          throw 'resultViewFactory not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);

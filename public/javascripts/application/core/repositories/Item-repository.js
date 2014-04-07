@@ -36,18 +36,22 @@
     };
 
     function init() {
-      if (!itemCache) {
-        throw 'ItemRepository::init itemCache not supplied.';
+      try {
+        if (!itemCache) {
+          throw 'itemCache not supplied.';
+        }
+
+        if (!croniclIService) {
+          throw 'croniclIService not supplied.';
+        }
+
+        _itemCache = itemCache;
+        _croniclIService = croniclIService;
+
+        return that;
+      } catch (e) {
+        throw 'ItemRepository::init ' + e;
       }
-
-      if (!croniclIService) {
-        throw 'ItemRepository::init croniclIService not supplied.';
-      }
-
-      _itemCache = itemCache;
-      _croniclIService = croniclIService;
-
-      return that;
     }
 
     return init();

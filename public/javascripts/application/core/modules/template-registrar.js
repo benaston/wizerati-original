@@ -6,8 +6,7 @@
       try {
         var mod = w.mod('templates');
         mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(c.config, i.croniclIService.getCroniclUri);
-      }
-      catch (e) {
+      } catch (e) {
         throw 'templateRegistrar::run ' + e;
       }
     }

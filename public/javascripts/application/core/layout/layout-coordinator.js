@@ -11,11 +11,11 @@
         _layoutCalculator = null;
 
     this.layOut = function () {
-        that.applyLayout(_layoutCalculator.calculate());
+      that.applyLayout(_layoutCalculator.calculate());
     };
 
     this.applyLayout = function (layout) {
-      if(!layout) {
+      if (!layout) {
         throw "layout not supplied";
       }
 
@@ -23,21 +23,25 @@
     };
 
     function init() {
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+      try {
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!layoutCalculator) {
+          throw 'layoutCalculator not supplied.';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        _itemsOfInterestModel = itemsOfInterestModel;
+        _layoutCalculator = layoutCalculator;
+
+        $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
+
+        return that;
+      } catch (e) {
+        throw 'LayoutCoordinator::init ' + e;
       }
-
-      if (!layoutCalculator) {
-        throw 'layoutCalculator not supplied.';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _layoutCalculator = layoutCalculator;
-
-      $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
-
-      return that;
     }
 
     init();

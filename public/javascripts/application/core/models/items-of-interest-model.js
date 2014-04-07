@@ -38,12 +38,12 @@
     };
 
     this.setSelectedItemId = function (value, options) {
-      options = options || { silent:false };
+      options = options || { silent: false };
 
       _previouslySelectedItemId = _itemsOfInterest.selectedItem;
       _itemsOfInterest.selectedItem = value;
 
-      if(!options.silent) {
+      if (!options.silent) {
         $.publish(that.eventUris.setSelectedItemId, _itemsOfInterest.selectedItem, _previouslySelectedItemId);
       }
     };
@@ -121,14 +121,18 @@
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        _resultListModel = resultListModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        return that;
+      } catch (e) {
+        throw 'ItemsOfInterestModel::init ' + e;
       }
-
-      _resultListModel = resultListModel;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
     }
 
     return init();

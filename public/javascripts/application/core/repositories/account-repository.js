@@ -46,7 +46,7 @@
 
         return that;
       } catch (e) {
-        throw 'BookmarkRepository::init ' + e;
+        throw 'AccountRepository::init ' + e;
       }
     }
 

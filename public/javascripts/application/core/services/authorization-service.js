@@ -31,15 +31,19 @@
     };
 
     function init() {
-      if (!cookieIService) {
-        throw 'cookieService not supplied';
+      try {
+        if (!cookieIService) {
+          throw 'cookieService not supplied';
+        }
+
+        _roleEnum = app.mod('enum').UserRole;
+
+        _cookieIService = cookieIService;
+
+        return that;
+      } catch (e) {
+        throw 'AuthorizationService::init ' + e;
       }
-
-      _roleEnum = app.mod('enum').UserRole;
-
-      _cookieIService = cookieIService;
-
-      return that;
     }
 
     return init();

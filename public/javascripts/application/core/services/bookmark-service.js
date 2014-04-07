@@ -42,30 +42,34 @@
     };
 
     function init() {
-      if (!bookmarkListModel) {
-        throw 'BookmarkService::init bookModel not supplied';
+      try {
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied';
+        }
+
+        if (!bookmarkRepository) {
+          throw 'bookmarkRepository not supplied';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied';
+        }
+
+        if (!itemCache) {
+          throw 'itemCache not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        _bookmarkListModel = bookmarkListModel;
+        _bookmarkRepository = bookmarkRepository;
+        _itemRepository = itemRepository;
+        _itemCache = itemCache;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarkService::init ' + e;
       }
-
-      if (!bookmarkRepository) {
-        throw 'BookmarkService::init bookmarkRepository not supplied';
-      }
-
-      if (!itemRepository) {
-        throw 'BookmarkService::init itemRepository not supplied';
-      }
-
-      if (!itemCache) {
-        throw 'BookmarkService::init itemCache not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      _bookmarkListModel = bookmarkListModel;
-      _bookmarkRepository = bookmarkRepository;
-      _itemRepository = itemRepository;
-      _itemCache = itemCache;
-
-      return that;
     }
 
     return init();

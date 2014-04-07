@@ -4358,25 +4358,23 @@ window.wizerati = {
     }
 
     var that = this,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
         _resultListModel = null,
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 424, /*empirical to stop line-wrap of top menu*/
         _minWidthItemOfInterestSmallScreen = 310,
-//        _effectiveWidthSearchPanelDefault = 74,//340 + 75, /*search panel width plus the width of the navbar*/
         _effectiveWidthResultListPanel = 400,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _widthTabBar = 74,
         _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {
-      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; /*mobile devices sometimes don't have innerWidth apparently*/
+      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+      /*mobile devices sometimes don't have innerWidth apparently*/
       /*todo: if width less than certain value, assume phone and set a public property somewhere so that phone-like behavior can be used*/
-      var minWidthItemOfInterestForDevice = viewPortWidth <=568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
-      var effectiveWidthResultListPanelForDevice = viewPortWidth <=568 ? _effectiveWidthResultListPanelSmallScreen : _effectiveWidthResultListPanel;
+      var minWidthItemOfInterestForDevice = viewPortWidth <= 568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
+      var effectiveWidthResultListPanelForDevice = viewPortWidth <= 568 ? _effectiveWidthResultListPanelSmallScreen : _effectiveWidthResultListPanel;
 
       var numberOfItemsOfInterest = _itemsOfInterestModel.getPinnedItemCount();
       var newWidth = minWidthItemOfInterestForDevice;
@@ -4385,7 +4383,7 @@ window.wizerati = {
       var widthTabBar = _widthTabBar;
 
       var effectiveWidthResultListPanel = effectiveWidthResultListPanelForDevice;
-      if(mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
+      if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
@@ -4394,13 +4392,9 @@ window.wizerati = {
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
-//        console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s)));', newWidth, viewPortWidth, widthTabBar, effectiveWidthResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         if ((widthTakenByTabBarAndResultListPanel + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel) / numberOfItemsOfInterest;
-//          console.log('newWidth (%s) = (viewPortWidth (%s) - (effectiveWidthSearchPanel (%s) + effectiveWidthResultListPanel (%s))) / numberOfItemsOfInterest (%s)', newWidth, viewPortWidth, widthTabBar, effectiveWidthResultListPanel, numberOfItemsOfInterest);
-        } else {
-//          console.log('no resize required.')
         }
       } else {
         throw "invalid itemsOfInterestModel mode.";
@@ -4409,16 +4403,16 @@ window.wizerati = {
       newWidth = Math.floor(newWidth);
       newWidth = newWidth >= minWidthItemOfInterestForDevice ? newWidth : minWidthItemOfInterestForDevice;
 
-      var leftP1 = 0;//10 * 1;
-      var leftP2 = 0;//10 * 2;
-      var leftP3 = 0;//10 * 3;
-      var leftP4 = 0;//10 * 4;
-      var leftP5 = 0;//10 * 5;
-      var leftP6 = 0;//10 * 6;
+      var leftP1 = 0;
+      var leftP2 = 0;
+      var leftP3 = 0;
+      var leftP4 = 0;
+      var leftP5 = 0;
+      var leftP6 = 0;
 
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
-        var selectedItemIncrement =  0;//_itemsOfInterestModel.getSelectedItemCount();
+        var selectedItemIncrement = 0;
         leftP1 = newWidth * (0 + selectedItemIncrement);
         leftP2 = newWidth * (1 + selectedItemIncrement);
         leftP3 = newWidth * (2 + selectedItemIncrement);
@@ -4439,25 +4433,29 @@ window.wizerati = {
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!bookmarkPanelModel) {
+          throw 'bookmarkPanelModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        _bookmarkPanelModel = bookmarkPanelModel;
+        _resultListModel = resultListModel;
+        _itemsOfInterestModel = itemsOfInterestModel;
+
+        return that;
+      } catch (e) {
+        throw 'LayoutCalculator::init ' + e;
       }
-
-      if (!bookmarkPanelModel) {
-        throw 'bookmarkPanelModel not supplied.';
-      }
-
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      _bookmarkPanelModel = bookmarkPanelModel;
-      _resultListModel = resultListModel;
-      _itemsOfInterestModel = itemsOfInterestModel;
-
-      return that;
     }
 
     init();
@@ -4479,11 +4477,11 @@ window.wizerati = {
         _layoutCalculator = null;
 
     this.layOut = function () {
-        that.applyLayout(_layoutCalculator.calculate());
+      that.applyLayout(_layoutCalculator.calculate());
     };
 
     this.applyLayout = function (layout) {
-      if(!layout) {
+      if (!layout) {
         throw "layout not supplied";
       }
 
@@ -4491,21 +4489,25 @@ window.wizerati = {
     };
 
     function init() {
-      if (!itemsOfInterestModel) {
-        throw 'itemsOfInterestModel not supplied.';
+      try {
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!layoutCalculator) {
+          throw 'layoutCalculator not supplied.';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        _itemsOfInterestModel = itemsOfInterestModel;
+        _layoutCalculator = layoutCalculator;
+
+        $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
+
+        return that;
+      } catch (e) {
+        throw 'LayoutCoordinator::init ' + e;
       }
-
-      if (!layoutCalculator) {
-        throw 'layoutCalculator not supplied.';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      _itemsOfInterestModel = itemsOfInterestModel;
-      _layoutCalculator = layoutCalculator;
-
-      $.subscribe(itemsOfInterestModel.eventUris.setMode, that.layOut);
-
-      return that;
     }
 
     init();
@@ -4726,12 +4728,12 @@ window.wizerati = {
     };
 
     this.setSelectedItemId = function (value, options) {
-      options = options || { silent:false };
+      options = options || { silent: false };
 
       _previouslySelectedItemId = _itemsOfInterest.selectedItem;
       _itemsOfInterest.selectedItem = value;
 
-      if(!options.silent) {
+      if (!options.silent) {
         $.publish(that.eventUris.setSelectedItemId, _itemsOfInterest.selectedItem, _previouslySelectedItemId);
       }
     };
@@ -4809,14 +4811,18 @@ window.wizerati = {
     };
 
     function init() {
-      if (!resultListModel) {
-        throw 'resultListModel not supplied.';
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        _resultListModel = resultListModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+        return that;
+      } catch (e) {
+        throw 'ItemsOfInterestModel::init ' + e;
       }
-
-      _resultListModel = resultListModel;
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
     }
 
     return init();
@@ -5034,7 +5040,6 @@ window.wizerati = {
 
     function init() {
       that = $.decorate(that, app.mod('decorators').decorators.trace);
-
       return that;
     }
 
@@ -5584,8 +5589,7 @@ window.wizerati = {
       try {
         var mod = w.mod('routing');
         mod.routeRegistry = new w.RouteRegistry();
-      }
-      catch (e) {
+      } catch (e) {
         throw 'routingRegistrar::run ' + e;
       }
     }
@@ -5607,8 +5611,7 @@ window.wizerati = {
         mod.hiddenItemService = new w.HiddenItemService(r.itemRepository);
         mod.readItemService = new w.ReadItemService(r.itemRepository);
         mod.searchService = new w.SearchService(i.croniclIService, ca.itemCache);
-      }
-      catch (e) {
+      } catch (e) {
         throw 'serviceRegistrar::run ' + e;
       }
     }
@@ -5623,8 +5626,7 @@ window.wizerati = {
       try {
         var mod = w.mod('templates');
         mod.templateUrlHelper = new invertebrate.TemplateUrlHelper(c.config, i.croniclIService.getCroniclUri);
-      }
-      catch (e) {
+      } catch (e) {
         throw 'templateRegistrar::run ' + e;
       }
     }
@@ -5639,8 +5641,7 @@ window.wizerati = {
       try {
         var mod = w.mod('ui');
         mod.postRenderActions = [];
-      }
-      catch (e) {
+      } catch (e) {
         throw 'uiRegistrar::run ' + e;
       }
     }
@@ -5650,20 +5651,19 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  app.viewRegistrar =  {
-    run:  function(w, f, l, m, p) {
+  app.viewRegistrar = {
+    run: function (w, f, l, m, p) {
       try {
         var mod = w.mod('views');
         mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
-        mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel,f.resultViewFactory, p.itemModelPack);
+        mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel, f.resultViewFactory, p.itemModelPack);
         mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
         mod.myAccountView = new w.MyAccountView(m.myAccountModel);
         mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
         mod.searchFormView = new w.SearchFormView(m.searchFormModel);
         mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
         mod.uiRootView = new w.UIRootView(m.uiRootModel);
-      }
-      catch (e) {
+      } catch (e) {
         throw 'viewRegistrar::run ' + e;
       }
     }
@@ -5839,7 +5839,7 @@ window.wizerati = {
 
         return that;
       } catch (e) {
-        throw 'BookmarkRepository::init ' + e;
+        throw 'AccountRepository::init ' + e;
       }
     }
 
@@ -5867,11 +5867,11 @@ window.wizerati = {
     //Return full items. Bookmark cache receives only id and bookmarkDateTime to avoid duplication of data.
     //All full items added to item cache, thereby ensuring they will not need to be retrieved again via ajax.
     this.getByUserId = function (userId, done) {
-      if(!userId) {
+      if (!userId) {
         throw 'BookmarkRepository::getByUserId userId not supplied.'
       }
 
-      if(!done) {
+      if (!done) {
         throw 'BookmarkRepository::getByUserId done not supplied.'
       }
 
@@ -5891,8 +5891,12 @@ window.wizerati = {
         }
 
         var bookmarkItems = $.parseJSON(data);
-        var bookmarks = bookmarkItems.map(function (b) { return { id: b.id, bookmarkDateTime: b.bookmarkDateTime }; });
-        _bookmarkCache.insert([{ id: userId, value: bookmarks }]);
+        var bookmarks = bookmarkItems.map(function (b) {
+          return { id: b.id, bookmarkDateTime: b.bookmarkDateTime };
+        });
+        _bookmarkCache.insert([
+          { id: userId, value: bookmarks }
+        ]);
         _itemCache.insert(bookmarkItems); //Ensure local item cache is primed with the bookmarks (the bookmark cache is dealt with in the repository).
 
         done(bookmarks);
@@ -5900,23 +5904,27 @@ window.wizerati = {
     };
 
     function init() {
-      if (!bookmarkCache) {
-        throw 'BookmarkRepository::init cache not supplied.';
+      try {
+        if (!bookmarkCache) {
+          throw 'cache not supplied.';
+        }
+
+        if (!croniclIService) {
+          throw 'croniclIService not supplied.';
+        }
+
+        if (!itemCache) {
+          throw 'itemCache not supplied.';
+        }
+
+        _bookmarkCache = bookmarkCache;
+        _croniclIService = croniclIService;
+        _itemCache = itemCache;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarkRepository::init ' + e;
       }
-
-      if (!croniclIService) {
-        throw 'BookmarkRepository::init croniclIService not supplied.';
-      }
-
-      if (!itemCache) {
-        throw 'BookmarkRepository::init itemCache not supplied.';
-      }
-
-      _bookmarkCache = bookmarkCache;
-      _croniclIService = croniclIService;
-      _itemCache = itemCache;
-
-      return that;
     }
 
     return init();
@@ -5963,18 +5971,22 @@ window.wizerati = {
     };
 
     function init() {
-      if (!itemCache) {
-        throw 'ItemRepository::init itemCache not supplied.';
+      try {
+        if (!itemCache) {
+          throw 'itemCache not supplied.';
+        }
+
+        if (!croniclIService) {
+          throw 'croniclIService not supplied.';
+        }
+
+        _itemCache = itemCache;
+        _croniclIService = croniclIService;
+
+        return that;
+      } catch (e) {
+        throw 'ItemRepository::init ' + e;
       }
-
-      if (!croniclIService) {
-        throw 'ItemRepository::init croniclIService not supplied.';
-      }
-
-      _itemCache = itemCache;
-      _croniclIService = croniclIService;
-
-      return that;
     }
 
     return init();
@@ -6129,13 +6141,17 @@ window.wizerati = {
     };
 
     function init() {
-      if (!wizeratiHttpClient) {
-        throw 'wizeratiHttpClient not supplied.';
+      try {
+        if (!wizeratiHttpClient) {
+          throw 'wizeratiHttpClient not supplied.';
+        }
+
+        _httpClient = wizeratiHttpClient;
+
+        return that;
+      } catch (e) {
+        throw 'AccountService::init ' + e;
       }
-
-      _httpClient = wizeratiHttpClient;
-
-      return that;
     }
 
     return init();
@@ -6162,47 +6178,51 @@ window.wizerati = {
         _modalEnum = app.mod('enum').Modal,
         _dialogPanelEnum = app.mod('enum').ApplyToContractDialogPanel;
 
-    this.show = function(itemId) {
-      if(_authorizationService.getCurrentRole() == _roleEnum.Contractor) {
-        _model.setCurrentDialogPanel(_dialogPanelEnum.CVSelection, {silent:true});
+    this.show = function (itemId) {
+      if (_authorizationService.getCurrentRole() == _roleEnum.Contractor) {
+        _model.setCurrentDialogPanel(_dialogPanelEnum.CVSelection, {silent: true});
       } else {
-        _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent:true});
+        _model.setCurrentDialogPanel(_dialogPanelEnum.SignInOrContinue, {silent: true});
       }
 
-      _itemRepository.getById(itemId, function(item){
+      _itemRepository.getById(itemId, function (item) {
         _model.setItem(item); //triggers render
         _uiRootModel.setModal(_modalEnum.ActionContract);
       })
     };
 
-    this.hide = function() {
+    this.hide = function () {
       _model.reset();
       _uiRootModel.setModal(_modalEnum.None);
     };
 
     function init() {
-      if (!model) {
-        throw 'model not supplied';
+      try {
+        if (!model) {
+          throw 'model not supplied';
+        }
+
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied';
+        }
+
+        if (!authorizationService) {
+          throw 'authorizationService not supplied';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied';
+        }
+
+        _uiRootModel = uiRootModel;
+        _authorizationService = authorizationService;
+        _model = model;
+        _itemRepository = itemRepository;
+
+        return that;
+      } catch (e) {
+        throw 'ApplyToContractDialogService::init ' + e;
       }
-
-      if (!uiRootModel) {
-        throw 'uiRootModel not supplied';
-      }
-
-     if (!authorizationService) {
-        throw 'authorizationService not supplied';
-      }
-
-      if (!itemRepository) {
-        throw 'itemRepository not supplied';
-      }
-
-      _uiRootModel = uiRootModel;
-      _authorizationService = authorizationService;
-      _model = model;
-      _itemRepository = itemRepository;
-
-      return that;
     }
 
     return init();
@@ -6282,15 +6302,19 @@ window.wizerati = {
     };
 
     function init() {
-      if (!cookieIService) {
-        throw 'cookieService not supplied';
+      try {
+        if (!cookieIService) {
+          throw 'cookieService not supplied';
+        }
+
+        _roleEnum = app.mod('enum').UserRole;
+
+        _cookieIService = cookieIService;
+
+        return that;
+      } catch (e) {
+        throw 'AuthorizationService::init ' + e;
       }
-
-      _roleEnum = app.mod('enum').UserRole;
-
-      _cookieIService = cookieIService;
-
-      return that;
     }
 
     return init();
@@ -6343,30 +6367,34 @@ window.wizerati = {
     };
 
     function init() {
-      if (!bookmarkListModel) {
-        throw 'BookmarkService::init bookModel not supplied';
+      try {
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied';
+        }
+
+        if (!bookmarkRepository) {
+          throw 'bookmarkRepository not supplied';
+        }
+
+        if (!itemRepository) {
+          throw 'itemRepository not supplied';
+        }
+
+        if (!itemCache) {
+          throw 'itemCache not supplied';
+        }
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        _bookmarkListModel = bookmarkListModel;
+        _bookmarkRepository = bookmarkRepository;
+        _itemRepository = itemRepository;
+        _itemCache = itemCache;
+
+        return that;
+      } catch (e) {
+        throw 'BookmarkService::init ' + e;
       }
-
-      if (!bookmarkRepository) {
-        throw 'BookmarkService::init bookmarkRepository not supplied';
-      }
-
-      if (!itemRepository) {
-        throw 'BookmarkService::init itemRepository not supplied';
-      }
-
-      if (!itemCache) {
-        throw 'BookmarkService::init itemCache not supplied';
-      }
-
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-      _bookmarkListModel = bookmarkListModel;
-      _bookmarkRepository = bookmarkRepository;
-      _itemRepository = itemRepository;
-      _itemCache = itemCache;
-
-      return that;
     }
 
     return init();
@@ -6527,39 +6555,43 @@ window.wizerati = {
 
     //rename to success, plus add timeout argument and error
     this.runSearch = function (keywords, rate, done) {
-        done = !done ? function (data) {
-        } : done;
+      done = !done ? function (data) {
+      } : done;
 
-        $.ajax({
-          url: _croniclIService.getCroniclUri() + 'search',
-          success: success,
-          cache: false
-        });
+      $.ajax({
+        url: _croniclIService.getCroniclUri() + 'search',
+        success: success,
+        cache: false
+      });
 
-        function success(data) {
-          if (!data) {
-            throw 'data not supplied';
-          }
-
-          var results = $.parseJSON(data);
-          _itemCache.insert(results);
-          done(results);
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
         }
+
+        var results = $.parseJSON(data);
+        _itemCache.insert(results);
+        done(results);
+      }
     };
 
     function init() {
-      if (!croniclIService) {
-        throw 'croniclService not supplied.';
+      try {
+        if (!croniclIService) {
+          throw 'croniclService not supplied.';
+        }
+
+        if (!itemCache) {
+          throw 'itemCache not supplied.';
+        }
+
+        _croniclIService = croniclIService;
+        _itemCache = itemCache;
+
+        return that;
+      } catch (e) {
+        throw 'SearchService::init ' + e;
       }
-
-      if (!itemCache) {
-        throw 'itemCache not supplied.';
-      }
-
-      _croniclIService = croniclIService;
-      _itemCache = itemCache;
-
-      return that;
     }
 
     return init();
@@ -6623,8 +6655,7 @@ window.wizerati = {
 
     var that = this,
         _el = '#apply-to-contract-dialog',
-        _jobTitleEl = '.job-title',
-        _uiModeEnum = app.mod('enum').UIMode;
+        _jobTitleEl = '.job-title';
 
     this.$el = null;
     this.Model = null;
@@ -6638,8 +6669,9 @@ window.wizerati = {
     };
 
     function init() {
+      try {
       if (!model) {
-        throw 'ApplyToContractDialogView::init model not supplied';
+        throw 'model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -6648,6 +6680,9 @@ window.wizerati = {
       $.subscribe(that.Model.eventUris.default, that.render);
 
       return that;
+      } catch (e) {
+        throw 'ApplyToContractDialogView::init ' + e;
+      }
     }
 
     return init();
@@ -6879,11 +6914,11 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'BookmarkPeriodView::init model not supplied';
+          throw 'model not supplied';
         }
 
         if (!resultViewFactory) {
-          throw 'BookmarkPeriodView::init resultViewFactory not supplied';
+          throw 'resultViewFactory not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -6942,7 +6977,7 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'ContractItemOfInterestView::init model not supplied';
+          throw 'model not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -7020,7 +7055,7 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'ContractResultView::init model not supplied';
+          throw 'model not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -7727,7 +7762,7 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'SearchFormView::init model not supplied';
+          throw 'model not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -7909,7 +7944,7 @@ window.wizerati = {
     function init() {
       try {
         if (!model) {
-          throw 'UIRootView::init model not supplied';
+          throw 'model not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);

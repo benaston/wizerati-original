@@ -14,39 +14,43 @@
 
     //rename to success, plus add timeout argument and error
     this.runSearch = function (keywords, rate, done) {
-        done = !done ? function (data) {
-        } : done;
+      done = !done ? function (data) {
+      } : done;
 
-        $.ajax({
-          url: _croniclIService.getCroniclUri() + 'search',
-          success: success,
-          cache: false
-        });
+      $.ajax({
+        url: _croniclIService.getCroniclUri() + 'search',
+        success: success,
+        cache: false
+      });
 
-        function success(data) {
-          if (!data) {
-            throw 'data not supplied';
-          }
-
-          var results = $.parseJSON(data);
-          _itemCache.insert(results);
-          done(results);
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
         }
+
+        var results = $.parseJSON(data);
+        _itemCache.insert(results);
+        done(results);
+      }
     };
 
     function init() {
-      if (!croniclIService) {
-        throw 'croniclService not supplied.';
+      try {
+        if (!croniclIService) {
+          throw 'croniclService not supplied.';
+        }
+
+        if (!itemCache) {
+          throw 'itemCache not supplied.';
+        }
+
+        _croniclIService = croniclIService;
+        _itemCache = itemCache;
+
+        return that;
+      } catch (e) {
+        throw 'SearchService::init ' + e;
       }
-
-      if (!itemCache) {
-        throw 'itemCache not supplied.';
-      }
-
-      _croniclIService = croniclIService;
-      _itemCache = itemCache;
-
-      return that;
     }
 
     return init();

@@ -9,8 +9,7 @@
 
     var that = this,
         _el = '#apply-to-contract-dialog',
-        _jobTitleEl = '.job-title',
-        _uiModeEnum = app.mod('enum').UIMode;
+        _jobTitleEl = '.job-title';
 
     this.$el = null;
     this.Model = null;
@@ -24,8 +23,9 @@
     };
 
     function init() {
+      try {
       if (!model) {
-        throw 'ApplyToContractDialogView::init model not supplied';
+        throw 'model not supplied';
       }
 
       that = $.decorate(that, app.mod('decorators').decorators.trace);
@@ -34,6 +34,9 @@
       $.subscribe(that.Model.eventUris.default, that.render);
 
       return that;
+      } catch (e) {
+        throw 'ApplyToContractDialogView::init ' + e;
+      }
     }
 
     return init();

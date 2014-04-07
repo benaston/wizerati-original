@@ -13,8 +13,7 @@
         mod.hiddenItemService = new w.HiddenItemService(r.itemRepository);
         mod.readItemService = new w.ReadItemService(r.itemRepository);
         mod.searchService = new w.SearchService(i.croniclIService, ca.itemCache);
-      }
-      catch (e) {
+      } catch (e) {
         throw 'serviceRegistrar::run ' + e;
       }
     }

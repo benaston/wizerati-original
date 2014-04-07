@@ -6,8 +6,7 @@
       try {
         var mod = w.mod('ui');
         mod.postRenderActions = [];
-      }
-      catch (e) {
+      } catch (e) {
         throw 'uiRegistrar::run ' + e;
       }
     }

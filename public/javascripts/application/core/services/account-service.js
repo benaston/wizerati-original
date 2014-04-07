@@ -40,13 +40,17 @@
     };
 
     function init() {
-      if (!wizeratiHttpClient) {
-        throw 'wizeratiHttpClient not supplied.';
+      try {
+        if (!wizeratiHttpClient) {
+          throw 'wizeratiHttpClient not supplied.';
+        }
+
+        _httpClient = wizeratiHttpClient;
+
+        return that;
+      } catch (e) {
+        throw 'AccountService::init ' + e;
       }
-
-      _httpClient = wizeratiHttpClient;
-
-      return that;
     }
 
     return init();

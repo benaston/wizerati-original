@@ -57,7 +57,7 @@
     function init() {
       try {
         if (!model) {
-          throw 'ContractResultView::init model not supplied';
+          throw 'model not supplied';
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
