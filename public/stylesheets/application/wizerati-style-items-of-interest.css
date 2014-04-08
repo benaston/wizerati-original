@@ -31,7 +31,7 @@ body[data-items-of-interest-mode='1'] .s-i-content {
 .menu .btn-s {
     position: relative; /*ensure focus indicator works as expected*/
     color: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, .2);
+    border-color: rgba(255, 255, 255, .1);
 }
 
 body[data-hover-is-enabled='true'] .menu .btn-s:enabled:hover {

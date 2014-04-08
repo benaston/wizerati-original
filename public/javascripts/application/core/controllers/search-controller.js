@@ -36,7 +36,7 @@
           _helper.resetUIForSearch();
         }
       } catch (err) {
-        console.log('SearchController::show exception: ' + err);
+        console.log('SearchController::show ' + err);
       }
     };
 

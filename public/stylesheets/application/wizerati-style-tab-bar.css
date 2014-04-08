@@ -46,7 +46,7 @@ body[data-ui-mode='1'] #tab-bar {
 #tab-bar .btn {
     position: relative; /*for positioning of after*/
     color: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, .2);
+    border-color: rgba(255, 255, 255, .1);
 }
 
 .h {

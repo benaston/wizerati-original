@@ -23,7 +23,7 @@
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (err) {
-        console.log('HomeController::index exception: ' + err);
+        console.log('HomeController::index ' + err);
       }
     };
 

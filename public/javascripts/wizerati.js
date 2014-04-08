@@ -3045,7 +3045,7 @@ window.wizerati = {
           _helper.resetUIForBookmarks();
         }
       } catch (err) {
-        console.log('BookmarksController::index exception: ' + err);
+        console.log('BookmarksController::index ' + err);
       }
     };
 
@@ -3238,7 +3238,7 @@ window.wizerati = {
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (err) {
-        console.log('HomeController::index exception: ' + err);
+        console.log('HomeController::index ' + err);
       }
     };
 
@@ -3324,15 +3324,17 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function MyAccountController(uiModelPack, helper, accountRepository) {
+  function MyAccountController(uiModelPack, helper, accountRepository, userModel) {
 
     if (!(this instanceof app.MyAccountController)) {
-      return new app.MyAccountController(uiModelPack, helper, accountRepository);
+      return new app.MyAccountController(uiModelPack, helper, accountRepository, userModel);
     }
 
     var that = this,
         _uiModelPack = null,
         _helper = null,
+        _accountRepository = null,
+        _userModel = null,
         _myAccountHasPreviouslyBeenRetrieved = false;
 
     this.urlTransforms = {};
@@ -3345,12 +3347,12 @@ window.wizerati = {
         if (!_myAccountHasPreviouslyBeenRetrieved) {
           _myAccountHasPreviouslyBeenRetrieved = true;
           _uiModelPack.myAccountModel.setIsWaiting('true');
-          _myAccountRepository.getByUserId(_userModel.getUserId(), _helper.myAccountRetrievalSuccess);
+          _accountRepository.getByUserId(_userModel.getUserId(), _helper.accountRetrievalSuccess);
         } else {
           _helper.resetUIForMyAccount();
         }
       } catch (err) {
-        console.log('MyAccountController::index exception: ' + err);
+        console.log('MyAccountController::index ' + err);
       }
     };
 
@@ -3364,8 +3366,18 @@ window.wizerati = {
           throw 'helper not supplied.';
         }
 
+        if (!accountRepository) {
+          throw 'accountRepository not supplied.';
+        }
+
+        if (!userModel) {
+          throw 'userModel not supplied.';
+        }
+
         _uiModelPack = uiModelPack;
         _helper = helper;
+        _accountRepository = accountRepository;
+        _userModel = userModel;
 
         return that;
       } catch (e) {
@@ -3417,7 +3429,7 @@ window.wizerati = {
           _helper.resetUIForSearch();
         }
       } catch (err) {
-        console.log('SearchController::show exception: ' + err);
+        console.log('SearchController::show ' + err);
       }
     };
 
@@ -3556,7 +3568,7 @@ window.wizerati = {
         //this has to be set before the mode change to ensure correct layout calculation
         _itemsOfInterestModel.setSelectedItemId(dto.id);
       } catch (err) {
-        console.log('SelectedItemController::update exception: ' + err);
+        console.log('SelectedItemController::update ' + err);
       }
     };
 
@@ -3614,11 +3626,11 @@ window.wizerati = {
     function init() {
       try {
         if (!loginPanelModel) {
-          throw 'SessionController::init loginPanelModel not supplied.';
+          throw 'loginPanelModel not supplied.';
         }
 
         if (!authenticationService) {
-          throw 'SessionController::init authenticationService not supplied.';
+          throw 'authenticationService not supplied.';
         }
 
         _loginPanelModel = loginPanelModel;
@@ -3796,7 +3808,7 @@ window.wizerati = {
               }));
               item.canAddToComparisonList = !item.hiddenDateTime && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
               item.isHidden = !!(item.hiddenDateTime);
-              item.isHideable = !(item.bookmarkDateTime) && !_itemModelPack.actionedItemsModel.isActioned(item.id);
+              item.isHideable = !(item.bookmarkDateTime); // && !_itemModelPack.actionedItemsModel.isActioned(item.id);
 //              item.isActioned = _itemModelPack.actionedItemsModel.isActioned(item.id);
               item.isActioned = false;
               item.isActionable = !item.hiddenDateTime;
@@ -4069,6 +4081,7 @@ window.wizerati = {
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _myAccountModeEnum = app.mod('enum').MyAccountMode,
         _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
@@ -4082,6 +4095,7 @@ window.wizerati = {
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Default);
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 
@@ -4888,13 +4902,15 @@ window.wizerati = {
 
     var that = this,
         _isWaiting = false,
+        _account = null,
         _myAccountModeEnum = app.mod('enum').MyAccountMode,
         _mode = _myAccountModeEnum.Minimized;
 
     this.eventUris = {
       default: 'update://myaccountmodel',
       setMode: 'update://myaccountmodel/setmode',
-      setIsWaiting: 'update://myaccountmodel/setiswaiting'
+      setIsWaiting: 'update://myaccountmodel/setiswaiting',
+      setAccount: 'update://myaccountmodel/setaccount'
     };
 
     this.getMode = function () {
@@ -4922,6 +4938,12 @@ window.wizerati = {
       _isWaiting = value;
 
       $.publish(that.eventUris.setIsWaiting, value);
+    };
+
+    this.setAccount= function (value) {
+      _account = value;
+
+      $.publish(that.eventUris.setAccount, value);
     };
 
     function init() {
@@ -5291,6 +5313,127 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService) {
+
+    if (!(this instanceof app.ItemModelPack)) {
+      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService);
+    }
+
+    var that = this;
+
+    this.resultListModel = null;
+    this.bookmarkListModel = null;
+    this.itemsOfInterestModel = null;
+    this.hiddenItemService = null;
+    this.actionedItemsModel = null;
+    this.readItemService = null;
+
+    function init() {
+      try {
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!hiddenItemService) {
+          throw 'hiddenItemService not supplied.';
+        }
+
+        if (!readItemService) {
+          throw 'readItemService not supplied.';
+        }
+
+        that.resultListModel = resultListModel;
+        that.bookmarkListModel = bookmarkListModel;
+        that.itemsOfInterestModel = itemsOfInterestModel;
+        that.hiddenItemService = hiddenItemService;
+        that.readItemService = readItemService;
+
+        return that;
+      } catch (e) {
+        throw 'ItemModelPack::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.ItemModelPack = ItemModelPack;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel) {
+
+    if (!(this instanceof app.UIModelPack)) {
+      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel);
+    }
+
+    var that = this;
+
+    this.uiRootModel = null;
+    this.searchFormModel = null;
+    this.resultListModel = null;
+    this.itemsOfInterestModel = null;
+    this.tabBarModel = null;
+    this.bookmarkPanelModel = null;
+
+    function init() {
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        if (!searchFormModel) {
+          throw 'searchFormModel not supplied.';
+        }
+
+        if (!resultListModel) {
+          throw 'resultListModel not supplied.';
+        }
+
+        if (!itemsOfInterestModel) {
+          throw 'itemsOfInterestModel not supplied.';
+        }
+
+        if (!tabBarModel) {
+          throw 'tabBarModel not supplied.';
+        }
+
+        if (!bookmarkListModel) {
+          throw 'bookmarkListModel not supplied.';
+        }
+
+        that.uiRootModel = uiRootModel;
+        that.searchFormModel = searchFormModel;
+        that.resultListModel = resultListModel;
+        that.itemsOfInterestModel = itemsOfInterestModel;
+        that.tabBarModel = tabBarModel;
+        that.bookmarkPanelModel = bookmarkListModel;
+
+        return that;
+      } catch(e) {
+        throw 'UIModelPack::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.UIModelPack = UIModelPack;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   app.cacheRegistrar =  {
     run:  function(w) {
       try {
@@ -5382,7 +5525,7 @@ window.wizerati = {
         mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
         mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
         mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
-        mod.myAccountController = new w.MyAccountController(p.uiModelPack, h.myAccountControllerHelper, r.accountRepository);
+        mod.myAccountController = new w.MyAccountController(p.uiModelPack, h.myAccountControllerHelper, r.accountRepository, m.userModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
@@ -5519,7 +5662,7 @@ window.wizerati = {
         var mod = w.mod('helpers');
         mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator, s.readItemService);
         mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
-        mod.myAccountControllerHelper = new w.MyAccountControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
+        mod.myAccountControllerHelper = new w.MyAccountControllerHelper(p.uiModelPack, l.layoutCoordinator, m.myAccountModel);
       }
       catch (e) {
         throw 'helperRegistrar::run ' + e;
@@ -5714,127 +5857,6 @@ window.wizerati = {
       }
     }
   };
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService) {
-
-    if (!(this instanceof app.ItemModelPack)) {
-      return new app.ItemModelPack(resultListModel, bookmarkListModel, itemsOfInterestModel, hiddenItemService, readItemService);
-    }
-
-    var that = this;
-
-    this.resultListModel = null;
-    this.bookmarkListModel = null;
-    this.itemsOfInterestModel = null;
-    this.hiddenItemService = null;
-    this.actionedItemsModel = null;
-    this.readItemService = null;
-
-    function init() {
-      try {
-        if (!resultListModel) {
-          throw 'resultListModel not supplied.';
-        }
-
-        if (!bookmarkListModel) {
-          throw 'bookmarkListModel not supplied.';
-        }
-
-        if (!itemsOfInterestModel) {
-          throw 'itemsOfInterestModel not supplied.';
-        }
-
-        if (!hiddenItemService) {
-          throw 'hiddenItemService not supplied.';
-        }
-
-        if (!readItemService) {
-          throw 'readItemService not supplied.';
-        }
-
-        that.resultListModel = resultListModel;
-        that.bookmarkListModel = bookmarkListModel;
-        that.itemsOfInterestModel = itemsOfInterestModel;
-        that.hiddenItemService = hiddenItemService;
-        that.readItemService = readItemService;
-
-        return that;
-      } catch (e) {
-        throw 'ItemModelPack::init ' + e;
-      }
-    }
-
-    return init();
-  }
-
-  app.ItemModelPack = ItemModelPack;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel) {
-
-    if (!(this instanceof app.UIModelPack)) {
-      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel);
-    }
-
-    var that = this;
-
-    this.uiRootModel = null;
-    this.searchFormModel = null;
-    this.resultListModel = null;
-    this.itemsOfInterestModel = null;
-    this.tabBarModel = null;
-    this.bookmarkPanelModel = null;
-
-    function init() {
-      try {
-        if (!uiRootModel) {
-          throw 'uiRootModel not supplied.';
-        }
-
-        if (!searchFormModel) {
-          throw 'searchFormModel not supplied.';
-        }
-
-        if (!resultListModel) {
-          throw 'resultListModel not supplied.';
-        }
-
-        if (!itemsOfInterestModel) {
-          throw 'itemsOfInterestModel not supplied.';
-        }
-
-        if (!tabBarModel) {
-          throw 'tabBarModel not supplied.';
-        }
-
-        if (!bookmarkListModel) {
-          throw 'bookmarkListModel not supplied.';
-        }
-
-        that.uiRootModel = uiRootModel;
-        that.searchFormModel = searchFormModel;
-        that.resultListModel = resultListModel;
-        that.itemsOfInterestModel = itemsOfInterestModel;
-        that.tabBarModel = tabBarModel;
-        that.bookmarkPanelModel = bookmarkListModel;
-
-        return that;
-      } catch(e) {
-        throw 'UIModelPack::init ' + e;
-      }
-    }
-
-    return init();
-  }
-
-  app.UIModelPack = UIModelPack;
 
 }(wizerati));
 ;(function (app, $) {
@@ -7490,6 +7512,7 @@ window.wizerati = {
         $.subscribe(that.model.eventUris.default, that.render);
         $.subscribe(that.model.eventUris.setIsWaiting, that.render);
         $.subscribe(that.model.eventUris.setMode, that.render);
+        $.subscribe(that.model.eventUris.setAccount, that.render);
 
         return that;
       } catch (e) {

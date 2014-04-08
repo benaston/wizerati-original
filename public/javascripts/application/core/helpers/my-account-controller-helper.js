@@ -13,6 +13,7 @@
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _myAccountModeEnum = app.mod('enum').MyAccountMode,
         _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
@@ -26,6 +27,7 @@
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Default);
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 

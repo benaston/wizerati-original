@@ -27,7 +27,7 @@
         //this has to be set before the mode change to ensure correct layout calculation
         _itemsOfInterestModel.setSelectedItemId(dto.id);
       } catch (err) {
-        console.log('SelectedItemController::update exception: ' + err);
+        console.log('SelectedItemController::update ' + err);
       }
     };
 

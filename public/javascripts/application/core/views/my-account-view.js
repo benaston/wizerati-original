@@ -88,6 +88,7 @@
         $.subscribe(that.model.eventUris.default, that.render);
         $.subscribe(that.model.eventUris.setIsWaiting, that.render);
         $.subscribe(that.model.eventUris.setMode, that.render);
+        $.subscribe(that.model.eventUris.setAccount, that.render);
 
         return that;
       } catch (e) {

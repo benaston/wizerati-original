@@ -28,7 +28,7 @@
           _helper.resetUIForBookmarks();
         }
       } catch (err) {
-        console.log('BookmarksController::index exception: ' + err);
+        console.log('BookmarksController::index ' + err);
       }
     };
 

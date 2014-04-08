@@ -9,13 +9,15 @@
 
     var that = this,
         _isWaiting = false,
+        _account = null,
         _myAccountModeEnum = app.mod('enum').MyAccountMode,
         _mode = _myAccountModeEnum.Minimized;
 
     this.eventUris = {
       default: 'update://myaccountmodel',
       setMode: 'update://myaccountmodel/setmode',
-      setIsWaiting: 'update://myaccountmodel/setiswaiting'
+      setIsWaiting: 'update://myaccountmodel/setiswaiting',
+      setAccount: 'update://myaccountmodel/setaccount'
     };
 
     this.getMode = function () {
@@ -43,6 +45,12 @@
       _isWaiting = value;
 
       $.publish(that.eventUris.setIsWaiting, value);
+    };
+
+    this.setAccount= function (value) {
+      _account = value;
+
+      $.publish(that.eventUris.setAccount, value);
     };
 
     function init() {

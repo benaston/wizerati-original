@@ -1,15 +1,17 @@
 (function (app) {
   'use strict';
 
-  function MyAccountController(uiModelPack, helper, accountRepository) {
+  function MyAccountController(uiModelPack, helper, accountRepository, userModel) {
 
     if (!(this instanceof app.MyAccountController)) {
-      return new app.MyAccountController(uiModelPack, helper, accountRepository);
+      return new app.MyAccountController(uiModelPack, helper, accountRepository, userModel);
     }
 
     var that = this,
         _uiModelPack = null,
         _helper = null,
+        _accountRepository = null,
+        _userModel = null,
         _myAccountHasPreviouslyBeenRetrieved = false;
 
     this.urlTransforms = {};
@@ -22,12 +24,12 @@
         if (!_myAccountHasPreviouslyBeenRetrieved) {
           _myAccountHasPreviouslyBeenRetrieved = true;
           _uiModelPack.myAccountModel.setIsWaiting('true');
-          _myAccountRepository.getByUserId(_userModel.getUserId(), _helper.myAccountRetrievalSuccess);
+          _accountRepository.getByUserId(_userModel.getUserId(), _helper.accountRetrievalSuccess);
         } else {
           _helper.resetUIForMyAccount();
         }
       } catch (err) {
-        console.log('MyAccountController::index exception: ' + err);
+        console.log('MyAccountController::index ' + err);
       }
     };
 
@@ -41,8 +43,18 @@
           throw 'helper not supplied.';
         }
 
+        if (!accountRepository) {
+          throw 'accountRepository not supplied.';
+        }
+
+        if (!userModel) {
+          throw 'userModel not supplied.';
+        }
+
         _uiModelPack = uiModelPack;
         _helper = helper;
+        _accountRepository = accountRepository;
+        _userModel = userModel;
 
         return that;
       } catch (e) {
