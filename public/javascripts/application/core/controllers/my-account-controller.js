@@ -33,6 +33,19 @@
       }
     };
 
+    function urlTransformIndex(uri, dto) {
+      if(uri.indexOf('?') >= 0) { //already has query string
+        return uri;
+      }
+
+      return uri + '?tab=' + dto.tab;
+    }
+
+    function dtoPopulatorIndex(dto) {
+      dto.tab = _myAccountModel.getSelectedTab();
+      return dto;
+    }
+
     function init() {
       try {
         if (!myAccountModel) {
@@ -60,6 +73,9 @@
         _accountRepository = accountRepository;
         _userModel = userModel;
         _uiRootModel = uiRootModel;
+
+        that.urlTransforms['/myaccount'] = urlTransformIndex;
+        that.dtoPopulators['/myaccount'] = dtoPopulatorIndex;
 
         return that;
       } catch (e) {

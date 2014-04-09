@@ -11,7 +11,9 @@
         _isWaiting = false,
         _account = null,
         _myAccountModeEnum = app.mod('enum').MyAccountMode,
-        _mode = _myAccountModeEnum.Minimized;
+        _myAccountTabEnum = app.mod('enum').MyAccountTab,
+        _mode = _myAccountModeEnum.Minimized,
+        _selectedTab = _myAccountTabEnum.MyDetails;
 
     this.eventUris = {
       default: 'update://myaccountmodel',
@@ -55,6 +57,16 @@
       _account = value;
 
       $.publish(that.eventUris.setAccount, value);
+    };
+
+    this.getSelectedTab= function () {
+      return _selectedTab;
+    };
+
+    this.setSelectedTab= function (value) {
+      _selectedTab = value;
+
+      $.publish(that.eventUris.setSelectedTab, value);
     };
 
     function init() {

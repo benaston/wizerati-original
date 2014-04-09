@@ -2386,7 +2386,9 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     this.routes = {};
 
     this.registerRoute = function (uri, action, options) {
-      var defaults = { silent: false, title: _defaultPageTitle, titleFactory: function(){ return null; }, uriTransform: function (uri, dto) {
+      var defaults = { silent: false, title: _defaultPageTitle, titleFactory: function () {
+        return null;
+      }, uriTransform: function (uri, dto) {
         return uri;
       }, isExternal: false };
       options = _.extend({}, defaults, options);
@@ -2400,7 +2402,6 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     this.route = function (uri, dto, options) {
       options = options || { silent: false };
-
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -2418,20 +2419,31 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       }
 
       var route = that.routes[firstMatchingRouteUri];
-      route.options.dtoPopulator = route.options.dtoPopulator || function() { return null; };
+      route.options.dtoPopulator = route.options.dtoPopulator || function () {
+        return null;
+      };
       var dto = dto
           || createDtoFromQueryString(queryString)
           || route.options.dtoPopulator({})
           || {};
-      dto.__isInvertebrateExternal__ =  options.isExternal;
+      dto.__isInvertebrateExternal__ = options.isExternal;
 
       //Ensure title changes occur when using back and forward buttons, and on external requests.
       if (!route.options.silent) {
         document.title = route.options.titleFactory(dto) || route.options.title;
       }
 
-      if (!route.options.silent && !options.silent) {
-        history.pushState(null, null, route.options.uriTransform(uri, dto));
+
+//      if (!route.options.silent && !options.silent) {
+//        history.pushState(null, null, route.options.uriTransform(uri, dto));
+//      }
+
+      if (options.isExternal) {
+        history.replaceState(null, null, route.options.uriTransform(uri, dto));
+      } else {
+        if (!route.options.silent && !options.silent) {
+          history.pushState(null, null, route.options.uriTransform(uri, dto));
+        }
       }
 
       route.action(dto);
@@ -2477,7 +2489,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
       //If we have found nothing to add to the dto from the form, then return null
       //permitting fall through to any dtoPopulationFunctions later.
-      if(Object.keys(dto).length) {
+      if (Object.keys(dto).length) {
         return dto;
       }
 
@@ -2516,7 +2528,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         //For opera, this works because the manual call happens second.
         if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
           _isFirstRouteCall = false;
-          that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+          that.route(location.pathname + location.search, null, {/*silent: true, */isExternal: true });
         }
       });
 
@@ -2528,7 +2540,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       });
 
       $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
-          function(evt){
+          function (evt) {
             evt.preventDefault();
           })); //debounce to prevent undesired interaction of double-click on results with double buffering
       $(document).on('submit', 'form', routeFormSubmission);
@@ -2536,7 +2548,6 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     init();
   }
-
 
 
   invertebrate.Router = Router;
@@ -3368,6 +3379,19 @@ window.wizerati = {
       }
     };
 
+    function urlTransformIndex(uri, dto) {
+      if(uri.indexOf('?') >= 0) { //already has query string
+        return uri;
+      }
+
+      return uri + '?tab=' + dto.tab;
+    }
+
+    function dtoPopulatorIndex(dto) {
+      dto.tab = _myAccountModel.getSelectedTab();
+      return dto;
+    }
+
     function init() {
       try {
         if (!myAccountModel) {
@@ -3395,6 +3419,9 @@ window.wizerati = {
         _accountRepository = accountRepository;
         _userModel = userModel;
         _uiRootModel = uiRootModel;
+
+        that.urlTransforms['/myaccount'] = urlTransformIndex;
+        that.dtoPopulators['/myaccount'] = dtoPopulatorIndex;
 
         return that;
       } catch (e) {
@@ -3460,6 +3487,10 @@ window.wizerati = {
     };
 
     function uriTransformShow(uri, dto) {
+      if(uri.indexOf('?') >= 0) { //already has query string
+        return uri;
+      }
+
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
@@ -4977,7 +5008,9 @@ window.wizerati = {
         _isWaiting = false,
         _account = null,
         _myAccountModeEnum = app.mod('enum').MyAccountMode,
-        _mode = _myAccountModeEnum.Minimized;
+        _myAccountTabEnum = app.mod('enum').MyAccountTab,
+        _mode = _myAccountModeEnum.Minimized,
+        _selectedTab = _myAccountTabEnum.MyDetails;
 
     this.eventUris = {
       default: 'update://myaccountmodel',
@@ -5021,6 +5054,16 @@ window.wizerati = {
       _account = value;
 
       $.publish(that.eventUris.setAccount, value);
+    };
+
+    this.getSelectedTab= function () {
+      return _selectedTab;
+    };
+
+    this.setSelectedTab= function (value) {
+      _selectedTab = value;
+
+      $.publish(that.eventUris.setSelectedTab, value);
     };
 
     function init() {
@@ -5682,6 +5725,13 @@ window.wizerati = {
           Minimized: '1'
         };
 
+        mod.MyAccountTab = {
+          MyDetails: '0',
+          Security: '1',
+          CVs: '2',
+          JobApplications: '3'
+        };
+
         mod.Tab = {
           Search: '0',
           Bookmark: '1',
@@ -6172,12 +6222,11 @@ window.wizerati = {
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
         }, {
-//             title: 'Wizerati Search',
-             titleFactory: function(d) {
-               return d.keywords + " - Wizerati Search";
-             },
-             uriTransform: c.searchController.urlTransforms['/search'],
-             dtoPopulator: c.searchController.dtoPopulators['/search'] });
+          titleFactory: function (d) {
+            return d.keywords + " - Wizerati Search";
+          },
+          uriTransform: c.searchController.urlTransforms['/search'],
+          dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
         router.registerRoute('/search/edit', function (dto) {
           c.searchController.edit(dto);
@@ -6241,7 +6290,9 @@ window.wizerati = {
 
         router.registerRoute('/myaccount', function (dto) {
           c.myAccountController.index(dto);
-        }, { title: 'Wizerati Account' });
+        }, { title: 'Wizerati Account',
+          uriTransform: c.myAccountController.urlTransforms['/myaccount'],
+          dtoPopulator: c.myAccountController.dtoPopulators['/myaccount']});
 
         router.registerRoute('/selectedaccounttab', function (dto) {
           c.selectedAccountTabController.index(dto);

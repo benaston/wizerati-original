@@ -50,6 +50,10 @@
     };
 
     function uriTransformShow(uri, dto) {
+      if(uri.indexOf('?') >= 0) { //already has query string
+        return uri;
+      }
+
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 

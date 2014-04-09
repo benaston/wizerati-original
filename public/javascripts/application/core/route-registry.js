@@ -22,12 +22,11 @@
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
         }, {
-//             title: 'Wizerati Search',
-             titleFactory: function(d) {
-               return d.keywords + " - Wizerati Search";
-             },
-             uriTransform: c.searchController.urlTransforms['/search'],
-             dtoPopulator: c.searchController.dtoPopulators['/search'] });
+          titleFactory: function (d) {
+            return d.keywords + " - Wizerati Search";
+          },
+          uriTransform: c.searchController.urlTransforms['/search'],
+          dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
         router.registerRoute('/search/edit', function (dto) {
           c.searchController.edit(dto);
@@ -91,7 +90,9 @@
 
         router.registerRoute('/myaccount', function (dto) {
           c.myAccountController.index(dto);
-        }, { title: 'Wizerati Account' });
+        }, { title: 'Wizerati Account',
+          uriTransform: c.myAccountController.urlTransforms['/myaccount'],
+          dtoPopulator: c.myAccountController.dtoPopulators['/myaccount']});
 
         router.registerRoute('/selectedaccounttab', function (dto) {
           c.selectedAccountTabController.index(dto);

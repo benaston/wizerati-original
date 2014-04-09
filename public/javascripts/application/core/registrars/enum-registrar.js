@@ -42,6 +42,13 @@
           Minimized: '1'
         };
 
+        mod.MyAccountTab = {
+          MyDetails: '0',
+          Security: '1',
+          CVs: '2',
+          JobApplications: '3'
+        };
+
         mod.Tab = {
           Search: '0',
           Bookmark: '1',

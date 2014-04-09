@@ -10,7 +10,9 @@
     this.routes = {};
 
     this.registerRoute = function (uri, action, options) {
-      var defaults = { silent: false, title: _defaultPageTitle, titleFactory: function(){ return null; }, uriTransform: function (uri, dto) {
+      var defaults = { silent: false, title: _defaultPageTitle, titleFactory: function () {
+        return null;
+      }, uriTransform: function (uri, dto) {
         return uri;
       }, isExternal: false };
       options = _.extend({}, defaults, options);
@@ -24,7 +26,6 @@
 
     this.route = function (uri, dto, options) {
       options = options || { silent: false };
-
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -42,20 +43,31 @@
       }
 
       var route = that.routes[firstMatchingRouteUri];
-      route.options.dtoPopulator = route.options.dtoPopulator || function() { return null; };
+      route.options.dtoPopulator = route.options.dtoPopulator || function () {
+        return null;
+      };
       var dto = dto
           || createDtoFromQueryString(queryString)
           || route.options.dtoPopulator({})
           || {};
-      dto.__isInvertebrateExternal__ =  options.isExternal;
+      dto.__isInvertebrateExternal__ = options.isExternal;
 
       //Ensure title changes occur when using back and forward buttons, and on external requests.
       if (!route.options.silent) {
         document.title = route.options.titleFactory(dto) || route.options.title;
       }
 
-      if (!route.options.silent && !options.silent) {
-        history.pushState(null, null, route.options.uriTransform(uri, dto));
+
+//      if (!route.options.silent && !options.silent) {
+//        history.pushState(null, null, route.options.uriTransform(uri, dto));
+//      }
+
+      if (options.isExternal) {
+        history.replaceState(null, null, route.options.uriTransform(uri, dto));
+      } else {
+        if (!route.options.silent && !options.silent) {
+          history.pushState(null, null, route.options.uriTransform(uri, dto));
+        }
       }
 
       route.action(dto);
@@ -101,7 +113,7 @@
 
       //If we have found nothing to add to the dto from the form, then return null
       //permitting fall through to any dtoPopulationFunctions later.
-      if(Object.keys(dto).length) {
+      if (Object.keys(dto).length) {
         return dto;
       }
 
@@ -140,7 +152,7 @@
         //For opera, this works because the manual call happens second.
         if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
           _isFirstRouteCall = false;
-          that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+          that.route(location.pathname + location.search, null, {/*silent: true, */isExternal: true });
         }
       });
 
@@ -152,7 +164,7 @@
       });
 
       $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
-          function(evt){
+          function (evt) {
             evt.preventDefault();
           })); //debounce to prevent undesired interaction of double-click on results with double buffering
       $(document).on('submit', 'form', routeFormSubmission);
@@ -160,7 +172,6 @@
 
     init();
   }
-
 
 
   invertebrate.Router = Router;

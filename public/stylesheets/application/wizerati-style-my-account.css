@@ -60,7 +60,7 @@ body[data-ui-mode='1'] #my-account-panel {
 }
 
 #my-details, #security, #my-cvs, #job-applications {
-    width: 400px;
+    width: 500px;
     position: absolute;
     -webkit-backface-visibility: hidden;
     -webkit-filter: opacity(0%);
@@ -107,11 +107,11 @@ body[data-ui-mode='1'] #my-account-panel {
 
 #my-account-tabs-container {
     position: relative;
-    width: 400px;
+    width: 500px;
     margin: auto;
 }
 
-#my-account-buttons-container {
+#my-account-buttons-container-my-details {
     width: 500px;
     height: 80px;
     margin: auto;
@@ -153,7 +153,7 @@ body[data-ui-mode='1'] #my-account-panel {
 
 .input-label-group .lbl {
     position: absolute;
-    left: 47px;
+    left: 95px;
     top: 33px;
 }
 
