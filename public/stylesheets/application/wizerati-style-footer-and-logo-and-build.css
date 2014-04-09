@@ -55,3 +55,10 @@ body[data-ui-mode='1'] .tag-line {
     display: none;
 }
 
+.build {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    margin: auto;
+    z-index: 9;
+}

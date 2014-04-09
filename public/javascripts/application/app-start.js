@@ -13,6 +13,10 @@ $(function appStart() {
     });
 
     wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
+
+    //Due to a change in the W3C spec, pop state is no longer triggered on page load, so we manually invoke it to trigger the initial route.
+    //In a settimout because this prevents a duplicate event being triggered.
+    setTimeout(function() {$(window).trigger("popstate", { isTriggeredManually: true });}, 0)
   } else {
     $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">')
   }

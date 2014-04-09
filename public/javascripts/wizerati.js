@@ -2380,7 +2380,8 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
   function Router(defaultPageTitle) {
 
     var that = this,
-        _defaultPageTitle = null;
+        _defaultPageTitle = null,
+        _isFirstRouteCall = true;
 
     this.routes = {};
 
@@ -2507,7 +2508,12 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       //if the models are initialized from local storage before routing begins
       //then dto populators can be used when coming from an external uri
       window.addEventListener('popstate', function (e) {
-        that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+        //This only works because on Safari - we bypass the issue using a settimeout in the app start.
+        //For opera, this works because the manual call happens second.
+        if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
+          _isFirstRouteCall = false;
+          that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+        }
       });
 
       $(document).on('touchstart', 'button, .lbl', function () {
@@ -2858,7 +2864,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'true'
+          'enableTrace': 'false'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -5861,6 +5867,68 @@ window.wizerati = {
 ;(function (app, $) {
   'use strict';
 
+  function ItemRepository(itemCache, croniclIService) {
+
+    if (!(this instanceof app.ItemRepository)) {
+      return new app.ItemRepository(itemCache,
+          croniclIService);
+    }
+
+    var that = this,
+        _itemCache = null,
+        _croniclIService = null;
+
+    this.getById = function (id, done) {
+      var cachedItem = _itemCache.items[id];
+      if (cachedItem) {
+        done(cachedItem);
+        return;
+      }
+
+      $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
+        success: success,
+        cache: false });
+
+      function success(data) {
+        if (!data) {
+          throw 'data not supplied';
+        }
+
+        var result = $.parseJSON(data);
+        _itemCache.insert([result]);
+
+        done(result);
+      }
+    };
+
+    function init() {
+      try {
+        if (!itemCache) {
+          throw 'itemCache not supplied.';
+        }
+
+        if (!croniclIService) {
+          throw 'croniclIService not supplied.';
+        }
+
+        _itemCache = itemCache;
+        _croniclIService = croniclIService;
+
+        return that;
+      } catch (e) {
+        throw 'ItemRepository::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.ItemRepository = ItemRepository;
+
+}(wizerati, $));
+;(function (app, $) {
+  'use strict';
+
   function AccountRepository(croniclIService) {
 
     if (!(this instanceof app.AccountRepository)) {
@@ -5998,68 +6066,6 @@ window.wizerati = {
   }
 
   app.BookmarkRepository = BookmarkRepository;
-
-}(wizerati, $));
-;(function (app, $) {
-  'use strict';
-
-  function ItemRepository(itemCache, croniclIService) {
-
-    if (!(this instanceof app.ItemRepository)) {
-      return new app.ItemRepository(itemCache,
-          croniclIService);
-    }
-
-    var that = this,
-        _itemCache = null,
-        _croniclIService = null;
-
-    this.getById = function (id, done) {
-      var cachedItem = _itemCache.items[id];
-      if (cachedItem) {
-        done(cachedItem);
-        return;
-      }
-
-      $.ajax({ url: _croniclIService.getCroniclUri() + 'items/' + id,
-        success: success,
-        cache: false });
-
-      function success(data) {
-        if (!data) {
-          throw 'data not supplied';
-        }
-
-        var result = $.parseJSON(data);
-        _itemCache.insert([result]);
-
-        done(result);
-      }
-    };
-
-    function init() {
-      try {
-        if (!itemCache) {
-          throw 'itemCache not supplied.';
-        }
-
-        if (!croniclIService) {
-          throw 'croniclIService not supplied.';
-        }
-
-        _itemCache = itemCache;
-        _croniclIService = croniclIService;
-
-        return that;
-      } catch (e) {
-        throw 'ItemRepository::init ' + e;
-      }
-    }
-
-    return init();
-  }
-
-  app.ItemRepository = ItemRepository;
 
 }(wizerati, $));
 ;(function (app, c) {
@@ -8093,6 +8099,10 @@ window.wizerati = {
     });
 
     wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
+
+    //Due to a change in the W3C spec, pop state is no longer triggered on page load, so we manually invoke it to trigger the initial route.
+    //In a settimout because this prevents a duplicate event being triggered.
+    setTimeout(function() {$(window).trigger("popstate", { isTriggeredManually: true });}, 0)
   } else {
     $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">')
   }

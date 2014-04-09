@@ -4,7 +4,8 @@
   function Router(defaultPageTitle) {
 
     var that = this,
-        _defaultPageTitle = null;
+        _defaultPageTitle = null,
+        _isFirstRouteCall = true;
 
     this.routes = {};
 
@@ -131,7 +132,12 @@
       //if the models are initialized from local storage before routing begins
       //then dto populators can be used when coming from an external uri
       window.addEventListener('popstate', function (e) {
-        that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+        //This only works because on Safari - we bypass the issue using a settimeout in the app start.
+        //For opera, this works because the manual call happens second.
+        if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
+          _isFirstRouteCall = false;
+          that.route(location.pathname + location.search, null, {silent: true, isExternal: true });
+        }
       });
 
       $(document).on('touchstart', 'button, .lbl', function () {
