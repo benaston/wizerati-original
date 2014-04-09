@@ -224,6 +224,17 @@ body[data-hover-is-enabled='true'] .t a:hover {
     color: #333;
 }
 
+.t hr {
+    position: absolute;
+    right: 0;
+    width: 367px;
+    bottom: 0;
+    color: rgba(0,0,0,.1);
+    height: 1px;
+    padding: 0;
+    margin: 0;
+}
+
 .location-and-posted,
 .rate {
     color: #999;
