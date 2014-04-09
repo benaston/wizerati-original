@@ -19,7 +19,6 @@
     this.dtoPopulators = {};
 
     this.index = function (dto) {
-
       try {
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_myAccountHasPreviouslyBeenRetrieved) {

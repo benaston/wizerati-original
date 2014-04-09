@@ -14,6 +14,7 @@
         mod.myAccountController = new w.MyAccountController(m.myAccountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
+        mod.selectedAccountTabController = new w.SelectedAccountTabController(m.myAccountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
       }
       catch (e) {

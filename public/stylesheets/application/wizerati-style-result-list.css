@@ -25,6 +25,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-devic
 
 body[data-ui-mode='0'] #result-list-panel-container {
     width: 100%;
+    display: none;
 }
 
 #result-list-panel {
@@ -42,6 +43,7 @@ body[data-ui-mode='0'] #result-list-panel-container {
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+
 }
 
 body[data-ui-mode='1'] #result-list-panel-container[data-mode='0']  #result-list-panel {
@@ -99,6 +101,7 @@ body[data-ui-mode='1'] #result-list-panel {
     overflow: hidden;
     line-height: 1.5rem;
     box-sizing: border-box;
+    color: white;
 }
 
 #search-desc {
@@ -115,8 +118,9 @@ body[data-ui-mode='1'] #result-list-panel {
 }
 
 label[for='btn-change-search'] {
-    line-height: 76px; /*empirical v centering*/
-    padding: 0 15px 0 15px;
+    line-height: 77px; /*empirical v centering*/
+    padding: 2px 15px 0 0;
+    color: white;
 }
 
 .result-list-search-summary-container {
@@ -211,6 +215,10 @@ label[for='btn-change-search'] {
     color: #333;
 }
 
+body[data-hover-is-enabled='true'] label[for='btn-change-search']:hover {
+    color: white;
+}
+
 body[data-hover-is-enabled='true'] .t a:hover {
     text-decoration: none;
     color: #333;
@@ -277,6 +285,8 @@ body[data-is-mobile-device='false'] .t.hidden {
 }
 
 #result-list-panel header {
+    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);
+    box-shadow: 1px 0 0 1px rgba(12, 9, 23, .37);
     height: 77px; /*This fixes what I believe to be a bug in webkit rendering whitespace when the overflow ellipsis is used inside.*/
 }
 

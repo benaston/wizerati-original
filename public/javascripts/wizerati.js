@@ -2386,7 +2386,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     this.routes = {};
 
     this.registerRoute = function (uri, action, options) {
-      var defaults = { silent: false, title: _defaultPageTitle, uriTransform: function (uri, dto) {
+      var defaults = { silent: false, title: _defaultPageTitle, titleFactory: function(){ return null; }, uriTransform: function (uri, dto) {
         return uri;
       }, isExternal: false };
       options = _.extend({}, defaults, options);
@@ -2425,8 +2425,12 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
           || {};
       dto.__isInvertebrateExternal__ =  options.isExternal;
 
+      //Ensure title changes occur when using back and forward buttons, and on external requests.
+      if (!route.options.silent) {
+        document.title = route.options.titleFactory(dto) || route.options.title;
+      }
+
       if (!route.options.silent && !options.silent) {
-        document.title = route.options.title;
         history.pushState(null, null, route.options.uriTransform(uri, dto));
       }
 
@@ -3350,7 +3354,6 @@ window.wizerati = {
     this.dtoPopulators = {};
 
     this.index = function (dto) {
-
       try {
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_myAccountHasPreviouslyBeenRetrieved) {
@@ -3551,6 +3554,51 @@ window.wizerati = {
   }
 
   app.SearchFormModeController = SearchFormModeController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function SelectedAccountTabController(myAccountModel) {
+
+    if (!(this instanceof app.SelectedAccountTabController)) {
+      return new app.SelectedAccountTabController(myAccountModel);
+    }
+
+    var that = this,
+        _myAccountModel = null;
+
+    this.update = function (dto) {
+      try {
+        if (!dto) {
+          throw 'dto not supplied';
+        }
+
+        _myAccountModel.setSelectedTab(dto.id);
+        app.instance.router.redirect('/account?tab=' + dto.id);
+      } catch (err) {
+        console.log('SelectedAccountTabController::update ' + err);
+      }
+    };
+
+    function init() {
+      try {
+        if (!myAccountModel) {
+          throw 'myAccountModel not supplied.';
+        }
+
+        _myAccountModel = myAccountModel;
+
+        return that;
+      } catch (e) {
+        throw 'SelectedAccountTabController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.SelectedAccountTabController = SelectedAccountTabController;
 
 }(wizerati));
 ;(function (app) {
@@ -5564,6 +5612,7 @@ window.wizerati = {
         mod.myAccountController = new w.MyAccountController(m.myAccountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
+        mod.selectedAccountTabController = new w.SelectedAccountTabController(m.myAccountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
       }
       catch (e) {
@@ -6122,7 +6171,13 @@ window.wizerati = {
 
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
-        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
+        }, {
+//             title: 'Wizerati Search',
+             titleFactory: function(d) {
+               return d.keywords + " - Wizerati Search";
+             },
+             uriTransform: c.searchController.urlTransforms['/search'],
+             dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
         router.registerRoute('/search/edit', function (dto) {
           c.searchController.edit(dto);
@@ -6134,7 +6189,7 @@ window.wizerati = {
 
         router.registerRoute('/bookmarks', function (dto) {
           c.bookmarksController.index(dto);
-        });
+        }, { title: 'Wizerati Bookmarks' });
 
         router.registerRoute('/bookmarks/create', function (dto) {
           c.bookmarksController.create(dto);
@@ -6146,7 +6201,7 @@ window.wizerati = {
 
         router.registerRoute('/comparisonlist', function (dto) {
           c.comparisonListController.index(dto);
-        });
+        }, { title: 'Wizerati Comparison List' });
 
         router.registerRoute('/itemsofinterest/create', function (dto) {
           c.itemsOfInterestController.create(dto);
@@ -6186,8 +6241,11 @@ window.wizerati = {
 
         router.registerRoute('/myaccount', function (dto) {
           c.myAccountController.index(dto);
-        });
+        }, { title: 'Wizerati Account' });
 
+        router.registerRoute('/selectedaccounttab', function (dto) {
+          c.selectedAccountTabController.index(dto);
+        }, { silent: true });
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;

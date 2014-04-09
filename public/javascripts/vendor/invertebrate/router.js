@@ -10,7 +10,7 @@
     this.routes = {};
 
     this.registerRoute = function (uri, action, options) {
-      var defaults = { silent: false, title: _defaultPageTitle, uriTransform: function (uri, dto) {
+      var defaults = { silent: false, title: _defaultPageTitle, titleFactory: function(){ return null; }, uriTransform: function (uri, dto) {
         return uri;
       }, isExternal: false };
       options = _.extend({}, defaults, options);
@@ -49,8 +49,12 @@
           || {};
       dto.__isInvertebrateExternal__ =  options.isExternal;
 
+      //Ensure title changes occur when using back and forward buttons, and on external requests.
+      if (!route.options.silent) {
+        document.title = route.options.titleFactory(dto) || route.options.title;
+      }
+
       if (!route.options.silent && !options.silent) {
-        document.title = route.options.title;
         history.pushState(null, null, route.options.uriTransform(uri, dto));
       }
 

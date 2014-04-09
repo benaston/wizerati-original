@@ -21,7 +21,13 @@
 
         router.registerRoute('/search', function (dto) {
           c.searchController.show(dto);
-        }, { title: 'Wizerati Search', uriTransform: c.searchController.urlTransforms['/search'], dtoPopulator: c.searchController.dtoPopulators['/search'] });
+        }, {
+//             title: 'Wizerati Search',
+             titleFactory: function(d) {
+               return d.keywords + " - Wizerati Search";
+             },
+             uriTransform: c.searchController.urlTransforms['/search'],
+             dtoPopulator: c.searchController.dtoPopulators['/search'] });
 
         router.registerRoute('/search/edit', function (dto) {
           c.searchController.edit(dto);
@@ -33,7 +39,7 @@
 
         router.registerRoute('/bookmarks', function (dto) {
           c.bookmarksController.index(dto);
-        });
+        }, { title: 'Wizerati Bookmarks' });
 
         router.registerRoute('/bookmarks/create', function (dto) {
           c.bookmarksController.create(dto);
@@ -45,7 +51,7 @@
 
         router.registerRoute('/comparisonlist', function (dto) {
           c.comparisonListController.index(dto);
-        });
+        }, { title: 'Wizerati Comparison List' });
 
         router.registerRoute('/itemsofinterest/create', function (dto) {
           c.itemsOfInterestController.create(dto);
@@ -85,8 +91,11 @@
 
         router.registerRoute('/myaccount', function (dto) {
           c.myAccountController.index(dto);
-        });
+        }, { title: 'Wizerati Account' });
 
+        router.registerRoute('/selectedaccounttab', function (dto) {
+          c.selectedAccountTabController.index(dto);
+        }, { silent: true });
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;
