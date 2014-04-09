@@ -58,6 +58,12 @@
       that.$el.scrollTop(0);
       that.renderSetMode();
       renderCount();
+
+//      if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+//        $('#bookmark-list-panel').bind('scroll', function (e) {
+//          window.stackHeads();
+//        });
+//      }
     };
 
     function renderCount() {

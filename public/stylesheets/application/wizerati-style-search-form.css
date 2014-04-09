@@ -29,7 +29,7 @@ body[data-ui-mode='1'] #search-form-panel-container[data-mode='1'] #search-form-
 }
 
 #search-form-panel {
-    z-index: 3; /*4=tab-bar, 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
+    z-index: 3; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
 }
 
 #keywords.shake {
@@ -44,7 +44,6 @@ body[data-ui-mode='0'] #search-form-panel {
     top: 39%;
     margin-left: -250px;
     margin-top: -155px;
-    border-radius: 130px;
     text-align: center;
     background: rgba(255, 255, 255, 1);
     -webkit-backface-visibility: hidden; /*needed?*/

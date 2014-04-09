@@ -36,8 +36,7 @@
       _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       _layoutCoordinator.layOut();
-      that.resetUIForBookmarks();
-
+      that.resetUIForMyAccount();
       _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 

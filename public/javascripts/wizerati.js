@@ -2858,7 +2858,7 @@ window.wizerati = {
             '3': './template-server/contract/',
             '4': './template-server/contractor/'
           },
-          'enableTrace': 'false'
+          'enableTrace': 'true'
         },
         prodConfig = {
           wizeratiUri: 'https://www.wizerati.com/',
@@ -4104,8 +4104,7 @@ window.wizerati = {
       _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
       _layoutCoordinator.layOut();
-      that.resetUIForBookmarks();
-
+      that.resetUIForMyAccount();
       _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 
@@ -5881,11 +5880,11 @@ window.wizerati = {
           throw 'done not supplied.'
         }
 
-        $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + userId,
+        $.ajax({ url: '/accounts/' + userId,
           success: success,
           cache: false });
       } catch (e) {
-        throw 'BookmarkRepository::getByUserId ' + e;
+        throw 'AccountRepository::getByUserId ' + e;
       }
 
       function success(data) {
@@ -6820,6 +6819,12 @@ window.wizerati = {
       that.$el.scrollTop(0);
       that.renderSetMode();
       renderCount();
+
+//      if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+//        $('#bookmark-list-panel').bind('scroll', function (e) {
+//          window.stackHeads();
+//        });
+//      }
     };
 
     function renderCount() {
@@ -7458,6 +7463,7 @@ window.wizerati = {
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
+      this.render();
     };
 
     this.render = function (e) {
@@ -7480,20 +7486,8 @@ window.wizerati = {
       }
     };
 
-    //When rendering a change of mode, we ensure both the keywords and rate are set to the value of the model, keeping it in sync.
-    //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
     //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
     this.renderSetMode = function (mode) {
-      if (mode === _modeEnum.Default) {
-        //ensure UI matches model values
-        this.renderSetKeywords();
-        this.renderSetRate();
-        $(document).keyup(keyUpFunction);
-      } else if(mode === _modeEnum.Minimized) {
-        $(document).unbind('keyup', keyUpFunction);
-      }
-
-
       that.$elContainer.attr('data-mode', mode);
     };
 
@@ -7988,6 +7982,17 @@ window.wizerati = {
       that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
       that.$el.attr('data-modal', that.Model.getModal());
+
+      //disable hover states in touch devices
+      if ('ontouchstart' in window) {
+        $('body').attr('data-hover-is-enabled', 'false');
+      }
+
+
+      //We do not enable the fixed position bookmark headers on iOS due to jank.
+      if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+        $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
+      }
     };
 
     this.renderSetVisibilityMode = function (mode) {
@@ -8088,100 +8093,7 @@ window.wizerati = {
     });
 
     wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
-
-    //disable hover states in touch devices
-    if ('ontouchstart' in window) {
-      $('body').attr('data-hover-is-enabled', 'false');
-    }
-
-
-    //We do not enable the fixed position bookmark headers on iOS due to jank.
-    if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
-      $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
-    }
-
-    if(!(/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
-      $('#bookmark-list-panel').bind('scroll', function (e) {
-        window.stackHeads();
-      });
-    }
   } else {
     $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">')
-  }
-
-
-
-  window.stackHeads = function (e) {
-    var fixedHeaders = document.getElementsByClassName('fixedheader');
-    var panel = document.getElementById('bookmark-list-panel');
-    for (var i = 0; i < fixedHeaders.length; i++) {
-      var currentHeader = fixedHeaders[i];
-      var nextHeader = fixedHeaders[i + 1];
-      var placeholder = getPrevNext(currentHeader)[0];
-      var currentScrollPosY = panel.scrollTop;
-      var placeholderPosY = findPosY(placeholder);
-
-      if (currentScrollPosY > placeholderPosY) {
-        //if our scroll position in the panel is father than the placeholder of the current header's position in the DOM...
-        if (typeof nextHeader != 'undefined') {
-          //If this isn't the last header.
-          var distanceToNextHeader = findPosY(nextHeader) - currentScrollPosY;
-          //the difference between our scroll position and the header's placeholder's position
-          if (distanceToNextHeader < currentHeader.offsetHeight) { //offsetHeight ===  height of element inc padding, border
-            //if we have less distance between the placeholder of the next element and the top of of the page than the height of the current header, we push the header up so it doesn't overlap.
-            currentHeader.style.position = "fixed";
-            currentHeader.style.top = '-' + (currentHeader.offsetHeight - distanceToNextHeader) + 'px';
-
-          }
-          else {
-            //if there is another header, but we have room
-            //console.log(header
-            placeholder.style.height = currentHeader.offsetHeight + 'px';
-            currentHeader.style.position = "fixed";
-            currentHeader.style.top = "0px";
-          }
-        } else {
-
-          placeholder.style.height = currentHeader.offsetHeight + 'px';
-          //if there isn't another header
-          currentHeader.style.position = "fixed";
-          currentHeader.style.top = "0px";
-        }
-
-
-      } else {
-        placeholder.style.height = '0px';
-        //if we haven't gotten to the header yet
-        currentHeader.style.position = 'static';
-        currentHeader.style.removeProperty('top');
-      }
-    }
-
-    return true;
-  };
-  function getPrevNext(el) {
-    var els = document.getElementsByTagName('*');
-    for (var j = 0; j < els.length; j++) {
-      if (els[j] == el) {
-        return [els[j - 1], els[j + 1]];
-      }
-    }
-    return false;
-  }
-
-  function findPosY(element) {
-    var posY = 0;
-    if (element.offsetParent) {//offsetParent is the closest parent that has position:relative or position:absolute or the body of the page
-      while (1) {
-        posY += element.offsetTop;
-        if (!element.offsetParent)
-          break;
-        element = element.offsetParent;
-      }
-    } else if (element.y) {
-      posY += element.y;
-    }
-
-    return posY;
   }
 });

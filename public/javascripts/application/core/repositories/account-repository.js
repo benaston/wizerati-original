@@ -20,11 +20,11 @@
           throw 'done not supplied.'
         }
 
-        $.ajax({ url: _croniclIService.getCroniclUri() + 'bookmarks/' + userId,
+        $.ajax({ url: '/accounts/' + userId,
           success: success,
           cache: false });
       } catch (e) {
-        throw 'BookmarkRepository::getByUserId ' + e;
+        throw 'AccountRepository::getByUserId ' + e;
       }
 
       function success(data) {

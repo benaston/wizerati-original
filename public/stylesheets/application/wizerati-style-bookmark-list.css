@@ -55,7 +55,7 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     vertical-align: top;
     overflow-x: hidden;
     overflow-y: scroll;
-    z-index: 2; /*4=tab-bar, 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
+    z-index: 2; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
     box-shadow: none;
     background-color: white;
     -webkit-filter: opacity(0%); /*attempt to avoid flash of visibility on greenfield*/

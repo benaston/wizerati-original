@@ -29,6 +29,17 @@
       that.$el.removeClass('modal-visible'); //re-adding of this class will trigger CSS transition
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
       that.$el.attr('data-modal', that.Model.getModal());
+
+      //disable hover states in touch devices
+      if ('ontouchstart' in window) {
+        $('body').attr('data-hover-is-enabled', 'false');
+      }
+
+
+      //We do not enable the fixed position bookmark headers on iOS due to jank.
+      if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+        $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
+      }
     };
 
     this.renderSetVisibilityMode = function (mode) {

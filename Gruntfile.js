@@ -135,6 +135,9 @@ module.exports = function (grunt) {
             },{
               match: 'bookmark-period-contract-template',
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/bookmark-period.html") %>'
+            },{
+              match: 'my-account-contract-template',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/my-account.html") %>'
             },
             {
               match: 'footer',
