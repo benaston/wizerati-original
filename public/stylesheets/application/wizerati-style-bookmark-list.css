@@ -82,11 +82,15 @@ body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-
 }
 
 #bookmark-list-panel-summary {
-    padding: 15px 10px 14px 10px;
-    box-sizing: border-box; /*because we are applying padding*/
-    color: #999;
-    height: 67px;
+    padding: 15px 10px 14px;
+    box-sizing: border-box;
     display: table;
+    background: -webkit-linear-gradient(top,rgba(110,143,160,1) 0,rgba(117,149,166,1) 61%,rgba(126,157,173,1) 100%);
+    box-shadow: 1px 0 0 1px rgba(12,9,23,.37);
+    height: 77px;
+    width: 100%;
+    z-index: 19;
+    color: white;
 }
 
 /*what is this*/
@@ -99,6 +103,11 @@ body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-
     width: 100%;
     z-index: 1; /*ensure remains over results*/
     box-sizing: border-box; /*IMPORTANT to avoid overflowing horizontally on iOS (and triggering unwanted horizontal scroll)*/
+}
+
+.bookmark-period:first-child .bookmark-list-summary {
+    top: 1px; /*Ensure the alignment looks correct, given the 1px box shadow on the header.*/
+    position: relative;
 }
 
 .bookmark-period.newly-empty {
