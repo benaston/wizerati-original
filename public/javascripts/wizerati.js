@@ -7977,6 +7977,7 @@ window.wizerati = {
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$mainContainer = $(_mainContainer);
+      that.render();
     };
 
     this.render = function (e) {
@@ -7989,11 +7990,10 @@ window.wizerati = {
       that.$el.attr('data-ui-mode', that.Model.getUIMode());
       that.$el.attr('data-modal', that.Model.getModal());
 
-      //disable hover states in touch devices
+      //Disable hover states in touch devices. Required for correct operation of halo effect on buttons.
       if ('ontouchstart' in window) {
         $('body').attr('data-hover-is-enabled', 'false');
       }
-
 
       //We do not enable the fixed position bookmark headers on iOS due to jank.
       if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
