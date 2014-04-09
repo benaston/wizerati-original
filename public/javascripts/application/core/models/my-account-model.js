@@ -38,13 +38,17 @@
       }
     };
 
-    this.setIsWaiting= function (value) {
+    this.setIsWaiting= function (value, options) {
       if (value === _isWaiting) {
         return;
       }
+      options = options || { silent: false };
+
       _isWaiting = value;
 
-      $.publish(that.eventUris.setIsWaiting, value);
+      if (!options.silent) {
+        $.publish(that.eventUris.setIsWaiting, value);
+      }
     };
 
     this.setAccount= function (value) {

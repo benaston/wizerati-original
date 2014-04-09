@@ -72,14 +72,15 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
 
 #tab-bar[data-selected-tab='0'] .i:nth-of-type(1) button:after,
 #tab-bar[data-selected-tab='1'] .i:nth-of-type(2) button:after,
-#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) button:after {
+#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) button:after,
+#tab-bar[data-selected-tab='3'] .i:nth-of-type(4) button:after {
     display: inline-block;
     position: absolute;
     content: '';
     width: 2px;
     height: 17px;
     background: #fff;
-    left: -5px;
+    left: -4px;
     bottom: 24px;
     box-shadow: 0 0 2px 0 white;
 }

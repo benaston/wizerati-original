@@ -1,17 +1,18 @@
 (function (app) {
   'use strict';
 
-  function MyAccountController(uiModelPack, helper, accountRepository, userModel) {
+  function MyAccountController(myAccountModel, helper, accountRepository, userModel, uiRootModel) {
 
     if (!(this instanceof app.MyAccountController)) {
-      return new app.MyAccountController(uiModelPack, helper, accountRepository, userModel);
+      return new app.MyAccountController(myAccountModel, helper, accountRepository, userModel);
     }
 
     var that = this,
-        _uiModelPack = null,
+        _myAccountModel = null,
         _helper = null,
         _accountRepository = null,
         _userModel = null,
+        _uiRootModel = null,
         _myAccountHasPreviouslyBeenRetrieved = false;
 
     this.urlTransforms = {};
@@ -20,10 +21,10 @@
     this.index = function (dto) {
 
       try {
-        _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
+        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_myAccountHasPreviouslyBeenRetrieved) {
           _myAccountHasPreviouslyBeenRetrieved = true;
-          _uiModelPack.myAccountModel.setIsWaiting('true');
+          _myAccountModel.setIsWaiting('true');
           _accountRepository.getByUserId(_userModel.getUserId(), _helper.accountRetrievalSuccess);
         } else {
           _helper.resetUIForMyAccount();
@@ -35,7 +36,7 @@
 
     function init() {
       try {
-        if (!uiModelPack) {
+        if (!myAccountModel) {
           throw 'uiModelPack not supplied.';
         }
 
@@ -51,10 +52,15 @@
           throw 'userModel not supplied.';
         }
 
-        _uiModelPack = uiModelPack;
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _myAccountModel = myAccountModel;
         _helper = helper;
         _accountRepository = accountRepository;
         _userModel = userModel;
+        _uiRootModel = uiRootModel;
 
         return that;
       } catch (e) {

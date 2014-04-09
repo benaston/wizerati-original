@@ -93,8 +93,7 @@ body[data-ui-mode='1'] #my-account-panel {
 
 #my-account-panel-header-item-list .ni {
     line-height: 44px;
-    padding-right: 10px;
-    padding-left: 10px;
+
 
 }
 
@@ -171,19 +170,22 @@ body[data-ui-mode='1'] #my-account-panel {
 #btn-nav-security,
 #btn-nav-cvs,
 #btn-nav-job-applications {
-    display: inline-block;
+    width: 100%;
+    padding: 0 10px 0 10px;
+    height: 44px;
+    /*display: inline-block;*/
     font-family: helvetica-pro-light;
-    position: relative;
-    pointer-events: none;
-    padding: 0 !important;
-    cursor: pointer;
-    color: rgba(0,109,204,.95);
-    margin: 0;
-    background-color: transparent;
-    -webkit-user-select: none;
-    text-align: center;
-    box-sizing: border-box;
+    /*position: relative;*/
+    /*pointer-events: none;*/
+    /*padding: 0 !important;*/
+    /*cursor: pointer;*/
+    /*color: rgba(0,109,204,.95);*/
+    /*margin: 0;*/
+    /*background-color: transparent;*/
+    /*-webkit-user-select: none;*/
+    /*text-align: center;*/
+    /*box-sizing: border-box;*/
     border: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /*-webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
     font-size: 1rem;
 }

@@ -49,8 +49,8 @@
       that.renderSetMode(that.model.getMode());
     };
 
-    this.renderSetIsWaiting = function () {
-      that.$el.find('btn-search').attr('data-is-waiting', that.model.getIsWaiting());
+    this.renderSetIsWaiting = function (value) {
+      that.$elContainer.attr('data-is-waiting', value);
 
       if (!_waitStateIsBeingMonitored) {
         monitorWaitState();

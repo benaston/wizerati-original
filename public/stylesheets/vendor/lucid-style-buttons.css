@@ -1,5 +1,5 @@
 .btn {
-    padding: 0 !important;
+    padding: 0;
     cursor: pointer;
     color: #333;
     margin: 0; /*important to avoid unexpected layout*/
@@ -35,9 +35,12 @@
 
 .btn-100 {
     width: 110px;
-    border-radius: 100px !important;
-    line-height: 97px !important;
-    height: 110px !important;
+    /*border-radius: 100px !important;*/
+    /*line-height: 97px !important;*/
+    /*height: 110px !important;*/
+    border-radius: 100px;
+    line-height: 97px;
+    height: 110px;
     font-size: 2.1em;
 }
 

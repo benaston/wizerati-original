@@ -21,23 +21,31 @@
         _myAccountModel = null;
 
     this.resetUIForMyAccount = function () {
-      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Default);
-      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      try {
+        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+        _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
+        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+        _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Default);
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      } catch (e) {
+        throw 'MyAccountControllerHelper::resetUIForMyAccount ' + e;
+      }
     };
 
     this.accountRetrievalSuccess = function (account) {
-      _myAccountModel.setAccount(account);
-      _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+      try {
+        _myAccountModel.setAccount(account);
+        _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
 
-      _layoutCoordinator.layOut();
-      that.resetUIForMyAccount();
-      _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
+        _layoutCoordinator.layOut();
+        that.resetUIForMyAccount();
+        _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
+      } catch (e) {
+        throw 'MyAccountControllerHelper::accountRetrievalSuccess ' + e;
+      }
     };
 
     function init() {
