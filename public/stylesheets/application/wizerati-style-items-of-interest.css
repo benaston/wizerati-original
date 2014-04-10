@@ -42,7 +42,7 @@ body[data-hover-is-enabled='true'] .menu .btn-s:enabled:hover {
     color: whitesmoke;
     position: absolute;
     top: -5px;
-    right: 45px;
+    right: 32px;
 }
 
 body[data-ui-mode='1'] #items-of-interest-panel {
@@ -323,6 +323,10 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     font-size: .8rem;
 }
 
+.frm-bookmark .lbl, .frm-pin .lbl {
+    white-space:nowrap !important; /*avoid wrapping 'un-bookmark'*/
+
+}
 /*safari does not yet support prefix-less flexbox styles*/
 .flex-container {
     display: -webkit-flex;

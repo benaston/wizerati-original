@@ -3,9 +3,11 @@
 <header id="my-account-panel-header">
     <ul id="my-account-panel-header-item-list">
         <li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="0"><button id="btn-nav-my-details" class="btn" title="personal details">personal details</button></form>
-        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="1"><button id="btn-nav-security" class="btn" title="bookmarks">change password</button></form>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="1"><button id="btn-nav-security" class="btn" title="bookmarks">security</button></form>
         </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="2"><button id="btn-nav-cvs" class="btn" title="my cvs">my cvs</button></form>
-        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="3"><button id="btn-nav-job-applications" class="btn" title="job applications">job applications</button></form></li>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="3"><button id="btn-nav-job-applications" class="btn" title="job applications">job applications</button></form>
+    </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="4"><button id="btn-nav-job-adverts" class="btn" title="my job adverts">my job adverts</button></form></li>
+    </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="5"><button id="btn-nav-billing" class="btn" title="billing">billing</button></form></li>
     </ul>
 </header>
 
@@ -54,7 +56,10 @@
         </form>
     </div>
     <div id="security">
-        <form id="frm-my-details" action="/myaccount/password/update" method="POST">
+        <div class="security-heading">
+            Change Password
+        </div>
+        <form id="frm-change-password" action="/myaccount/password/update" method="POST">
             <div id="my-account-buttons-container-my-details">
                 <div id="cancel-my-account-button-container">
                     <div class="rotating-button-container">
@@ -85,6 +90,18 @@
                 <label class="lbl" for="name">New password again</label>
             </div>
         </form>
+        <div class="security-heading">
+            Delete Account
+        </div>
+        <p>Once you delete your account, there is no going back. It will be deleted forever. Please be certain.</p>
+        <div id="my-account-buttons-container-delete-account">
+            <div id="delete-account-button-container">
+                    <button type="submit" id="btn-delete-my-account" tabindex="1"
+                            class="btn btn-s btn-critical"
+                            data-is-waiting="false">delete my account</button>
+                    <span class="focus-indicator"></span>
+            </div>
+        </div>
     </div>
     <div id="my-cvs">
         <div id="my-account-buttons-container-my-cvs">
@@ -147,6 +164,40 @@
                 </div>
             </li>
         </ul>
+        </div>
+    </div>
+    <div id="billing">
+        <div class="security-heading">
+            Invoice History
+        </div>
+        <div class="application-period">
+        <p>Invoices are emailed to ben@cloudsca.pe.</p>
+        <table id="invoice-history">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Invoice Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd" title="Click to show invoice">
+                <td>
+                    <a href="/payments/payment/20216">21 Nov 10</a>
+                </td>
+                <td>
+                    <a href="/payments/payment/20216">£29.38</a>
+                </td>
+            </tr>
+            <tr class="even" title="Click to show invoice">
+                <td>
+                    <a href="/payments/payment/23547">22 Jan 11</a>
+                </td>
+                <td>
+                    <a href="/payments/payment/23547">£30.00</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
         </div>
     </div>
 </div>

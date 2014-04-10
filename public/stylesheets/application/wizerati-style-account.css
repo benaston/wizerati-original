@@ -55,7 +55,8 @@ body[data-ui-mode='1'] #my-account-panel {
 #my-account-panel[data-selected-tab='0'] #my-account-panel-header .ni:nth-child(1),
 #my-account-panel[data-selected-tab='1'] #my-account-panel-header .ni:nth-child(2),
 #my-account-panel[data-selected-tab='2'] #my-account-panel-header .ni:nth-child(3),
-#my-account-panel[data-selected-tab='3'] #my-account-panel-header  .ni:nth-child(4) {
+#my-account-panel[data-selected-tab='3'] #my-account-panel-header .ni:nth-child(4),
+#my-account-panel[data-selected-tab='4'] #my-account-panel-header .ni:nth-child(5) {
     background-color: rgba(126, 157, 173, 1);
 }
 
@@ -117,7 +118,7 @@ body[data-ui-mode='1'] #my-account-panel {
 
 #my-account-buttons-container-my-details {
     width: 500px;
-    height: 80px;
+    height: 20px;
     margin: auto;
     position: relative;
 
@@ -168,14 +169,16 @@ body[data-ui-mode='1'] #my-account-panel {
 #my-account-panel[data-selected-tab='0'] #btn-nav-my-details,
 #my-account-panel[data-selected-tab='1'] #btn-nav-security,
 #my-account-panel[data-selected-tab='2'] #btn-nav-cvs,
-#my-account-panel[data-selected-tab='3']  #btn-nav-job-applications {
+#my-account-panel[data-selected-tab='3']  #btn-nav-job-applications,
+#my-account-panel[data-selected-tab='4']  #btn-nav-job-adverts {
     color: white;
 }
 
 #btn-nav-my-details,
 #btn-nav-security,
 #btn-nav-cvs,
-#btn-nav-job-applications {
+#btn-nav-job-applications,
+#btn-nav-job-adverts {
     width: 100%;
     padding: 0 10px 0 10px;
     height: 44px;
@@ -277,7 +280,7 @@ body[data-ui-mode='1'] #my-account-panel {
     right: 0;
     width: 390px;
     bottom: 0;
-    color: rgba(0,0,0,.1);
+    color: rgba(0, 0, 0, .1);
     height: 1px;
     padding: 0;
     margin: 0;
@@ -288,7 +291,7 @@ body[data-ui-mode='1'] #my-account-panel {
 }
 
 .application .added {
-    margin-top:10px;
+    margin-top: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -299,7 +302,7 @@ body[data-ui-mode='1'] #my-account-panel {
     right: 0;
     width: 390px;
     bottom: 0;
-    color: rgba(0,0,0,.1);
+    color: rgba(0, 0, 0, .1);
     height: 1px;
     padding: 0;
     margin: 0;
@@ -338,4 +341,36 @@ body[data-ui-mode='1'] #my-account-panel {
     width: 100%;
     z-index: 1;
     box-sizing: border-box;
+}
+
+.security-heading {
+    text-align: left;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    background: transparent;
+    /*padding: 10px;*/
+    line-height: 1rem;
+    color: #333;
+    font-family: helvetica-bold;
+    width: 100%;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+#frm-change-password {
+    margin-bottom: 20px;
+}
+
+#btn-delete-my-account {
+    width: 167px;
+    height: 41px;
+    font-size: 1rem;
+    color: #900;
+    border-radius: 5px;
+    line-height: 41px;
+    margin-top: 20px;
+}
+
+p {
+    text-align: left;
 }
