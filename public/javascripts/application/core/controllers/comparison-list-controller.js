@@ -20,7 +20,7 @@
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_myAccountModeEnum.Minimized);
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
     };
 

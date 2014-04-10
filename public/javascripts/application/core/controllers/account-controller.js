@@ -21,7 +21,7 @@
 
     this.index = function (dto) {
       try {
-          _accountModel.setSelectedTab(dto.tab || _accountTabEnum.MyDetails);
+        _accountModel.setSelectedTab(dto.tab || _accountTabEnum.MyDetails);
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_myAccountHasPreviouslyBeenRetrieved) {
           _myAccountHasPreviouslyBeenRetrieved = true;

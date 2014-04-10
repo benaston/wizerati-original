@@ -58,7 +58,7 @@
     };
 
     this.renderSetSelectedTab = function (tab) {
-      $(_elHeader).attr('data-selected-tab', tab);
+      that.$el.attr('data-selected-tab', tab);
     };
 
     //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.

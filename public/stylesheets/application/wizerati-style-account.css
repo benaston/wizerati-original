@@ -43,19 +43,19 @@ body[data-ui-mode='1'] #my-account-panel {
     -webkit-backface-visibility: hidden;
 }
 
-#my-account-panel-header[data-selected-tab='0'] ~ #my-account-tabs-container #my-details,
-#my-account-panel-header[data-selected-tab='1'] ~ #my-account-tabs-container #security,
-#my-account-panel-header[data-selected-tab='2'] ~ #my-account-tabs-container #my-cvs,
-#my-account-panel-header[data-selected-tab='3'] ~ #my-account-tabs-container #job-applications {
+#my-account-panel[data-selected-tab='0'] #my-account-tabs-container #my-details,
+#my-account-panel[data-selected-tab='1'] #my-account-tabs-container #security,
+#my-account-panel[data-selected-tab='2'] #my-account-tabs-container #my-cvs,
+#my-account-panel[data-selected-tab='3'] #my-account-tabs-container #job-applications {
     -webkit-filter: opacity(100%);
     pointer-events: auto;
 
 }
 
-#my-account-panel-header[data-selected-tab='0'] .ni:nth-child(1),
-#my-account-panel-header[data-selected-tab='1'] .ni:nth-child(2),
-#my-account-panel-header[data-selected-tab='2'] .ni:nth-child(3),
-#my-account-panel-header[data-selected-tab='3']  .ni:nth-child(4) {
+#my-account-panel[data-selected-tab='0'] #my-account-panel-header .ni:nth-child(1),
+#my-account-panel[data-selected-tab='1'] #my-account-panel-header .ni:nth-child(2),
+#my-account-panel[data-selected-tab='2'] #my-account-panel-header .ni:nth-child(3),
+#my-account-panel[data-selected-tab='3'] #my-account-panel-header  .ni:nth-child(4) {
     background-color: rgba(126, 157, 173, 1);
 }
 
@@ -165,10 +165,10 @@ body[data-ui-mode='1'] #my-account-panel {
     position: relative;
 }
 
-#my-account-panel-header[data-selected-tab='0'] #btn-nav-my-details,
-#my-account-panel-header[data-selected-tab='1'] #btn-nav-security,
-#my-account-panel-header[data-selected-tab='2'] #btn-nav-cvs,
-#my-account-panel-header[data-selected-tab='3']  #btn-nav-job-applications {
+#my-account-panel[data-selected-tab='0'] #btn-nav-my-details,
+#my-account-panel[data-selected-tab='1'] #btn-nav-security,
+#my-account-panel[data-selected-tab='2'] #btn-nav-cvs,
+#my-account-panel[data-selected-tab='3']  #btn-nav-job-applications {
     color: white;
 }
 
@@ -201,6 +201,15 @@ body[data-ui-mode='1'] #my-account-panel {
 }
 
 #cv-list {
+    display: block;
+    width: 400px;
+    box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
+    border-radius: 5px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#application-list {
     display: block;
     width: 400px;
     box-shadow: 0 0 0 1px rgba(2, 86, 244, .1);
@@ -248,6 +257,41 @@ body[data-ui-mode='1'] #my-account-panel {
     box-sizing: border-box;
 }
 
+.application {
+    position: relative;
+    vertical-align: middle;
+    display: table-cell;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.application-period:first-child {
+    top: 22px; /*empirical to match other tabs*/
+    position: relative;
+}
+
+.application-i:not(:last-child) hr {
+    display: block;
+    position: absolute;
+    right: 0;
+    width: 390px;
+    bottom: 0;
+    color: rgba(0,0,0,.1);
+    height: 1px;
+    padding: 0;
+    margin: 0;
+}
+
+.application-i:last-child hr {
+    display: none;
+}
+
+.application .added {
+    margin-top:10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .cv-i:not(:last-child) hr {
     display: block;
@@ -277,4 +321,21 @@ body[data-ui-mode='1'] #my-account-panel {
 
 .added {
     color: #999;
+}
+
+.download-link {
+    float: right;
+}
+
+.application-period-summary {
+    text-align: left;
+    margin-top: 22px;
+    background: transparent;
+    padding: 10px;
+    line-height: 1rem;
+    color: #333;
+    font-family: helvetica-bold;
+    width: 100%;
+    z-index: 1;
+    box-sizing: border-box;
 }
