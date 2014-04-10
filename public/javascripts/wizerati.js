@@ -3234,7 +3234,7 @@ window.wizerati = {
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _tabEnum = app.mod('enum').Tab,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
         _uiModelPack = null,
         _layoutCoordinator = null;
 
@@ -3243,8 +3243,9 @@ window.wizerati = {
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _uiModelPack.accountModel.setMode(_myAccountModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+      _uiModelPack.uiRootModel.clearModal();
     };
 
     function init() {
@@ -4105,6 +4106,7 @@ window.wizerati = {
         _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
         _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
         _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+        _uiModelPack.uiRootModel.clearModal();
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
         _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
@@ -4183,6 +4185,7 @@ window.wizerati = {
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+      _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);

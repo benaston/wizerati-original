@@ -11,7 +11,7 @@
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _tabEnum = app.mod('enum').Tab,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
         _uiModelPack = null,
         _layoutCoordinator = null;
 
@@ -20,8 +20,9 @@
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _uiModelPack.accountModel.setMode(_myAccountModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
       _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+      _uiModelPack.uiRootModel.clearModal();
     };
 
     function init() {

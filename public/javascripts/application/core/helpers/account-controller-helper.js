@@ -27,6 +27,7 @@
         _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
         _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
         _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+        _uiModelPack.uiRootModel.clearModal();
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
         _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
