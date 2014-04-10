@@ -2204,7 +2204,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       var templateMarkup = $('script[type="text/template"][data-template-uri="' + uri + '"]').html();
 
       if (!$.trim(templateMarkup)) {
-        throw 'Local template "' + uri + '" is empty.';
+        throw 'Local template "' + uri + '" is empty. Verify Gruntfile and data-template-uri.';
       }
 
       var template = _.template(templateMarkup)
@@ -2401,7 +2401,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     };
 
     this.route = function (uri, dto, options) {
-      options = options || { silent: false };
+      options = options || {};
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -2433,15 +2433,10 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         document.title = route.options.titleFactory(dto) || route.options.title;
       }
 
-
-//      if (!route.options.silent && !options.silent) {
-//        history.pushState(null, null, route.options.uriTransform(uri, dto));
-//      }
-
       if (options.isExternal) {
         history.replaceState(null, null, route.options.uriTransform(uri, dto));
       } else {
-        if (!route.options.silent && !options.silent) {
+        if (!route.options.silent) {
           history.pushState(null, null, route.options.uriTransform(uri, dto));
         }
       }
@@ -2525,10 +2520,10 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       //then dto populators can be used when coming from an external uri
       window.addEventListener('popstate', function (e) {
         //This only works because on Safari - we bypass the issue using a settimeout in the app start.
-        //For opera, this works because the manual call happens second.
+        //For opera, this works because the manual call happens second (possibly due to the settimeout in app start).
         if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
           _isFirstRouteCall = false;
-          that.route(location.pathname + location.search, null, {/*silent: true, */isExternal: true });
+          that.route(location.pathname + location.search, null, { isExternal: true });
         }
       });
 
@@ -2999,6 +2994,99 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function AccountController(accountModel, helper, accountRepository, userModel, uiRootModel) {
+
+    if (!(this instanceof app.AccountController)) {
+      return new app.AccountController(accountModel, helper, accountRepository, userModel);
+    }
+
+    var that = this,
+        _accountModel = null,
+        _helper = null,
+        _accountRepository = null,
+        _userModel = null,
+        _uiRootModel = null,
+        _myAccountHasPreviouslyBeenRetrieved = false,
+        _accountTabEnum = app.mod('enum').AccountTab;
+
+    this.urlTransforms = {};
+    this.dtoPopulators = {};
+
+    this.index = function (dto) {
+      try {
+          _accountModel.setSelectedTab(dto.tab || _accountTabEnum.MyDetails);
+        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
+        if (!_myAccountHasPreviouslyBeenRetrieved) {
+          _myAccountHasPreviouslyBeenRetrieved = true;
+          _accountModel.setIsWaiting('true');
+          _accountRepository.getByUserId(_userModel.getUserId(), _helper.accountRetrievalSuccess);
+        } else {
+          _helper.resetUIForAccount();
+        }
+      } catch (err) {
+        console.log('MyAccountController::index ' + err);
+      }
+    };
+
+    function urlTransformIndex(uri, dto) {
+      if(uri.indexOf('?') >= 0) { //already has query string
+        return uri;
+      }
+
+      return uri + '?tab=' + dto.tab;
+    }
+
+    function dtoPopulatorIndex(dto) {
+      dto.tab = _accountModel.getSelectedTab();
+      return dto;
+    }
+
+    function init() {
+      try {
+        if (!accountModel) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!helper) {
+          throw 'helper not supplied.';
+        }
+
+        if (!accountRepository) {
+          throw 'accountRepository not supplied.';
+        }
+
+        if (!userModel) {
+          throw 'userModel not supplied.';
+        }
+
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _accountModel = accountModel;
+        _helper = helper;
+        _accountRepository = accountRepository;
+        _userModel = userModel;
+        _uiRootModel = uiRootModel;
+
+        that.urlTransforms['/account'] = urlTransformIndex;
+        that.dtoPopulators['/account'] = dtoPopulatorIndex;
+
+        return that;
+      } catch (e) {
+        throw 'AccountController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.AccountController = AccountController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function ApplyToContractDialogController(service) {
 
     if (!(this instanceof app.ApplyToContractDialogController)) {
@@ -3347,97 +3435,6 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function MyAccountController(myAccountModel, helper, accountRepository, userModel, uiRootModel) {
-
-    if (!(this instanceof app.MyAccountController)) {
-      return new app.MyAccountController(myAccountModel, helper, accountRepository, userModel);
-    }
-
-    var that = this,
-        _myAccountModel = null,
-        _helper = null,
-        _accountRepository = null,
-        _userModel = null,
-        _uiRootModel = null,
-        _myAccountHasPreviouslyBeenRetrieved = false;
-
-    this.urlTransforms = {};
-    this.dtoPopulators = {};
-
-    this.index = function (dto) {
-      try {
-        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-        if (!_myAccountHasPreviouslyBeenRetrieved) {
-          _myAccountHasPreviouslyBeenRetrieved = true;
-          _myAccountModel.setIsWaiting('true');
-          _accountRepository.getByUserId(_userModel.getUserId(), _helper.accountRetrievalSuccess);
-        } else {
-          _helper.resetUIForMyAccount();
-        }
-      } catch (err) {
-        console.log('MyAccountController::index ' + err);
-      }
-    };
-
-    function urlTransformIndex(uri, dto) {
-      if(uri.indexOf('?') >= 0) { //already has query string
-        return uri;
-      }
-
-      return uri + '?tab=' + dto.tab;
-    }
-
-    function dtoPopulatorIndex(dto) {
-      dto.tab = _myAccountModel.getSelectedTab();
-      return dto;
-    }
-
-    function init() {
-      try {
-        if (!myAccountModel) {
-          throw 'uiModelPack not supplied.';
-        }
-
-        if (!helper) {
-          throw 'helper not supplied.';
-        }
-
-        if (!accountRepository) {
-          throw 'accountRepository not supplied.';
-        }
-
-        if (!userModel) {
-          throw 'userModel not supplied.';
-        }
-
-        if (!uiRootModel) {
-          throw 'uiRootModel not supplied.';
-        }
-
-        _myAccountModel = myAccountModel;
-        _helper = helper;
-        _accountRepository = accountRepository;
-        _userModel = userModel;
-        _uiRootModel = uiRootModel;
-
-        that.urlTransforms['/myaccount'] = urlTransformIndex;
-        that.dtoPopulators['/myaccount'] = dtoPopulatorIndex;
-
-        return that;
-      } catch (e) {
-        throw 'MyAccountController::init ' + e;
-      }
-    }
-
-    return init();
-  }
-
-  app.MyAccountController = MyAccountController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
   function SearchController(uiModelPack, searchService, searchControllerHelper) {
 
     if (!(this instanceof app.SearchController)) {
@@ -3605,8 +3602,8 @@ window.wizerati = {
           throw 'dto not supplied';
         }
 
-        _myAccountModel.setSelectedTab(dto.id);
-        app.instance.router.redirect('/account?tab=' + dto.id);
+        _myAccountModel.setSelectedTab(dto.tab);
+        app.instance.router.redirect('/account');
       } catch (err) {
         console.log('SelectedAccountTabController::update ' + err);
       }
@@ -4082,6 +4079,85 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel) {
+
+    if (!(this instanceof app.AccountControllerHelper)) {
+      return new app.AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel);
+    }
+
+    var that = this,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
+        _tabEnum = app.mod('enum').Tab,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiModelPack = null,
+        _layoutCoordinator = null,
+        _accountModel = null;
+
+    this.resetUIForAccount = function () {
+      try {
+        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+        _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
+        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+        _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
+        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      } catch (e) {
+        throw 'AccountControllerHelper::resetUIForAccount ' + e;
+      }
+    };
+
+    this.accountRetrievalSuccess = function (account) {
+      try {
+        _accountModel.setAccount(account);
+        _accountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+        _layoutCoordinator.layOut();
+        that.resetUIForAccount();
+        _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
+      } catch (e) {
+        throw 'AccountControllerHelper::accountRetrievalSuccess ' + e;
+      }
+    };
+
+    function init() {
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        if (!accountModel) {
+          throw 'accountModel not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+        _accountModel = accountModel;
+
+        return that;
+      } catch (e) {
+        throw 'AccountControllerHelper::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.AccountControllerHelper = AccountControllerHelper;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function BookmarksControllerHelper(uiModelPack, layoutCoordinator, bookmarkListModel) {
 
     if (!(this instanceof app.BookmarksControllerHelper)) {
@@ -4095,7 +4171,7 @@ window.wizerati = {
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _navbarItemEnum = app.mod('enum').Tab,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
         _layoutCoordinator = null,
@@ -4108,7 +4184,7 @@ window.wizerati = {
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 
@@ -4164,86 +4240,6 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function MyAccountControllerHelper(uiModelPack, layoutCoordinator, myAccountModel) {
-
-    if (!(this instanceof app.MyAccountControllerHelper)) {
-      return new app.MyAccountControllerHelper(uiModelPack, layoutCoordinator, myAccountModel);
-    }
-
-    var that = this,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
-        _tabEnum = app.mod('enum').Tab,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
-        _uiModelPack = null,
-        _layoutCoordinator = null,
-        _myAccountModel = null;
-
-    this.resetUIForMyAccount = function () {
-      try {
-        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-        _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
-        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-        _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Default);
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-      } catch (e) {
-        throw 'MyAccountControllerHelper::resetUIForMyAccount ' + e;
-      }
-    };
-
-    this.accountRetrievalSuccess = function (account) {
-      try {
-        _myAccountModel.setAccount(account);
-        _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-
-        _layoutCoordinator.layOut();
-        that.resetUIForMyAccount();
-        _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
-      } catch (e) {
-        throw 'MyAccountControllerHelper::accountRetrievalSuccess ' + e;
-      }
-    };
-
-    function init() {
-      try {
-        if (!uiModelPack) {
-          throw 'uiModelPack not supplied.';
-        }
-
-        if (!layoutCoordinator) {
-          throw 'layoutCoordinator not supplied.';
-        }
-
-        if (!myAccountModel) {
-          throw 'bookmarkListModel not supplied.';
-        }
-
-        _uiModelPack = uiModelPack;
-        _layoutCoordinator = layoutCoordinator;
-        _myAccountModel = myAccountModel;
-
-        return that;
-      } catch (e) {
-        throw 'MyAccountControllerHelper::init bookmarkListModel not supplied.';
-      }
-    }
-
-    return init();
-  }
-
-  app.MyAccountControllerHelper = MyAccountControllerHelper;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
   function SearchControllerHelper(uiModelPack, layoutCoordinator, readItemService) {
 
     if (!(this instanceof app.SearchControllerHelper)) {
@@ -4257,7 +4253,7 @@ window.wizerati = {
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _navbarItemEnum = app.mod('enum').Tab,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
         _layoutCoordinator = null,
@@ -4270,7 +4266,7 @@ window.wizerati = {
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Search);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.uiRootModel.clearModal();
-      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 
@@ -4680,6 +4676,90 @@ window.wizerati = {
   app.LayoutCoordinator = LayoutCoordinator;
 
 }(wizerati));
+;(function (app, $, invertebrate, _) {
+  'use strict';
+
+  function AccountModel() {
+
+    if (!(this instanceof app.AccountModel)) {
+      return new app.AccountModel();
+    }
+
+    var that = this,
+        _isWaiting = false,
+        _account = null,
+        _myAccountModeEnum = app.mod('enum').AccountMode,
+        _myAccountTabEnum = app.mod('enum').AccountTab,
+        _mode = _myAccountModeEnum.Minimized,
+        _selectedTab = _myAccountTabEnum.MyDetails;
+
+    this.eventUris = {
+      default: 'update://accountmodel',
+      setMode: 'update://accountmodel/setmode',
+      setIsWaiting: 'update://accountmodel/setiswaiting',
+      setAccount: 'update://accountmodel/setaccount',
+      setSelectedTab: 'update://accountmodel/setselectedtab'
+    };
+
+    this.getMode = function () {
+      return _mode;
+    };
+
+    this.setMode = function (value, options) {
+      if (_mode === value) {
+        return;
+      }
+
+      options = options || { silent: false };
+
+      _mode = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setMode, _mode);
+      }
+    };
+
+    this.setIsWaiting= function (value, options) {
+      if (value === _isWaiting) {
+        return;
+      }
+      options = options || { silent: false };
+
+      _isWaiting = value;
+
+      if (!options.silent) {
+        $.publish(that.eventUris.setIsWaiting, value);
+      }
+    };
+
+    this.setAccount= function (value) {
+      _account = value;
+
+      $.publish(that.eventUris.setAccount, value);
+    };
+
+    this.getSelectedTab= function () {
+      return _selectedTab;
+    };
+
+    this.setSelectedTab= function (value) {
+      _selectedTab = value;
+
+      $.publish(that.eventUris.setSelectedTab, value);
+    };
+
+    function init() {
+      that = $.decorate(that, app.mod('decorators').decorators.trace);
+      return that;
+    }
+
+    return init();
+  }
+
+  app.AccountModel = AccountModel;
+  invertebrate.Model.isExtendedBy(app.AccountModel);
+
+}(wizerati, $, invertebrate, _));
 ;(function (app, $, invertebrate) {
   'use strict';
 
@@ -4995,89 +5075,6 @@ window.wizerati = {
   app.ItemsOfInterestModel = ItemsOfInterestModel;
 
 }(wizerati, $));
-;(function (app, $, invertebrate, _) {
-  'use strict';
-
-  function MyAccountModel() {
-
-    if (!(this instanceof app.MyAccountModel)) {
-      return new app.MyAccountModel();
-    }
-
-    var that = this,
-        _isWaiting = false,
-        _account = null,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
-        _myAccountTabEnum = app.mod('enum').MyAccountTab,
-        _mode = _myAccountModeEnum.Minimized,
-        _selectedTab = _myAccountTabEnum.MyDetails;
-
-    this.eventUris = {
-      default: 'update://myaccountmodel',
-      setMode: 'update://myaccountmodel/setmode',
-      setIsWaiting: 'update://myaccountmodel/setiswaiting',
-      setAccount: 'update://myaccountmodel/setaccount'
-    };
-
-    this.getMode = function () {
-      return _mode;
-    };
-
-    this.setMode = function (value, options) {
-      if (_mode === value) {
-        return;
-      }
-
-      options = options || { silent: false };
-
-      _mode = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setMode, _mode);
-      }
-    };
-
-    this.setIsWaiting= function (value, options) {
-      if (value === _isWaiting) {
-        return;
-      }
-      options = options || { silent: false };
-
-      _isWaiting = value;
-
-      if (!options.silent) {
-        $.publish(that.eventUris.setIsWaiting, value);
-      }
-    };
-
-    this.setAccount= function (value) {
-      _account = value;
-
-      $.publish(that.eventUris.setAccount, value);
-    };
-
-    this.getSelectedTab= function () {
-      return _selectedTab;
-    };
-
-    this.setSelectedTab= function (value) {
-      _selectedTab = value;
-
-      $.publish(that.eventUris.setSelectedTab, value);
-    };
-
-    function init() {
-      that = $.decorate(that, app.mod('decorators').decorators.trace);
-      return that;
-    }
-
-    return init();
-  }
-
-  app.MyAccountModel = MyAccountModel;
-  invertebrate.Model.isExtendedBy(app.MyAccountModel);
-
-}(wizerati, $, invertebrate, _));
 ;(function (app, $) {
   'use strict';
 
@@ -5492,10 +5489,10 @@ window.wizerati = {
   'use strict';
 
   function UIModelPack(uiRootModel,
-                       searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, myAccountModel) {
+                       searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, accountModel) {
 
     if (!(this instanceof app.UIModelPack)) {
-      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, myAccountModel);
+      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, accountModel);
     }
 
     var that = this;
@@ -5506,7 +5503,7 @@ window.wizerati = {
     this.itemsOfInterestModel = null;
     this.tabBarModel = null;
     this.bookmarkPanelModel = null;
-    this.myAccountModel = null;
+    this.accountModel = null;
 
     function init() {
       try {
@@ -5534,8 +5531,8 @@ window.wizerati = {
           throw 'bookmarkListModel not supplied.';
         }
 
-        if (!myAccountModel) {
-          throw 'myAccountModel not supplied.';
+        if (!accountModel) {
+          throw 'accountModel not supplied.';
         }
 
         that.uiRootModel = uiRootModel;
@@ -5544,7 +5541,7 @@ window.wizerati = {
         that.itemsOfInterestModel = itemsOfInterestModel;
         that.tabBarModel = tabBarModel;
         that.bookmarkPanelModel = bookmarkListModel;
-        that.myAccountModel = myAccountModel;
+        that.accountModel = accountModel;
 
         return that;
       } catch(e) {
@@ -5652,10 +5649,10 @@ window.wizerati = {
         mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
         mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
         mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
-        mod.myAccountController = new w.MyAccountController(m.myAccountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
+        mod.accountController = new w.AccountController(m.accountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
-        mod.selectedAccountTabController = new w.SelectedAccountTabController(m.myAccountModel);
+        mod.selectedAccountTabController = new w.SelectedAccountTabController(m.accountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
       }
       catch (e) {
@@ -5689,6 +5686,18 @@ window.wizerati = {
       try {
         var mod = w.mod('enum');
 
+        mod.AccountMode = {
+          Default: '0',
+          Minimized: '1'
+        };
+
+        mod.AccountTab = {
+          MyDetails: '0',
+          Security: '1',
+          CVs: '2',
+          JobApplications: '3'
+        };
+
         mod.ApplyToContractDialogPanel = {
           CVSelection: '0',
           SignInOrContinue: '1'
@@ -5720,23 +5729,11 @@ window.wizerati = {
           ActionContract: '5'
         };
 
-        mod.MyAccountMode = {
-          Default: '0',
-          Minimized: '1'
-        };
-
-        mod.MyAccountTab = {
-          MyDetails: '0',
-          Security: '1',
-          CVs: '2',
-          JobApplications: '3'
-        };
-
         mod.Tab = {
           Search: '0',
           Bookmark: '1',
           ComparisonList: '2',
-          MyAccount: '3'
+          Account: '3'
         };
 
         mod.ResultListMode = {
@@ -5797,7 +5794,7 @@ window.wizerati = {
         var mod = w.mod('helpers');
         mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator, s.readItemService);
         mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
-        mod.myAccountControllerHelper = new w.MyAccountControllerHelper(p.uiModelPack, l.layoutCoordinator, m.myAccountModel);
+        mod.myAccountControllerHelper = new w.AccountControllerHelper(p.uiModelPack, l.layoutCoordinator, m.accountModel);
       }
       catch (e) {
         throw 'helperRegistrar::run ' + e;
@@ -5854,7 +5851,7 @@ window.wizerati = {
         var mod = w.mod('models');
         mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
         mod.bookmarkListModel = new w.BookmarkListModel();
-        mod.myAccountModel = new w.MyAccountModel();
+        mod.accountModel = new w.AccountModel();
         mod.resultListModel = new w.ResultListModel();
         mod.searchFormModel = new w.SearchFormModel();
         mod.tabBarModel = new w.TabBarModel();
@@ -5878,7 +5875,7 @@ window.wizerati = {
       try {
         var mod = w.mod('packs');
         mod.itemModelPack = new w.ItemModelPack(m.resultListModel, m.bookmarkListModel, m.itemsOfInterestModel, s.hiddenItemService, s.readItemService);
-        mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel, m.myAccountModel);
+        mod.uiModelPack = new w.UIModelPack(m.uiRootModel, m.searchFormModel, m.resultListModel, m.itemsOfInterestModel, m.tabBarModel, m.bookmarkListModel, m.accountModel);
       }
       catch (e) {
         throw 'packRegistrar::run ' + e;
@@ -5982,7 +5979,7 @@ window.wizerati = {
         mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
         mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel, f.resultViewFactory, p.itemModelPack);
         mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
-        mod.myAccountView = new w.MyAccountView(m.myAccountModel);
+        mod.myAccountView = new w.AccountView(m.accountModel);
         mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
         mod.searchFormView = new w.SearchFormView(m.searchFormModel);
         mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
@@ -6288,14 +6285,14 @@ window.wizerati = {
           c.searchFormModeController.update(dto);
         }, { silent: true });
 
-        router.registerRoute('/myaccount', function (dto) {
-          c.myAccountController.index(dto);
+        router.registerRoute('/account', function (dto) {
+          c.accountController.index(dto);
         }, { title: 'Wizerati Account',
-          uriTransform: c.myAccountController.urlTransforms['/myaccount'],
-          dtoPopulator: c.myAccountController.dtoPopulators['/myaccount']});
+          uriTransform: c.accountController.urlTransforms['/account'],
+          dtoPopulator: c.accountController.dtoPopulators['/account']});
 
-        router.registerRoute('/selectedaccounttab', function (dto) {
-          c.selectedAccountTabController.index(dto);
+        router.registerRoute('/selectedaccounttab/update', function (dto) {
+          c.selectedAccountTabController.update(dto);
         }, { silent: true });
 
       } catch (e) {
@@ -7576,17 +7573,17 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function MyAccountView(model) {
+  function AccountView(model) {
 
-    if (!(this instanceof app.MyAccountView)) {
-      return new app.MyAccountView(model);
+    if (!(this instanceof app.AccountView)) {
+      return new app.AccountView(model);
     }
 
     var that = this,
         _el = '#my-account-panel',
         _elContainer = '#my-account-panel-container',
-        _templateName = 'my-account.html-local',
-        _modeEnum = app.mod('enum').MyAccountMode,
+        _elHeader = '#my-account-panel-header',
+        _templateName = 'account.html-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
 
@@ -7632,6 +7629,10 @@ window.wizerati = {
       }
     };
 
+    this.renderSetSelectedTab = function (tab) {
+      $(_elHeader).attr('data-selected-tab', tab);
+    };
+
     //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
     this.renderSetMode = function (mode) {
       that.$elContainer.attr('data-mode', mode);
@@ -7648,23 +7649,25 @@ window.wizerati = {
 
         _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
         _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[that.model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
 
         $.subscribe(that.model.eventUris.default, that.render);
         $.subscribe(that.model.eventUris.setIsWaiting, that.render);
         $.subscribe(that.model.eventUris.setMode, that.render);
         $.subscribe(that.model.eventUris.setAccount, that.render);
+        $.subscribe(that.model.eventUris.setSelectedTab, that.render);
 
         return that;
       } catch (e) {
-        throw 'MyAccountView::init ' + e;
+        throw 'AccountView::init ' + e;
       }
     }
 
     return init();
   }
 
-  app.MyAccountView = MyAccountView;
-  invertebrate.View.isExtendedBy(app.MyAccountView);
+  app.AccountView = AccountView;
+  invertebrate.View.isExtendedBy(app.AccountView);
 
 }(wizerati, $, invertebrate));
 ;(function (app, $, inv) {

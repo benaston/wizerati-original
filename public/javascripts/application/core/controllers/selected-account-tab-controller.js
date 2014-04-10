@@ -16,8 +16,8 @@
           throw 'dto not supplied';
         }
 
-        _myAccountModel.setSelectedTab(dto.id);
-        app.instance.router.redirect('/account?tab=' + dto.id);
+        _myAccountModel.setSelectedTab(dto.tab);
+        app.instance.router.redirect('/account');
       } catch (err) {
         console.log('SelectedAccountTabController::update ' + err);
       }

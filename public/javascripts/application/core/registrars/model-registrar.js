@@ -7,7 +7,7 @@
         var mod = w.mod('models');
         mod.applyToContractDialogModel = new w.ApplyToContractDialogModel();
         mod.bookmarkListModel = new w.BookmarkListModel();
-        mod.myAccountModel = new w.MyAccountModel();
+        mod.accountModel = new w.AccountModel();
         mod.resultListModel = new w.ResultListModel();
         mod.searchFormModel = new w.SearchFormModel();
         mod.tabBarModel = new w.TabBarModel();

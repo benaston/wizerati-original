@@ -88,14 +88,14 @@
           c.searchFormModeController.update(dto);
         }, { silent: true });
 
-        router.registerRoute('/myaccount', function (dto) {
-          c.myAccountController.index(dto);
+        router.registerRoute('/account', function (dto) {
+          c.accountController.index(dto);
         }, { title: 'Wizerati Account',
-          uriTransform: c.myAccountController.urlTransforms['/myaccount'],
-          dtoPopulator: c.myAccountController.dtoPopulators['/myaccount']});
+          uriTransform: c.accountController.urlTransforms['/account'],
+          dtoPopulator: c.accountController.dtoPopulators['/account']});
 
-        router.registerRoute('/selectedaccounttab', function (dto) {
-          c.selectedAccountTabController.index(dto);
+        router.registerRoute('/selectedaccounttab/update', function (dto) {
+          c.selectedAccountTabController.update(dto);
         }, { silent: true });
 
       } catch (e) {

@@ -2,10 +2,10 @@
   'use strict';
 
   function UIModelPack(uiRootModel,
-                       searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, myAccountModel) {
+                       searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, accountModel) {
 
     if (!(this instanceof app.UIModelPack)) {
-      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, myAccountModel);
+      return new app.UIModelPack(uiRootModel, searchFormModel, resultListModel, itemsOfInterestModel, tabBarModel, bookmarkListModel, accountModel);
     }
 
     var that = this;
@@ -16,7 +16,7 @@
     this.itemsOfInterestModel = null;
     this.tabBarModel = null;
     this.bookmarkPanelModel = null;
-    this.myAccountModel = null;
+    this.accountModel = null;
 
     function init() {
       try {
@@ -44,8 +44,8 @@
           throw 'bookmarkListModel not supplied.';
         }
 
-        if (!myAccountModel) {
-          throw 'myAccountModel not supplied.';
+        if (!accountModel) {
+          throw 'accountModel not supplied.';
         }
 
         that.uiRootModel = uiRootModel;
@@ -54,7 +54,7 @@
         that.itemsOfInterestModel = itemsOfInterestModel;
         that.tabBarModel = tabBarModel;
         that.bookmarkPanelModel = bookmarkListModel;
-        that.myAccountModel = myAccountModel;
+        that.accountModel = accountModel;
 
         return that;
       } catch(e) {

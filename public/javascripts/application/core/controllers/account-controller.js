@@ -1,32 +1,34 @@
 (function (app) {
   'use strict';
 
-  function MyAccountController(myAccountModel, helper, accountRepository, userModel, uiRootModel) {
+  function AccountController(accountModel, helper, accountRepository, userModel, uiRootModel) {
 
-    if (!(this instanceof app.MyAccountController)) {
-      return new app.MyAccountController(myAccountModel, helper, accountRepository, userModel);
+    if (!(this instanceof app.AccountController)) {
+      return new app.AccountController(accountModel, helper, accountRepository, userModel);
     }
 
     var that = this,
-        _myAccountModel = null,
+        _accountModel = null,
         _helper = null,
         _accountRepository = null,
         _userModel = null,
         _uiRootModel = null,
-        _myAccountHasPreviouslyBeenRetrieved = false;
+        _myAccountHasPreviouslyBeenRetrieved = false,
+        _accountTabEnum = app.mod('enum').AccountTab;
 
     this.urlTransforms = {};
     this.dtoPopulators = {};
 
     this.index = function (dto) {
       try {
+          _accountModel.setSelectedTab(dto.tab || _accountTabEnum.MyDetails);
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_myAccountHasPreviouslyBeenRetrieved) {
           _myAccountHasPreviouslyBeenRetrieved = true;
-          _myAccountModel.setIsWaiting('true');
+          _accountModel.setIsWaiting('true');
           _accountRepository.getByUserId(_userModel.getUserId(), _helper.accountRetrievalSuccess);
         } else {
-          _helper.resetUIForMyAccount();
+          _helper.resetUIForAccount();
         }
       } catch (err) {
         console.log('MyAccountController::index ' + err);
@@ -42,13 +44,13 @@
     }
 
     function dtoPopulatorIndex(dto) {
-      dto.tab = _myAccountModel.getSelectedTab();
+      dto.tab = _accountModel.getSelectedTab();
       return dto;
     }
 
     function init() {
       try {
-        if (!myAccountModel) {
+        if (!accountModel) {
           throw 'uiModelPack not supplied.';
         }
 
@@ -68,24 +70,24 @@
           throw 'uiRootModel not supplied.';
         }
 
-        _myAccountModel = myAccountModel;
+        _accountModel = accountModel;
         _helper = helper;
         _accountRepository = accountRepository;
         _userModel = userModel;
         _uiRootModel = uiRootModel;
 
-        that.urlTransforms['/myaccount'] = urlTransformIndex;
-        that.dtoPopulators['/myaccount'] = dtoPopulatorIndex;
+        that.urlTransforms['/account'] = urlTransformIndex;
+        that.dtoPopulators['/account'] = dtoPopulatorIndex;
 
         return that;
       } catch (e) {
-        throw 'MyAccountController::init ' + e;
+        throw 'AccountController::init ' + e;
       }
     }
 
     return init();
   }
 
-  app.MyAccountController = MyAccountController;
+  app.AccountController = AccountController;
 
 }(wizerati));

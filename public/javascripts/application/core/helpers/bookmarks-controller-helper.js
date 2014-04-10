@@ -14,7 +14,7 @@
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
         _navbarItemEnum = app.mod('enum').Tab,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
         _layoutCoordinator = null,
@@ -27,7 +27,7 @@
       _uiModelPack.tabBarModel.setSelectedTab(_navbarItemEnum.Bookmark);
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 

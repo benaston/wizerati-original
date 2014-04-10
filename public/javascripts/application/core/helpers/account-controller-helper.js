@@ -1,10 +1,10 @@
 (function (app) {
   'use strict';
 
-  function MyAccountControllerHelper(uiModelPack, layoutCoordinator, myAccountModel) {
+  function AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel) {
 
-    if (!(this instanceof app.MyAccountControllerHelper)) {
-      return new app.MyAccountControllerHelper(uiModelPack, layoutCoordinator, myAccountModel);
+    if (!(this instanceof app.AccountControllerHelper)) {
+      return new app.AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel);
     }
 
     var that = this,
@@ -13,38 +13,37 @@
         _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
         _resultListModeEnum = app.mod('enum').ResultListMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
+        _accountModeEnum = app.mod('enum').AccountMode,
         _tabEnum = app.mod('enum').Tab,
         _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _uiModelPack = null,
         _layoutCoordinator = null,
-        _myAccountModel = null;
+        _accountModel = null;
 
-    this.resetUIForMyAccount = function () {
+    this.resetUIForAccount = function () {
       try {
         _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
         _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
         _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.MyAccount);
+        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
         _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-        _uiModelPack.myAccountModel.setMode(_myAccountModeEnum.Default);
+        _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (e) {
-        throw 'MyAccountControllerHelper::resetUIForMyAccount ' + e;
+        throw 'AccountControllerHelper::resetUIForAccount ' + e;
       }
     };
 
     this.accountRetrievalSuccess = function (account) {
       try {
-        _myAccountModel.setAccount(account);
-        _myAccountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-
+        _accountModel.setAccount(account);
+        _accountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
         _layoutCoordinator.layOut();
-        that.resetUIForMyAccount();
+        that.resetUIForAccount();
         _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
       } catch (e) {
-        throw 'MyAccountControllerHelper::accountRetrievalSuccess ' + e;
+        throw 'AccountControllerHelper::accountRetrievalSuccess ' + e;
       }
     };
 
@@ -58,23 +57,23 @@
           throw 'layoutCoordinator not supplied.';
         }
 
-        if (!myAccountModel) {
-          throw 'bookmarkListModel not supplied.';
+        if (!accountModel) {
+          throw 'accountModel not supplied.';
         }
 
         _uiModelPack = uiModelPack;
         _layoutCoordinator = layoutCoordinator;
-        _myAccountModel = myAccountModel;
+        _accountModel = accountModel;
 
         return that;
       } catch (e) {
-        throw 'MyAccountControllerHelper::init bookmarkListModel not supplied.';
+        throw 'AccountControllerHelper::init ' + e;
       }
     }
 
     return init();
   }
 
-  app.MyAccountControllerHelper = MyAccountControllerHelper;
+  app.AccountControllerHelper = AccountControllerHelper;
 
 }(wizerati));

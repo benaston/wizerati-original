@@ -6,6 +6,18 @@
       try {
         var mod = w.mod('enum');
 
+        mod.AccountMode = {
+          Default: '0',
+          Minimized: '1'
+        };
+
+        mod.AccountTab = {
+          MyDetails: '0',
+          Security: '1',
+          CVs: '2',
+          JobApplications: '3'
+        };
+
         mod.ApplyToContractDialogPanel = {
           CVSelection: '0',
           SignInOrContinue: '1'
@@ -37,23 +49,11 @@
           ActionContract: '5'
         };
 
-        mod.MyAccountMode = {
-          Default: '0',
-          Minimized: '1'
-        };
-
-        mod.MyAccountTab = {
-          MyDetails: '0',
-          Security: '1',
-          CVs: '2',
-          JobApplications: '3'
-        };
-
         mod.Tab = {
           Search: '0',
           Bookmark: '1',
           ComparisonList: '2',
-          MyAccount: '3'
+          Account: '3'
         };
 
         mod.ResultListMode = {

@@ -1,17 +1,17 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function MyAccountView(model) {
+  function AccountView(model) {
 
-    if (!(this instanceof app.MyAccountView)) {
-      return new app.MyAccountView(model);
+    if (!(this instanceof app.AccountView)) {
+      return new app.AccountView(model);
     }
 
     var that = this,
         _el = '#my-account-panel',
         _elContainer = '#my-account-panel-container',
-        _templateName = 'my-account.html-local',
-        _modeEnum = app.mod('enum').MyAccountMode,
+        _elHeader = '#my-account-panel-header',
+        _templateName = 'account.html-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
 
@@ -57,6 +57,10 @@
       }
     };
 
+    this.renderSetSelectedTab = function (tab) {
+      $(_elHeader).attr('data-selected-tab', tab);
+    };
+
     //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
     this.renderSetMode = function (mode) {
       that.$elContainer.attr('data-mode', mode);
@@ -73,22 +77,24 @@
 
         _renderOptimizations[that.model.eventUris.setIsWaiting] = that.renderSetIsWaiting;
         _renderOptimizations[that.model.eventUris.setMode] = that.renderSetMode;
+        _renderOptimizations[that.model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
 
         $.subscribe(that.model.eventUris.default, that.render);
         $.subscribe(that.model.eventUris.setIsWaiting, that.render);
         $.subscribe(that.model.eventUris.setMode, that.render);
         $.subscribe(that.model.eventUris.setAccount, that.render);
+        $.subscribe(that.model.eventUris.setSelectedTab, that.render);
 
         return that;
       } catch (e) {
-        throw 'MyAccountView::init ' + e;
+        throw 'AccountView::init ' + e;
       }
     }
 
     return init();
   }
 
-  app.MyAccountView = MyAccountView;
-  invertebrate.View.isExtendedBy(app.MyAccountView);
+  app.AccountView = AccountView;
+  invertebrate.View.isExtendedBy(app.AccountView);
 
 }(wizerati, $, invertebrate));

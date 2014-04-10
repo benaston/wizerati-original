@@ -25,7 +25,7 @@
     };
 
     this.route = function (uri, dto, options) {
-      options = options || { silent: false };
+      options = options || {};
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -57,15 +57,10 @@
         document.title = route.options.titleFactory(dto) || route.options.title;
       }
 
-
-//      if (!route.options.silent && !options.silent) {
-//        history.pushState(null, null, route.options.uriTransform(uri, dto));
-//      }
-
       if (options.isExternal) {
         history.replaceState(null, null, route.options.uriTransform(uri, dto));
       } else {
-        if (!route.options.silent && !options.silent) {
+        if (!route.options.silent) {
           history.pushState(null, null, route.options.uriTransform(uri, dto));
         }
       }
@@ -149,10 +144,10 @@
       //then dto populators can be used when coming from an external uri
       window.addEventListener('popstate', function (e) {
         //This only works because on Safari - we bypass the issue using a settimeout in the app start.
-        //For opera, this works because the manual call happens second.
+        //For opera, this works because the manual call happens second (possibly due to the settimeout in app start).
         if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
           _isFirstRouteCall = false;
-          that.route(location.pathname + location.search, null, {/*silent: true, */isExternal: true });
+          that.route(location.pathname + location.search, null, { isExternal: true });
         }
       });
 

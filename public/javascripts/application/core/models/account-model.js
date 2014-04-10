@@ -1,25 +1,26 @@
 (function (app, $, invertebrate, _) {
   'use strict';
 
-  function MyAccountModel() {
+  function AccountModel() {
 
-    if (!(this instanceof app.MyAccountModel)) {
-      return new app.MyAccountModel();
+    if (!(this instanceof app.AccountModel)) {
+      return new app.AccountModel();
     }
 
     var that = this,
         _isWaiting = false,
         _account = null,
-        _myAccountModeEnum = app.mod('enum').MyAccountMode,
-        _myAccountTabEnum = app.mod('enum').MyAccountTab,
+        _myAccountModeEnum = app.mod('enum').AccountMode,
+        _myAccountTabEnum = app.mod('enum').AccountTab,
         _mode = _myAccountModeEnum.Minimized,
         _selectedTab = _myAccountTabEnum.MyDetails;
 
     this.eventUris = {
-      default: 'update://myaccountmodel',
-      setMode: 'update://myaccountmodel/setmode',
-      setIsWaiting: 'update://myaccountmodel/setiswaiting',
-      setAccount: 'update://myaccountmodel/setaccount'
+      default: 'update://accountmodel',
+      setMode: 'update://accountmodel/setmode',
+      setIsWaiting: 'update://accountmodel/setiswaiting',
+      setAccount: 'update://accountmodel/setaccount',
+      setSelectedTab: 'update://accountmodel/setselectedtab'
     };
 
     this.getMode = function () {
@@ -77,7 +78,7 @@
     return init();
   }
 
-  app.MyAccountModel = MyAccountModel;
-  invertebrate.Model.isExtendedBy(app.MyAccountModel);
+  app.AccountModel = AccountModel;
+  invertebrate.Model.isExtendedBy(app.AccountModel);
 
 }(wizerati, $, invertebrate, _));

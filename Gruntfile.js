@@ -136,8 +136,8 @@ module.exports = function (grunt) {
               match: 'bookmark-period-contract-template',
               replacement: '<%= grunt.file.read("public/template-server/contract/templates/bookmark-period.html") %>'
             },{
-              match: 'my-account-contract-template',
-              replacement: '<%= grunt.file.read("public/template-server/contract/templates/my-account.html") %>'
+              match: 'account-contract-template',
+              replacement: '<%= grunt.file.read("public/template-server/contract/templates/account.html") %>'
             },
             {
               match: 'footer',
@@ -161,8 +161,8 @@ module.exports = function (grunt) {
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/items-of-interest-panel.html") %>'
             },
             {
-              match: 'my-account-panel',
-              replacement: '<%= grunt.file.read("public/template-server/shared/templates/my-account-panel.html") %>'
+              match: 'account-panel',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/account-panel.html") %>'
             },
             {
               match: 'nav-panel',

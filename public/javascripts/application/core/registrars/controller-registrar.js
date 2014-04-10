@@ -11,10 +11,10 @@
         mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
         mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
         mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
-        mod.myAccountController = new w.MyAccountController(m.myAccountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
+        mod.accountController = new w.AccountController(m.accountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
-        mod.selectedAccountTabController = new w.SelectedAccountTabController(m.myAccountModel);
+        mod.selectedAccountTabController = new w.SelectedAccountTabController(m.accountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
       }
       catch (e) {

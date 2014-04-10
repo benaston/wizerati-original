@@ -85,7 +85,7 @@
       var templateMarkup = $('script[type="text/template"][data-template-uri="' + uri + '"]').html();
 
       if (!$.trim(templateMarkup)) {
-        throw 'Local template "' + uri + '" is empty.';
+        throw 'Local template "' + uri + '" is empty. Verify Gruntfile and data-template-uri.';
       }
 
       var template = _.template(templateMarkup)
