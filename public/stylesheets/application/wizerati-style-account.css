@@ -32,6 +32,12 @@ body[data-ui-mode='0'] #my-account-panel {
     display: none;
 }
 
+.download-icon {
+    font-size: 1.6rem;
+    line-height: 1.3rem;
+    vertical-align: bottom;
+}
+
 body[data-ui-mode='1'] #my-account-panel {
     display: inline-table;
     position: fixed;
@@ -41,14 +47,18 @@ body[data-ui-mode='1'] #my-account-panel {
     text-align: left;
     background: rgba(255, 255, 255, .97);
     -webkit-backface-visibility: hidden;
+    min-width: 819px;
 }
 
 #my-account-panel[data-selected-tab='0'] #my-account-tabs-container #my-details,
 #my-account-panel[data-selected-tab='1'] #my-account-tabs-container #security,
 #my-account-panel[data-selected-tab='2'] #my-account-tabs-container #my-cvs,
-#my-account-panel[data-selected-tab='3'] #my-account-tabs-container #job-applications {
+#my-account-panel[data-selected-tab='3'] #my-account-tabs-container #job-applications,
+#my-account-panel[data-selected-tab='4'] #my-account-tabs-container #job-adverts,
+#my-account-panel[data-selected-tab='5'] #my-account-tabs-container #billing {
     -webkit-filter: opacity(100%);
     pointer-events: auto;
+    z-index: 0;
 
 }
 
@@ -56,17 +66,19 @@ body[data-ui-mode='1'] #my-account-panel {
 #my-account-panel[data-selected-tab='1'] #my-account-panel-header .ni:nth-child(2),
 #my-account-panel[data-selected-tab='2'] #my-account-panel-header .ni:nth-child(3),
 #my-account-panel[data-selected-tab='3'] #my-account-panel-header .ni:nth-child(4),
-#my-account-panel[data-selected-tab='4'] #my-account-panel-header .ni:nth-child(5) {
+#my-account-panel[data-selected-tab='4'] #my-account-panel-header .ni:nth-child(5),
+#my-account-panel[data-selected-tab='5'] #my-account-panel-header .ni:nth-child(6) {
     background-color: rgba(126, 157, 173, 1);
 }
 
-#my-details, #security, #my-cvs, #job-applications {
+#my-details, #security, #my-cvs, #job-applications, #job-adverts, #billing {
     width: 500px;
     position: absolute;
     -webkit-backface-visibility: hidden;
     -webkit-filter: opacity(0%);
     pointer-events: none;
     text-align: center;
+    z-index: -1;
 }
 
 #my-account-panel-header {
@@ -170,7 +182,8 @@ body[data-ui-mode='1'] #my-account-panel {
 #my-account-panel[data-selected-tab='1'] #btn-nav-security,
 #my-account-panel[data-selected-tab='2'] #btn-nav-cvs,
 #my-account-panel[data-selected-tab='3']  #btn-nav-job-applications,
-#my-account-panel[data-selected-tab='4']  #btn-nav-job-adverts {
+#my-account-panel[data-selected-tab='4']  #btn-nav-job-adverts,
+#my-account-panel[data-selected-tab='5']  #btn-nav-billing {
     color: white;
 }
 
@@ -178,7 +191,8 @@ body[data-ui-mode='1'] #my-account-panel {
 #btn-nav-security,
 #btn-nav-cvs,
 #btn-nav-job-applications,
-#btn-nav-job-adverts {
+#btn-nav-job-adverts,
+#btn-nav-billing {
     width: 100%;
     padding: 0 10px 0 10px;
     height: 44px;
@@ -190,7 +204,9 @@ body[data-ui-mode='1'] #my-account-panel {
 #my-details #my-account-buttons-container-my-details,
 #security #my-account-buttons-container-security,
 #my-cvs #my-account-buttons-container-cvs,
-#job-applications #my-account-buttons-container-job-applications {
+#job-applications #my-account-buttons-container-job-applications,
+#job-applications #my-account-buttons-container-job-adverts,
+#job-applications #my-account-buttons-container-billing {
     -webkit-filter: opacity(0%);
     pointer-events: none;
 }
@@ -198,7 +214,9 @@ body[data-ui-mode='1'] #my-account-panel {
 #my-details[data-is-dirty='true'] #my-account-buttons-container-my-details,
 #security[data-is-dirty='true'] #my-account-buttons-container-security,
 #my-cvs[data-is-dirty='true'] #my-account-buttons-container-cvs,
-#job-applications[data-is-dirty='true']  #my-account-buttons-container-job-applications {
+#job-applications[data-is-dirty='true']  #my-account-buttons-container-job-applications,
+#job-applications[data-is-dirty='true']  #my-account-buttons-container-job-adverts,
+#job-applications[data-is-dirty='true']  #my-account-buttons-container-billing {
     -webkit-filter: opacity(100%);
     pointer-events: auto;
 }
@@ -230,7 +248,6 @@ body[data-ui-mode='1'] #my-account-panel {
     width: 400px;
     height: 62px;
     display: table;
-    /*padding: 10px;*/
     box-sizing: border-box;
     text-align: left;
 }
@@ -239,8 +256,6 @@ body[data-ui-mode='1'] #my-account-panel {
     width: 400px;
     height: 62px;
     display: table;
-    /*border-bottom: 1px solid rgba(2, 86, 244, .1);*/
-    /*padding: 10px;*/
     box-sizing: border-box;
     text-align: left;
 }
@@ -348,7 +363,6 @@ body[data-ui-mode='1'] #my-account-panel {
     margin-top: 40px;
     margin-bottom: 20px;
     background: transparent;
-    /*padding: 10px;*/
     line-height: 1rem;
     color: #333;
     font-family: helvetica-bold;
@@ -374,3 +388,26 @@ body[data-ui-mode='1'] #my-account-panel {
 p {
     text-align: left;
 }
+
+#invoice-history td, #invoice-history th {
+    padding: 10px;
+}
+
+#invoice-history {
+    width: 400px;
+    margin: 20px auto 20px auto;
+    box-shadow: 0 0 0 1px rgba(2,86,244,.1);
+    border-radius: 5px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#job-advert-list {
+    display: block;
+    width: 400px;
+    box-shadow: 0 0 0 1px rgba(2,86,244,.1);
+    border-radius: 5px;
+    margin: auto;
+    margin-top: 20px;
+}
+

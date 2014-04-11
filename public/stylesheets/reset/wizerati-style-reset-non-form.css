@@ -94,7 +94,7 @@ hr {
     height: 1px;
 }
 
-ol, ul {
+ol, ul, menu {
     display: inline-block;
     padding: 0 0 0 0;
 }

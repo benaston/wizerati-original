@@ -280,7 +280,6 @@ module.exports = function (grunt) {
     'uglify',
     'cssUrlEmbed',
     'cssmin',
-    'replace:injectEditWarningIntoHead',
     'replace:injectCssIntoHead',
     'replace:injectInPageTemplates',
     'replace:injectBuildNumber',
