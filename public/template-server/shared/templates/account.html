@@ -1,0 +1,28 @@
+{{ try { }}
+
+<header id="my-account-panel-header">
+    <nav>
+    <ul id="my-account-panel-header-item-list">
+        <li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="0"><button id="btn-nav-my-details" class="btn" title="personal details">personal details</button></form>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="1"><button id="btn-nav-security" class="btn" title="bookmarks">security</button></form>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="2"><button id="btn-nav-cvs" class="btn" title="my cvs">my cvs</button></form>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="3"><button id="btn-nav-job-applications" class="btn" title="job applications">job applications</button></form>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="4"><button id="btn-nav-job-adverts" class="btn" title="my job adverts">my job adverts</button></form>
+        </li><li class="ni"><form action="/selectedaccounttab/update" method="POST"><input type="hidden" name="tab" value="5"><button id="btn-nav-billing" class="btn" title="billing">billing</button></form></li>
+    </ul>
+    </nav>
+</header>
+
+<div id="my-account-tabs-container">
+    @@account-tab-personal-details
+    @@account-tab-security
+    @@account-tab-my-cvs
+    @@account-tab-job-applications
+    @@account-tab-job-adverts
+    @@account-tab-billing
+</div>
+{{
+} catch(e) {
+throw "template exception: contract/my-account. " + e;
+}
+}}

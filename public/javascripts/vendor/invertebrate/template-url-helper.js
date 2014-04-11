@@ -23,7 +23,7 @@
       if (!templatesUriPart) {
         throw 'templatesUriPart empty.';
       }
-      var serverUri = that.serverUrlSelectionFunc();
+      var serverUri = that.serverUrlSelectionFunc(templateName);
       if (!serverUri) {
         throw 'serverUri empty.';
       }

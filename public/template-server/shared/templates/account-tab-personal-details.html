@@ -1,0 +1,43 @@
+<div id="my-details">
+    <form id="frm-my-details" action="/account/mydetails/update" method="POST">
+        <div id="my-account-buttons-container-my-details">
+            <div id="cancel-my-account-button-container">
+                <div class="rotating-button-container">
+                    <button type="submit" form="frm-cancel-my-account" id="btn-cancel-my-account" tabindex="1"
+                            class="btn btn-s"></button>
+                    <span class="focus-indicator"></span><span class="button-icon">cancel</span>
+                </div>
+            </div>
+            <div id="save-my-account-button-container">
+                <div class="rotating-button-container">
+                    <button type="submit" id="btn-save-my-account" tabindex="1"
+                            class="btn btn-s btn-primary btn-rotating"
+                            data-is-waiting="false"></button>
+                    <span class="focus-indicator"></span><span class="button-icon">done</span>
+                </div>
+            </div>
+        </div>
+        <input id="id" type="hidden" value="{{=model.id}}"/>
+        <div class="input-label-group">
+            <input id="name" type="text" placeholder="Fred Smith" value="{{=model.name}}"/>
+            <label class="lbl" for="name">Name</label>
+        </div>
+        <div class="input-label-group">
+            <input id="email" type="email" placeholder="example@example.com" value="{{=model.email}}"/>
+            <label class="lbl" for="name">Email</label>
+        </div>
+        <div class="input-label-group">
+            <input id="location" type="text" placeholder="London" value="{{=model.location}}"/>
+            <label class="lbl" for="name">Location</label>
+        </div>
+        <div class="input-label-group">
+            <input id="company" type="text" placeholder="My Company" value="{{=model.company}}"/>
+            <label class="lbl" for="name">Company</label>
+        </div>
+        <div class="input-label-group">
+            <input id="url" type="text" placeholder="www.example.com" value="{{=model.url}}"/>
+            <label class="lbl" for="name">URL</label>
+        </div>
+    </form>
+</div>
+<form id="frm-cancel-my-account" action="/myaccount" method="GET"></form>

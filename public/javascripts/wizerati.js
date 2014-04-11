@@ -2126,7 +2126,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     }
 
     var that = this,
-        _templateServerSvc = null,
+        _templateUrlHelper = null,
         _templates = {},
         _templatePostRenderScripts = {},
         _inFlightRequests = {};
@@ -2231,7 +2231,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         throw 'model not supplied';
       }
 
-      var templateUri = _templateServerSvc.getTemplateUri(templateName);
+      var templateUri = _templateUrlHelper.getTemplateUri(templateName);
 
       if (templateName.match(/-local$/g)) {
         that.fetchTemplateLocal(templateUri, { done: done });
@@ -2244,7 +2244,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
 
         if (options.postRenderScriptName) {
-          var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
+          var postRenderScriptUri = _templateUrlHelper.getPostRenderScriptUri(options.postRenderScriptName);
           that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
             _templatePostRenderScripts[postRenderScriptUri]($, $el);
             options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
@@ -2281,7 +2281,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
         throw 'templateUrlHelper not supplied';
       }
 
-      _templateServerSvc = templateUrlHelper;
+      _templateUrlHelper = templateUrlHelper;
       return that;
     }
 
@@ -2622,7 +2622,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       if (!templatesUriPart) {
         throw 'templatesUriPart empty.';
       }
-      var serverUri = that.serverUrlSelectionFunc();
+      var serverUri = that.serverUrlSelectionFunc(templateName);
       if (!serverUri) {
         throw 'serverUri empty.';
       }
@@ -2872,7 +2872,8 @@ window.wizerati = {
             '1': './template-server/contract/',
             '2': './template-server/contractor/',
             '3': './template-server/contract/',
-            '4': './template-server/contractor/'
+            '4': './template-server/contractor/',
+            'shared': './template-server/shared/'
           },
           'enableTrace': 'false'
         },
@@ -4386,8 +4387,16 @@ window.wizerati = {
         _signInService = null,
         _config = null;
 
-    this.getCroniclUri = function () {
-      return _config.config.templateServerUris[_signInService.getCurrentRole()];
+    this.getCroniclUri = function (templateName) {
+      try {
+        if (templateName && templateName.match(/--shared/g)) {
+          return _config.config.templateServerUris['shared'];
+        }
+
+        return _config.config.templateServerUris[_signInService.getCurrentRole()];
+      } catch (e) {
+        throw 'CroniclIService::getCroniclUri ' + e;
+      }
     };
 
     function init() {
@@ -6870,7 +6879,7 @@ window.wizerati = {
         _el = '#my-account-panel',
         _elContainer = '#my-account-panel-container',
         _elHeader = '#my-account-panel-header',
-        _templateName = 'account.html-local',
+        _templateName = 'account.html--shared-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
 
@@ -8237,23 +8246,26 @@ window.wizerati = {
 ;$(function appStart() {
   'use strict';
 
-  if(wizerati.mod('compatibility').browserCompatibilityChecker.isBrowserCompatible()) {
-    window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
-    for (var v in window.wizerati.mod('views')) {
-      window.wizerati.mod('views')[v].onDomReady();
-    }
-    //TODO read application state from local storage, before applying this first layout calculation
-    window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
-    window.addEventListener('resize', function () {
-      window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
-    });
-
-    wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
-
-    //Due to a change in the W3C spec, pop state is no longer triggered on page load, so we manually invoke it to trigger the initial route.
-    //In a settimout because this prevents a duplicate event being triggered.
-    setTimeout(function() {$(window).trigger("popstate", { isTriggeredManually: true });}, 0)
-  } else {
-    $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">')
+  if (!wizerati.mod('compatibility').browserCompatibilityChecker.isBrowserCompatible()) {
+    $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">');
+    return;
   }
+
+  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
+  for (var v in window.wizerati.mod('views')) {
+    window.wizerati.mod('views')[v].onDomReady();
+  }
+  //TODO read application state from local storage, before applying this first layout calculation
+  window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
+  window.addEventListener('resize', function () {
+    window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
+  });
+
+  wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
+
+  //Due to a change in the W3C spec, pop state is no longer triggered on page load, so we manually invoke it to trigger the initial route.
+  //In a settimout because this prevents a duplicate event being triggered.
+  setTimeout(function () {
+    $(window).trigger("popstate", { isTriggeredManually: true });
+  }, 0)
 });

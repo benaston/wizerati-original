@@ -7,7 +7,7 @@
     }
 
     var that = this,
-        _templateServerSvc = null,
+        _templateUrlHelper = null,
         _templates = {},
         _templatePostRenderScripts = {},
         _inFlightRequests = {};
@@ -112,7 +112,7 @@
         throw 'model not supplied';
       }
 
-      var templateUri = _templateServerSvc.getTemplateUri(templateName);
+      var templateUri = _templateUrlHelper.getTemplateUri(templateName);
 
       if (templateName.match(/-local$/g)) {
         that.fetchTemplateLocal(templateUri, { done: done });
@@ -125,7 +125,7 @@
         $el.html(tmpl({ model: _.clone(model), $: $, moment: moment }));
 
         if (options.postRenderScriptName) {
-          var postRenderScriptUri = _templateServerSvc.getPostRenderScriptUri(options.postRenderScriptName);
+          var postRenderScriptUri = _templateUrlHelper.getPostRenderScriptUri(options.postRenderScriptName);
           that.fetchTemplatePostRenderScript(postRenderScriptUri, function (data) {
             _templatePostRenderScripts[postRenderScriptUri]($, $el);
             options.done($el); //NOTE: this is in correct location (really)! Purpose: supply $el1 for possible additional work, like dom insertion
@@ -162,7 +162,7 @@
         throw 'templateUrlHelper not supplied';
       }
 
-      _templateServerSvc = templateUrlHelper;
+      _templateUrlHelper = templateUrlHelper;
       return that;
     }
 

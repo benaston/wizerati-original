@@ -13,7 +13,8 @@
             '1': './template-server/contract/',
             '2': './template-server/contractor/',
             '3': './template-server/contract/',
-            '4': './template-server/contractor/'
+            '4': './template-server/contractor/',
+            'shared': './template-server/shared/'
           },
           'enableTrace': 'false'
         },

@@ -41,7 +41,6 @@ app.get('/account', routes.index);
 app.get('/advertisers', routes.index);
 app.get('/accountactivationpanel', routes.index);
 app.get('/purchasepanel', routes.index);
-app.get('/deletefavoritegroupconfirmationdialog', routes.index);
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));

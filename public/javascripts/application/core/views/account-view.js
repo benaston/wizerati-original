@@ -11,7 +11,7 @@
         _el = '#my-account-panel',
         _elContainer = '#my-account-panel-container',
         _elHeader = '#my-account-panel-header',
-        _templateName = 'account.html-local',
+        _templateName = 'account.html--shared-local',
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false;
 

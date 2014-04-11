@@ -11,8 +11,16 @@
         _signInService = null,
         _config = null;
 
-    this.getCroniclUri = function () {
-      return _config.config.templateServerUris[_signInService.getCurrentRole()];
+    this.getCroniclUri = function (templateName) {
+      try {
+        if (templateName && templateName.match(/--shared/g)) {
+          return _config.config.templateServerUris['shared'];
+        }
+
+        return _config.config.templateServerUris[_signInService.getCurrentRole()];
+      } catch (e) {
+        throw 'CroniclIService::getCroniclUri ' + e;
+      }
     };
 
     function init() {

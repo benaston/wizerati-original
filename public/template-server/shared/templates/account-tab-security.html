@@ -1,0 +1,48 @@
+<div id="security">
+    <div class="security-heading">
+        Change Password
+    </div>
+    <form id="frm-change-password" action="/myaccount/password/update" method="POST">
+        <div id="my-account-buttons-container-my-details">
+            <div id="cancel-my-account-button-container">
+                <div class="rotating-button-container">
+                    <button type="submit" form="form-cancel-change-password" id="btn-cancel-my-account" tabindex="1"
+                            class="btn btn-s"></button>
+                    <span class="focus-indicator"></span><span class="button-icon">cancel</span>
+                </div>
+            </div>
+            <div id="save-my-account-button-container">
+                <div class="rotating-button-container">
+                    <button type="submit" id="btn-save-my-account" tabindex="1"
+                            class="btn btn-s btn-primary btn-rotating"
+                            data-is-waiting="false"></button>
+                    <span class="focus-indicator"></span><span class="button-icon">done</span>
+                </div>
+            </div>
+        </div>
+        <div class="input-label-group">
+            <input id="password-c" type="text" placeholder="required" value=""/>
+            <label class="lbl" for="password-c">Current Password</label>
+        </div>
+        <div class="input-label-group">
+            <input id="password-n1" type="email" placeholder="required" value=""/>
+            <label class="lbl" for="password-n1"">New password</label>
+        </div>
+        <div class="input-label-group">
+            <input id="password-n2" type="text" placeholder="required" value=""/>
+            <label class="lbl" for="password-n2">New password again</label>
+        </div>
+    </form>
+    <div class="security-heading">
+        Delete Account
+    </div>
+    <p>Once you delete your account, there is no going back. It will be deleted forever. Please be certain.</p>
+    <div id="my-account-buttons-container-delete-account">
+        <div id="delete-account-button-container">
+            <button type="submit" id="btn-delete-my-account" tabindex="1"
+                    class="btn btn-s btn-critical"
+                    data-is-waiting="false">delete my account</button>
+            <span class="focus-indicator"></span>
+        </div>
+    </div>
+</div>
