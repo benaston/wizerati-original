@@ -26,7 +26,7 @@ body[data-modal='1'] #sign-in-modal {
     width: 500px;
     height: 400px;
     position: absolute;
-    top: 40%;
+    top: 44%;
     left: 50%;
     margin-top: -250px;
     margin-left: -250px;
@@ -61,7 +61,7 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibi
 
 #sign-in-modal-title {
     /*margin-bottom: 21px;*/
-    margin-left: 80px;
+    text-align: center;
 }
 
 #sign-in-button-container {
@@ -90,8 +90,8 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibi
 }
 
 .logo-image {
-    width: 300px;
-    height: 300px;
+    width: 270px;
+    height: 270px;
     background-image: url('../images/logo.svg');
     background-size: contain;
     -webkit-backface-visibility: hidden;
