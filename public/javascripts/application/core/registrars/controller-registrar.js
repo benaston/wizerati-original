@@ -16,6 +16,7 @@
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
         mod.selectedAccountTabController = new w.SelectedAccountTabController(m.accountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
+        mod.signInController = new w.SignInController(m.uiRootModel);
       }
       catch (e) {
         throw 'controllerRegistrar::run ' + e;

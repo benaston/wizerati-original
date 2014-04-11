@@ -158,6 +158,10 @@ module.exports = function (grunt) {
             {
               match: 'bookmark-list-panel',
               replacement: '<%= grunt.file.read("public/template-server/shared/templates/bookmark-list-panel.html") %>'
+            },
+            {
+              match: 'sign-in-modal',
+              replacement: '<%= grunt.file.read("public/template-server/shared/templates/sign-in-modal.html") %>'
             }
           ]
         },

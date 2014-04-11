@@ -98,6 +98,10 @@
           c.selectedAccountTabController.update(dto);
         }, { silent: true });
 
+        router.registerRoute('/signin', function (dto) {
+          c.signInController.index(dto);
+        });
+
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;
       }

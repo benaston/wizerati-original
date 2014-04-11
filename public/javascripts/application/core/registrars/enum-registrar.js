@@ -42,8 +42,7 @@
         mod.Modal = {
           None: '-1',
           Purchase: '0',
-          LogIn: '1',
-          MyAccount: '2',
+          SignIn: '1',
           AccountActivation: '3',
           DeleteFavoriteGroupConfirmationDialog: '4',
           ActionContract: '5'

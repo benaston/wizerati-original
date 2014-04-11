@@ -1,0 +1,28 @@
+<div id="sign-in-modal-container">
+    <div id="sign-in-modal">
+        <div id="sign-in-modal-content">
+            <div class="logo-image"></div>
+            <div class="sign-in">
+                <form id="frm-action-item-modal-sign-in" method="POST" action="/session/create">
+                    <h1 id="sign-in-modal-title">Sign-in to Wizerati</h1>
+                    <!--<p class="error-message">The username or password you have entered is incorrect.</p>-->
+                    <div class="input-label-group">
+                        <input id="email" type="email" placeholder="example@example.com" value=""/>
+                        <label class="lbl" for="email">Email</label>
+                    </div>
+                    <div class="input-label-group">
+                        <input id="password" type="password" placeholder="Required" value=""/>
+                        <label class="lbl" for="password">Password</label>
+                        <div id="sign-in-button-container">
+                            <div class="rotating-button-container">
+                                <button type="submit" id="btn-sign-in" tabindex="1"
+                                        class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button>
+                                <span class="focus-indicator"></span><span class="button-icon icon">&#xf2b9;</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

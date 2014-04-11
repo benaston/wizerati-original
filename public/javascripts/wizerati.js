@@ -3743,6 +3743,49 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function SignInController(uiRootModel) {
+
+    if (!(this instanceof app.SignInController)) {
+      return new app.SignInController(uiRootModel);
+    }
+
+    var that = this,
+        _uiRootModel = null,
+        _modalEnum = wizerati.mod('enum').Modal;
+
+    this.index = function () {
+      try {
+        _uiRootModel.setModal(_modalEnum.SignIn);
+      } catch (err) {
+        console.log('SignInController::index ' + err);
+      }
+    };
+
+    function init() {
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _uiRootModel = uiRootModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'SignInController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.SignInController = SignInController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function Decorators(config) {
     if (!(this instanceof Decorators)) {
       return new Decorators(config);
@@ -5666,6 +5709,7 @@ window.wizerati = {
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
         mod.selectedAccountTabController = new w.SelectedAccountTabController(m.accountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
+        mod.signInController = new w.SignInController(m.uiRootModel);
       }
       catch (e) {
         throw 'controllerRegistrar::run ' + e;
@@ -5734,8 +5778,7 @@ window.wizerati = {
         mod.Modal = {
           None: '-1',
           Purchase: '0',
-          LogIn: '1',
-          MyAccount: '2',
+          SignIn: '1',
           AccountActivation: '3',
           DeleteFavoriteGroupConfirmationDialog: '4',
           ActionContract: '5'
@@ -6306,6 +6349,10 @@ window.wizerati = {
         router.registerRoute('/selectedaccounttab/update', function (dto) {
           c.selectedAccountTabController.update(dto);
         }, { silent: true });
+
+        router.registerRoute('/signin', function (dto) {
+          c.signInController.index(dto);
+        });
 
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;
