@@ -98,9 +98,13 @@
           c.selectedAccountTabController.update(dto);
         }, { silent: true });
 
-        router.registerRoute('/signin', function (dto) {
-          c.signInController.index(dto);
-        });
+        router.registerRoute('/modal/update', function (dto) {
+          c.modalController.update(dto);
+        }, { silent: true });
+
+        router.registerRoute('/modal/destroy', function (dto) {
+          c.modalController.destroy(dto);
+        }, { silent: true });
 
         router.registerRoute('/postajob', function (dto) {
           c.postAJobController.index(dto);

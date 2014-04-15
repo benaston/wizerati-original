@@ -24,11 +24,11 @@ body[data-modal='1'] #sign-in-modal {
 
 #sign-in-modal-content {
     width: 500px;
-    height: 400px;
+    height: 200px;
     position: absolute;
     top: 44%;
     left: 50%;
-    margin-top: -250px;
+    margin-top: -100px;
     margin-left: -250px;
 }
 
@@ -41,7 +41,6 @@ body[data-modal='1'] #sign-in-modal {
 
 .sign-in {
     position: relative;
-    top: -37px;
 }
 
 body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibility-mode='2'] {
@@ -103,8 +102,8 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibi
 #button-close-sign-in-modal {
     font-size: 3rem;
     position: absolute;
-    top: 30px;
-    right: 30px;
+    top: -60px;
+    right: -60px;
     font-family: ionicons;
     background: transparent;
     border: 0;

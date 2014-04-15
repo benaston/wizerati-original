@@ -300,6 +300,11 @@ body[data-is-mobile-device='false'] .t.hidden {
     float: right;
 }
 
+/*Here because I want to avoid other buttons having this behavior.*/
+.t a:focus, .t a:active {
+    box-shadow: 0 0 0 2px rgb(244, 244, 248) inset;
+}
+
 #result-list-panel header {
     /*background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);*/
     background: rgba(249,249,249,1);

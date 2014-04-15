@@ -1,7 +1,6 @@
 <div id="sign-in-modal">
-    <button id="button-close-sign-in-modal" class="btn">&#xf2bd;</button>
     <div id="sign-in-modal-content">
-        <div class="logo-image"></div>
+        <button form="cancel-sign-in-form" id="button-close-sign-in-modal" class="btn">&#xf2bd;</button>
         <div class="sign-in">
             <form id="frm-action-item-modal-sign-in" method="POST" action="/session/create">
                 <h1 id="sign-in-modal-title">Sign-in to Wizerati</h1>
@@ -25,4 +24,5 @@
             </form>
         </div>
     </div>
+    <form id="cancel-sign-in-form" action="/modal/destroy" method="POST"></form>
 </div>

@@ -3437,6 +3437,57 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function ModalController(uiRootModel) {
+
+    if (!(this instanceof app.ModalController)) {
+      return new app.ModalController(uiRootModel);
+    }
+
+    var that = this,
+        _modalEnum = app.mod('enum').Modal,
+        _uiRootModel = null;
+
+    this.update = function (dto) {
+      try {
+        _uiRootModel.setModal(dto.id);
+      } catch (err) {
+        console.log('ModalController::index ' + err);
+      }
+    };
+
+    this.destroy = function () {
+      try {
+        _uiRootModel.setModal(_modalEnum.None);
+      } catch (err) {
+        console.log('ModalController::destroy ' + err);
+      }
+    };
+
+    function init() {
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _uiRootModel = uiRootModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'ModalController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.ModalController = ModalController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function PostAJobController(uiRootModel) {
 
     if (!(this instanceof app.PostAJobController)) {
@@ -3784,49 +3835,6 @@ window.wizerati = {
   }
 
   app.SessionController = SessionController;
-
-}(wizerati));
-;(function (app) {
-  'use strict';
-
-  function SignInController(uiRootModel) {
-
-    if (!(this instanceof app.SignInController)) {
-      return new app.SignInController(uiRootModel);
-    }
-
-    var that = this,
-        _uiRootModel = null,
-        _modalEnum = wizerati.mod('enum').Modal;
-
-    this.index = function () {
-      try {
-        _uiRootModel.setModal(_modalEnum.SignIn);
-      } catch (err) {
-        console.log('SignInController::index ' + err);
-      }
-    };
-
-    function init() {
-      try {
-        if (!uiRootModel) {
-          throw 'uiRootModel not supplied.';
-        }
-
-        _uiRootModel = uiRootModel;
-
-        that = $.decorate(that, app.mod('decorators').decorators.trace);
-
-        return that;
-      } catch (e) {
-        throw 'SignInController::init ' + e;
-      }
-    }
-
-    return init();
-  }
-
-  app.SignInController = SignInController;
 
 }(wizerati));
 ;(function (app) {
@@ -5751,12 +5759,12 @@ window.wizerati = {
         mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
         mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
         mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
+        mod.modalController = new w.ModalController(m.uiRootModel);
         mod.postAJobController = new w.PostAJobController(m.uiRootModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
         mod.selectedAccountTabController = new w.SelectedAccountTabController(m.accountModel);
         mod.selectedItemController = new w.SelectedItemController(m.resultListModel, m.itemsOfInterestModel, s.readItemService);
-        mod.signInController = new w.SignInController(m.uiRootModel);
       }
       catch (e) {
         throw 'controllerRegistrar::run ' + e;
@@ -6402,9 +6410,13 @@ window.wizerati = {
           c.selectedAccountTabController.update(dto);
         }, { silent: true });
 
-        router.registerRoute('/signin', function (dto) {
-          c.signInController.index(dto);
-        });
+        router.registerRoute('/modal/update', function (dto) {
+          c.modalController.update(dto);
+        }, { silent: true });
+
+        router.registerRoute('/modal/destroy', function (dto) {
+          c.modalController.destroy(dto);
+        }, { silent: true });
 
         router.registerRoute('/postajob', function (dto) {
           c.postAJobController.index(dto);
@@ -7638,7 +7650,7 @@ window.wizerati = {
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');
-      $bFrm.find('.lbl').text('un-bookmark');
+      $bFrm.find('.lbl').text('Un-bookmark');
 
       //Bookmarked items cannot be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -7650,7 +7662,7 @@ window.wizerati = {
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/create');
       $bFrm.find('.btn').removeClass('checked');
-      $bFrm.find('.lbl').text('bookmark');
+      $bFrm.find('.lbl').text('Bookmark');
 
       //Non-bookmarked items can be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -7664,8 +7676,8 @@ window.wizerati = {
       $frmsHide.attr('action', '/hiddenitems/destroy');
       $frmsHide.find('.btn').addClass('checked');
       var $label = $frmsHide.find('.btn ~ .lbl');
-      $label.text('un-hide');
-      $items.addClass('hidden');
+      $label.text('Un-hide');
+      $items.addClass('Hidden');
 
       $items.find('.menu .btn:not(.btn-hide):not(.btn-pin)').attr('disabled', 'disabled');
       $items.find('.menu .btn-pin:not(.checked)').attr('disabled', 'disabled');
@@ -7692,7 +7704,7 @@ window.wizerati = {
       var $frm = that.$elSelectedItemContainer.find('.frm-pin')
       $frm.attr('action', '/itemsofinterest/destroy');
       $frm.find('button').addClass('checked');
-      $frm.find('.lbl').text('un-compare');
+      $frm.find('.lbl').text('Un-compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
           that.Model.getLayout().widthItemOfInterest,
@@ -7708,7 +7720,7 @@ window.wizerati = {
       var $frmPin = $item.find('.frm-pin');
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
-      $frmPin.find('.lbl').text('compare');
+      $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
       if ($item.find('.frm-hide .btn.checked').length) {

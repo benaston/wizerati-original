@@ -131,7 +131,7 @@
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');
-      $bFrm.find('.lbl').text('un-bookmark');
+      $bFrm.find('.lbl').text('Un-bookmark');
 
       //Bookmarked items cannot be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -143,7 +143,7 @@
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/create');
       $bFrm.find('.btn').removeClass('checked');
-      $bFrm.find('.lbl').text('bookmark');
+      $bFrm.find('.lbl').text('Bookmark');
 
       //Non-bookmarked items can be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -157,8 +157,8 @@
       $frmsHide.attr('action', '/hiddenitems/destroy');
       $frmsHide.find('.btn').addClass('checked');
       var $label = $frmsHide.find('.btn ~ .lbl');
-      $label.text('un-hide');
-      $items.addClass('hidden');
+      $label.text('Un-hide');
+      $items.addClass('Hidden');
 
       $items.find('.menu .btn:not(.btn-hide):not(.btn-pin)').attr('disabled', 'disabled');
       $items.find('.menu .btn-pin:not(.checked)').attr('disabled', 'disabled');
@@ -185,7 +185,7 @@
       var $frm = that.$elSelectedItemContainer.find('.frm-pin')
       $frm.attr('action', '/itemsofinterest/destroy');
       $frm.find('button').addClass('checked');
-      $frm.find('.lbl').text('un-compare');
+      $frm.find('.lbl').text('Un-compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
           that.Model.getLayout().widthItemOfInterest,
@@ -201,7 +201,7 @@
       var $frmPin = $item.find('.frm-pin');
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
-      $frmPin.find('.lbl').text('compare');
+      $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
       if ($item.find('.frm-hide .btn.checked').length) {
