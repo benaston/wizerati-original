@@ -302,7 +302,7 @@ body[data-is-mobile-device='false'] .t.hidden {
 
 #result-list-panel header {
     /*background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);*/
-    background: rgb(253, 253, 253);
+    background: rgba(249,249,249,1);
     /*box-shadow: 1px 0 0 1px rgba(12, 9, 23, .37);*/
     border-bottom: 1px solid rgba(0, 95, 167, 0.35); /*we have a subtly blue hue to the border at the top of the page. We avoid box-shadow for perf reasons.*/
     box-sizing: border-box;

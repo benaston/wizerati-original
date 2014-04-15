@@ -279,7 +279,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 .menu-container {
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    background: rgb(253,253,253);
+    background: rgba(249,249,249,1);
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
