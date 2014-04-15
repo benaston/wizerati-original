@@ -23,13 +23,24 @@ body[data-modal='1'] #sign-in-modal {
 }
 
 #sign-in-modal-content {
+    /*width: 500px;*/
+    /*height: 200px;*/
+    /*position: absolute;*/
+    /*top: 44%;*/
+    /*left: 50%;*/
+    /*margin-top: -100px;*/
+    /*margin-left: -250px;*/
+
     width: 500px;
-    height: 200px;
+    height: 300px;
     position: absolute;
     top: 44%;
     left: 50%;
-    margin-top: -100px;
+    margin-top: -150px;
     margin-left: -250px;
+    background: white;
+    box-shadow: 0 0 100px 0 rgba(0,0,0,.2);
+    border-radius: 10px;
 }
 
 #sign-in-modal-container {
@@ -41,10 +52,11 @@ body[data-modal='1'] #sign-in-modal {
 
 .sign-in {
     position: relative;
+    top: 48px;
 }
 
 body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibility-mode='2'] {
-    -webkit-filter: opacity(100%) blur(40px);
+    -webkit-filter: opacity(100%) blur(5px);
     transition: -webkit-filter .1s ease-out;
 }
 
@@ -102,8 +114,10 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibi
 #button-close-sign-in-modal {
     font-size: 3rem;
     position: absolute;
-    top: -60px;
-    right: -60px;
+    /*top: -60px;*/
+    /*right: -60px;*/
+    top: -2px;
+    right: -2px;
     font-family: ionicons;
     background: transparent;
     border: 0;

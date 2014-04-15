@@ -6414,6 +6414,10 @@ window.wizerati = {
           c.modalController.update(dto);
         }, { silent: true });
 
+        router.registerRoute('/signin', function (dto) {
+          c.modalController.update({id: '1'});
+        }, { silent: true });
+
         router.registerRoute('/modal/destroy', function (dto) {
           c.modalController.destroy(dto);
         }, { silent: true });
