@@ -68,7 +68,7 @@ body[data-ui-mode='0'] #search-form-panel hr {
 }
 
 body[data-ui-mode='1'] #search-form {
-    left: 74px; /*width of tab bar*/
+    left: 96px; /*width of tab bar*/
 }
 
 body[data-ui-mode='1'] #search-form-panel {

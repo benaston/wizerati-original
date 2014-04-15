@@ -15,7 +15,7 @@
         _minWidthItemOfInterestSmallScreen = 310,
         _effectiveWidthResultListPanel = 400,
         _effectiveWidthResultListPanelSmallScreen = 245,
-        _widthTabBar = 74,
+        _widthTabBar = 96,
         _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {

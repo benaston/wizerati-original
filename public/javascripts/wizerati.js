@@ -3437,6 +3437,52 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
+  function PostAJobController(uiRootModel) {
+
+    if (!(this instanceof app.PostAJobController)) {
+      return new app.PostAJobController(uiRootModel);
+    }
+
+    var that = this,
+        _uiRootModel = null,
+        _postAJobModel = null,
+        _postAJobTabEnum = wizerati.mod('enum').PostAJobTab,
+        _modalEnum = wizerati.mod('enum').Modal;
+
+    this.index = function (dto) {
+      try {
+        _postAJobModel.setSelectedTab(dto.tab || _postAJobTabEnum.LogInOrSignUp);
+        _uiRootModel.setModal(_modalEnum.SignIn);
+      } catch (err) {
+        console.log('PostAJobController::index ' + err);
+      }
+    };
+
+    function init() {
+      try {
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied.';
+        }
+
+        _uiRootModel = uiRootModel;
+
+        that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        return that;
+      } catch (e) {
+        throw 'PostAJobController::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.PostAJobController = PostAJobController;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
   function SearchController(uiModelPack, searchService, searchControllerHelper) {
 
     if (!(this instanceof app.SearchController)) {
@@ -4581,7 +4627,7 @@ window.wizerati = {
         _minWidthItemOfInterestSmallScreen = 310,
         _effectiveWidthResultListPanel = 400,
         _effectiveWidthResultListPanelSmallScreen = 245,
-        _widthTabBar = 74,
+        _widthTabBar = 96,
         _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {
@@ -5698,13 +5744,14 @@ window.wizerati = {
     run:  function(w, f, l, m, s, p, h, r) {
       try {
         var mod = w.mod('controllers');
+        mod.accountController = new w.AccountController(m.accountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
         mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
         mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
         mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
         mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
         mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
         mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
-        mod.accountController = new w.AccountController(m.accountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
+        mod.postAJobController = new w.PostAJobController(m.uiRootModel);
         mod.searchController = new w.SearchController(p.uiModelPack, s.searchService, h.searchControllerHelper);
         mod.searchFormModeController = new w.SearchFormModeController(m.searchFormModel);
         mod.selectedAccountTabController = new w.SelectedAccountTabController(m.accountModel);
@@ -5782,6 +5829,11 @@ window.wizerati = {
           AccountActivation: '3',
           DeleteFavoriteGroupConfirmationDialog: '4',
           ActionContract: '5'
+        };
+
+        mod.PostAJobTab = {
+          LogInOrSignUp: '0',
+
         };
 
         mod.Tab = {
@@ -6352,6 +6404,10 @@ window.wizerati = {
 
         router.registerRoute('/signin', function (dto) {
           c.signInController.index(dto);
+        });
+
+        router.registerRoute('/postajob', function (dto) {
+          c.postAJobController.index(dto);
         });
 
       } catch (e) {

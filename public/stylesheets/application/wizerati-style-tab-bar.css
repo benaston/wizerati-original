@@ -4,14 +4,16 @@
     left: 0;
     top: 0;
     height: 100%;
-    width: 74px;
-    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(118, 150, 167, 1) 9%, rgba(156, 184, 199, 1) 36%, rgba(161, 188, 203, 1) 42%, rgba(161, 188, 203, 1) 51%, rgba(148, 176, 191, 1) 61%, rgba(87, 120, 136, 1) 89%, rgba(76, 110, 126, 1) 95%, rgba(69, 104, 120, 1) 100%);
+    width: 96px;
+    background: rgb(253,253,253);
     z-index: 5; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
-    box-shadow: 1px 0 1px -1px #0c0917;
+    /*box-shadow: 1px 0 1px -1px #0c0917;*/
     min-height: 660px; /*empirical*/
     -webkit-filter: opacity(0%);
     pointer-events: none;
     -webkit-user-select: none;
+    box-sizing: border-box;
+    border-right: 1px solid rgba(0,95,167,.35);
 }
 
 body[data-ui-mode='1'] #tab-bar {
@@ -19,10 +21,23 @@ body[data-ui-mode='1'] #tab-bar {
     pointer-events: auto;
 }
 
+.i:first-child {
+    border-radius: 5px 5px 0 0;
+    border-top: 1px solid rgba(0, 122, 255, 1);
+}
+
+.i:last-child {
+    border-radius: 0 0 5px 5px;
+}
+
 .i {
+    width: 74px;
+    margin: auto;
     display: block;
-    margin: 20px 0;
+    /*margin: 20px 0;*/
     text-align: center;
+    border: 1px solid rgba(0, 122, 255, 1);
+    border-top: 0;
 }
 
 .i-my-account {
@@ -40,49 +55,74 @@ body[data-ui-mode='1'] #tab-bar {
 }
 
 #tab-bar .lbl {
-    color: whitesmoke;
+    margin-top: -12px;
+    margin-bottom: 11px;
+    color: rgb(0, 122, 255);
 }
 
 #tab-bar .btn {
     position: relative; /*for positioning of after*/
-    color: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, .1);
+    /*color: rgba(255, 255, 255, 1);*/
+    color: rgb(0, 122, 255);
+    /*border-color: rgba(255, 255, 255, .1);*/
 }
 
 .h {
     display: inline-block;
-    width: 74px;
+    width: 100%;
     height: 50px;
     line-height: 50px;
     text-align: center;
     font-family: helvetica-bold, Arial, sans-serif;
-    color: rgba(255, 255, 255, .55);
+    /*color: rgba(255, 255, 255, .55);*/
+    color: #333;
 }
 
-body[data-hover-is-enabled='true'] .h:hover {
-    text-decoration: none;
-    cursor: pointer;
-    color: white;
-}
+/*body[data-hover-is-enabled='true'] .h:hover {*/
+    /*text-decoration: none;*/
+    /*cursor: pointer;*/
+    /*color: white;*/
+/*}*/
 
 body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
-    box-shadow: rgba(255, 255, 255, .4) 0 0 5px 0;
+    /*box-shadow: rgba(255, 255, 255, .4) 0 0 5px 0;*/
     text-decoration: none; /*required for anchor buttons*/
 }
 
-#tab-bar[data-selected-tab='0'] .i:nth-of-type(1) button:after,
-#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) button:after,
-#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) button:after,
-#tab-bar[data-selected-tab='3'] .i:nth-of-type(4) button:after {
-    display: inline-block;
-    position: absolute;
-    content: '';
-    width: 2px;
-    height: 17px;
-    background: #fff;
-    left: -4px;
-    bottom: 24px;
-    /*box-shadow: 0 0 2px 0 white;*/
+/*#tab-bar[data-selected-tab='0'] .i:nth-of-type(1) button:after,*/
+/*#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) button:after,*/
+/*#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) button:after,*/
+/*#tab-bar[data-selected-tab='3'] .i:nth-of-type(4) button:after {*/
+    /*display: inline-block;*/
+    /*position: absolute;*/
+    /*content: '';*/
+    /*width: 2px;*/
+    /*height: 17px;*/
+    /*background: #fff;*/
+    /*left: -4px;*/
+    /*bottom: 24px;*/
+/*}*/
+
+#tab-bar[data-selected-tab='0'] .i:nth-of-type(1),
+#tab-bar[data-selected-tab='1'] .i:nth-of-type(2),
+#tab-bar[data-selected-tab='2'] .i:nth-of-type(3),
+#tab-bar[data-selected-tab='3'] .i:nth-of-type(4) {
+    color: white;
+    background: rgb(0, 122, 255);
+}
+
+#tab-bar[data-selected-tab='0'] .i:nth-of-type(1) .btn,
+#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) .btn,
+#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) .btn,
+#tab-bar[data-selected-tab='3'] .i:nth-of-type(4) .btn {
+    color: white;
+}
+
+#tab-bar[data-selected-tab='0'] .i:nth-of-type(1) .lbl,
+#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) .lbl,
+#tab-bar[data-selected-tab='2'] .i:nth-of-type(3) .lbl,
+#tab-bar[data-selected-tab='3'] .i:nth-of-type(4) .lbl {
+    color: white;
 }
 
 #tab-bar h1 {

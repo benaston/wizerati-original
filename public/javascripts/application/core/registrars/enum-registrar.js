@@ -48,6 +48,11 @@
           ActionContract: '5'
         };
 
+        mod.PostAJobTab = {
+          LogInOrSignUp: '0',
+
+        };
+
         mod.Tab = {
           Search: '0',
           Bookmark: '1',

@@ -102,6 +102,10 @@
           c.signInController.index(dto);
         });
 
+        router.registerRoute('/postajob', function (dto) {
+          c.postAJobController.index(dto);
+        });
+
       } catch (e) {
         throw 'RouteRegistry::registerRoutes threw an exception. ' + e;
       }

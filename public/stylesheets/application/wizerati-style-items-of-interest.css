@@ -11,12 +11,12 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #items-of-interest-p
     display: inline-block;
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     z-index: 0; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
-    -webkit-transform: translate3d(474px, 0, 0); /*needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
+    -webkit-transform: translate3d(496px, 0, 0); /*needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
     opacity: 0;
 }
 
 body[data-items-of-interest-mode='1'] #items-of-interest-panel {
-    -webkit-transform: translate3d(74px, 0, 0);
+    -webkit-transform: translate3d(96px, 0, 0); /*width of tab bar*/
 }
 
 body[data-items-of-interest-mode='1'] .s-i-content {
@@ -25,12 +25,13 @@ body[data-items-of-interest-mode='1'] .s-i-content {
 }
 
 .menu .btn-s.checked {
-    background: rgba(149, 176, 190, .8);
+    /*background: rgba(149, 176, 190, .8);*/
 }
 
 .menu .btn-s {
     position: relative; /*ensure focus indicator works as expected*/
-    color: rgba(255, 255, 255, 1);
+    /*color: rgba(255, 255, 255, 1);*/
+    color: rgb(0, 122, 255);
     border-color: rgba(255, 255, 255, .1);
 }
 
@@ -39,10 +40,10 @@ body[data-hover-is-enabled='true'] .menu .btn-s:enabled:hover {
 }
 
 .menu .btn-s ~ .lbl {
-    color: whitesmoke;
-    position: absolute;
-    top: -5px;
-    right: 32px;
+    color: #007aff;
+    position: relative;
+    margin: auto;
+    margin-top: -15px;
 }
 
 body[data-ui-mode='1'] #items-of-interest-panel {
@@ -232,12 +233,12 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .m-i {
-    width: 97px;
-    top: 5px;
+    width: 85px;
+    top: -12px;
     display: inline-block;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
-    position: relative; /*to enable absolute positioning of label such that box does not overlap other items*/
+    position: relative;
 }
 
 .i-o-i-c {
@@ -278,12 +279,13 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 .menu-container {
     min-width: 305px;
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
+    background: rgb(253,253,253);
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
-    background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);
+    /*background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);*/
     box-sizing: border-box;
-    box-shadow: 1px 0 0px 1px rgba(12, 9, 23, 0.37);
+    border-bottom: 1px solid rgba(0, 95, 167, 0.35); /*we have a subtly blue hue to the border at the top of the page. We avoid box-shadow for perf reasons.*/
 }
 
 #selected-item-container-2 {
@@ -339,7 +341,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 
 .flex-item:nth-child(1) {
     -webkit-order: 0;
-    -webkit-flex: 0 0 77px; /*height of the menu on items of interest*/
+    -webkit-flex: 0 0 62px; /*height of the menu on items of interest*/
     -webkit-align-self: auto;
 }
 

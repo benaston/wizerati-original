@@ -1,18 +1,23 @@
+* {
+    -webkit-font-smoothing: antialiased; /*Fixes a blurry text issue in Chrome*/
+}
+
 a, .a {
-    color: #08c;
+    color: rgb(0, 122, 255);
     text-decoration: none;
 }
 
 body[data-hover-is-enabled='true'] a:hover, body[data-hover-is-enabled='true'] .a:hover {
     outline: 0;
-    color: #005580;
-    text-decoration: underline;
+    /*color: #005580;*/
+    color: rgb(0,99,204);
+    text-decoration: none;
 }
 
 a:focus, a:active, .a:focus, .a:active {
     outline: 0;
     outline-offset: 2px; /*why?*/
-    box-shadow: 0 0 0 2px #eee inset;
+    box-shadow: 0 0 0 2px rgb(244, 244, 248) inset;
 }
 
 blockquote {

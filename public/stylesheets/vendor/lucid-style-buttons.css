@@ -8,7 +8,8 @@
     -webkit-user-select: none;
     text-align: center;
     box-sizing: border-box;
-    border: 1px solid rgba(2, 86, 244, .1);
+    /*border: 1px solid rgba(2, 86, 244, .1);*/
+    border: 0;
     display: inline-block;
     transition: border-color 0.1s ease-out .2s, box-shadow .1s ease-out, border-left-width .2s ease-out;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /*removes dark active overlay when tapping buttons on ios*/
@@ -154,7 +155,7 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 
 /*Rotates and border-color changes when waiting*/
 .rotating-button-container > .btn[data-is-waiting='true'] {
-    box-shadow: 0 2px 0 2px rgba(0,0,0,.05) inset;
+    box-shadow: 0 2px 0 2px rgba(0, 0, 0, .05) inset;
     -webkit-animation-duration: 2.5s;
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: 1;

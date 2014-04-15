@@ -13,9 +13,9 @@ label.radio {
 }
 
 button.checked, .btn.checked {
-    background-color: rgba(0, 109, 204, 0.95);
-    color: white;
-    box-shadow: none;
+    /*background-color: rgba(0, 109, 204, 0.95);*/
+    /*color: white;*/
+    /*box-shadow: none;*/
 }
 
 .form-button-container {
