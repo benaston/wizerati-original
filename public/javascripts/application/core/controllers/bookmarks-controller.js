@@ -19,6 +19,7 @@
 
     this.index = function (dto) {
       try {
+        _uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_bookmarksHavePreviouslyBeenRetrieved) {
           _bookmarksHavePreviouslyBeenRetrieved = true;

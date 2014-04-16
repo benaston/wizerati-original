@@ -19,16 +19,9 @@
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.render();
     };
 
     this.bindEvents = function () {
-      //We set the previous URL on the root UI model for use by the cancel button on the sign in modal.
-      //This 'hack' is used to circumvent the limitations of the HTML5 history API.
-      var $btn = that.$el.find('#sign-in-out-form');
-      $btn.on('submit', function (e) {
-        _uiRootModel.setPreviousUrl(location.pathname + location.search);
-      });
     };
 
     this.render = function (e) {

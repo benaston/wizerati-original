@@ -20,6 +20,8 @@
 
     this.show = function (dto) {
       try {
+        _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
+
         if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
@@ -41,6 +43,8 @@
     };
 
     this.edit = function (dto) {
+      _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
+
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
         _helper.resetUIForSearch();

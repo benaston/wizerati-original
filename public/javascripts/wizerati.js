@@ -3061,6 +3061,7 @@ window.wizerati = {
 
     this.index = function (dto) {
       try {
+        _uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
         _accountModel.setSelectedTab(dto.tab || _accountTabEnum.MyDetails);
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_myAccountHasPreviouslyBeenRetrieved) {
@@ -3192,6 +3193,7 @@ window.wizerati = {
 
     this.index = function (dto) {
       try {
+        _uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
         _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
         if (!_bookmarksHavePreviouslyBeenRetrieved) {
           _bookmarksHavePreviouslyBeenRetrieved = true;
@@ -3287,6 +3289,7 @@ window.wizerati = {
 
     this.index = function (dto) {
       //if external get state from local storage...
+      _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
@@ -3614,6 +3617,8 @@ window.wizerati = {
 
     this.show = function (dto) {
       try {
+        _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
+
         if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
@@ -3635,6 +3640,8 @@ window.wizerati = {
     };
 
     this.edit = function (dto) {
+      _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
+
       if (dto.__isInvertebrateExternal__) {
         //todo: retrieve from local storage
         _helper.resetUIForSearch();
@@ -8238,16 +8245,9 @@ window.wizerati = {
 
     this.onDomReady = function () {
       that.$el = $(_el);
-      that.render();
     };
 
     this.bindEvents = function () {
-      //We set the previous URL on the root UI model for use by the cancel button on the sign in modal.
-      //This 'hack' is used to circumvent the limitations of the HTML5 history API.
-      var $btn = that.$el.find('#sign-in-out-form');
-      $btn.on('submit', function (e) {
-        _uiRootModel.setPreviousUrl(location.pathname + location.search);
-      });
     };
 
     this.render = function (e) {

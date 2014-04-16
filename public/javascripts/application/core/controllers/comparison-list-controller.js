@@ -17,6 +17,7 @@
 
     this.index = function (dto) {
       //if external get state from local storage...
+      _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
       _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
