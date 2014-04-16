@@ -13,7 +13,7 @@
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 424, /*empirical to stop line-wrap of top menu*/
         _minWidthItemOfInterestSmallScreen = 310,
-        _effectiveWidthResultListPanel = 400,
+        _effectiveWidthResultListPanel = 345,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _widthTabBar = 96,
         _effectiveWidthResultListPanelMinimized = 0;

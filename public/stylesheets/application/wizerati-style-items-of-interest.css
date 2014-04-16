@@ -11,7 +11,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #items-of-interest-p
     display: inline-block;
     height: 100%; /*limits height of items of interest, forcing overflow:scroll*/
     z-index: 0; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
-    -webkit-transform: translate3d(496px, 0, 0); /*needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
+    -webkit-transform: translate3d(441px, 0, 0); /*96 + 345 needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
     opacity: 0;
 }
 
@@ -24,13 +24,8 @@ body[data-items-of-interest-mode='1'] .s-i-content {
     -webkit-transform: translate3d(-100%, 0, 0);
 }
 
-.menu .btn-s.checked {
-    /*background: rgba(149, 176, 190, .8);*/
-}
-
 .menu .btn-s {
     position: relative; /*ensure focus indicator works as expected*/
-    /*color: rgba(255, 255, 255, 1);*/
     color: rgb(0, 122, 255);
     border-color: rgba(255, 255, 255, .1);
 }
@@ -283,7 +278,6 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
-    /*background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0%, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);*/
     box-sizing: border-box;
     border-bottom: 1px solid rgba(0, 95, 167, 0.35); /*we have a subtly blue hue to the border at the top of the page. We avoid box-shadow for perf reasons.*/
 }

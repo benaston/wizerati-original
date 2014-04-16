@@ -48,9 +48,9 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     display: inline-block;
     position: relative; /*required to ensure correct horizontal scrolling behavior*/
     top: 0;
-    left: -400px; /*IMPORTANT: avoid scroll events falling onto this element*/
+    left: -345px; /*IMPORTANT: avoid scroll events falling onto this element*/
     height: 100%;
-    width: 400px;
+    width: 345px;
     margin-left: 96px; /*width of tab bar*/
     vertical-align: top;
     overflow-x: hidden;
