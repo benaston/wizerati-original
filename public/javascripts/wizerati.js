@@ -7797,7 +7797,7 @@ window.wizerati = {
       var $frm = that.$elSelectedItemContainer.find('.frm-pin')
       $frm.attr('action', '/itemsofinterest/destroy');
       $frm.find('.btn').addClass('checked');
-      $frm.find('.btn').html('&#xf320;');
+      $frm.find('.btn').html('&#xf31b;');
       $frm.find('.lbl').text('Un-compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
@@ -7814,7 +7814,7 @@ window.wizerati = {
       var $frmPin = $item.find('.frm-pin');
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
-      $frmPin.find('.btn').html('&#xf321;');
+      $frmPin.find('.btn').html('&#xf31c;');
       $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.

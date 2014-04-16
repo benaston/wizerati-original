@@ -183,7 +183,7 @@ label[for='btn-change-search'] {
 
 .ti.is-bookmark:after {
     font-family: ionicons;
-    content: '\f320';
+    content: '\f15d';
 }
 
 .ti.actioned:after {
@@ -194,7 +194,7 @@ label[for='btn-change-search'] {
 
 .ti.is-in-comparison-list:after {
     font-family: ionicons;
-    content: '\f30e';
+    content: '\f31b';
 }
 
 .t h3 {

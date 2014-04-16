@@ -29,7 +29,7 @@
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-pin-{{= model.id}}" class="btn btn-s a {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
-                            title="{{=model.canAddToComparisonList ? 'Add to/Remove from comparison list' : 'This item is already in your comparison list / You have the maximum number of permitted items in the comparison list / You cannot add hidden items to the comparison list' }}" {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }}>{{=model.isInComparisonList ? '&#xf320;' : '&#xf321;' }}</button>
+                            title="{{=model.canAddToComparisonList ? 'Add to/Remove from comparison list' : 'This item is already in your comparison list / You have the maximum number of permitted items in the comparison list / You cannot add hidden items to the comparison list' }}" {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }}>{{=model.isInComparisonList ? '&#xf31b;' : '&#xf31c;' }}</button>
                     <label class="lbl" for="btn-pin-{{= model.id}}">{{= model.isInComparisonList ? 'Un-compare' : 'Compare' }}</label>
                 </div>
             </form></li>
