@@ -145,7 +145,7 @@ label[for='btn-change-search'] {
     width: 22px;
     font-family: 'glyph';
     text-align: center;
-    color: #999;
+    color: rgba(167, 174, 182 ,1);
 }
 
 .ti.is-unread:after {
@@ -183,7 +183,7 @@ label[for='btn-change-search'] {
 
 .ti.is-bookmark:after {
     font-family: ionicons;
-    content: '\f26b';
+    content: '\f320';
 }
 
 .ti.actioned:after {

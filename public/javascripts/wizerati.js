@@ -7739,6 +7739,7 @@ window.wizerati = {
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');
+      $bFrm.find('.btn').html('&#xf15d;');
       $bFrm.find('.lbl').text('Un-bookmark');
 
       //Bookmarked items cannot be hidden.
@@ -7751,6 +7752,7 @@ window.wizerati = {
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/create');
       $bFrm.find('.btn').removeClass('checked');
+      $bFrm.find('.btn').html('&#xf15c;');
       $bFrm.find('.lbl').text('Bookmark');
 
       //Non-bookmarked items can be hidden.
@@ -7764,6 +7766,7 @@ window.wizerati = {
       var $frmsHide = $items.find('.frm-hide');
       $frmsHide.attr('action', '/hiddenitems/destroy');
       $frmsHide.find('.btn').addClass('checked');
+      $frmsHide.find('.btn').html('&#xf188;');
       var $label = $frmsHide.find('.btn ~ .lbl');
       $label.text('Un-hide');
       $items.addClass('Hidden');
@@ -7782,8 +7785,9 @@ window.wizerati = {
       var $frmsHide = $items.find('.frm-hide');
       $frmsHide.attr('action', '/hiddenitems/create');
       $frmsHide.find('.btn').removeClass('checked');
+      $frmsHide.find('.btn').html('&#xf30f;');
       var $label = $frmsHide.find('.btn ~ .lbl');
-      $label.text('hide');
+      $label.text('Hide');
       $items.removeClass('hidden');
       $items.find('.btn:not(.btn-hide)').removeAttr('disabled');
       $items.find('.btn:not(.btn-hide)').removeClass('disabled');
@@ -7792,7 +7796,8 @@ window.wizerati = {
     this.renderAddItemOfInterest = function (id) {
       var $frm = that.$elSelectedItemContainer.find('.frm-pin')
       $frm.attr('action', '/itemsofinterest/destroy');
-      $frm.find('button').addClass('checked');
+      $frm.find('.btn').addClass('checked');
+      $frm.find('.btn').html('&#xf320;');
       $frm.find('.lbl').text('Un-compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
@@ -7809,6 +7814,7 @@ window.wizerati = {
       var $frmPin = $item.find('.frm-pin');
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
+      $frmPin.find('.btn').html('&#xf321;');
       $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
