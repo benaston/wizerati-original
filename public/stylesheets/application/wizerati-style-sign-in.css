@@ -23,14 +23,6 @@ body[data-modal='1'] #sign-in-modal {
 }
 
 #sign-in-modal-content {
-    /*width: 500px;*/
-    /*height: 200px;*/
-    /*position: absolute;*/
-    /*top: 44%;*/
-    /*left: 50%;*/
-    /*margin-top: -100px;*/
-    /*margin-left: -250px;*/
-
     width: 500px;
     height: 300px;
     position: absolute;
@@ -39,7 +31,7 @@ body[data-modal='1'] #sign-in-modal {
     margin-top: -150px;
     margin-left: -250px;
     background: white;
-    box-shadow: 0 0 100px 0 rgba(0,0,0,.2);
+    box-shadow: 0 0 100px 0 rgba(0, 0, 0, .2);
     border-radius: 10px;
 }
 
@@ -52,7 +44,7 @@ body[data-modal='1'] #sign-in-modal {
 
 .sign-in {
     position: relative;
-    top: 48px;
+    top: 24px;
 }
 
 body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibility-mode='2'] {
@@ -125,4 +117,11 @@ body:not([data-ui-mode='-1']):not([data-modal='-1']) #main-container[data-visibi
     width: 50px;
     height: 50px;
     display: inline-block;
+    z-index: 1; /*Ensure infront of the main content of the modal.*/
+}
+
+.forgotten-password {
+    display: block;
+    text-align: center;
+    margin-top: 42px;
 }

@@ -6,7 +6,7 @@ $(function appStart() {
     return;
   }
 
-  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
+  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati', new window.invertebrate.History()));
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();
   }

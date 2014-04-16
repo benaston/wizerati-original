@@ -103,8 +103,8 @@
         }, { silent: true });
 
         router.registerRoute('/signin', function (dto) {
-          c.modalController.update({id: '1'});
-        }, { silent: true });
+          c.modalController.update(_.extend({id: app.mod('enum').Modal.SignIn }, dto));
+        }, { title: 'Sign In - Wizerati', dtoPopulator: c.modalController.dtoPopulators['/signin'] });
 
         router.registerRoute('/modal/destroy', function (dto) {
           c.modalController.destroy(dto);

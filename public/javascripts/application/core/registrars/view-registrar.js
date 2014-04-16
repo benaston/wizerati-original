@@ -11,7 +11,7 @@
         mod.myAccountView = new w.AccountView(m.accountModel);
         mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
         mod.searchFormView = new w.SearchFormView(m.searchFormModel);
-        mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
+        mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel, m.uiRootModel);
         mod.uiRootView = new w.UIRootView(m.uiRootModel);
       } catch (e) {
         throw 'viewRegistrar::run ' + e;

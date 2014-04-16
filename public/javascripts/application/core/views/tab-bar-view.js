@@ -1,23 +1,34 @@
 (function (app, $, invertebrate) {
   'use strict';
 
-  function TabBarView(model, itemsOfInterestModel, bookmarkListModel) {
+  function TabBarView(model, itemsOfInterestModel, bookmarkListModel, uiRootModel) {
 
     if (!(this instanceof app.TabBarView)) {
-      return new app.TabBarView(model, itemsOfInterestModel, bookmarkListModel);
+      return new app.TabBarView(model, itemsOfInterestModel, bookmarkListModel, uiRootModel);
     }
 
     var that = this,
         _el = '#tab-bar',
         _renderOptimizations = {},
         _itemsOfInterestModel = null,
-        _bookmarkListModel = null;
+        _bookmarkListModel = null,
+        _uiRootModel = null;
 
     this.$el = null;
     this.Model = null;
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.render();
+    };
+
+    this.bindEvents = function () {
+      //We set the previous URL on the root UI model for use by the cancel button on the sign in modal.
+      //This 'hack' is used to circumvent the limitations of the HTML5 history API.
+      var $btn = that.$el.find('#sign-in-out-form');
+      $btn.on('submit', function (e) {
+        _uiRootModel.setPreviousUrl(location.pathname + location.search);
+      });
     };
 
     this.render = function (e) {
@@ -27,6 +38,7 @@
       }
 
       that.renderSetSelectedTab(that.Model.getSelectedTab())
+      that.bindEvents();
     };
 
     this.renderSetSelectedTab = function (tab) {
@@ -63,11 +75,16 @@
           throw 'bookmarkListModel not supplied';
         }
 
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied';
+        }
+
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
 
         _itemsOfInterestModel = itemsOfInterestModel;
         _bookmarkListModel = bookmarkListModel;
+        _uiRootModel = uiRootModel;
 
         _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
         _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;

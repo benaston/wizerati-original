@@ -22,13 +22,18 @@
 
     this.resetUIForAccount = function () {
       try {
-        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-        _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+        //Delaying the resetting of the remainder of the UI avoid the user seeing
+        //the user interface move around unnecessarily.
+        setTimeout(function () {
+          _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+          _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+          _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+          _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+          _uiModelPack.uiRootModel.clearModal();
+          _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+          _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
+        }, 400);
         _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
-        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-        _uiModelPack.uiRootModel.clearModal();
-        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
         _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (e) {

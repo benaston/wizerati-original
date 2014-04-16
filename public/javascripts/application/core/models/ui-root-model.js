@@ -14,7 +14,8 @@
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
-        _areTransitionsEnabled = 'true';
+        _areTransitionsEnabled = 'true',
+        _previousUrl = null;
 
     this.eventUris = { default: 'update://uirootmodel',
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
@@ -55,6 +56,17 @@
 
     this.getUIMode = function () {
       return _uiMode || '';
+    };
+
+    this.getAndClearPreviousUrl = function () {
+      var temp = _previousUrl;
+      _previousUrl = null;
+
+      return temp;
+    };
+
+    this.setPreviousUrl = function(value) {
+      _previousUrl = value;
     };
 
     this.setUIMode = function (value, options) {

@@ -2343,6 +2343,47 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 ;(function (invertebrate) {
   'use strict';
 
+  function History() {
+
+    if (!(this instanceof invertebrate.History)) {
+      return new invertebrate.History();
+    }
+
+    var that = this,
+        _stack = [];
+
+
+    this.push = function (url) {
+      _stack.push(url);
+    };
+
+    this.pop = function () {
+      return _stack.pop();
+    };
+
+    this.getPreviousUrl = function () {
+      if(_stack.length < 2) {
+        return null;
+      }
+
+      return _stack[_stack.length-2];
+    };
+
+
+    function init() {
+      return that;
+    }
+
+    init();
+  }
+
+  invertebrate.History = History;
+}(invertebrate, $, _));
+
+
+;(function (invertebrate) {
+  'use strict';
+
   function Model() {
 
     if (!(this instanceof invertebrate.Model)) {
@@ -2379,6 +2420,10 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
   function Router(defaultPageTitle) {
 
+    if (!(this instanceof invertebrate.Router)) {
+      return new invertebrate.Router(defaultPageTitle);
+    }
+
     var that = this,
         _defaultPageTitle = null,
         _isFirstRouteCall = true;
@@ -2397,11 +2442,11 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     };
 
     this.redirect = function (uri, dto, options) {
-      that.route(uri, dto, options);
+      that.route(uri, dto, options || { isExternal: false });
     };
 
     this.route = function (uri, dto, options) {
-      options = options || {};
+      options = options || { isExternal: false }; //changed from bare object
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -2419,20 +2464,17 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
       }
 
       var route = that.routes[firstMatchingRouteUri];
-      route.options.dtoPopulator = route.options.dtoPopulator || function () {
-        return null;
+      route.options.dtoPopulator = route.options.dtoPopulator || function (dto) {
+        return dto;
       };
       var dto = dto
-          || createDtoFromQueryString(queryString)
-          || route.options.dtoPopulator({})
-          || {};
-      dto.__isInvertebrateExternal__ = options.isExternal;
+          || route.options.dtoPopulator(_.extend(createDtoFromQueryString(queryString), {__isInvertebrateExternal__: options.isExternal}));
 
       //Ensure title changes occur when using back and forward buttons, and on external requests.
       if (!route.options.silent) {
         document.title = route.options.titleFactory(dto) || route.options.title;
       }
-
+      //{'previousUrl': location.pathname + location.search}
       if (options.isExternal) {
         history.replaceState(null, null, route.options.uriTransform(uri, dto));
       } else {
@@ -2493,7 +2535,7 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 
     function createDtoFromQueryString(queryString) {
       if (queryString === '') {
-        return null;
+        return {};
       }
 
       var dto = {};
@@ -2510,35 +2552,39 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
     }
 
     function init() {
-      if (!defaultPageTitle) {
-        throw 'defaultPageTitle not supplied.';
-      }
-
-      _defaultPageTitle = defaultPageTitle;
-
-      //if the models are initialized from local storage before routing begins
-      //then dto populators can be used when coming from an external uri
-      window.addEventListener('popstate', function (e) {
-        //This only works because on Safari - we bypass the issue using a settimeout in the app start.
-        //For opera, this works because the manual call happens second (possibly due to the settimeout in app start).
-        if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
-          _isFirstRouteCall = false;
-          that.route(location.pathname + location.search, null, { isExternal: true });
+      try {
+        if (!defaultPageTitle) {
+          throw 'defaultPageTitle not supplied.';
         }
-      });
 
-      $(document).on('touchstart', 'button, .lbl', function () {
-        $(this).addClass('halo');
-      });
-      $(document).on('touchend', 'button, .lbl', function () {
-        $(this).removeClass('halo');
-      });
+        _defaultPageTitle = defaultPageTitle;
 
-      $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
-          function (evt) {
-            evt.preventDefault();
-          })); //debounce to prevent undesired interaction of double-click on results with double buffering
-      $(document).on('submit', 'form', routeFormSubmission);
+        //if the models are initialized from local storage before routing begins
+        //then dto populators can be used when coming from an external uri
+        window.addEventListener('popstate', function (e) {
+          //This only works because on Safari - we bypass the issue using a settimeout in the app start.
+          //For opera, this works because the manual call happens second (possibly due to the settimeout in app start).
+          if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
+            _isFirstRouteCall = false;
+            that.route(location.pathname + location.search, null, { isExternal: true });
+          }
+        });
+
+        $(document).on('touchstart', 'button, .lbl', function () {
+          $(this).addClass('halo');
+        });
+        $(document).on('touchend', 'button, .lbl', function () {
+          $(this).removeClass('halo');
+        });
+
+        $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
+            function (evt) {
+              evt.preventDefault();
+            })); //debounce to prevent undesired interaction of double-click on results with double buffering
+        $(document).on('submit', 'form', routeFormSubmission);
+      } catch (e) {
+        throw 'Router::init ' + e;
+      }
     }
 
     init();
@@ -3447,21 +3493,34 @@ window.wizerati = {
         _modalEnum = app.mod('enum').Modal,
         _uiRootModel = null;
 
+    this.dtoPopulators = {};
+
     this.update = function (dto) {
       try {
         _uiRootModel.setModal(dto.id);
       } catch (err) {
-        console.log('ModalController::index ' + err);
+        console.log('ModalController::update ' + err);
       }
     };
 
-    this.destroy = function () {
+    this.destroy = function (dto) {
       try {
         _uiRootModel.setModal(_modalEnum.None);
+        app.instance.router.redirect(_uiRootModel.getAndClearPreviousUrl() || '/');
       } catch (err) {
         console.log('ModalController::destroy ' + err);
       }
     };
+
+    function dtoPopulatorSignIn(dto) {
+      //Guard is important. If coming from external URL then the previous URL would be the very page we are visiting,
+      //meaning that when clicking the close button on the sing-in dialog, we navigate back to the dialog.
+      if (location.pathname !== '/signin') {
+        dto.previousUrl = location.pathname + location.search;
+      }
+
+      return dto;
+    }
 
     function init() {
       try {
@@ -3472,6 +3531,8 @@ window.wizerati = {
         _uiRootModel = uiRootModel;
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
+
+        that.dtoPopulators['/signin'] = dtoPopulatorSignIn;
 
         return that;
       } catch (e) {
@@ -4199,13 +4260,18 @@ window.wizerati = {
 
     this.resetUIForAccount = function () {
       try {
-        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-        _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+        //Delaying the resetting of the remainder of the UI avoid the user seeing
+        //the user interface move around unnecessarily.
+        setTimeout(function () {
+          _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+          _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+          _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+          _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+          _uiModelPack.uiRootModel.clearModal();
+          _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+          _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
+        }, 400);
         _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
-        _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-        _uiModelPack.uiRootModel.clearModal();
-        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
         _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
         _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (e) {
@@ -5396,7 +5462,8 @@ window.wizerati = {
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
-        _areTransitionsEnabled = 'true';
+        _areTransitionsEnabled = 'true',
+        _previousUrl = null;
 
     this.eventUris = { default: 'update://uirootmodel',
       setVisibilityMode: 'update://uirootmodel/setvisibilitymode',
@@ -5437,6 +5504,17 @@ window.wizerati = {
 
     this.getUIMode = function () {
       return _uiMode || '';
+    };
+
+    this.getAndClearPreviousUrl = function () {
+      var temp = _previousUrl;
+      _previousUrl = null;
+
+      return temp;
+    };
+
+    this.setPreviousUrl = function(value) {
+      _previousUrl = value;
     };
 
     this.setUIMode = function (value, options) {
@@ -6097,7 +6175,7 @@ window.wizerati = {
         mod.myAccountView = new w.AccountView(m.accountModel);
         mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
         mod.searchFormView = new w.SearchFormView(m.searchFormModel);
-        mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel);
+        mod.tabBarView = new w.TabBarView(m.tabBarModel, m.itemsOfInterestModel, m.bookmarkListModel, m.uiRootModel);
         mod.uiRootView = new w.UIRootView(m.uiRootModel);
       } catch (e) {
         throw 'viewRegistrar::run ' + e;
@@ -6415,8 +6493,8 @@ window.wizerati = {
         }, { silent: true });
 
         router.registerRoute('/signin', function (dto) {
-          c.modalController.update({id: '1'});
-        }, { silent: true });
+          c.modalController.update(_.extend({id: app.mod('enum').Modal.SignIn }, dto));
+        }, { title: 'Sign In - Wizerati', dtoPopulator: c.modalController.dtoPopulators['/signin'] });
 
         router.registerRoute('/modal/destroy', function (dto) {
           c.modalController.destroy(dto);
@@ -8142,23 +8220,34 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function TabBarView(model, itemsOfInterestModel, bookmarkListModel) {
+  function TabBarView(model, itemsOfInterestModel, bookmarkListModel, uiRootModel) {
 
     if (!(this instanceof app.TabBarView)) {
-      return new app.TabBarView(model, itemsOfInterestModel, bookmarkListModel);
+      return new app.TabBarView(model, itemsOfInterestModel, bookmarkListModel, uiRootModel);
     }
 
     var that = this,
         _el = '#tab-bar',
         _renderOptimizations = {},
         _itemsOfInterestModel = null,
-        _bookmarkListModel = null;
+        _bookmarkListModel = null,
+        _uiRootModel = null;
 
     this.$el = null;
     this.Model = null;
 
     this.onDomReady = function () {
       that.$el = $(_el);
+      that.render();
+    };
+
+    this.bindEvents = function () {
+      //We set the previous URL on the root UI model for use by the cancel button on the sign in modal.
+      //This 'hack' is used to circumvent the limitations of the HTML5 history API.
+      var $btn = that.$el.find('#sign-in-out-form');
+      $btn.on('submit', function (e) {
+        _uiRootModel.setPreviousUrl(location.pathname + location.search);
+      });
     };
 
     this.render = function (e) {
@@ -8168,6 +8257,7 @@ window.wizerati = {
       }
 
       that.renderSetSelectedTab(that.Model.getSelectedTab())
+      that.bindEvents();
     };
 
     this.renderSetSelectedTab = function (tab) {
@@ -8204,11 +8294,16 @@ window.wizerati = {
           throw 'bookmarkListModel not supplied';
         }
 
+        if (!uiRootModel) {
+          throw 'uiRootModel not supplied';
+        }
+
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
 
         _itemsOfInterestModel = itemsOfInterestModel;
         _bookmarkListModel = bookmarkListModel;
+        _uiRootModel = uiRootModel;
 
         _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
         _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
@@ -8370,7 +8465,7 @@ window.wizerati = {
     return;
   }
 
-  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
+  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati', new window.invertebrate.History()));
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();
   }

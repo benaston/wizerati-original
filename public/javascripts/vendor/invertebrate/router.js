@@ -3,6 +3,10 @@
 
   function Router(defaultPageTitle) {
 
+    if (!(this instanceof invertebrate.Router)) {
+      return new invertebrate.Router(defaultPageTitle);
+    }
+
     var that = this,
         _defaultPageTitle = null,
         _isFirstRouteCall = true;
@@ -21,11 +25,11 @@
     };
 
     this.redirect = function (uri, dto, options) {
-      that.route(uri, dto, options);
+      that.route(uri, dto, options || { isExternal: false });
     };
 
     this.route = function (uri, dto, options) {
-      options = options || {};
+      options = options || { isExternal: false }; //changed from bare object
 
       var splitUri = uri.split('?');
       var uriWithoutQueryString = splitUri[0];
@@ -43,20 +47,17 @@
       }
 
       var route = that.routes[firstMatchingRouteUri];
-      route.options.dtoPopulator = route.options.dtoPopulator || function () {
-        return null;
+      route.options.dtoPopulator = route.options.dtoPopulator || function (dto) {
+        return dto;
       };
       var dto = dto
-          || createDtoFromQueryString(queryString)
-          || route.options.dtoPopulator({})
-          || {};
-      dto.__isInvertebrateExternal__ = options.isExternal;
+          || route.options.dtoPopulator(_.extend(createDtoFromQueryString(queryString), {__isInvertebrateExternal__: options.isExternal}));
 
       //Ensure title changes occur when using back and forward buttons, and on external requests.
       if (!route.options.silent) {
         document.title = route.options.titleFactory(dto) || route.options.title;
       }
-
+      //{'previousUrl': location.pathname + location.search}
       if (options.isExternal) {
         history.replaceState(null, null, route.options.uriTransform(uri, dto));
       } else {
@@ -117,7 +118,7 @@
 
     function createDtoFromQueryString(queryString) {
       if (queryString === '') {
-        return null;
+        return {};
       }
 
       var dto = {};
@@ -134,35 +135,39 @@
     }
 
     function init() {
-      if (!defaultPageTitle) {
-        throw 'defaultPageTitle not supplied.';
-      }
-
-      _defaultPageTitle = defaultPageTitle;
-
-      //if the models are initialized from local storage before routing begins
-      //then dto populators can be used when coming from an external uri
-      window.addEventListener('popstate', function (e) {
-        //This only works because on Safari - we bypass the issue using a settimeout in the app start.
-        //For opera, this works because the manual call happens second (possibly due to the settimeout in app start).
-        if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
-          _isFirstRouteCall = false;
-          that.route(location.pathname + location.search, null, { isExternal: true });
+      try {
+        if (!defaultPageTitle) {
+          throw 'defaultPageTitle not supplied.';
         }
-      });
 
-      $(document).on('touchstart', 'button, .lbl', function () {
-        $(this).addClass('halo');
-      });
-      $(document).on('touchend', 'button, .lbl', function () {
-        $(this).removeClass('halo');
-      });
+        _defaultPageTitle = defaultPageTitle;
 
-      $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
-          function (evt) {
-            evt.preventDefault();
-          })); //debounce to prevent undesired interaction of double-click on results with double buffering
-      $(document).on('submit', 'form', routeFormSubmission);
+        //if the models are initialized from local storage before routing begins
+        //then dto populators can be used when coming from an external uri
+        window.addEventListener('popstate', function (e) {
+          //This only works because on Safari - we bypass the issue using a settimeout in the app start.
+          //For opera, this works because the manual call happens second (possibly due to the settimeout in app start).
+          if (_isFirstRouteCall && e._args && e._args.isTriggeredManually || !_isFirstRouteCall) {
+            _isFirstRouteCall = false;
+            that.route(location.pathname + location.search, null, { isExternal: true });
+          }
+        });
+
+        $(document).on('touchstart', 'button, .lbl', function () {
+          $(this).addClass('halo');
+        });
+        $(document).on('touchend', 'button, .lbl', function () {
+          $(this).removeClass('halo');
+        });
+
+        $(document).on('click', 'a:not([data-bypass-router="true"])', $.debounce(routeHyperlink, 500, true,
+            function (evt) {
+              evt.preventDefault();
+            })); //debounce to prevent undesired interaction of double-click on results with double buffering
+        $(document).on('submit', 'form', routeFormSubmission);
+      } catch (e) {
+        throw 'Router::init ' + e;
+      }
     }
 
     init();
