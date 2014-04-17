@@ -188,6 +188,10 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
         width: 36px;
     }
 
+    .i-sign-out {
+        bottom: 5px;
+    }
+
     #tab-bar h1:after {
         content: '\f322';
         display: block;
