@@ -57,19 +57,22 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     overflow-x: hidden;
     overflow-y: scroll;
     z-index: 2; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
-    box-shadow: none;
+    /*box-shadow: none;*/
     background-color: white;
     -webkit-filter: opacity(0%); /*attempt to avoid flash of visibility on greenfield*/
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
     pointer-events: none;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+    border-right: none;
 }
 
 body[data-ui-mode='1'] #bookmark-list-panel-container[data-mode='0']  #bookmark-list-panel {
     -webkit-filter: opacity(100%);
-    box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
+    /*box-shadow: 1px 0 1px -1px rgb(12, 9, 23);*/
     left: 0;
     pointer-events: auto;
+    border-right: 1px solid rgba(160, 159, 164, .7);
 }
 
 /*h1 for the result list does not follow default h1 styling*/
@@ -134,6 +137,10 @@ body[data-is-mobile-device='false'] .bookmark-period.hidden {
 }
 
 /*"narrow-screen" devices like iphone*/
+/*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
-
+    #bookmark-list-panel {
+        width: 200px;
+        margin-left: 45px;
+    }
 }

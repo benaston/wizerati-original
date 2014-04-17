@@ -167,6 +167,28 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     }
 
     #tab-bar {
-        min-height: 508px !important;
+        min-height: 468px !important;
+    }
+}
+
+
+/*"narrow-screen" devices like iphone*/
+/*media queries must be on a single lime to avoid safari bug*/
+@media only screen and (max-device-width: 568px) {
+    #tab-bar {
+        width: 45px; /*height of lower panel on iOS Safari*/
+    }
+
+    #tab-bar .i {
+        width: 36px;
+    }
+
+    #tab-bar .i .btn,
+    .i-sign-out .btn {
+        width: 36px;
+    }
+
+    #tab-bar h1 {
+        font-size: .7rem;
     }
 }

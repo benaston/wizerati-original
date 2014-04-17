@@ -174,10 +174,10 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     font-size: .95rem;
 }
 
-.table-container {
-    min-width: 358px;
-    text-align: right;
-}
+/*.table-container {*/
+    /*min-width: 358px;*/
+    /*text-align: right;*/
+/*}*/
 
 .s-i .table-bordered, .p-i .table-bordered {
     margin-top: 0;
@@ -272,9 +272,9 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .menu-container {
-    min-width: 305px;
+    /*min-width: 305px;*/
     position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    background: rgba(249,249,249,1);
+    background: rgba(249, 249, 249, 1);
     /*required to circumvent transform z-index bug in webkit when transforms applied*/
     z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
     -webkit-backface-visibility: hidden;
@@ -320,9 +320,10 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .frm-bookmark .lbl, .frm-pin .lbl {
-    white-space:nowrap !important; /*avoid wrapping 'un-bookmark'*/
+    white-space: nowrap !important; /*avoid wrapping 'un-bookmark'*/
 
 }
+
 /*safari does not yet support prefix-less flexbox styles*/
 .flex-container {
     display: -webkit-flex;
@@ -348,7 +349,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .i-o-i-t {
-    min-width: 250px;
+    /*min-width: 250px;*/
     display: block;
 }
 
@@ -376,18 +377,35 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
     font-family: helvetica-pro-light;
     font-size: .8rem;
     color: rgb(116, 148, 165);
-    background-color: rgba(149,176,190,.8);
-    border-color: rgba(255,255,255,.05);
+    background-color: rgba(149, 176, 190, .8);
+    border-color: rgba(255, 255, 255, .05);
 }
 
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
-    /*.menu-container {*/
-        /*min-width: 120px;*/
-    /*}*/
+    #items-of-interest-panel {
+        -webkit-transform: translate3d(245px, 0, 0); /*96 + 200 needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
+    }
 
-    /*.m-i {*/
-        /*width: 82px; *//*force two up/two down for aesthetic*/
-    /*}*/
+    .m-i {
+        top: -10px;
+        width: 65px;
+    }
+
+    .m-i .btn {
+        width: 65px;
+    }
+
+    .m-i .lbl {
+        display: none;
+    }
+
+    .flex-item:nth-child(1) {
+        -webkit-flex: 0 0 45px; /*height of lower menu on iOS Safari*/
+    }
+
+    .empty-message-container {
+        width: 85px;
+    }
 }

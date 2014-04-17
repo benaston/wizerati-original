@@ -40,11 +40,12 @@ body[data-ui-mode='0'] #result-list-panel-container {
     vertical-align: top;
     z-index: 1; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
     background-color: white; /*avoids visibility of items sliding in from behind panel*/
-    box-shadow: 1px 0 1px -1px rgb(12, 9, 23);
+    /*box-shadow: 1px 0 1px -1px rgb(12, 9, 23);*/
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-
+    box-sizing: border-box;
+    border-right: 1px solid rgba(160, 159, 164, .7);
 }
 
 body[data-ui-mode='1'] #result-list-panel-container[data-mode='0']  #result-list-panel {
@@ -92,9 +93,9 @@ body[data-ui-mode='1'] #result-list-panel {
 #r-l-s-s-c-h1 {
     position: relative;
     width: 280px; /*empirical*/
-    height: 77px;
+    height: 61px; /*empirical*/
     margin: 0;
-    padding: 9px 0 0 15px;
+    padding: 9px 0 0 10px;
     font-size: inherit;
     font-family: inherit;
     white-space: nowrap;
@@ -102,7 +103,6 @@ body[data-ui-mode='1'] #result-list-panel {
     overflow: hidden;
     line-height: 1.5rem;
     box-sizing: border-box;
-    /*color: white;*/
     color: rgb(172, 174, 175);
 }
 
@@ -111,6 +111,8 @@ body[data-ui-mode='1'] #result-list-panel {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    display: inline-block;
+    width: 100%; /*required for ellipsis*/
 }
 
 #frm-edit-search {
@@ -120,9 +122,10 @@ body[data-ui-mode='1'] #result-list-panel {
 }
 
 label[for='btn-change-search'] {
-    line-height: 63px; /*empirical v centering*/
+    line-height: 62px; /*empirical v centering*/
     padding: 2px 15px 0 0;
     color: rgb(0, 122, 255);
+    box-sizing: border-box;
 }
 
 .result-list-search-summary-container {
@@ -146,7 +149,7 @@ label[for='btn-change-search'] {
     width: 22px;
     font-family: 'glyph';
     text-align: center;
-    color: rgba(167, 174, 182 ,1);
+    color: rgba(167, 174, 182, 1);
 }
 
 .ti.is-unread:after {
@@ -217,10 +220,6 @@ label[for='btn-change-search'] {
     color: #333;
 }
 
-/*body[data-hover-is-enabled='true'] label[for='btn-change-search']:hover {*/
-/*color: white;*/
-/*}*/
-
 body[data-hover-is-enabled='true'] .t a:hover {
     text-decoration: none;
     color: #333;
@@ -255,7 +254,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
     overflow: hidden;
     -webkit-user-select: none;
     line-height: 1.5; /*important for resetting this with a line-height of 0 for the list itself*/
-    max-height: 250px; /*larger than it will ever get*/
+    max-height: 350px; /*larger than it will ever get*/
 }
 
 .t.hidden {
@@ -308,7 +307,7 @@ body[data-is-mobile-device='false'] .t.hidden {
 
 #result-list-panel header {
     /*background: -webkit-linear-gradient(top, rgba(110, 143, 160, 1) 0, rgba(117, 149, 166, 1) 61%, rgba(126, 157, 173, 1) 100%);*/
-    background: rgba(249,249,249,1);
+    background: rgba(249, 249, 249, 1);
     /*box-shadow: 1px 0 0 1px rgba(12, 9, 23, .37);*/
     border-bottom: 1px solid rgba(0, 95, 167, 0.35); /*we have a subtly blue hue to the border at the top of the page. We avoid box-shadow for perf reasons.*/
     box-sizing: border-box;
@@ -320,5 +319,9 @@ body[data-is-mobile-device='false'] .t.hidden {
 @media only screen and (max-device-width: 568px) {
     #result-list-panel {
         width: 200px;
+        margin-left: 45px;
+    }
+    #r-l-s-s-c-h1 {
+        width: 145px; /*empirical*/
     }
 }

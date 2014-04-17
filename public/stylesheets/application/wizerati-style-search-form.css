@@ -238,3 +238,28 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         margin-top: -105px;
     }
 }
+
+/*"narrow-screen" devices like iphone*/
+/*media queries must be on a single lime to avoid safari bug*/
+@media only screen and (max-device-width: 568px) {
+    #search-form {
+        left: 45px;
+    }
+
+    #keywords {
+        padding-right: 69px;
+    }
+
+    #keywords,
+    .search-filters {
+        width: 236px;
+    }
+
+    #search-buttons-container {
+        left: 170px;
+    }
+
+    .cancel-button-container {
+        display: none;
+    }
+}

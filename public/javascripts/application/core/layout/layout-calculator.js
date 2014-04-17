@@ -12,9 +12,9 @@
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 350, /*empirical to stop line-wrap of top menu*/
-        _minWidthItemOfInterestSmallScreen = 350,
+        _minWidthItemOfInterestSmallScreen = 275, /*empirical*/
         _effectiveWidthResultListPanel = 327,
-        _effectiveWidthResultListPanelSmallScreen = 245,
+        _effectiveWidthResultListPanelSmallScreen = 200,
         _widthTabBar = 96,
         _effectiveWidthResultListPanelMinimized = 0;
 
