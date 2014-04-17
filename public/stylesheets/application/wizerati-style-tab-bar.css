@@ -161,13 +161,13 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     width: 100%; /*ensure buttons centered even when labels not present*/
 }
 
-@media only screen and (max-height: 610px) {
+@media only screen and (max-device-height: 568px) {
     #tab-bar .btn-s ~ .lbl, #tab-bar .btn-s > .lbl {
         display: none;
     }
 
     #tab-bar {
-        min-height: 468px !important;
+        min-height: 320px !important; /*iPhone landscape*/
     }
 }
 
@@ -182,13 +182,18 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
         width: 36px;
     }
 
+    #tab-bar .i .btn {
+        line-height: 60px; /*Reduced height helps with landscape on iPhone*/
+        height: 60px; /*Reduced height helps with landscape on iPhone*/
+    }
+
     #tab-bar .i .btn,
     .i-sign-out .btn {
         width: 36px;
     }
 
     .i-sign-out {
-        bottom: 5px;
+        bottom: 0px;
     }
 
     #tab-bar h1:after {
@@ -210,5 +215,15 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
 
     #btn-nav-comparison-list[data-count='1/4']::before {
         box-shadow: 8px 0 0 0 rgba(255, 255, 255, 1), 16px 0 0 0 rgba(255, 255, 255, 1), 24px 0 0 0 rgba(255, 255, 255, 1), 24px 0 0 1px rgba(0, 122, 255, 1), 16px 0 0 1px rgba(0, 122, 255, 1), 8px 0 0 1px rgba(0, 122, 255, 1), 0 0 0 1px rgba(0, 122, 255, 1);
+    }
+}
+
+@media only screen and (max-device-height: 568px ) and (orientation:landscape) {
+    #tab-bar ul:first-of-type {
+        margin-top: 5px;
+    }
+
+    #tab-bar h1:after {
+        display: none !important;
     }
 }

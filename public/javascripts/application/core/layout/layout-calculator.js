@@ -16,10 +16,12 @@
         _effectiveWidthResultListPanel = 327,
         _effectiveWidthResultListPanelSmallScreen = 200,
         _widthTabBar = 96,
+        _widthTabBarSmallScreen = 45,
         _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {
       var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+      console
       /*mobile devices sometimes don't have innerWidth apparently*/
       /*todo: if width less than certain value, assume phone and set a public property somewhere so that phone-like behavior can be used*/
       var minWidthItemOfInterestForDevice = viewPortWidth <= 568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
@@ -29,14 +31,14 @@
       var newWidth = minWidthItemOfInterestForDevice;
       var mode = itemsOfInterestModel.getMode();
 
-      var widthTabBar = _widthTabBar;
+      var effectiveWidthTabBar = viewPortWidth <= 568 ? _widthTabBarSmallScreen : _widthTabBar;
 
       var effectiveWidthResultListPanel = effectiveWidthResultListPanelForDevice;
       if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         effectiveWidthResultListPanel = _effectiveWidthResultListPanelMinimized;
       }
 
-      var widthTakenByTabBarAndResultListPanel = widthTabBar + effectiveWidthResultListPanel;
+      var widthTakenByTabBarAndResultListPanel = effectiveWidthTabBar + effectiveWidthResultListPanel;
 
 
       if (mode === _itemsOfInterestModeEnum.Default) {

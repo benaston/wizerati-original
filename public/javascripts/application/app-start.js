@@ -15,6 +15,9 @@ $(function appStart() {
   window.addEventListener('resize', function () {
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
   });
+  window.addEventListener('orientationchange', function () {
+    window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
+  });
 
   wizerati.mod('routing').routeRegistry.registerRoutes(window.wizerati.instance.router); //happens last to ensure init complete before routing start
 
