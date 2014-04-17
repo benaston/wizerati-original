@@ -8430,7 +8430,7 @@ window.wizerati = {
     };
 
     this.renderSetScrollLeft = function (left, done) {
-      that.$el.scrollToX({endX: left, duration: 1000, done: done});
+      that.$el.scrollToX({endX: left, duration: 500, done: done});
     };
 
     function init() {
