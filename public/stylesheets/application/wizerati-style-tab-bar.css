@@ -184,8 +184,8 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
 
     #tab-bar .i .btn,
     #tab-bar .i-sign-out .btn {
-        line-height: 60px; /*Reduced height helps with landscape on iPhone*/
-        height: 60px; /*Reduced height helps with landscape on iPhone*/
+        line-height: 58px; /*Reduced height helps with landscape on iPhone*/
+        height: 58px; /*Reduced height helps with landscape on iPhone*/
     }
 
     #tab-bar .i .btn,
