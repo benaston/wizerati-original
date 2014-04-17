@@ -393,6 +393,10 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
         -webkit-transform: translate3d(245px, 0, 0); /*96 + 200 needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
     }
 
+    body[data-items-of-interest-mode='1'] #items-of-interest-panel {
+        -webkit-transform: translate3d(45px, 0, 0); /*width of tab bar*/
+    }
+
     .m-i {
         top: -10px;
         width: 65px;

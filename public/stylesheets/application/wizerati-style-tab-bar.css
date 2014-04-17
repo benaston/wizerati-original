@@ -167,7 +167,7 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     }
 
     #tab-bar {
-        min-height: 320px !important; /*iPhone landscape*/
+        min-height: 300px !important; /*iPhone landscape - minus status bar - note tethering not supported here!*/
     }
 }
 
