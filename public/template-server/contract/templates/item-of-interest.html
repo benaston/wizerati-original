@@ -49,7 +49,9 @@
                 </ul>
                 <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
             </div>
-            <hr class="i-o-i-hr">
+            <div class="i-o-i-p-c-hr">
+                <hr class="i-o-i-hr">
+            </div>
             <div class="i-o-i-p-c">
                 <h4>Job Description</h4>
                 {{= model.summary }}
