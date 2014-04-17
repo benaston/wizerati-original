@@ -381,6 +381,10 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
     border-color: rgba(255, 255, 255, .05);
 }
 
+.i-o-i-c p {
+    margin-bottom: 10px;
+}
+
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
