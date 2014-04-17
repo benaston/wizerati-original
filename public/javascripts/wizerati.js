@@ -4705,7 +4705,7 @@ window.wizerati = {
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
         _minWidthItemOfInterest = 424, /*empirical to stop line-wrap of top menu*/
-        _minWidthItemOfInterestSmallScreen = 310,
+        _minWidthItemOfInterestSmallScreen = 363,
         _effectiveWidthResultListPanel = 327,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _widthTabBar = 96,
@@ -4734,6 +4734,7 @@ window.wizerati = {
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
+        console.log('viewPortWidth (%s) - widthTakenByTabBarAndResultListPanel (%s)', viewPortWidth, widthTakenByTabBarAndResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         if ((widthTakenByTabBarAndResultListPanel + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel) / numberOfItemsOfInterest;
