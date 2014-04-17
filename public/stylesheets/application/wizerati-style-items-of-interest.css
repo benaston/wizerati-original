@@ -175,8 +175,8 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 /*.table-container {*/
-    /*min-width: 358px;*/
-    /*text-align: right;*/
+/*min-width: 358px;*/
+/*text-align: right;*/
 /*}*/
 
 .s-i .table-bordered, .p-i .table-bordered {
@@ -236,8 +236,19 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     position: relative;
 }
 
-.i-o-i-c {
+.i-o-i-p-c {
     margin: 15px 25px 30px;
+}
+
+.i-o-i-hr {
+    right: 0;
+    left: 25px;
+    position: relative;
+    width: 100%;
+}
+
+.i-o-i-c {
+    /*margin: 15px 25px 30px;*/
     position: absolute;
 }
 

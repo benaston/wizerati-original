@@ -37,25 +37,29 @@
     </header>
     <div class="flex-item">
         <article class="i-o-i-c {{=model.isHidden ? 'hidden' : '' }}">
-            <h3 class="i-o-i-t">{{= model.title }}</h3>
-            <ul class="info">
-                <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
-                <li><a href="#">{{= model.organization }}</a></li>
-            </ul>
-            <ul class="info">
-                <li>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day</li>
-                <li>{{= model.location }}, <span class="country">{{= model.country }}</span></li>
-            </ul>
-            <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
-            <h4>Job Description</h4>
-            {{= model.summary }}
-            <h4>About You</h4>
-            {{= model.aboutYou }}
-            <h4>About Us</h4>
-            {{= model.aboutOrganization }}
-            <h4>Contact</h4>
-            <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }} (ref. {{= model.ref }})</div>
-            <hr>
+            <div class="i-o-i-p-c">
+                <h3 class="i-o-i-t">{{= model.title }}</h3>
+                <ul class="info">
+                    <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
+                    <li><a href="#">{{= model.organization }}</a></li>
+                </ul>
+                <ul class="info">
+                    <li>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day</li>
+                    <li>{{= model.location }}, <span class="country">{{= model.country }}</span></li>
+                </ul>
+                <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
+            </div>
+            <hr class="i-o-i-hr">
+            <div class="i-o-i-p-c">
+                <h4>Job Description</h4>
+                {{= model.summary }}
+                <h4>About You</h4>
+                {{= model.aboutYou }}
+                <h4>About Us</h4>
+                {{= model.aboutOrganization }}
+                <h4>Contact</h4>
+                <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }} (ref. {{= model.ref }})</div>
+            </div>
         </article>
     </div>
 </div>{{

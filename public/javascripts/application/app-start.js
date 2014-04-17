@@ -15,6 +15,7 @@ $(function appStart() {
   window.addEventListener('resize', function () {
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
   });
+  //We need to recalculate the layout when an iOS device changes orientation.
   window.addEventListener('orientationchange', function () {
     window.wizerati.mod('layout').layoutCoordinator.applyLayout(window.wizerati.mod('layout').layoutCalculator.calculate());
   });
