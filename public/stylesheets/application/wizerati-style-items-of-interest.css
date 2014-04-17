@@ -228,7 +228,7 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .m-i {
-    width: 85px;
+    width: 84px;
     top: -12px;
     display: inline-block;
     text-align: center;
@@ -358,7 +358,7 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
 
 .empty-message-container {
     visibility: hidden;
-    width: 291px; /*empirical - because we are maintaining this in the flow of the document, we need to make it narrow enough to ensure it never pushes pushes beyond a narrow selected item*/
+    width: 285px; /*empirical - because we are maintaining this in the flow of the document, we need to make it narrow enough to ensure it never pushes pushes beyond a narrow selected item*/
     display: inline-block;
     position: absolute; /*avoid affecting pinned items*/
     top: 38%;
@@ -383,11 +383,11 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
 /*"narrow screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
-    .menu-container {
-        min-width: 120px;
-    }
+    /*.menu-container {*/
+        /*min-width: 120px;*/
+    /*}*/
 
-    .m-i {
-        width: 82px; /*force two up/two down for aesthetic*/
-    }
+    /*.m-i {*/
+        /*width: 82px; *//*force two up/two down for aesthetic*/
+    /*}*/
 }
