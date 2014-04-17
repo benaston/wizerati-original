@@ -11,8 +11,8 @@
         _resultListModel = null,
         _bookmarkPanelModel = null,
         _itemsOfInterestModel = null,
-        _minWidthItemOfInterest = 424, /*empirical to stop line-wrap of top menu*/
-        _minWidthItemOfInterestSmallScreen = 363,
+        _minWidthItemOfInterest = 376, /*empirical to stop line-wrap of top menu*/
+        _minWidthItemOfInterestSmallScreen = 376,
         _effectiveWidthResultListPanel = 327,
         _effectiveWidthResultListPanelSmallScreen = 245,
         _widthTabBar = 96,
