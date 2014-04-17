@@ -242,7 +242,7 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
 /*"narrow-screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
-    #search-form {
+    body[data-ui-mode='1'] #search-form {
         left: 45px;
     }
 

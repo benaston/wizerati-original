@@ -321,7 +321,30 @@ body[data-is-mobile-device='false'] .t.hidden {
         width: 200px;
         margin-left: 45px;
     }
+
     #r-l-s-s-c-h1 {
+        height: 45px;
         width: 145px; /*empirical*/
+        line-height: 45px;
+        padding: 3px 0 0 10px;
     }
+
+    .t hr {
+        width: 167px;
+    }
+
+    #search-desc-preamble {
+        display: none;
+    }
+
+    #result-list-panel header,
+    .result-list-search-summary-container {
+        height: 45px;
+    }
+
+    label[for='btn-change-search'] {
+        line-height: 45px;
+        padding: 3px 15px 0 0;
+    }
+
 }
