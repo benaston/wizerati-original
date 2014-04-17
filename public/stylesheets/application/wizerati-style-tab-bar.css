@@ -231,7 +231,7 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
         margin-top: 5px;
     }
 
-    #tab-bar h1:after {
+    #tab-bar h1 {
         display: none !important;
     }
 }
