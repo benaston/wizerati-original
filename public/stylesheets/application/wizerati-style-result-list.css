@@ -254,7 +254,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
     overflow: hidden;
     -webkit-user-select: none;
     line-height: 1.5; /*important for resetting this with a line-height of 0 for the list itself*/
-    max-height: 350px; /*larger than it will ever get*/
+    max-height: 200px; /*larger than it will ever get*/
 }
 
 .t.hidden {
@@ -327,6 +327,10 @@ body[data-is-mobile-device='false'] .t.hidden {
         width: 145px; /*empirical*/
         line-height: 45px;
         padding: 3px 0 0 10px;
+    }
+
+    .t {
+        max-height: 400px; /*larger than it will ever get*/
     }
 
     .t hr {
