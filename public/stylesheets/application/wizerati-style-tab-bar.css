@@ -188,7 +188,16 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
         width: 36px;
     }
 
-    #tab-bar h1 {
-        font-size: .7rem;
+    #tab-bar h1:after {
+        content: '\f322';
+        display: block;
+        font-family: ionicons;
+        font-size: 3rem;
+        text-align: center;
+        color: rgba(0,122,255,1);
+    }
+
+    #tab-bar h1 a {
+        display: none;
     }
 }
