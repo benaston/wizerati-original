@@ -13,6 +13,7 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #items-of-interest-p
     z-index: 0; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
     -webkit-transform: translate3d(423px, 0, 0); /*96 + 327 needed because both bookmarks and result list are in containers of width 0. translate3d might be more performant than translate*/
     opacity: 0;
+    word-break: break-word; /*required to avoid horizontal springy scroll on iOS*/
 }
 
 body[data-items-of-interest-mode='1'] #items-of-interest-panel {
