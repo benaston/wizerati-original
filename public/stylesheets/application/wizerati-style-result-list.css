@@ -330,7 +330,7 @@ body[data-is-mobile-device='false'] .t.hidden {
     }
 
     .t {
-        max-height: 400px; /*larger than it will ever get*/
+        max-height: 450px; /*larger than it will ever get*/
     }
 
     .t hr {
