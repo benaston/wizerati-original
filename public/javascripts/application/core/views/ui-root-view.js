@@ -37,7 +37,7 @@
       }
 
       //We do not enable the fixed position bookmark headers on iOS due to jank.
-      if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+      if ((/(iPad|iPhone|iPod)/g.test(navigator.userAgent))) {
         $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
       }
     };
@@ -58,8 +58,8 @@
       that.$el.attr('data-ui-mode', uiMode);
     };
 
-    this.renderSetScrollLeft = function (left) {
-      that.$el.scrollToX({endX: left, duration: 1000});
+    this.renderSetScrollLeft = function (left, done) {
+      that.$el.scrollToX({endX: left, duration: 1000, done: done});
     };
 
     function init() {

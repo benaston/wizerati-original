@@ -248,7 +248,8 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
     endY: 0,
     endX: 0,
     duration: 2000,
-    updateRate: 15
+    updateRate: 15,
+    done: function() {}
   };
 
   var interpolate = function (source, target, shift) {
@@ -264,13 +265,19 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
 
     if (options.duration === 0) {
       window.scrollTo(0, options.endY);
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
     var startY = window.pageYOffset,
         startT = Date.now(),
         finishT = startT + options.duration;
+
+    //Avoid waiting for the duration of the easing function if there is no scrolling to perform.
+    if(startY === options.endY) {
+      options.done();
+      return;
+    }
 
     var animate = function() {
       var now = Date.now(),
@@ -282,7 +289,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -294,13 +301,19 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
 
     if (options.duration === 0) {
       window.scrollTo(options.endX,0);
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
     var startX = window.pageXOffset,
         startT = Date.now(),
         finishT = startT + options.duration;
+
+    //Avoid waiting for the duration of the easing function if there is no scrolling to perform.
+    if(startX === options.endX) {
+      options.done();
+      return;
+    }
 
     var animate = function() {
       var now = Date.now(),
@@ -312,7 +325,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -324,7 +337,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
 
     if (options.duration === 0) {
       this.scrollTop = options.endX;
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
@@ -332,6 +345,12 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
         startT = Date.now(),
         finishT = startT + options.duration,
         _this = this;
+
+    //Avoid waiting for the duration of the easing function if there is no scrolling to perform.
+    if(startX === options.endX) {
+      options.done();
+      return;
+    }
 
     var animate = function() {
       var now = Date.now(),
@@ -343,7 +362,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -355,7 +374,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
 
     if (options.duration === 0) {
       this.scrollTop = options.endY;
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
@@ -374,7 +393,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[T.call(t)]||"objec
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -3195,14 +3214,18 @@ window.wizerati = {
     this.index = function (dto) {
       try {
         _uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
-        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-        if (!_bookmarksHavePreviouslyBeenRetrieved) {
-          _bookmarksHavePreviouslyBeenRetrieved = true;
-          _bookmarkListModel.setIsWaiting('true');
-          _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
-        } else {
-          _helper.resetUIForBookmarks();
-        }
+
+        //Ensure scroll position is reset gracefully.
+        //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+        _uiRootModel.setScrollLeft(0, function done() {
+          if (!_bookmarksHavePreviouslyBeenRetrieved) {
+            _bookmarksHavePreviouslyBeenRetrieved = true;
+            _bookmarkListModel.setIsWaiting('true');
+            _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
+          } else {
+            _helper.resetUIForBookmarks();
+          }
+        });
       } catch (err) {
         console.log('BookmarksController::index ' + err);
       }
@@ -3291,12 +3314,16 @@ window.wizerati = {
     this.index = function (dto) {
       //if external get state from local storage...
       _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
-      _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
-      _uiModelPack.uiRootModel.clearModal();
+
+      //Ensure scroll position is reset gracefully.
+      //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+      _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
+        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+        _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+        _uiModelPack.uiRootModel.clearModal();
+      });
     };
 
     function init() {
@@ -3625,16 +3652,18 @@ window.wizerati = {
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-        var currentSearchHash = '' + dto.keywords + dto.r;
-
-        if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
-          _previousSearchHash = currentSearchHash;
-          _uiModelPack.searchFormModel.setIsWaiting('true');
-          _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
-        } else {
-          _helper.resetUIForSearch();
-        }
+        //Ensure scroll position is reset gracefully.
+        //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+        _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
+          var currentSearchHash = '' + dto.keywords + dto.r;
+          if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
+            _previousSearchHash = currentSearchHash;
+            _uiModelPack.searchFormModel.setIsWaiting('true');
+            _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
+          } else {
+            _helper.resetUIForSearch();
+          }
+        });
       } catch (err) {
         console.log('SearchController::show ' + err);
       }
@@ -3652,7 +3681,7 @@ window.wizerati = {
     };
 
     function uriTransformShow(uri, dto) {
-      if(uri.indexOf('?') >= 0) { //already has query string
+      if (uri.indexOf('?') >= 0) { //already has query string
         return uri;
       }
 
@@ -5524,7 +5553,7 @@ window.wizerati = {
       return temp;
     };
 
-    this.setPreviousUrl = function(value) {
+    this.setPreviousUrl = function (value) {
       _previousUrl = value;
     };
 
@@ -5542,8 +5571,8 @@ window.wizerati = {
       }
     };
 
-    this.setScrollLeft = function (value) {
-        $.publish(that.eventUris.setScrollLeft, value);
+    this.setScrollLeft = function (value, done) {
+      $.publish(that.eventUris.setScrollLeft, value, done || function() {});
     };
 
     this.getModal = function () {
@@ -5560,7 +5589,7 @@ window.wizerati = {
       }
     };
 
-    this.clearModal = function(){
+    this.clearModal = function () {
       that.setModal(_modalEnum.None);
     };
 
@@ -8379,7 +8408,7 @@ window.wizerati = {
       }
 
       //We do not enable the fixed position bookmark headers on iOS due to jank.
-      if((/(iPad|iPhone|iPod)/g.test( navigator.userAgent ))) {
+      if ((/(iPad|iPhone|iPod)/g.test(navigator.userAgent))) {
         $('body').attr('data-is-mobile-device', 'true'); //Enables disabling of certain "tough" transitions.
       }
     };
@@ -8400,8 +8429,8 @@ window.wizerati = {
       that.$el.attr('data-ui-mode', uiMode);
     };
 
-    this.renderSetScrollLeft = function (left) {
-      that.$el.scrollToX({endX: left, duration: 1000});
+    this.renderSetScrollLeft = function (left, done) {
+      that.$el.scrollToX({endX: left, duration: 1000, done: done});
     };
 
     function init() {

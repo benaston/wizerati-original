@@ -27,16 +27,18 @@
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
         }
 
-        _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-        var currentSearchHash = '' + dto.keywords + dto.r;
-
-        if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
-          _previousSearchHash = currentSearchHash;
-          _uiModelPack.searchFormModel.setIsWaiting('true');
-          _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
-        } else {
-          _helper.resetUIForSearch();
-        }
+        //Ensure scroll position is reset gracefully.
+        //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+        _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
+          var currentSearchHash = '' + dto.keywords + dto.r;
+          if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
+            _previousSearchHash = currentSearchHash;
+            _uiModelPack.searchFormModel.setIsWaiting('true');
+            _searchService.runSearch(dto.keywords, dto.r, _helper.searchSuccess);
+          } else {
+            _helper.resetUIForSearch();
+          }
+        });
       } catch (err) {
         console.log('SearchController::show ' + err);
       }
@@ -54,7 +56,7 @@
     };
 
     function uriTransformShow(uri, dto) {
-      if(uri.indexOf('?') >= 0) { //already has query string
+      if (uri.indexOf('?') >= 0) { //already has query string
         return uri;
       }
 

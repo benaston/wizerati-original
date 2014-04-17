@@ -20,14 +20,18 @@
     this.index = function (dto) {
       try {
         _uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
-        _uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-        if (!_bookmarksHavePreviouslyBeenRetrieved) {
-          _bookmarksHavePreviouslyBeenRetrieved = true;
-          _bookmarkListModel.setIsWaiting('true');
-          _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
-        } else {
-          _helper.resetUIForBookmarks();
-        }
+
+        //Ensure scroll position is reset gracefully.
+        //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+        _uiRootModel.setScrollLeft(0, function done() {
+          if (!_bookmarksHavePreviouslyBeenRetrieved) {
+            _bookmarksHavePreviouslyBeenRetrieved = true;
+            _bookmarkListModel.setIsWaiting('true');
+            _bookmarkRepository.getByUserId(_userModel.getUserId(), _helper.bookmarkRetrievalSuccess);
+          } else {
+            _helper.resetUIForBookmarks();
+          }
+        });
       } catch (err) {
         console.log('BookmarksController::index ' + err);
       }

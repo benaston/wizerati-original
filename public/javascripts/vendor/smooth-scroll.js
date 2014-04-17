@@ -9,7 +9,8 @@
     endY: 0,
     endX: 0,
     duration: 2000,
-    updateRate: 15
+    updateRate: 15,
+    done: function() {}
   };
 
   var interpolate = function (source, target, shift) {
@@ -25,13 +26,19 @@
 
     if (options.duration === 0) {
       window.scrollTo(0, options.endY);
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
     var startY = window.pageYOffset,
         startT = Date.now(),
         finishT = startT + options.duration;
+
+    //Avoid waiting for the duration of the easing function if there is no scrolling to perform.
+    if(startY === options.endY) {
+      options.done();
+      return;
+    }
 
     var animate = function() {
       var now = Date.now(),
@@ -43,7 +50,7 @@
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -55,13 +62,19 @@
 
     if (options.duration === 0) {
       window.scrollTo(options.endX,0);
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
     var startX = window.pageXOffset,
         startT = Date.now(),
         finishT = startT + options.duration;
+
+    //Avoid waiting for the duration of the easing function if there is no scrolling to perform.
+    if(startX === options.endX) {
+      options.done();
+      return;
+    }
 
     var animate = function() {
       var now = Date.now(),
@@ -73,7 +86,7 @@
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -85,7 +98,7 @@
 
     if (options.duration === 0) {
       this.scrollTop = options.endX;
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
@@ -93,6 +106,12 @@
         startT = Date.now(),
         finishT = startT + options.duration,
         _this = this;
+
+    //Avoid waiting for the duration of the easing function if there is no scrolling to perform.
+    if(startX === options.endX) {
+      options.done();
+      return;
+    }
 
     var animate = function() {
       var now = Date.now(),
@@ -104,7 +123,7 @@
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 
@@ -116,7 +135,7 @@
 
     if (options.duration === 0) {
       this.scrollTop = options.endY;
-      if (typeof options.callback === 'function') options.callback();
+      options.done();
       return;
     }
 
@@ -135,7 +154,7 @@
         setTimeout(animate, options.updateRate);
       }
       else {
-        if (typeof options.callback === 'function') options.callback();
+        options.done();
       }
     };
 

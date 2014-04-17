@@ -65,7 +65,7 @@
       return temp;
     };
 
-    this.setPreviousUrl = function(value) {
+    this.setPreviousUrl = function (value) {
       _previousUrl = value;
     };
 
@@ -83,8 +83,8 @@
       }
     };
 
-    this.setScrollLeft = function (value) {
-        $.publish(that.eventUris.setScrollLeft, value);
+    this.setScrollLeft = function (value, done) {
+      $.publish(that.eventUris.setScrollLeft, value, done || function() {});
     };
 
     this.getModal = function () {
@@ -101,7 +101,7 @@
       }
     };
 
-    this.clearModal = function(){
+    this.clearModal = function () {
       that.setModal(_modalEnum.None);
     };
 

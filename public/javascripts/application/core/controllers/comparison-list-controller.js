@@ -18,12 +18,16 @@
     this.index = function (dto) {
       //if external get state from local storage...
       _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
-      _uiModelPack.uiRootModel.setScrollLeft(0); //Ensure scroll position is reset gracefully.
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
-      _uiModelPack.uiRootModel.clearModal();
+
+      //Ensure scroll position is reset gracefully.
+      //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+      _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
+        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+        _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+        _uiModelPack.uiRootModel.clearModal();
+      });
     };
 
     function init() {
