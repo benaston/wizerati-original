@@ -217,31 +217,33 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
 
 /*"narrow-screen" devices like iphone*/
 @media only screen and (max-device-width: 568px) {
-    .search-panel {
-        position: absolute;
-    }
-
-    body {
-        background-color: white;
-    }
-
-    body[data-ui-mode='0'] h2.search-form-title {
-        display: none;
-    }
-
-    #background-container {
-        display: none;
-    }
-
-    body[data-ui-mode='0'] #search-form-panel {
-        box-shadow: none;
-        margin-top: -105px;
-    }
+    /*.search-panel {*/
+    /*position: absolute;*/
+    /*}*/
+    /*body {*/
+    /*background-color: white;*/
+    /*}*/
+    /*body[data-ui-mode='0'] h2.search-form-title {*/
+    /*display: none;*/
+    /*}*/
+    /*#background-container {*/
+    /*display: none;*/
+    /*}*/
+    /*body[data-ui-mode='0'] #search-form-panel {*/
+    /*box-shadow: none;*/
+    /*margin-top: -105px;*/
+    /*}*/
 }
 
 /*"narrow-screen" devices like iphone*/
 /*media queries must be on a single lime to avoid safari bug*/
 @media only screen and (max-device-width: 568px) {
+
+    body[data-ui-mode='0'] #search-form-panel {
+        box-shadow: none;
+        margin-top: -185px;
+    }
+
     body[data-ui-mode='1'] #search-form {
         left: 45px;
     }
@@ -255,11 +257,36 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         width: 236px;
     }
 
+    .search-filters ol {
+        text-align: center;
+    }
+
     #search-buttons-container {
-        left: 170px;
+        left: 280px;
     }
 
     .cancel-button-container {
         display: none;
+    }
+
+    .legal {
+        left: 10px;
+    }
+
+    .f {
+        bottom: 24px;
+    }
+
+    body[data-ui-mode='0'] #search-form-panel {
+        /*position: absolute;*/
+        /*height: 310px;*/
+        /*width: 500px;*/
+        /*left: 50%;*/
+        /*top: 44%;*/
+        /*margin-left: -250px;*/
+        /*margin-top: -155px;*/
+        /*text-align: center;*/
+        /*background: rgba(255, 255, 255, 1);*/
+        /*-webkit-backface-visibility: hidden; *//*needed?*/
     }
 }

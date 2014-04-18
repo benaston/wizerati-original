@@ -20,11 +20,9 @@
         _effectiveWidthResultListPanelMinimized = 0;
 
     this.calculate = function () {
-      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-      console
-      /*mobile devices sometimes don't have innerWidth apparently*/
-      /*todo: if width less than certain value, assume phone and set a public property somewhere so that phone-like behavior can be used*/
-      var minWidthItemOfInterestForDevice = viewPortWidth <= 568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
+      var viewPortWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width; //Mobile devices sometimes don't have innerWidth apparently.
+      //Note that we check screen width, because we want to avoid mobile styling on desktop.
+      var minWidthItemOfInterestForDevice = viewPortWidth <= 568 && screen.width < 568 ? _minWidthItemOfInterestSmallScreen : _minWidthItemOfInterest;
       var effectiveWidthResultListPanelForDevice = viewPortWidth <= 568 ? _effectiveWidthResultListPanelSmallScreen : _effectiveWidthResultListPanel;
 
       var numberOfItemsOfInterest = _itemsOfInterestModel.getPinnedItemCount();
