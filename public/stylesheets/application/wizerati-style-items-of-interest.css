@@ -433,6 +433,7 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
     }
 
     .empty-message-container {
-        width: 85px;
+        width: 225px;
+        left: 25px;
     }
 }

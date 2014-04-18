@@ -241,7 +241,16 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
 
     body[data-ui-mode='0'] #search-form-panel {
         box-shadow: none;
+        width: 100%;
         margin-top: -185px;
+    }
+
+    body[data-ui-mode='0'] #search-form {
+        width: 100%;
+    }
+
+    body[data-ui-mode='1'] #search-buttons-container {
+        left: 190px;
     }
 
     body[data-ui-mode='1'] #search-form {
@@ -274,19 +283,6 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
     }
 
     .f {
-        bottom: 24px;
-    }
-
-    body[data-ui-mode='0'] #search-form-panel {
-        /*position: absolute;*/
-        /*height: 310px;*/
-        /*width: 500px;*/
-        /*left: 50%;*/
-        /*top: 44%;*/
-        /*margin-left: -250px;*/
-        /*margin-top: -155px;*/
-        /*text-align: center;*/
-        /*background: rgba(255, 255, 255, 1);*/
-        /*-webkit-backface-visibility: hidden; *//*needed?*/
+        bottom: 15px;
     }
 }
