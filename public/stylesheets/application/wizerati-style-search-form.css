@@ -243,10 +243,17 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         box-shadow: none;
         width: 100%;
         margin-top: -185px;
+        left: 0;
+        margin-left: 0;
     }
 
     body[data-ui-mode='0'] #search-form {
         width: 100%;
+    }
+
+    body[data-ui-mode='0'] #search-buttons-container {
+        left: 195px;
+        right: auto;
     }
 
     body[data-ui-mode='1'] #search-buttons-container {
