@@ -107,7 +107,7 @@ label:focus {
     pointer-events: none;
     left: 26px;
     top: 41px;
-    color: rgba(0, 109, 204, 0.95);
+    color: rgba(0, 122, 255, 1);
     position: absolute;
 }
 
@@ -169,8 +169,8 @@ a.btn-primary:not(.disabled):not(.checked):hover {
 
 @media not screen and (min-device-width: 768px) and (max-device-width: 1024px) {
     /*.btn:enabled:active, a.btn:not(.disabled):active {*/
-        /*box-shadow: 0 2px 0px 2px rgba(0, 0, 0, 0.05) inset;*/
-        /*-webkit-transition: none;*/
+    /*box-shadow: 0 2px 0px 2px rgba(0, 0, 0, 0.05) inset;*/
+    /*-webkit-transition: none;*/
     /*}*/
 }
 

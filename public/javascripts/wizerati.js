@@ -2362,47 +2362,6 @@ window.invertebrate = {}; //'namespace' in the global namespace to hang stuff of
 ;(function (invertebrate) {
   'use strict';
 
-  function History() {
-
-    if (!(this instanceof invertebrate.History)) {
-      return new invertebrate.History();
-    }
-
-    var that = this,
-        _stack = [];
-
-
-    this.push = function (url) {
-      _stack.push(url);
-    };
-
-    this.pop = function () {
-      return _stack.pop();
-    };
-
-    this.getPreviousUrl = function () {
-      if(_stack.length < 2) {
-        return null;
-      }
-
-      return _stack[_stack.length-2];
-    };
-
-
-    function init() {
-      return that;
-    }
-
-    init();
-  }
-
-  invertebrate.History = History;
-}(invertebrate, $, _));
-
-
-;(function (invertebrate) {
-  'use strict';
-
   function Model() {
 
     if (!(this instanceof invertebrate.Model)) {
@@ -8502,7 +8461,7 @@ window.wizerati = {
     return;
   }
 
-  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati', new window.invertebrate.History()));
+  window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();
   }
