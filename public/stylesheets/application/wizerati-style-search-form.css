@@ -280,6 +280,10 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         left: 280px;
     }
 
+    .search-button-container {
+        left: -85px;
+    }
+
     .cancel-button-container {
         display: none;
     }
