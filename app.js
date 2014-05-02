@@ -37,6 +37,7 @@ app.get('/indexs', routes.indexs);
 app.get('/search', routes.index);
 app.get('/search/edit', routes.index);
 app.get('/bookmarks', routes.index);
+app.get('/comparison', routes.index);
 app.get('/account', routes.index);
 app.get('/signin', routes.index);
 app.get('/advertisers', routes.index);

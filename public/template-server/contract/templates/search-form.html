@@ -10,7 +10,7 @@ var keywords = model.getKeywords();
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
-      <span>minimum daily rate (gbp)</span>
+      <span>Minimum daily rate (GBP)</span>
         <ol>
             <li><input id="r200" class="radio" name="r" type="radio" value=">200" tabindex="1" {{= rate ? rate === "200" ? "checked='checked'" : ""  : "" }}>
                 <label for="r200" class="lbl">200</label></li>
@@ -35,12 +35,12 @@ var keywords = model.getKeywords();
     <div id="search-buttons-container">
     <div class="cancel-button-container">
         <div class="rotating-button-container">
-            <button type="submit" form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-s"></button><span class="focus-indicator"></span><span class="button-icon">cancel</span>
+            <button type="submit" form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-s"></button><span class="focus-indicator"></span><span class="button-icon">Cancel</span>
         </div>
     </div>
     <div class="search-button-container">
         <div class="rotating-button-container">
-            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">search</span>
+            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">Search</span>
         </div>
     </div>
     </div>

@@ -48,7 +48,7 @@ body[data-hover-is-enabled='true'] input[type="radio"]:not(:checked) + label:hov
 }
 
 input[type="radio"]:checked + label {
-    text-decoration: underline;
+    box-shadow: 0 0 0 1px;
 }
 
 input[type="text"]:focus,

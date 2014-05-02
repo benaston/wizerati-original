@@ -10,7 +10,11 @@
     var that = this,
         _searchFormModeEnum = app.mod('enum').SearchFormMode,
         _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
         _tabEnum = app.mod('enum').Tab,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
         _accountModeEnum = app.mod('enum').AccountMode,
         _uiModelPack = null,
         _layoutCoordinator = null;
@@ -22,12 +26,23 @@
       //Ensure scroll position is reset gracefully.
       //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
       _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
+        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
         _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
         _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
         _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
         _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
         _uiModelPack.uiRootModel.clearModal();
       });
+
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Bookmark);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+      _uiModelPack.uiRootModel.clearModal();
+      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 
     function init() {

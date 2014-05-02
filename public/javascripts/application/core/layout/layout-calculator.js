@@ -41,7 +41,6 @@
 
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
-        console.log('viewPortWidth (%s) - widthTakenByTabBarAndResultListPanel (%s)', viewPortWidth, widthTakenByTabBarAndResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         if ((widthTakenByTabBarAndResultListPanel + (minWidthItemOfInterestForDevice * numberOfItemsOfInterest)) < viewPortWidth) {
           newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel) / numberOfItemsOfInterest;

@@ -48,9 +48,9 @@
           c.bookmarksController.destroy(dto);
         }, { silent: true });
 
-        router.registerRoute('/comparisonlist', function (dto) {
+        router.registerRoute('/comparison', function (dto) {
           c.comparisonListController.index(dto);
-        }, { title: 'Wizerati Comparison List' });
+        }, { title: 'Wizerati Comparison' });
 
         router.registerRoute('/itemsofinterest/create', function (dto) {
           c.itemsOfInterestController.create(dto);

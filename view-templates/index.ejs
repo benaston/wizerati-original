@@ -4,41 +4,47 @@
     <title>Wizerati</title>
     <meta name="author" content="Ben Aston">
     <meta name="build" content="@@build">
-    <style>@@css</style>
-    <noscript><link rel="stylesheet" type="text/css" href="stylesheets/no-script.css"></noscript>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi, minimal-ui">
+    <style>@
+        @css</style>
+    <noscript>
+        <link rel="stylesheet" type="text/css" href="stylesheets/no-script.css">
+    </noscript>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="120x120" href="./images/apple-touch-icon-120.png">
     <link rel="apple-touch-icon" sizes="152x152" href="./images/apple-touch-icon-152.png">
 </head>
-<body data-ui-mode="-1" data-are-transitions-enabled="false" data-modal="-1" data-hover-is-enabled="true" data-is-mobile-device="false">
+<body data-ui-mode="-1" data-are-transitions-enabled="false" data-modal="-1" data-hover-is-enabled="true"
+      data-is-mobile-device="false">
 <div id="main-container" data-visibility-mode="1">
     <header>@@nav-panel</header>
     <main>@@account-panel@@search-form-panel@@bookmark-list-panel@@result-list-panel@@items-of-interest-panel</main>
     <footer class="f">@@footer</footer>
-</div>@@sign-in-modal
+</div>
+@@sign-in-modal
 <!--<div class="build">@@build</div>-->
 @@no-script
 @@no-compatibility
 <script type="text/template" data-template-uri="./template-server/contract/templates/apply-dialog.html-local">
-@@apply-dialog-contract
+    @@apply-dialog-contract
 </script>
 <script type="text/template" data-template-uri="./template-server/shared/templates/account.html--shared-local">
-@@account-template
+    @@account-template
 </script>
 <script type="text/template" data-template-uri="./template-server/contract/templates/search-form.html-local">
-@@search-form-contract-template
+    @@search-form-contract-template
 </script>
 <script type="text/template" data-template-uri="./template-server/contract/templates/item-of-interest.html-local">
-@@item-of-interest-contract-template
+    @@item-of-interest-contract-template
 </script>
 <script type="text/template" data-template-uri="./template-server/contract/templates/result.html-local">
-@@result-contract-template
+    @@result-contract-template
 </script>
 <script type="text/template" data-template-uri="./template-server/contract/templates/bookmark-period.html-local">
-@@bookmark-period-contract-template
+    @@bookmark-period-contract-template
 </script>
 @@javascript
 </body>
