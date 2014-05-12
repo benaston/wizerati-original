@@ -3288,16 +3288,6 @@ window.wizerati = {
         _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
         _uiModelPack.uiRootModel.clearModal();
       });
-
-      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Bookmark);
-      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-      _uiModelPack.uiRootModel.clearModal();
-      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
-      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
     };
 
     function init() {
