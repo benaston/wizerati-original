@@ -4703,7 +4703,7 @@ window.wizerati = {
         _minWidthItemOfInterestSmallScreen = 275, /*empirical*/
         _effectiveWidthResultListPanel = 327,
         _effectiveWidthResultListPanelSmallScreen = 200,
-        _widthTabBar = 94,
+        _widthTabBar = 73,
         _widthTabBarSmallScreen = 45,
         _effectiveWidthResultListPanelMinimized = 0;
 

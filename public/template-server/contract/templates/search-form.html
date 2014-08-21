@@ -10,7 +10,7 @@ var keywords = model.getKeywords();
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
-      <span>Minimum daily rate (GBP)</span>
+      <span>Show me jobs paying more than (GBP/day)</span>
         <ol>
             <li><input id="r200" class="radio" name="r" type="radio" value=">200" tabindex="1" {{= rate ? rate === "200" ? "checked='checked'" : ""  : "" }}>
                 <label for="r200" class="lbl">200</label></li>
