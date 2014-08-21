@@ -48,11 +48,9 @@ body[data-hover-is-enabled='true'] input[type="radio"]:not(:checked) + label:hov
 }
 
 input[type="radio"]:checked + label {
-    box-shadow: 0 0 0 1px;
-}
-
-body {
-    background-color: blue !important;
+    background-color: rgba(0, 122, 255, 1);
+    color: white;
+    border-radius: 5px;
 }
 
 input[type="text"]:focus,

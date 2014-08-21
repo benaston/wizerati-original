@@ -2,14 +2,6 @@
     <!--<div id="top1" class="in-page-anchor-target"></div>-->
     <header class="menu-container flex-item">
         <ul class="menu">
-            <li><form class="frm-bookmark" method="POST" action="/bookmarks/{{=model.isBookmark ? 'destroy' : 'create' }}">
-                <input type="hidden" name="id" value="{{=model.id}}" />
-                <div class="m-i">
-                    <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s a {{=model.isBookmarkable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
-                            title="{{=model.isBookmarkable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>{{=model.isBookmark ? '&#xf15d;' : '&#xf15c;' }}</button>
-                    <label class="lbl" for="btn-bookmark-{{= model.id}}">{{= model.isBookmark ? 'Un-bookmark' : 'Bookmark' }}</label>
-                </div>
-            </form></li>
             <li><form class="frm-hide" method="POST" action="/hiddenitems/{{=model.isHidden ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
@@ -18,14 +10,22 @@
                     <label class="lbl" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'Un-hide' : 'Hide' }}</label>
                 </div>
             </form></li>
-            <li><form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
+            <li><form class="frm-bookmark" method="POST" action="/bookmarks/{{=model.isBookmark ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
-                    <button id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
-                            title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable ? '' : 'disabled' }}>&#xf16c;</button>
-                    <label class="lbl" for="btn-action-{{= model.id}}">Apply</label>
+                    <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s a {{=model.isBookmarkable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
+                            title="{{=model.isBookmarkable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>{{=model.isBookmark ? '&#xf15d;' : '&#xf15c;' }}</button>
+                    <label class="lbl" for="btn-bookmark-{{= model.id}}">{{= model.isBookmark ? 'Un-bookmark' : 'Bookmark' }}</label>
                 </div>
             </form></li>
+            <!--<li><form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">-->
+                <!--<input type="hidden" name="id" value="{{=model.id}}" />-->
+                <!--<div class="m-i">-->
+                    <!--<button id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"-->
+                            <!--title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable ? '' : 'disabled' }}>&#xf16c;</button>-->
+                    <!--<label class="lbl" for="btn-action-{{= model.id}}">Apply</label>-->
+                <!--</div>-->
+            <!--</form></li>-->
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-pin-{{= model.id}}" class="btn btn-s a {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
@@ -38,22 +38,38 @@
     <div class="flex-item">
         <article class="i-o-i-c {{=model.isHidden ? 'hidden' : '' }}">
             <div class="i-o-i-p-c">
-                <h3 class="i-o-i-t">{{= model.title }}</h3>
-                <ul class="info">
-                    <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
-                    <li><a href="#">{{= model.organization }}</a></li>
-                </ul>
-                <ul class="info">
-                    <li>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day</li>
-                    <li>{{= model.location }}, <span class="country">{{= model.country }}</span></li>
-                </ul>
-                <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
+                <div>
+                    <h3 class="i-o-i-t">{{= model.title }}</h3>
+                    <ul class="info">
+                        <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
+                        <li><a href="#">{{= model.organization }}</a></li>
+                    </ul>
+                    <ul class="info">
+                        <li>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day</li>
+                        <li>{{= model.location }}, <span class="country">{{= model.country }}</span></li>
+                    </ul>
+                    <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
+                </div>
+
+
+
             </div>
             <div class="i-o-i-p-c-hr">
                 <hr class="i-o-i-hr">
             </div>
             <div class="i-o-i-p-c">
-                <h4>Job Description</h4>
+                <div style="float:right;margin-top: 20px;background: rgba(249, 249, 249, 1);border-radius:5px;border: 1px solid rgba(0, 95, 167, 0.35);margin: 30px;
+margin-top: 0;margin-right: 0;">
+                    <form class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
+                        <input type="hidden" name="id" value="{{=model.id}}" />
+                        <div class="m-i">
+                            <button id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
+                                    title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable ? '' : 'disabled' }}>&#xf16c;</button>
+                            <label class="lbl" for="btn-action-{{= model.id}}">Apply</label>
+                        </div>
+                    </form>
+                </div>
+                <h4 style="clear:none;display:inline;">Job Description</h4>
                 {{= model.summary }}
                 <h4>About You</h4>
                 {{= model.aboutYou }}
@@ -63,7 +79,7 @@
                 <div class="contact">Contact {{= model.contact }} on {{= model.telephoneNumber }} (ref. {{= model.ref }})</div>
             </div>
         </article>
-    </div>
+   </div>
 </div>{{
 } catch(e) {
 throw "template exception: contract/item-of-interest. " + e;

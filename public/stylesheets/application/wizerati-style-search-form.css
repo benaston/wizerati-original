@@ -192,18 +192,19 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
 }
 
 .search-filters label:active {
-    box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.05) inset;
+    /*box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.05) inset;*/
+    border-bottom: 2px solid rgba(0, 122, 255, 1);
 }
 
 .search-filters label {
     font-size: 14px;
     font-weight: normal;
-    line-height: 45px;
+    line-height: 26px;
     border: 0;
     text-align: center;
-    height: 45px;
+    height: 25px;
     width: 45px;
-    border-radius: 45px;
+    /*border-radius: 45px;*/
     margin: 8px 2px 0 0;
     color: rgba(0, 122, 255, 1);
 }

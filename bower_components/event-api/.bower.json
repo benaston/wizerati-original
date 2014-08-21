@@ -1,0 +1,41 @@
+{
+  "name": "event-api",
+  "version": "0.0.9",
+  "homepage": "https://www.github.com/benaston/event-api",
+  "authors": [
+    "Ben Aston"
+  ],
+  "description": "A lightweight implementation of publish/subscribe for decoupling JavaScript software components.",
+  "keywords": [
+    "publish",
+    "subscribe",
+    "pubsub",
+    "api"
+  ],
+  "main": "dist/event-api.min.js",
+  "license": "MIT",
+  "ignore": [
+    "lib",
+    "node_modules",
+    "reports",
+    "spec",
+    "src",
+    ".gitignore",
+    "bower.json",
+    "Gruntfile.js",
+    "license",
+    "package.json",
+    "readme.md",
+    "spec-runner.html",
+    "diagram.png"
+  ],
+  "_release": "0.0.9",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.9",
+    "commit": "c99476b14846bcdb44575463e97c2a5f47e9db23"
+  },
+  "_source": "git://github.com/benaston/event-api.git",
+  "_target": "~0.0.8",
+  "_originalSource": "event-api"
+}

@@ -52,7 +52,7 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     height: 100%;
     /*width: 345px;*/
     width: 327px;
-    margin-left: 96px; /*width of tab bar*/
+    margin-left: 94px; /*width of tab bar*/
     vertical-align: top;
     overflow-x: hidden;
     overflow-y: scroll;
