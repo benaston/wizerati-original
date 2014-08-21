@@ -146,11 +146,11 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
 }
 
 #btn-nav-comparison-list.pulse {
-    -webkit-animation: pulse .2s 1 0;
+    -webkit-animation: pulse-l .5s 1 0;
 }
 
 #btn-nav-bookmarks.pulse {
-    -webkit-animation: pulse .2s 1 0;
+    -webkit-animation: pulse-l .5s 1 0;
 }
 
 #btn-nav-my-account {

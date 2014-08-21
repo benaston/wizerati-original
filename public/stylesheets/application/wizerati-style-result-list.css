@@ -14,6 +14,10 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-devic
     transition: -webkit-transform .5s ease-in, max-height .5s cubic-bezier(0.2, 0.3, 0.25, 0.9) 1s; /* we use max-height because involve transition to auto height*/
 }
 
+#search-desc-preamble {
+    font-weight: bold;
+}
+
 #result-list-panel-container {
     width: 0;
     height: 100%;
@@ -102,7 +106,8 @@ body[data-ui-mode='1'] #result-list-panel {
     overflow: hidden;
     line-height: 1.5rem;
     box-sizing: border-box;
-    color: rgb(172, 174, 175);
+    /*color: rgb(172, 174, 175);*/
+    color: rgb(22, 22, 22);
 }
 
 #search-desc {

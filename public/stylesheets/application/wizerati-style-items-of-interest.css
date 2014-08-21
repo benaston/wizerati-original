@@ -164,7 +164,8 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 #items-of-interest-panel .menu {
-    text-align: right;
+    text-align: left;
+    margin-left: 12px; /*attempt to nudge away from the search result list, inline with start of title of item*/
 }
 
 .table-location-industry {
@@ -230,11 +231,14 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 
 .m-i {
     width: 84px;
-    top: -12px;
     display: inline-block;
     text-align: center;
     vertical-align: top;
     position: relative;
+}
+
+#items-of-interest-panel .m-i {
+    top: -12px;
 }
 
 .i-o-i-p-c {
