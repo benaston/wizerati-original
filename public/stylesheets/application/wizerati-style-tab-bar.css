@@ -155,19 +155,27 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     }
 
     #tab-bar .i {
-        width: 36px;
+        width: 45px;
     }
 
     #tab-bar .i .btn,
     #tab-bar .i-sign-out .btn {
-        line-height: 58px; /*Reduced height helps with landscape on iPhone*/
-        height: 58px; /*Reduced height helps with landscape on iPhone*/
+        /*Reduced height helps with landscape on iPhone*/
+        /*line-height: 58px; */
+        /*height: 58px;*/
+
+        line-height: 45px; /*45px provides a decent large touch target*/
+        height: 45px;
+        margin-top: 11px; /*We use margin to enable decent spacing, whilst keeping a round touch target*/
+        margin-bottom: 11px;
     }
+
+
 
     #tab-bar .i .btn,
     .i-my-account .btn,
     .i-sign-out .btn {
-        width: 36px;
+        width: 45px;
     }
 
     .i-my-account,
@@ -223,7 +231,7 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
         height: 40px;
         position: absolute;
         background: rgba(0, 122, 255, 1);
-        top: 9px;
+        top: 0;
         left: -4px;
         border-radius: 0;
     }
