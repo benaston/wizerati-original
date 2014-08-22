@@ -3257,37 +3257,41 @@ window.wizerati = {
 ;(function (app) {
   'use strict';
 
-  function ComparisonListController(uiModelPack, layoutCoordinator) {
+  function ComparisonListController(uiModelPack, layoutCoordinator, helper) {
 
     if (!(this instanceof app.ComparisonListController)) {
-      return new app.ComparisonListController(uiModelPack, layoutCoordinator);
+      return new app.ComparisonListController(uiModelPack, layoutCoordinator, helper);
     }
 
     var that = this,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _tabEnum = app.mod('enum').Tab,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
-        _accountModeEnum = app.mod('enum').AccountMode,
+//        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+//        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+//        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+//        _resultListModeEnum = app.mod('enum').ResultListMode,
+//        _tabEnum = app.mod('enum').Tab,
+//        _uiModeEnum = app.mod('enum').UIMode,
+//        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+//        _accountModeEnum = app.mod('enum').AccountMode,
         _uiModelPack = null,
-        _layoutCoordinator = null;
+        _layoutCoordinator = null,
+        _helper = null;
 
     this.index = function (dto) {
+      console.info('ComparisonListController:index');
       //if external get state from local storage...
       _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
 
       //Ensure scroll position is reset gracefully.
       //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
       _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
-        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
-        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
-        _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
-        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
-        _uiModelPack.uiRootModel.clearModal();
+        _helper.resetUIForComparisonList();
+
+//        _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Default);
+//        _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+//        _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+//        _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+//        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+//        _uiModelPack.uiRootModel.clearModal();
       });
     };
 
@@ -3301,8 +3305,13 @@ window.wizerati = {
           throw 'layoutCoordinator not supplied.';
         }
 
+        if (!helper) {
+          throw 'helper not supplied.';
+        }
+
         _uiModelPack = uiModelPack;
         _layoutCoordinator = layoutCoordinator;
+        _helper = helper;
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
 
@@ -4404,6 +4413,65 @@ window.wizerati = {
   }
 
   app.BookmarksControllerHelper = BookmarksControllerHelper;
+
+}(wizerati));
+;(function (app) {
+  'use strict';
+
+  function ComparisonListControllerHelper(uiModelPack, layoutCoordinator, bookmarkListModel) {
+
+    if (!(this instanceof app.ComparisonListControllerHelper)) {
+      return new app.ComparisonListControllerHelper(uiModelPack, layoutCoordinator, bookmarkListModel);
+    }
+
+    var that = this,
+        _uiModeEnum = app.mod('enum').UIMode,
+        _searchFormModeEnum = app.mod('enum').SearchFormMode,
+        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+        _resultListModeEnum = app.mod('enum').ResultListMode,
+        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+        _tabEnum = app.mod('enum').Tab,
+        _accountModeEnum = app.mod('enum').AccountMode,
+        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+        _uiModelPack = null,
+        _layoutCoordinator = null;
+
+    this.resetUIForComparisonList = function () {
+       console.log('resetting ui');
+      _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+      _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+      _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.PinnedItemsExpanded);
+      _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.ComparisonList);
+      _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+      _uiModelPack.uiRootModel.clearModal();
+      _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+      _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+      _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+    };
+
+    function init() {
+      try {
+        if (!uiModelPack) {
+          throw 'uiModelPack not supplied.';
+        }
+
+        if (!layoutCoordinator) {
+          throw 'layoutCoordinator not supplied.';
+        }
+
+        _uiModelPack = uiModelPack;
+        _layoutCoordinator = layoutCoordinator;
+
+        return that;
+      } catch (e) {
+        throw 'ComparisonListControllerHelper::init ' + e;
+      }
+    }
+
+    return init();
+  }
+
+  app.ComparisonListControllerHelper = ComparisonListControllerHelper;
 
 }(wizerati));
 ;(function (app) {
@@ -5835,7 +5903,7 @@ window.wizerati = {
         mod.accountController = new w.AccountController(m.accountModel, h.myAccountControllerHelper, r.accountRepository, m.userModel, m.uiRootModel);
         mod.applyToContractDialogController = new w.ApplyToContractDialogController(s.applyToContractDialogService);
         mod.bookmarksController = new w.BookmarksController(s.bookmarkService, m.bookmarkListModel, h.bookmarksControllerHelper, m.userModel, r.bookmarkRepository, m.uiRootModel);
-        mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator);
+        mod.comparisonListController = new w.ComparisonListController(p.uiModelPack, l.layoutCoordinator, h.comparisonListControllerHelper);
         mod.hiddenItemsController = new w.HiddenItemsController(s.hiddenItemService);
         mod.homeController = new w.HomeController(m.uiRootModel, m.resultListModel, m.searchFormModel);
         mod.itemsOfInterestController = new w.ItemsOfInterestController(m.itemsOfInterestModel);
@@ -5924,13 +5992,6 @@ window.wizerati = {
 
         };
 
-        mod.Tab = {
-          Search: '0',
-          Bookmark: '1',
-          ComparisonList: '2',
-          Account: '3'
-        };
-
         mod.ResultListMode = {
           Default: '0',
           Minimized: '1'
@@ -5939,6 +6000,13 @@ window.wizerati = {
         mod.SearchFormMode = {
           Default: '0',
           Minimized: '1'
+        };
+
+        mod.Tab = {
+          Search: '0',
+          Bookmark: '1',
+          ComparisonList: '2',
+          Account: '3'
         };
 
         mod.UIMode = {
@@ -5990,6 +6058,7 @@ window.wizerati = {
         mod.searchControllerHelper = new w.SearchControllerHelper(p.uiModelPack, l.layoutCoordinator, s.readItemService);
         mod.bookmarksControllerHelper = new w.BookmarksControllerHelper(p.uiModelPack, l.layoutCoordinator, m.bookmarkListModel);
         mod.myAccountControllerHelper = new w.AccountControllerHelper(p.uiModelPack, l.layoutCoordinator, m.accountModel);
+        mod.comparisonListControllerHelper = new w.ComparisonListControllerHelper(p.uiModelPack, l.layoutCoordinator);
       }
       catch (e) {
         throw 'helperRegistrar::run ' + e;

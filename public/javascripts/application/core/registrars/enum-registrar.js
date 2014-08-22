@@ -53,13 +53,6 @@
 
         };
 
-        mod.Tab = {
-          Search: '0',
-          Bookmark: '1',
-          ComparisonList: '2',
-          Account: '3'
-        };
-
         mod.ResultListMode = {
           Default: '0',
           Minimized: '1'
@@ -68,6 +61,13 @@
         mod.SearchFormMode = {
           Default: '0',
           Minimized: '1'
+        };
+
+        mod.Tab = {
+          Search: '0',
+          Bookmark: '1',
+          ComparisonList: '2',
+          Account: '3'
         };
 
         mod.UIMode = {
