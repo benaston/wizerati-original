@@ -22,7 +22,7 @@
     width: 2px;
     height: 65px;
     position: absolute;
-    background: rgba(0,122,255,1);
+    background: rgba(0, 122, 255, 1);
     top: 6px;
     left: -3px;
     border-radius: 0;
@@ -78,7 +78,6 @@ body[data-ui-mode='1'] #tab-bar {
 }
 
 body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
-    /*box-shadow: rgba(255, 255, 255, .4) 0 0 5px 0;*/
     text-decoration: none; /*required for anchor buttons*/
 }
 
@@ -166,12 +165,14 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     }
 
     #tab-bar .i .btn,
+    .i-my-account .btn,
     .i-sign-out .btn {
         width: 36px;
     }
 
+    .i-my-account,
     .i-sign-out {
-        bottom: 0px;
+        bottom: 0;
     }
 
     #tab-bar h1 {
@@ -213,6 +214,19 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     #btn-nav-comparison-list[data-count='4/4']::before {
         box-shadow: 8px 0 0 0 rgba(0, 122, 255, 1), 16px 0 0 0 rgba(0, 122, 255, 1), 24px 0 0 0 rgba(0, 122, 255, 1), 24px 0 0 1px rgba(0, 122, 255, 1), 16px 0 0 1px rgba(0, 122, 255, 1), 8px 0 0 1px rgba(0, 122, 255, 1), 0 0 0 1px rgba(0, 122, 255, 1);
     }
+
+    #tab-bar[data-selected-tab='0'] .i:nth-of-type(1) button::after,
+    #tab-bar[data-selected-tab='1'] .i:nth-of-type(2) button::after,
+    #tab-bar[data-selected-tab='2'] .i:nth-of-type(3) button::after {
+        content: '';
+        width: 2px;
+        height: 40px;
+        position: absolute;
+        background: rgba(0, 122, 255, 1);
+        top: 9px;
+        left: -4px;
+        border-radius: 0;
+    }
 }
 
 @media only screen and (max-device-height: 568px ) and (orientation: landscape) {
@@ -223,4 +237,5 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     #tab-bar h1 {
         display: none !important;
     }
+
 }
