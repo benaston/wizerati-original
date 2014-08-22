@@ -192,7 +192,6 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
 }
 
 .search-filters label:active {
-    /*box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.05) inset;*/
     border-bottom: 2px solid rgba(0, 122, 255, 1);
 }
 
@@ -281,8 +280,12 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         left: 280px;
     }
 
-    .search-button-container {
+    body[data-ui-mode='0'] .search-button-container {
         left: -85px;
+    }
+
+    body[data-ui-mode='1'] .search-button-container {
+        left: -18px
     }
 
     .cancel-button-container {
