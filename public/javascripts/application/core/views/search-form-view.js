@@ -11,7 +11,6 @@
         _el = '#search-form-panel',
         _elContainer = '#search-form-panel-container',
         _templateName = 'search-form.html-local',
-        _modeEnum = app.mod('enum').SearchFormMode,
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false,
         _modeEnum = app.mod('enum').SearchFormMode,
@@ -110,6 +109,7 @@
     //this is needed because there is no two-way data binding on the form because the model is only updated when the user decides to run a search.
     //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
     this.renderSetMode = function (mode) {
+      console.log('in render set mode', mode);
       if (mode === _modeEnum.Default) {
         //ensure UI matches model values
         this.renderSetKeywords();
