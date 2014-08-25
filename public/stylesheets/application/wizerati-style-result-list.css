@@ -283,6 +283,8 @@ body[data-is-mobile-device='false'] .t.hidden {
 
 }
 
+}
+
 /*.c is the content container for the result, located inside the anchor itself (minus the icon-container)*/
 .c {
     display: inline-block; /*required to ensure opacity takes effect on children*/

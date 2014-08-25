@@ -13,7 +13,9 @@
         _templateName = 'search-form.html-local',
         _modeEnum = app.mod('enum').SearchFormMode,
         _renderOptimizations = {},
-        _waitStateIsBeingMonitored = false;
+        _waitStateIsBeingMonitored = false,
+        _modeEnum = app.mod('enum').SearchFormMode,
+        _displayTimeout = null;
 
     this.$el = null;
     this.$elContainer = null;
@@ -118,7 +120,21 @@
       }
 
 
-      that.$elContainer.attr('data-mode', mode);
+//      that.$elContainer.attr('data-mode', mode);
+      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+      if (mode === _modeEnum.Minimized) {
+        that.$elContainer.attr('data-mode', mode);
+        _displayTimeout = setTimeout(function () {
+          that.$elContainer.css('display', 'none');
+        }, 300);
+      } else {
+        clearTimeout(_displayTimeout);
+        that.$elContainer.css('display', '');
+        setTimeout(function () {
+          that.$elContainer.attr('data-mode', mode);
+        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+      }
+
     };
 
     this.renderSetKeywords = function (keywords) {
