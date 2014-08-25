@@ -13,7 +13,9 @@
         _elList = '#bookmark-list',
         _elSummary = '#bookmark-list-panel-summary',
         _resultViewFactory = null,
-        _renderOptimizations = {};
+        _renderOptimizations = {},
+        _modeEnum = app.mod('enum').BookmarkPanelMode,
+        _displayTimeout = null;
 
     this.$el = null;
     this.$elContainer = null;
@@ -134,7 +136,20 @@
 
     this.renderSetMode = function (mode) {
       mode = mode || that.Model.getMode();
-      that.$elContainer.attr('data-mode', mode);
+
+      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+      if (mode === _modeEnum.Minimized) {
+        that.$elContainer.attr('data-mode', mode);
+        _displayTimeout = setTimeout(function () {
+          that.$elContainer.css('display', 'none');
+        }, 300);
+      } else {
+        clearTimeout(_displayTimeout);
+        that.$elContainer.css('display', '');
+        setTimeout(function () {
+          that.$elContainer.attr('data-mode', mode);
+        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+      }
     };
 
     this.renderAddReadItem = function (id) {
