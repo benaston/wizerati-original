@@ -3398,8 +3398,8 @@ window.wizerati = {
     this.index = function () {
       try {
         _uiRootModel.setUIMode(_uiModeEnum.Start); //todo: retrieve state from local state bag - initialize from local storage, then redirect to search if required
-        _resultListModel.setMode(_resultListModeEnum.Default);
-        _searchFormModel.setMode('0');
+        _resultListModel.setMode(_resultListModeEnum.Minimized); //60fps
+        _searchFormModel.setMode('0'); //search form is visible on the home page
         _uiRootModel.setModal(_modalEnum.None);
         _uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
       } catch (err) {
