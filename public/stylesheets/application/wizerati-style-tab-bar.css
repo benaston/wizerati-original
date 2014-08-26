@@ -94,25 +94,29 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
 
 #btn-nav-comparison-list[data-count='1/4']::before {
     box-shadow: 16px 0 0 0 rgba(180, 196, 206, .3), 32px 0 0 0 rgba(180, 196, 206, .3), 48px 0 0 0 rgba(180, 196, 206, .3);
+    -webkit-animation: pulse-comparison-item-1 .5s 5 0.2s;
 }
 
 #btn-nav-comparison-list[data-count='2/4']::before {
     box-shadow: 16px 0 0 0 rgba(0, 122, 255, 1), 32px 0 0 0 rgba(180, 196, 206, .3), 48px 0 0 0 rgba(180, 196, 206, .3);
+    -webkit-animation: pulse-comparison-item-2 .5s 5 0.2s;
 }
 
 #btn-nav-comparison-list[data-count='3/4']::before {
     box-shadow: 16px 0 0 0 rgba(0, 122, 255, 1), 32px 0 0 0 rgba(0, 122, 255, 1), 48px 0 0 0 rgba(180, 196, 206, .3);
+    -webkit-animation: pulse-comparison-item-3 .5s 5 0.2s;
 }
 
 #btn-nav-comparison-list[data-count='4/4']::before {
     box-shadow: 16px 0 0 0 rgba(0, 122, 255, 1), 32px 0 0 0 rgba(0, 122, 255, 1), 48px 0 0 0 rgba(0, 122, 255, 1);
+    -webkit-animation: pulse-comparison-item-4 .5s 5 0.2s;
 }
 
 #btn-nav-comparison-list::before {
     display: block;
     position: absolute;
     width: 14px;
-    height: 1px;
+    height: 5px;
     background: rgba(0, 122, 255, 1);
     border-radius: 0;
     font-size: 1rem;
