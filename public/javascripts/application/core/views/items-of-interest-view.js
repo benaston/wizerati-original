@@ -13,6 +13,7 @@
         _elSelectedItemContainer1 = '#s-i-c-1',
         _elSelectedItemContainer2 = '#s-i-c-2',
         _elPinnedItemsContainer = '#p-i-c',
+        _elSelectedItemContainer = '.s-i-c',
         _elPinnedItems = '.p-i',
         _elPinnedItem1 = '.p-i:nth-child(2) .p-i-content',
         _elPinnedItem2 = '.p-i:nth-child(3) .p-i-content',
@@ -24,7 +25,9 @@
         _renderOptimizations = {},
         _scrollTopValues = {},
         _scrollLeft = 0,
-        _uiRootModel = null;
+        _uiRootModel = null,
+        _modeEnum = app.mod('enum').ItemsOfInterestMode,
+        _displayTimeout = null;
 
     this.$el = null;
     this.Model = null;
@@ -33,7 +36,8 @@
       that.$el = $(_el);
       that.$elSelectedItemContainer1 = $(_elSelectedItemContainer1);
       that.$elSelectedItemContainer2 = $(_elSelectedItemContainer2);
-      that.$elSelectedItemContainer = $('.s-i-c');
+      that.$elSelectedItemContainer = $(_elSelectedItemContainer);
+      that.$elPinnedItemsContainer = $(_elPinnedItemsContainer);
       that.$elPinnedItems = $(_elPinnedItems);
     };
 
@@ -68,7 +72,8 @@
       selectedItemContent.width(layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
-      $('body').attr('data-items-of-interest-mode', that.Model.getMode());
+      that.renderSetMode(that.Model.getMode());
+//      $('body').attr('data-items-of-interest-mode', that.Model.getMode());
     };
 
     this.render = function (e) {
@@ -123,7 +128,23 @@
     };
 
     this.renderSetMode = function (mode) {
-      $('body').attr('data-items-of-interest-mode', mode)
+//      $('body').attr('data-items-of-interest-mode', mode)
+
+      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+      if (mode === _modeEnum.Default) {
+//        that.$elContainer.attr('data-mode', mode);
+        $('body').attr('data-items-of-interest-mode', mode);
+        _displayTimeout = setTimeout(function () {
+          that.$elPinnedItemsContainer.css('display', 'none');
+        }, 1100); //.9s is the transition time (before resizing)
+      } else {
+        clearTimeout(_displayTimeout);
+        that.$elPinnedItemsContainer.css('display', '');
+        setTimeout(function () {
+//          that.$elPinnedItemsContainer.attr('data-mode', mode);
+          $('body').attr('data-items-of-interest-mode', mode)
+        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+      }
     };
 
     this.renderAddBookmark = function (bookmark) {
