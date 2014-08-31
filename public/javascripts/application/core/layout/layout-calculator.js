@@ -38,7 +38,6 @@
 
       var widthTakenByTabBarAndResultListPanel = effectiveWidthTabBar + effectiveWidthResultListPanel;
 
-
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
@@ -52,13 +51,16 @@
       newWidth = Math.floor(newWidth);
       newWidth = newWidth >= minWidthItemOfInterestForDevice ? newWidth : minWidthItemOfInterestForDevice;
 
+      var widthTakenByTabBarExpandedResultListPanel = effectiveWidthTabBar + effectiveWidthResultListPanelForDevice;
+      var newWidthSelectedItemOfInterest = (viewPortWidth - widthTakenByTabBarExpandedResultListPanel);
+      newWidthSelectedItemOfInterest = newWidthSelectedItemOfInterest >= minWidthItemOfInterestForDevice ? newWidthSelectedItemOfInterest : minWidthItemOfInterestForDevice;
+
       var leftP1 = 0;
       var leftP2 = 0;
       var leftP3 = 0;
       var leftP4 = 0;
       var leftP5 = 0;
       var leftP6 = 0;
-
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement = 0;
@@ -72,6 +74,7 @@
 
       return {
         widthItemOfInterest: newWidth,
+        widthSelectedItemOfInterest: newWidthSelectedItemOfInterest,
         leftPinnedItem1: leftP1,
         leftPinnedItem2: leftP2,
         leftPinnedItem3: leftP3,

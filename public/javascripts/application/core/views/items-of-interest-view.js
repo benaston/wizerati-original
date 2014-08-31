@@ -69,7 +69,8 @@
       $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
       $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
-      selectedItemContent.width(layout.widthItemOfInterest);
+      selectedItemContent.width(layout.widthSelectedItemOfInterest);
+//      selectedItemContent.width(layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       that.renderSetMode(that.Model.getMode());
@@ -132,7 +133,6 @@
 
       //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
       if (mode === _modeEnum.Default) {
-//        that.$elContainer.attr('data-mode', mode);
         $('body').attr('data-items-of-interest-mode', mode);
         _displayTimeout = setTimeout(function () {
           that.$elPinnedItemsContainer.css('display', 'none');
@@ -141,7 +141,6 @@
         clearTimeout(_displayTimeout);
         that.$elPinnedItemsContainer.css('display', '');
         setTimeout(function () {
-//          that.$elPinnedItemsContainer.attr('data-mode', mode);
           $('body').attr('data-items-of-interest-mode', mode)
         }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
       }
@@ -152,7 +151,7 @@
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');
-      $bFrm.find('.btn').html('&#xf15d;');
+      $bFrm.find('.btn').html('&#xf26b;');
       $bFrm.find('.lbl').text('Un-bookmark');
 
       //Bookmarked items cannot be hidden.
@@ -165,7 +164,7 @@
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/create');
       $bFrm.find('.btn').removeClass('checked');
-      $bFrm.find('.btn').html('&#xf15c;');
+      $bFrm.find('.btn').html('&#xf25d;');
       $bFrm.find('.lbl').text('Bookmark');
 
       //Non-bookmarked items can be hidden.
@@ -210,7 +209,7 @@
       var $frm = that.$elSelectedItemContainer.find('.frm-pin')
       $frm.attr('action', '/itemsofinterest/destroy');
       $frm.find('.btn').addClass('checked');
-      $frm.find('.btn').html('&#xf31b;');
+      $frm.find('.btn').html('&#xf40d;');
       $frm.find('.lbl').text('Un-compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
@@ -227,7 +226,7 @@
       var $frmPin = $item.find('.frm-pin');
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
-      $frmPin.find('.btn').html('&#xf31c;');
+      $frmPin.find('.btn').html('&#xf30e;');
       $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.

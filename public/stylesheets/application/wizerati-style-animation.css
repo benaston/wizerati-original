@@ -95,6 +95,23 @@
     }
 }
 
+@-webkit-keyframes pulse-glyph-1 {
+    0% {
+        content: '\f40a';
+        background-color: blue;
+    }
+
+    50% {
+        content: '\f30e';
+        background-color: white;
+    }
+
+    100% {
+        content: '\f40e';
+        background-color: red;
+    }
+}
+
 @-webkit-keyframes pulse-l {
     0% {
         -webkit-transform: scale(1);

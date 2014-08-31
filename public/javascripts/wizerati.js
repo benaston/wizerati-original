@@ -4795,7 +4795,6 @@ window.wizerati = {
 
       var widthTakenByTabBarAndResultListPanel = effectiveWidthTabBar + effectiveWidthResultListPanel;
 
-
       if (mode === _itemsOfInterestModeEnum.Default) {
         newWidth = (viewPortWidth - widthTakenByTabBarAndResultListPanel);
       } else if (mode === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
@@ -4809,13 +4808,16 @@ window.wizerati = {
       newWidth = Math.floor(newWidth);
       newWidth = newWidth >= minWidthItemOfInterestForDevice ? newWidth : minWidthItemOfInterestForDevice;
 
+      var widthTakenByTabBarExpandedResultListPanel = effectiveWidthTabBar + effectiveWidthResultListPanelForDevice;
+      var newWidthSelectedItemOfInterest = (viewPortWidth - widthTakenByTabBarExpandedResultListPanel);
+      newWidthSelectedItemOfInterest = newWidthSelectedItemOfInterest >= minWidthItemOfInterestForDevice ? newWidthSelectedItemOfInterest : minWidthItemOfInterestForDevice;
+
       var leftP1 = 0;
       var leftP2 = 0;
       var leftP3 = 0;
       var leftP4 = 0;
       var leftP5 = 0;
       var leftP6 = 0;
-
 
       if (_itemsOfInterestModel.getMode() === _itemsOfInterestModeEnum.PinnedItemsExpanded) {
         var selectedItemIncrement = 0;
@@ -4829,6 +4831,7 @@ window.wizerati = {
 
       return {
         widthItemOfInterest: newWidth,
+        widthSelectedItemOfInterest: newWidthSelectedItemOfInterest,
         leftPinnedItem1: leftP1,
         leftPinnedItem2: leftP2,
         leftPinnedItem3: leftP3,
@@ -5151,7 +5154,7 @@ window.wizerati = {
 
       _bookmarks[bookmark.id] = bookmark;
 
-      $.publish(that.eventUris.addBookmark, bookmark);
+      $.publish(that.eventUris.addBookmark, bookmark, _bookmarks.length);
     };
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
@@ -5159,7 +5162,7 @@ window.wizerati = {
     this.removeBookmark = function (id) {
       delete _bookmarks[id];
 
-      $.publish(that.eventUris.removeBookmark, id);
+      $.publish(that.eventUris.removeBookmark, id, _bookmarks.length);
     };
 
     this.isBookmark = function (id) {
@@ -6005,8 +6008,8 @@ window.wizerati = {
 
         mod.Tab = {
           Search: '0',
-          Bookmark: '1',
-          ComparisonList: '2',
+          ComparisonList: '1',
+          Bookmark: '2',
           Account: '3'
         };
 
@@ -7771,7 +7774,8 @@ window.wizerati = {
       $(_elPinnedItem3).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem3 + 'px,0,0)'});
       $(_elPinnedItem4).css({'-webkit-transform': 'translate3d(' + layout.leftPinnedItem4 + 'px,0,0)'});
 
-      selectedItemContent.width(layout.widthItemOfInterest);
+      selectedItemContent.width(layout.widthSelectedItemOfInterest);
+//      selectedItemContent.width(layout.widthItemOfInterest);
       $(_elPinnedItems).children().width(layout.widthItemOfInterest);
 
       that.renderSetMode(that.Model.getMode());
@@ -7834,7 +7838,6 @@ window.wizerati = {
 
       //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
       if (mode === _modeEnum.Default) {
-//        that.$elContainer.attr('data-mode', mode);
         $('body').attr('data-items-of-interest-mode', mode);
         _displayTimeout = setTimeout(function () {
           that.$elPinnedItemsContainer.css('display', 'none');
@@ -7843,7 +7846,6 @@ window.wizerati = {
         clearTimeout(_displayTimeout);
         that.$elPinnedItemsContainer.css('display', '');
         setTimeout(function () {
-//          that.$elPinnedItemsContainer.attr('data-mode', mode);
           $('body').attr('data-items-of-interest-mode', mode)
         }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
       }
@@ -7854,7 +7856,7 @@ window.wizerati = {
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');
-      $bFrm.find('.btn').html('&#xf15d;');
+      $bFrm.find('.btn').html('&#xf26b;');
       $bFrm.find('.lbl').text('Un-bookmark');
 
       //Bookmarked items cannot be hidden.
@@ -7867,7 +7869,7 @@ window.wizerati = {
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/create');
       $bFrm.find('.btn').removeClass('checked');
-      $bFrm.find('.btn').html('&#xf15c;');
+      $bFrm.find('.btn').html('&#xf25d;');
       $bFrm.find('.lbl').text('Bookmark');
 
       //Non-bookmarked items can be hidden.
@@ -7912,7 +7914,7 @@ window.wizerati = {
       var $frm = that.$elSelectedItemContainer.find('.frm-pin')
       $frm.attr('action', '/itemsofinterest/destroy');
       $frm.find('.btn').addClass('checked');
-      $frm.find('.btn').html('&#xf31b;');
+      $frm.find('.btn').html('&#xf40d;');
       $frm.find('.lbl').text('Un-compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
@@ -7929,7 +7931,7 @@ window.wizerati = {
       var $frmPin = $item.find('.frm-pin');
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
-      $frmPin.find('.btn').html('&#xf31c;');
+      $frmPin.find('.btn').html('&#xf30e;');
       $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
@@ -8401,7 +8403,8 @@ window.wizerati = {
       that.$el.attr('data-selected-tab', tab);
     };
 
-    this.renderAddOrRemoveBookmark = function () {
+    this.renderAddOrRemoveBookmark = function (item, count) {
+      $('#tab-bookmarks').attr('data-count', (count ? count : '0'));
       $('#btn-nav-bookmarks').addClass('pulse');
       setTimeout(function () {
         $('#btn-nav-bookmarks').removeClass('pulse');
@@ -8409,12 +8412,15 @@ window.wizerati = {
     };
 
     this.renderAddOrRemoveItemOfInterest = function (id, count) {
-      $('#btn-nav-comparison-list').attr('data-count', (count ? count + '/4' : ''));
+      $('#tab-item-comparison').attr('data-count', (count ? count + '/4' : '0/4'));
+//      $('#btn-nav-comparison-list').attr('data-count', (count ? count + '/4' : ''));
+      var glyphs = { 0: '&#xf30e',1: '&#xf40a',2: '&#xf31a',3: '&#xf31c',4: '&#xf40d' };
+      $('#btn-nav-comparison-list').html(glyphs[count]);
 
       $('#btn-nav-comparison-list').addClass('pulse');
       setTimeout(function () {
         $('#btn-nav-comparison-list').removeClass('pulse');
-      }, 300);
+      }, 3500);
     };
 
     function init() {

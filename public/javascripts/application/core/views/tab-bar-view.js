@@ -38,7 +38,8 @@
       that.$el.attr('data-selected-tab', tab);
     };
 
-    this.renderAddOrRemoveBookmark = function () {
+    this.renderAddOrRemoveBookmark = function (item, count) {
+      $('#tab-bookmarks').attr('data-count', (count ? count : '0'));
       $('#btn-nav-bookmarks').addClass('pulse');
       setTimeout(function () {
         $('#btn-nav-bookmarks').removeClass('pulse');
@@ -46,12 +47,15 @@
     };
 
     this.renderAddOrRemoveItemOfInterest = function (id, count) {
-      $('#btn-nav-comparison-list').attr('data-count', (count ? count + '/4' : ''));
+      $('#tab-item-comparison').attr('data-count', (count ? count + '/4' : '0/4'));
+//      $('#btn-nav-comparison-list').attr('data-count', (count ? count + '/4' : ''));
+      var glyphs = { 0: '&#xf30e',1: '&#xf40a',2: '&#xf31a',3: '&#xf31c',4: '&#xf40d' };
+      $('#btn-nav-comparison-list').html(glyphs[count]);
 
       $('#btn-nav-comparison-list').addClass('pulse');
       setTimeout(function () {
         $('#btn-nav-comparison-list').removeClass('pulse');
-      }, 300);
+      }, 3500);
     };
 
     function init() {

@@ -76,7 +76,7 @@
 
       _bookmarks[bookmark.id] = bookmark;
 
-      $.publish(that.eventUris.addBookmark, bookmark);
+      $.publish(that.eventUris.addBookmark, bookmark, _bookmarks.length);
     };
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
@@ -84,7 +84,7 @@
     this.removeBookmark = function (id) {
       delete _bookmarks[id];
 
-      $.publish(that.eventUris.removeBookmark, id);
+      $.publish(that.eventUris.removeBookmark, id, _bookmarks.length);
     };
 
     this.isBookmark = function (id) {

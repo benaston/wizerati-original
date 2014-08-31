@@ -65,8 +65,8 @@
 
         mod.Tab = {
           Search: '0',
-          Bookmark: '1',
-          ComparisonList: '2',
+          ComparisonList: '1',
+          Bookmark: '2',
           Account: '3'
         };
 

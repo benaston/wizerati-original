@@ -243,11 +243,13 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .i-o-i-p-c {
-    margin: 0 25px 30px 25px;
+    /*margin: 0 25px 30px 25px;*/
+    margin: 0 33px 30px 33px;
 }
 
 .i-o-i-p-c:first-child {
-    margin: 15px 25px 10px 25px;
+    /*margin: 15px 25px 10px 25px;*/
+    margin: 15px 33px 10px 33px;
 }
 
 .i-o-i-p-c-hr {

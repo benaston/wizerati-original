@@ -7,16 +7,16 @@
                 <label for="btn-nav-search" class="lbl">Search</label>
             </form>
         </li>
-        <li class="i">
-            <form action="/bookmarks" method="GET">
-                <button id="btn-nav-bookmarks" class="btn btn-s" title="Bookmarks">&#xf26b;</button>
-                <label for="btn-nav-bookmarks" class="lbl">Bookmarks</label>
+        <li class="i" data-count="0/4" id="tab-item-comparison">
+            <form action="/comparison" method="GET">
+                <button id="btn-nav-comparison-list" class="btn btn-s" title="Comparison List" data-count="">&#xf30e;</button>
+                <label for="btn-nav-comparison-list" class="lbl">Compare</label>
             </form>
         </li>
-        <li class="i">
-            <form action="/comparison" method="GET">
-                <button id="btn-nav-comparison-list" class="btn btn-s" title="Comparison List" data-count="">&#xf31c;</button>
-                <label for="btn-nav-comparison-list" class="lbl">Compare</label>
+        <li class="i" data-count="0" id="tab-bookmarks">
+            <form action="/bookmarks" method="GET">
+                <button id="btn-nav-bookmarks" class="btn btn-s" title="Bookmarks">&#xf25d;</button>
+                <label for="btn-nav-bookmarks" class="lbl">Bookmarks</label>
             </form>
         </li>
     </ul>
