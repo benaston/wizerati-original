@@ -56,11 +56,11 @@
                     <form style="width:100%;text-align: center;" class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
                         <input type="hidden" name="id" value="{{=model.id}}" />
                         <div class="m-i" style="top:0">
-                            <button style="font-size: 1.45rem;
+                            <button style="font-size: 1.25rem;
 font-family: helvetica-pro-light,Arial,sans-serif;
 color: rgba(0,109,204,.95);
-width: 120px;
-height: 120px;
+width: 100px;
+height: 100px;
 border-radius: 100px;
 border: 1px solid;
 line-height: 100px;" id="btn-action-{{= model.id}}" class="btn a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
