@@ -217,10 +217,10 @@ label[for='btn-change-search'] {
 .ti.is-in-comparison-list:after {
     font-family: ionicons;
     content: '\f40d';
-    font-size: 3rem;
-    position: absolute;
-    top: 152px;
-    left: 10px;
+    font-size: 1.4rem;
+    position: relative;
+    top: 8px;
+    left: -1px;
 }
 
 .t h3 {
