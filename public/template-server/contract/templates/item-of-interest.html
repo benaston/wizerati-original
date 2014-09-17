@@ -56,7 +56,7 @@
                     <form style="width:100%;text-align: center;" class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
                         <input type="hidden" name="id" value="{{=model.id}}" />
                         <div class="m-i" style="top:0">
-                            <button style="font-size: 1.25rem;" id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
+                            <button style="font-size: 1.65rem;font-family: helvetica-pro-light,Arial,sans-serif;" id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
                                     title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable ? '' : 'disabled' }}>Apply</button>
                             <!--<label class="lbl" for="btn-action-{{= model.id}}">Apply</label>-->
                         </div>
