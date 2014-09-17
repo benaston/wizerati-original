@@ -6,6 +6,11 @@ $(function appStart() {
     return;
   }
 
+  var os = wizerati.mod('compatibility').osChecker.getOS();
+  if (os === wizerati.mod('enum').OS.Mac) {
+    $('html').addClass('mac');
+  }
+
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
   for (var v in window.wizerati.mod('views')) {
     window.wizerati.mod('views')[v].onDomReady();

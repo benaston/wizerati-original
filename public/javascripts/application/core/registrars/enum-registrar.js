@@ -48,9 +48,14 @@
           ActionContract: '5'
         };
 
-        mod.PostAJobTab = {
-          LogInOrSignUp: '0',
+        mod.OS = {
+          Windows: '0',
+          Unix: '1',
+          Mac: '2'
+        };
 
+        mod.PostAJobTab = {
+          LogInOrSignUp: '0'
         };
 
         mod.ResultListMode = {

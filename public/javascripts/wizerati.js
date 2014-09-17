@@ -2883,6 +2883,34 @@ window.wizerati = {
   app.BrowserCompatibilityChecker = BrowserCompatibilityChecker;
 
 }(wizerati));
+;(function (app) {
+  'use strict';
+
+  function OSChecker() {
+    if (!(this instanceof OSChecker)) {
+      return new OSChecker();
+    }
+
+    var osEnum = app.mod('enum').OS;
+
+    this.getOS = function () {
+      if(/(Windows)/g.test( navigator.userAgent )) {
+        return osEnum.Windows;
+      }
+
+      if(/(Unix|Linux|Solaris)/g.test( navigator.userAgent )) {
+        return osEnum.Unix;
+      }
+
+      if(/(Macintosh)/g.test( navigator.userAgent )) {
+        return osEnum.Mac;
+      }
+    };
+  }
+
+  app.OSChecker = OSChecker;
+
+}(wizerati));
 ;(function (app, invertebrate, _) {
   'use strict';
 
@@ -5857,6 +5885,7 @@ window.wizerati = {
       try {
         var mod = w.mod('compatibility');
         mod.browserCompatibilityChecker = new wizerati.BrowserCompatibilityChecker();
+        mod.osChecker = new wizerati.OSChecker();
       }
       catch (e) {
         throw 'compatibilityRegistrar::run ' + e;
@@ -5991,9 +6020,14 @@ window.wizerati = {
           ActionContract: '5'
         };
 
-        mod.PostAJobTab = {
-          LogInOrSignUp: '0',
+        mod.OS = {
+          Windows: '0',
+          Unix: '1',
+          Mac: '2'
+        };
 
+        mod.PostAJobTab = {
+          LogInOrSignUp: '0'
         };
 
         mod.ResultListMode = {
@@ -8606,6 +8640,11 @@ window.wizerati = {
   if (!wizerati.mod('compatibility').browserCompatibilityChecker.isBrowserCompatible()) {
     $('head').append('<link rel="stylesheet" type="text/css" href="stylesheets/no-compatibility.css">');
     return;
+  }
+
+  var os = wizerati.mod('compatibility').osChecker.getOS();
+  if (os === wizerati.mod('enum').OS.Mac) {
+    $('html').addClass('mac');
   }
 
   window.wizerati.instance = new wizerati.App(window.env, new window.invertebrate.Router('Wizerati'));
