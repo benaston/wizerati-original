@@ -44,15 +44,11 @@ p, h1, h2, h3, code, a, li {
 
 code {
     padding: 2px 4px;
-    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
     font-size: .8rem;
-    color: #333333;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    color: #333;
     white-space: nowrap;
-    background-color: #f7f7f9;
-    border: 1px solid #e1e1e8;
+    text-transform: uppercase;
 }
 
 div {

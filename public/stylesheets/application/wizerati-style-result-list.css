@@ -163,6 +163,8 @@ label[for='btn-change-search'] {
     background-color: rgb(0, 122, 255);
     border-radius: 14px;
     content: '';
+    top: 9px;
+    position: relative;
 }
 
 .i-c {
@@ -288,7 +290,8 @@ body[data-is-mobile-device='false'] .t.hidden {
 
 .t a {
     /*padding: 3px 20px 9px 32px;*/
-    padding: 3px 32px 9px 32px;
+    /*padding: 3px 32px 9px 32px;*/
+    padding: 15px 32px 15px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
 }

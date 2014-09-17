@@ -52,11 +52,11 @@
                 <!--<hr class="i-o-i-hr">-->
             <!--</div>-->
             <div class="i-o-i-p-c">
-                <div style="width:100%;height:40px;vertical-align:top;line-height:40px;display:inline-block;background: rgba(249, 249, 249, 1);border-radius:5px;border: 1px solid rgba(0, 95, 167, 0.35);margin:0;margin-bottom:4px;">
+                <div style="float: right;margin-left: 17px; margin-right: 20px; margin-bottom: 20px;">
                     <form style="width:100%;text-align: center;" class="frm-action" method="POST" action="{{=model.isActioned ? '/actioneditems/destroy' : '/applytocontractdialog/create' }}">
                         <input type="hidden" name="id" value="{{=model.id}}" />
                         <div class="m-i" style="top:0">
-                            <button style="height:40px;font-size: 1.25rem;line-height: 40px;" id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
+                            <button style="font-size: 1.25rem;" id="btn-action-{{= model.id}}" class="btn btn-s a {{=model.isActionable || model.isHidden ? '' : 'disabled' }} {{ if(model.isActioned) {}}checked{{} }} btn-action"
                                     title="{{=model.isActionable ? 'Apply to this job' : '' }}" {{=model.isActionable ? '' : 'disabled' }}>Apply</button>
                             <!--<label class="lbl" for="btn-action-{{= model.id}}">Apply</label>-->
                         </div>
