@@ -203,9 +203,9 @@ label[for='btn-change-search'] {
     font-family: ionicons;
     content: '\f26b';
     position: absolute;
-    top: -30px;
-    left: 265px;
-    font-size: 3.6rem;
+    top: -90px;
+    left: 238px;
+    font-size: 13.6rem;
 }
 
 .ti.actioned:after {
@@ -214,13 +214,16 @@ label[for='btn-change-search'] {
     font-size: 1.1rem;
 }
 
+/*will need to be changed for small devices*/
 .ti.is-in-comparison-list:after {
     font-family: ionicons;
     content: '\f40d';
-    font-size: 1.4rem;
-    position: relative;
-    top: 8px;
-    left: -1px;
+    font-size: 16.4rem;
+    position: absolute;
+    top: -81px;
+    left: 27px;
+    opacity: .3;
+    pointer-events: none;
 }
 
 .t h3 {

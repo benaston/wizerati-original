@@ -56,7 +56,7 @@
     function renderCount() {
       var count = that.Model.getResults().length || 'No';
       var searchDesc = htmlEncode(_searchFormModel.getKeywords().trim()) + ' ' + htmlEncode(_searchFormModel.getRate()) + ' GBP/day';
-      that.$elH1.html('<span id="search-desc-preamble">' + count + ' results for: <br/></span><span id="search-desc" title="'+ searchDesc+'">' +searchDesc + '</span>');
+      that.$elH1.html('<span id="search-desc-preamble">' + count + ' results for <br/></span><span id="search-desc" title="'+ searchDesc+'">\'' +searchDesc + '\'</span>');
     }
 
     this.renderSetSelectedItemId = function (selectedItemId) {
