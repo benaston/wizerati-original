@@ -158,13 +158,14 @@ label[for='btn-change-search'] {
 
 .ti.is-unread:after {
     display: inline-block;
-    width: 14px;
-    height: 14px;
-    background-color: rgb(0, 122, 255);
-    border-radius: 14px;
     content: '';
-    top: 12px;
+    top: 0px;
     position: relative;
+    left: 0px;
+    border-bottom: 19px solid transparent;
+    border-left: 19px solid #007aff;
+    width: 0;
+    height: 0;
 }
 
 .i-c {
