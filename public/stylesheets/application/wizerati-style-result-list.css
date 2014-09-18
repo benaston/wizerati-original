@@ -279,7 +279,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
     overflow: hidden;
     -webkit-user-select: none;
     line-height: 1.5; /*important for resetting this with a line-height of 0 for the list itself*/
-    max-height: 250px; /*larger than it will ever get*/
+    max-height: 269px; /*larger than it will ever get*/
 }
 
 .t.hidden {
