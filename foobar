@@ -28,29 +28,29 @@ input[type='range']::-webkit-slider-thumb::after {
     z-index: 9999;
     border-radius: 20px;
 }
-.range__outer::before {
-	content: '';
-display: block;
-width: 444px;
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
 height: 2px;
 position: relative;
-top: 30px;
-left: 27px;
+/*top: 30px;
+left: 27px;*/
 background-color: rgba(2,86,244,.1);
-pointer-events: none;
-
 }
+
 .range__outer {
 	width: 550px;
 	display: block;
 	position: relative;
+	box-shadow: 0 0 0 1px red;
 }
 .range__outer .range-ticks {
 position: absolute;
-top: 18px;
+top: 0px;
+left: 0px;
 display: block;
 width: calc(100% - 50px);
-
+box-shadow: 0 0 0 1px black;
 pointer-events: none;
 }
 .range__outer .range-ticks>* {
@@ -74,7 +74,7 @@ content: '';
 <div class="search-filters">
     <span>Show me jobs paying more than 200 GBP/day</span>
 <span class="range__outer">
-    <input name="r" id="r-range" type="range" min="0" max="9" list="rates" value="0" style="
+    <input name="r" id="r-range" type="range" min="0" max="8" list="rates" value="0" style="
     width: 100%;
     margin-top: 15px;">
 <div class="range-ticks">
@@ -98,7 +98,6 @@ content: '';
         <option label="400">450</option>
         <option label="400">500</option>
         <option label="400">550</option>
-        <option label="400">600</option>
     </datalist>
 
 </div>
