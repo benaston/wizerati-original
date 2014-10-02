@@ -33,6 +33,25 @@ function updateDom(messageId, messageReceived) {
   console.log('Message ', messageId, ' Time to render (ms): ', (now-messageReceived));
 }
 
+var streamCallbacks, 
+				streamConfiguration, 
+				stream;
+
+			streamCallbacks = {
+				filledCb: this._onFilled.bind(this),
+				rejectedCb: this._onRejected.bind(this),
+				streamErrorCb: this._onStreamError.bind(this)
+			};
+
+			streamConfiguration = this._priceStreamConfigurationFactory.create(model, streamCallbacks);
+
+			this._priceStream = this._priceStreamFactory.create(streamConfiguration);
+			
+			this._priceStream.start()
+				  .then(_onPriceStreamStart, _onPriceStreamStartFailed);
+
+			this._priceStream.destroy();
+
 function getPrimes(max) {
     var sieve = [], i, j, primes = [];
     for (i = 2; i <= max; ++i) {
