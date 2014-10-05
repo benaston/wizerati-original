@@ -125,7 +125,8 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
 
 #btn-nav-comparison-list.pulse {
     /*-webkit-animation: pulse-l .5s 1 0;*/
-    -webkit-animation: pulse-l .5s 5 0.2s;
+    /*-webkit-animation: pulse-l .5s 5 0.2s;*/
+    -webkit-animation: fly-in .5s 1 0.2s;
 }
 
 #btn-nav-bookmarks.pulse {

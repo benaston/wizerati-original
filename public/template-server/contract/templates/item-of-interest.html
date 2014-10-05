@@ -1,15 +1,19 @@
-{{ try {  }}<div class="flex-container {{= model.isSelected ? 's-i-content' : 'p-i-content' }}" style="width: {{=model.width}}px;">
+{{ try {  }}
+
+<div class="flex-containerr {{= model.isSelected ? 's-i-content' : 'p-i-content' }}" style="width: {{=model.width}}px; overflow:hidden; position:relative;">
     <!--<div id="top1" class="in-page-anchor-target"></div>-->
-    <header class="menu-container flex-item">
-        <ul class="menu">
-            <li><form class="frm-hide" method="POST" action="/hiddenitems/{{=model.isHidden ? 'destroy' : 'create' }}">
+    <header class="menu-container flex-itemm" style="position: absolute; right: 0; top:10px; width: 194px; border-bottom:0; border-radius: 0 0 0 25px; background: -webkit-linear-gradient(left, rgba(255,255,255,.95) 0%,rgba(255,255,255,.95) 75%, rgba(255,255,255,0) 100%);border-radius: 0 0 0 20px;">
+
+    <ul class="menu" style="position: relative;
+">        
+            <!-- <li><form class="frm-hide" method="POST" action="/hiddenitems/{{=model.isHidden ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-hide-{{= model.id}}" class="btn btn-s a {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
                             title="{{=model.isHideable ? 'Hide this from future results' : '' }}" {{=model.isHideable || model.isHidden ? '' : 'disabled' }}>&#xf30f;</button>
                     <label class="lbl" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'Un-hide' : 'Hide' }}</label>
                 </div>
-            </form></li>
+            </form></li> -->
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-pin-{{= model.id}}" class="btn btn-s a {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
@@ -26,12 +30,11 @@
                 </div>
             </form></li>
         </ul>
-    </header>
-    <div class="flex-item">
-        <article class="i-o-i-c {{=model.isHidden ? 'hidden' : '' }}">
-            <div class="i-o-i-p-c">
-                <div style="vertical-align:top;display:inline-block; ">
-                    <h3 class="i-o-i-t">{{= model.title }}</h3>
+    </header><div class="flex-item" style="position:absolute;overflow-y: scroll;height:100%;"><article class="i-o-i-c {{=model.isHidden ? 'hidden' : '' }}" style="position:relative; top: 0;"><div class="i-o-i-p-c">
+                <div style="vertical-align:top;display:block; ">
+                    <h3 class="i-o-i-t" style="width: calc(100% - 160px);
+line-height: 23px; /*try and certical center more*/
+min-height: 47px;">{{= model.title }}</h3>
                     <ul class="info">
                         <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
                         <li><a href="#">{{= model.organization }}</a></li>
