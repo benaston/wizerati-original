@@ -1,0 +1,16 @@
+var streamCallbacks, 
+				streamConfiguration, 
+				stream;
+
+			streamCallbacks = {
+				filledCb: this._onFilled.bind(this),
+				rejectedCb: this._onRejected.bind(this),
+				streamErrorCb: this._onStreamError.bind(this)
+			};
+
+			streamConfiguration = this._priceStreamConfigurationFactory.create(model);
+
+			this._priceStream = this._priceStreamFactory.create(streamConfiguration);
+			
+			stream.start()
+				  .then(_onPriceStreamStart, _onPriceStreamStartFailed);

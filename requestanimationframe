@@ -1,0 +1,68 @@
+
+<div id="normal"></div>
+
+<script>
+var messageCount = -1,
+    normalElement = document.getElementById('normal'),
+    intervalId;
+
+function simulateMessage() {  
+  messageCount++;
+  
+  if(messageCount < 500) {
+    var messageReceived = performance.now();
+    requestAnimationFrame((function () {
+      
+      return function() {       
+        updateDom(messageCount, messageReceived);
+      };
+    }()));
+    return;
+  } 
+
+  clearInterval(intervalId);
+  console.log('completed: ', performance.now());
+}
+
+intervalId = setInterval(simulateMessage, 16);
+
+function updateDom(messageId, messageReceived) {
+  getPrimes(5000000 * Math.random());
+  var now = performance.now();
+  normalElement.innerHTML = now;
+  console.log('Message ', messageId, ' Time to render (ms): ', (now-messageReceived));
+}
+
+var streamCallbacks, 
+				streamConfiguration, 
+				stream;
+
+			streamCallbacks = {
+				filledCb: this._onFilled.bind(this),
+				rejectedCb: this._onRejected.bind(this),
+				streamErrorCb: this._onStreamError.bind(this)
+			};
+
+			streamConfiguration = this._priceStreamConfigurationFactory.create(model, streamCallbacks);
+
+			this._priceStream = this._priceStreamFactory.create(streamConfiguration);
+			
+			this._priceStream.start()
+				  .then(_onPriceStreamStart, _onPriceStreamStartFailed);
+
+			this._priceStream.destroy();
+
+function getPrimes(max) {
+    var sieve = [], i, j, primes = [];
+    for (i = 2; i <= max; ++i) {
+        if (!sieve[i]) {
+            // i has not been marked -- it is prime
+            primes.push(i);
+            for (j = i << 1; j <= max; j += i) {
+                sieve[j] = true;
+            }
+        }
+    }
+    return primes;
+}
+</script>
