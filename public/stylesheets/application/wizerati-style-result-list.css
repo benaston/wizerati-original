@@ -330,6 +330,8 @@ body[data-is-mobile-device='false'] .t.hidden {
     border-radius: 0;
 }
 
+
+
 #btn-change-search {
     position: absolute;
     visibility: hidden;
