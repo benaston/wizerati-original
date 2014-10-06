@@ -153,7 +153,8 @@ label[for='btn-change-search'] {
     font-family: 'glyph';
     text-align: center;
     /*color: rgba(167, 174, 182, 1);*/
-    color: rgba(167, 174, 182, .3);
+    /*color: rgba(167, 174, 182, .3);*/
+    color: rgba(204, 204, 206, 1);
 }
 
 .ti.is-unread:after {
@@ -162,18 +163,19 @@ label[for='btn-change-search'] {
     top: 0px;
     position: relative;
     left: 0px;
-    border-bottom: 19px solid transparent;
-    border-left: 19px solid #007aff;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid #007aff;
     width: 0;
     height: 0;
 }
 
 .i-c {
     position: absolute;
-    left: 7px;
-    top: 8px;
+    left: 4px;
+    top: 1px;
     width: 22px;
     font-size: 1.2rem;
+    color: rgba(204,204,206,1);
 }
 
 .c .menu {
@@ -204,9 +206,9 @@ label[for='btn-change-search'] {
     font-family: ionicons;
     content: '\f26b';
     position: absolute;
-    top: -90px;
-    left: 238px;
-    font-size: 13.6rem;
+    top: -48px;
+    left: 264px;
+    font-size: 6.6rem;
 }
 
 .ti.actioned:after {
@@ -219,16 +221,17 @@ label[for='btn-change-search'] {
 .ti.is-in-comparison-list:after {
     font-family: ionicons;
     content: '\f40d';
-    font-size: 16.4rem;
+    font-size: 1.6rem;
     position: absolute;
-    top: -81px;
-    left: 27px;
-    opacity: .3;
+    top: 3px;
+    left: 5px;
+    opacity: 1.3;
     pointer-events: none;
 }
 
 .t h3 {
     color: black;
+    margin: 0 0;
 }
 
 .location-and-posted {
@@ -239,6 +242,11 @@ label[for='btn-change-search'] {
 
 .rate {
     text-align: right;
+    /*refactor*/
+    font-size: .9rem;
+line-height: 1.9rem;
+top: 4px;
+position: relative;
 }
 
 .t a {
@@ -266,8 +274,7 @@ body[data-hover-is-enabled='true'] .t a:hover {
     margin: 0;
 }
 
-.location-and-posted,
-.rate {
+.location-and-posted {
     color: #999;
 }
 
@@ -295,7 +302,8 @@ body[data-is-mobile-device='false'] .t.hidden {
 .t a {
     /*padding: 3px 20px 9px 32px;*/
     /*padding: 3px 32px 9px 32px;*/
-    padding: 15px 32px 15px;
+    /*padding: 15px 32px 15px;*/
+    padding: 15px 22px 15px 42px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
 }
@@ -309,6 +317,7 @@ body[data-is-mobile-device='false'] .t.hidden {
 
 .t .tld {
     margin-bottom: 9px;
+    font-size: .8rem;
 }
 
 .t h2 {

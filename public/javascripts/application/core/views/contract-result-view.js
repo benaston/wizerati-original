@@ -8,7 +8,7 @@
     }
 
     var that = this,
-        _el = '<li class="t"></li>',
+        _el = '<li class="t" style="width:100%;"></li>',
         _templateName = 'result.html-local';
 
     this.$el = $(_el);

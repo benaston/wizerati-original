@@ -42,8 +42,12 @@
     /*border-left: 6px solid rgba(0,122,255,.5);*/
 /*}*/
 
-#tab-bar .i:nth-of-type(3)[data-count='0'] {
+#tab-bar .i:nth-of-type(2)[data-count='0/4'] {
     display: none;
+}
+
+#tab-bar .i:nth-of-type(3)[data-count='0'] {
+    color: silver;
 }
 
 #tab-bar .i:nth-of-type(1),
@@ -119,9 +123,7 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     font-size: inherit;
 }
 
-#tab-bar .i:nth-of-type(2)[data-count='0/4'] {
-    display: none;
-}
+
 
 #btn-nav-comparison-list.pulse {
     /*-webkit-animation: pulse-l .5s 1 0;*/

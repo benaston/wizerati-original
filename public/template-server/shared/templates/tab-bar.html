@@ -7,12 +7,6 @@
                 <label for="btn-nav-search" class="lbl">Search</label>
             </form>
         </li>
-        <li class="i" data-count="0/4" id="tab-item-comparison">
-            <form action="/comparison" method="GET">
-                <button id="btn-nav-comparison-list" class="btn btn-s" title="Comparison List" data-count="">&#xf30e;</button>
-                <label for="btn-nav-comparison-list" class="lbl">Comparison List</label>
-            </form>
-        </li>
         <li class="i" data-count="0" id="tab-bookmarks">
             <form action="/bookmarks" method="GET">
                 <button id="btn-nav-bookmarks" class="btn btn-s" title="Bookmarks">&#xf25d;</button>
@@ -35,4 +29,18 @@
             <!--</form>-->
         <!--</li>-->
     </ul>
+</nav>
+    <nav id="comparison-list-heads-up" data-count="1">
+    <form action="/comparison" method="GET">
+    <button id="btn-comparison-list" style="display:none;"></button>
+    <label for="btn-comparison-list">
+    <ul class="menu">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <div class="label">Comparison List</div>
+    </label>
+    </form>
 </nav>
