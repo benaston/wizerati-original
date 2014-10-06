@@ -318,6 +318,7 @@ body[data-is-mobile-device='false'] .t.hidden {
 .t .tld {
     margin-bottom: 9px;
     font-size: .8rem;
+    color: rgba(150,150,150,1);
 }
 
 .t h2 {
