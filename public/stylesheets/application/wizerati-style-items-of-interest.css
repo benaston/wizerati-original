@@ -165,8 +165,11 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 #items-of-interest-panel .menu {
-    text-align: left;
-    margin-left: 12px; /*attempt to nudge away from the search result list, inline with start of title of item*/
+    /*text-align: left;
+    margin-left: 12px;
+     attempt to nudge away from the search result list, inline with start of title of item*/
+    text-align: right;
+    right: 24px;
 }
 
 .table-location-industry {
@@ -309,6 +312,19 @@ body[data-ui-mode='1'] #items-of-interest-panel {
     -webkit-backface-visibility: hidden;
     box-sizing: border-box;
     border-bottom: 1px solid rgba(0, 95, 167, 0.35); /*we have a subtly blue hue to the border at the top of the page. We avoid box-shadow for perf reasons.*/
+
+position: absolute; 
+right: 5px; 
+top:0; 
+padding-top:10px;
+ width: 194px; 
+   background:rgba(255,255,255,.95);
+   border-bottom:0;
+
+
+    background: -webkit-radial-gradient(205px -1px,ellipse cover,rgba(255,255,255,.94) 37%,rgba(255,255,255,0) 65%);
+    height: 146px;
+    width: 304px;
 }
 
 #selected-item-container-2 {
