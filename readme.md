@@ -3,6 +3,8 @@ http://codepen.io/davidyarham/pen/Ajdms
 Wizerati
 ========
 
+**The fastest way to find an IT contract role.**
+
 Wizerati is an ongoing project to test out user interface ideas and hone my skills developing JavaScript-heavy single-page web applications.
 
 Please note:

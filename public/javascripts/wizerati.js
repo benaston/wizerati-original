@@ -6042,9 +6042,9 @@ window.wizerati = {
 
         mod.Tab = {
           Search: '0',
-          ComparisonList: '1',
-          Bookmark: '2',
-          Account: '3'
+          Bookmark: '1',
+          Account: '2',
+          ComparisonList: '3'
         };
 
         mod.UIMode = {

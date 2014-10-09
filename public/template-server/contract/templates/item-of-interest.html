@@ -6,14 +6,6 @@
 
     <ul class="menu" style="position: relative;
 ">        
-            <!-- <li><form class="frm-hide" method="POST" action="/hiddenitems/{{=model.isHidden ? 'destroy' : 'create' }}">
-                <input type="hidden" name="id" value="{{=model.id}}" />
-                <div class="m-i">
-                    <button id="btn-hide-{{= model.id}}" class="btn btn-s a {{=model.isHideable || model.isHidden ? '' : 'disabled' }} {{ if(model.isHidden) {}}checked{{} }} btn-hide"
-                            title="{{=model.isHideable ? 'Hide this from future results' : '' }}" {{=model.isHideable || model.isHidden ? '' : 'disabled' }}>&#xf30f;</button>
-                    <label class="lbl" for="btn-hide-{{= model.id}}">{{= model.isHidden ? 'Un-hide' : 'Hide' }}</label>
-                </div>
-            </form></li> -->
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-pin-{{= model.id}}" class="btn btn-s a {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
