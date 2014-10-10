@@ -17,10 +17,22 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-devic
 #search-desc-preamble {
     font-weight: bold;
 }
+p.rate::after {
+content: '';
+clear: both;
+display: block;
+}
+
+.rate-new {
+float: left;
+}
 
 .location {
-    color: rgba(150,150,150,1);    
-    margin-left:15px;
+    color: rgba(150,150,150,1);
+width: 169px;
+margin: 0;
+float: right;
+line-height: 1.5rem;
 }
 
 /*.rate-value  {

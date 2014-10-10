@@ -76,13 +76,13 @@ body[data-ui-mode='1'] #tab-bar {
     margin-top: -12px;
     margin-bottom: 11px;
     /*color: rgba(149, 149, 149, 1);*/
-    color: rgba(66, 66, 66, 1);
+    color: slategray;
 }
 
 #tab-bar .btn {
     position: relative; /*for positioning of after*/
     /*color: rgb(147, 147, 147);  Lighter than label because of line thickness illusion. */
-    color: rgb(78, 78, 78); /* Lighter than label because of line thickness illusion. */
+    color: slategray; 
 }
 
 .h {
@@ -91,8 +91,11 @@ body[data-ui-mode='1'] #tab-bar {
     height: 61px;
     line-height: 61px;
     text-align: center;
-    font-family: helvetica-bold, Arial, sans-serif;
-    color: #333;
+    /*font-family: helvetica-bold, Arial, sans-serif;*/
+    /*color: #333;*/
+    font-family: ionicons;
+font-size: 3.8rem;
+color: slategray;
 }
 
 body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
