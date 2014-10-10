@@ -6277,6 +6277,7 @@ window.wizerati = {
         var mod = w.mod('views');
         mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
         mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel, f.resultViewFactory, p.itemModelPack);
+        mod.comparisonListHeadsUpView = new w.ComparisonListHeadsUpView(m.tabBarModel, m.itemsOfInterestModel, m.uiRootModel);
         mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
         mod.myAccountView = new w.AccountView(m.accountModel);
         mod.resultListView = new w.ResultListView(m.resultListModel, f.resultViewFactory, p.itemModelPack, m.searchFormModel);
@@ -7601,23 +7602,20 @@ window.wizerati = {
 ;(function (app, $, invertebrate) {
   'use strict';
 
-  function ComparisonListHeadsUpView(model, itemsOfInterestModel, uiRootModel) {
+  function ComparisonListHeadsUpView(tabBarModel, itemsOfInterestModel, uiRootModel) {
 
     var that = this,
         _el = '#comparison-list-heads-up',
         _renderOptimizations = {},
+        _tabBarModel = null,
         _itemsOfInterestModel = null,
-        _bookmarkListModel = null,
-        _uiRootModel = null;
+        _uiRootModel = null,
+        _tabEnum = app.mod('enum').Tab;
 
     this.$el = null;
-    this.Model = null;
 
     this.onDomReady = function () {
       that.$el = $(_el);
-    };
-
-    this.bindEvents = function () {
     };
 
     this.render = function (e) {
@@ -7625,47 +7623,52 @@ window.wizerati = {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;
       }
-
-      that.renderSetSelectedTab(that.Model.getSelectedTab())
-      that.bindEvents();
     };
 
     this.renderSetSelectedTab = function (tab) {
-      that.$el.attr('data-selected-tab', tab);
-    };
-
-    this.renderAddOrRemoveBookmark = function (item, count) {
-      $('#tab-bookmarks').attr('data-count', (count ? count : '0'));
-      $('#btn-nav-bookmarks').addClass('pulse');
-      setTimeout(function () {
-        $('#btn-nav-bookmarks').removeClass('pulse');
-      }, 300);
+      console.log('ComparisonListHeadsUpView::renderSetSelectedTab', tab);
+      switch(tab) {
+        case _tabEnum.Search:
+        case _tabEnum.Bookmark:
+          show();
+        break;
+        default:
+          hide();
+      }
     };
 
     this.renderAddOrRemoveItemOfInterest = function (id, count) {
-      $('#tab-item-comparison').attr('data-count', (count ? count + '/4' : '0/4'));
-//      $('#btn-nav-comparison-list').attr('data-count', (count ? count + '/4' : ''));
-      var glyphs = { 0: '&#xf30e',1: '&#xf40a',2: '&#xf31a',3: '&#xf31c',4: '&#xf40d' };
-      $('#btn-nav-comparison-list').html(glyphs[count]);
+      that.$el.attr('data-count', (count ? count + '/4' : '0/4'));
 
-      $('#btn-nav-comparison-list').addClass('pulse');
+      that.$el.addClass('pulse');
       setTimeout(function () {
-        $('#btn-nav-comparison-list').removeClass('pulse');
+        that.$el.removeClass('pulse');
       }, 3500);
     };
 
+    function show() {
+      console.log('ComparisonListHeadsUpView::show');
+      that.$el.css('display', '');
+
+      // $el.addClass('pulse');
+      // setTimeout(function () {
+      //   $el.removeClass('pulse');
+      // }, 3500);
+    }
+
+    function hide() {
+      console.log('ComparisonListHeadsUpView::hide');
+      $el.css('display', 'none');
+    }
+
     function init() {
       try {
-        if (!model) {
-          throw 'model not supplied';
+        if (!tabBarModel) {
+          throw 'tabBarModel not supplied';
         }
 
         if (!itemsOfInterestModel) {
           throw 'itemsOfInterestModel not supplied';
-        }
-
-        if (!bookmarkListModel) {
-          throw 'bookmarkListModel not supplied';
         }
 
         if (!uiRootModel) {
@@ -7673,23 +7676,18 @@ window.wizerati = {
         }
 
         that = $.decorate(that, app.mod('decorators').decorators.trace);
-        that.Model = model;
 
+        _tabBarModel = tabBarModel;
         _itemsOfInterestModel = itemsOfInterestModel;
-        _bookmarkListModel = bookmarkListModel;
         _uiRootModel = uiRootModel;
 
-        _renderOptimizations[that.Model.eventUris.setSelectedTab] = that.renderSetSelectedTab;
+        _renderOptimizations[_tabBarModel.eventUris.setSelectedTab] = that.renderSetSelectedTab;
         _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
         _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
-        _renderOptimizations[_bookmarkListModel.eventUris.addBookmark] = that.renderAddOrRemoveBookmark;
-        _renderOptimizations[_bookmarkListModel.eventUris.removeBookmark] = that.renderAddOrRemoveBookmark;
-
-        $.subscribe(that.Model.eventUris.setSelectedTab, that.render);
+    
+        $.subscribe(_tabBarModel.eventUris.setSelectedTab, that.render);
         $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);
         $.subscribe(_itemsOfInterestModel.eventUris.removeItemOfInterest, that.render);
-        $.subscribe(_bookmarkListModel.eventUris.addBookmark, that.render);
-        $.subscribe(_bookmarkListModel.eventUris.removeBookmark, that.render);
 
         return that;
       } catch (e) {

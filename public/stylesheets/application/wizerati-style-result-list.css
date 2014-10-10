@@ -203,7 +203,8 @@ label[for='btn-change-search'] {
     position: absolute;
     left: 4px;
     top: 1px;
-    width: 22px;
+    /*width: 22px;*/
+    width: 36px; /*empirical to avoid clipping of the icons*/
     font-size: 1.2rem;
     color: rgba(204,204,206,1);
 }
@@ -232,7 +233,9 @@ label[for='btn-change-search'] {
     display: none;
 }
 
-
+.ti {
+    width: 100%;
+}
 
 .ti.actioned:after {
     font-family: ionicons;
@@ -245,7 +248,7 @@ label[for='btn-change-search'] {
 content: '\f26b';
 position: relative;
 top: 5px;
-left: 6px;
+/*left: 6px;*/
 font-size: 2.0rem;
 }
 
@@ -254,8 +257,8 @@ font-size: 2.0rem;
 content: '\f40d';
 font-size: 1.4rem;
 position: relative;
-top: -3px;
-left: 6px;
+top: 6px;
+/*left: 6px;*/
 pointer-events: none;
 }
 

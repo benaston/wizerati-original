@@ -16,6 +16,66 @@
     -webkit-backface-visibility: hidden; /*fix blur resulting from an unknown source in Chrome*/
 }
 
+#comparison-list-heads-up {
+    text-align: center;
+    position: absolute;
+    display: block;
+    width: 226px;
+    height: 144px;
+    z-index: 2;
+    right: 5px;
+    bottom: 0;
+    background: -webkit-radial-gradient(140px 124px, ellipse cover, rgba(255,255,255,.94) 37%,rgba(249,249,249,0) 70%);
+}
+
+label[for=btn-comparison-list] {
+    bottom: 7px;
+position: absolute;
+right: 0;
+width: 168px;
+}
+
+#comparison-list-heads-up .label {
+    margin-bottom: 0;
+    font-size: .8rem;
+    color: #007aff;
+}
+#comparison-list-heads-up .menu {
+    position: relative;
+}
+#comparison-list-heads-up .menu li {
+    display: inline-block;
+    width: 32px; /*empirical*/
+    text-align: center;
+}
+
+#comparison-list-heads-up[data-count='0/4'] {
+    -webkit-filter: opacity(0);
+    pointer-events: none;
+}
+
+#comparison-list-heads-up .menu li::before {
+    content: '\f25c';
+    display: block;
+    font-family: ionicons;
+    font-size: 2.5rem;
+    color: #007aff;
+}
+#comparison-list-heads-up[data-count='3/4'] .menu li:nth-child(4)::before {
+    /*color: rgba(204,204,206,.5);*/
+    color: silver;
+}
+#comparison-list-heads-up[data-count='2/4'] .menu li:nth-child(3)::before, 
+#comparison-list-heads-up[data-count='2/4'] .menu li:nth-child(4)::before {
+    color: silver;
+}
+#comparison-list-heads-up[data-count='1/4'] .menu li:nth-child(2)::before, 
+#comparison-list-heads-up[data-count='1/4'] .menu li:nth-child(3)::before, 
+#comparison-list-heads-up[data-count='1/4'] .menu li:nth-child(4)::before {
+    color: silver;
+}
+
+
 #tab-bar .i:nth-of-type(2)[data-count='0/4'] {
     display: none;
 }
