@@ -7,7 +7,7 @@
     width: 73px;
     background: rgba(249, 249, 249, 1);
     z-index: 5; /*5=tab-bar, 4=my-account-panel 3=search-form-panel, 2=bookmarks-panel, 1=result-list-panel, 0=ioi-panel*/
-    min-height: 660px; /*empirical*/
+    min-height: 338px; /*empirical*/
     -webkit-filter: opacity(0%);
     pointer-events: none;
     -webkit-user-select: none;
@@ -60,7 +60,7 @@ body[data-ui-mode='1'] #tab-bar {
 
 .i-my-account {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     text-align: center;
     width: 100%;
 }
@@ -75,12 +75,14 @@ body[data-ui-mode='1'] #tab-bar {
 #tab-bar .lbl {
     margin-top: -12px;
     margin-bottom: 11px;
-    color: rgba(149, 149, 149, 1);
+    /*color: rgba(149, 149, 149, 1);*/
+    color: rgba(66, 66, 66, 1);
 }
 
 #tab-bar .btn {
     position: relative; /*for positioning of after*/
-    color: rgb(147, 147, 147); /* Lighter than label because of line thickness illusion. */
+    /*color: rgb(147, 147, 147);  Lighter than label because of line thickness illusion. */
+    color: rgb(78, 78, 78); /* Lighter than label because of line thickness illusion. */
 }
 
 .h {

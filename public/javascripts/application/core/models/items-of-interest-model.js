@@ -2,10 +2,7 @@
   'use strict';
 
   function ItemsOfInterestModel(resultListModel) {
-    if (!(this instanceof app.ItemsOfInterestModel)) {
-      return new app.ItemsOfInterestModel(resultListModel);
-    }
-
+    
     var that = this,
         _resultListModel = null,
         _modeEnum = app.mod('enum').ItemsOfInterestMode,
