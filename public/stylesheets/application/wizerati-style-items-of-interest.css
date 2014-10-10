@@ -396,6 +396,11 @@ padding-top:10px;
 .i-o-i-t {
     /*min-width: 250px;*/
     display: block;
+    width: calc(100% - 164px);
+line-height: 23px;
+min-height: 55px;
+font-size: 1.2rem;
+line-height: 1.6rem;
 }
 
 body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
