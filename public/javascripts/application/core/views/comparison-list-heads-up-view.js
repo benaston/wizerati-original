@@ -4,7 +4,7 @@
   function ComparisonListHeadsUpView(tabBarModel, itemsOfInterestModel, uiRootModel) {
 
     var that = this,
-        _el = '#comparison-list-heads-up',
+        _el = '.comparison-list-heads-up',
         _renderOptimizations = {},
         _tabBarModel = null,
         _itemsOfInterestModel = null,
@@ -36,13 +36,19 @@
       }
     };
 
-    this.renderAddOrRemoveItemOfInterest = function (id, count) {
+    this.renderAddItemOfInterest = function (id, count) {
       that.$el.attr('data-count', (count ? count + '/4' : '0/4'));
 
       that.$el.addClass('pulse');
       setTimeout(function () {
         that.$el.removeClass('pulse');
-      }, 3500);
+      }, 201);
+    };
+
+    this.renderRemoveItemOfInterest = function (id, count) {
+      that.$el.attr('data-count', (count ? count + '/4' : '0/4'));
+
+      // that.$el.removeClass('pulse');
     };
 
     function show() {
@@ -81,8 +87,8 @@
         _uiRootModel = uiRootModel;
 
         _renderOptimizations[_tabBarModel.eventUris.setSelectedTab] = that.renderSetSelectedTab;
-        _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
-        _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
+        _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
     
         $.subscribe(_tabBarModel.eventUris.setSelectedTab, that.render);
         $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);

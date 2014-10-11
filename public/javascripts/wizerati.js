@@ -4075,6 +4075,7 @@ window.wizerati = {
               item.isBookmark = item['isBookmark'];
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
               item.isInComparisonList = !isSelectedItem;
+              debugger;
               item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
               item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === id;
@@ -4096,6 +4097,7 @@ window.wizerati = {
               item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === item.id;
               }));
+              item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
               item.canAddToComparisonList = !item.hiddenDateTime && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
               item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime); // && !_itemModelPack.actionedItemsModel.isActioned(item.id);
@@ -7605,7 +7607,7 @@ window.wizerati = {
   function ComparisonListHeadsUpView(tabBarModel, itemsOfInterestModel, uiRootModel) {
 
     var that = this,
-        _el = '#comparison-list-heads-up',
+        _el = '.comparison-list-heads-up',
         _renderOptimizations = {},
         _tabBarModel = null,
         _itemsOfInterestModel = null,
@@ -7637,13 +7639,19 @@ window.wizerati = {
       }
     };
 
-    this.renderAddOrRemoveItemOfInterest = function (id, count) {
+    this.renderAddItemOfInterest = function (id, count) {
       that.$el.attr('data-count', (count ? count + '/4' : '0/4'));
 
       that.$el.addClass('pulse');
       setTimeout(function () {
         that.$el.removeClass('pulse');
-      }, 3500);
+      }, 201);
+    };
+
+    this.renderRemoveItemOfInterest = function (id, count) {
+      that.$el.attr('data-count', (count ? count + '/4' : '0/4'));
+
+      // that.$el.removeClass('pulse');
     };
 
     function show() {
@@ -7682,8 +7690,8 @@ window.wizerati = {
         _uiRootModel = uiRootModel;
 
         _renderOptimizations[_tabBarModel.eventUris.setSelectedTab] = that.renderSetSelectedTab;
-        _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
-        _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderAddOrRemoveItemOfInterest;
+        _renderOptimizations[_itemsOfInterestModel.eventUris.addItemOfInterest] = that.renderAddItemOfInterest;
+        _renderOptimizations[_itemsOfInterestModel.eventUris.removeItemOfInterest] = that.renderRemoveItemOfInterest;
     
         $.subscribe(_tabBarModel.eventUris.setSelectedTab, that.render);
         $.subscribe(_itemsOfInterestModel.eventUris.addItemOfInterest, that.render);

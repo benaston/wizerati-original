@@ -17,8 +17,8 @@
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s a {{=model.isBookmarkable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
-                            title="{{=model.isBookmarkable ? 'Bookmark' : '' }}" {{=model.isHidden ? 'disabled' : '' }}>{{=model.isBookmark ? '&#xf26b;' : '&#xf25d;' }}</button>
-                    <label class="lbl" for="btn-bookmark-{{= model.id}}">{{= model.isBookmark ? 'Un-bookmark' : 'Bookmark' }}</label>
+                            title="{{=model.isBookmarkable ? 'Save' : 'Un-save' }}" {{=model.isHidden ? 'disabled' : '' }}>{{=model.isBookmark ? '&#xf26b;' : '&#xf25d;' }}</button>
+                    <label class="lbl" for="btn-bookmark-{{= model.id}}">{{= model.isBookmark ? 'Un-save' : 'Save' }}</label>
                 </div>
             </form></li>
         </ul>

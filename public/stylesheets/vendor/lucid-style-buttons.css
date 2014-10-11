@@ -28,7 +28,7 @@
 .btn-s ~ .lbl,
 .btn-s > .lbl {
     margin-top: 4px;
-    font-size: .8rem;
+    font-size: .9rem;
     color: rgba(0, 109, 204, 0.95);
     -webkit-user-select: none;
     line-height: 1.34rem; /*required for span labels*/

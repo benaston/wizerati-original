@@ -50,6 +50,7 @@
               item.isBookmark = item['isBookmark'];
               item.isSelected = _itemModelPack.itemsOfInterestModel.getSelectedItemId() === item.id;
               item.isInComparisonList = !isSelectedItem;
+              debugger;
               item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
               item.isPinnable = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4 && !_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === id;
@@ -71,6 +72,7 @@
               item.isInComparisonList = !!(_.find(_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems, function (i) {
                 return i === item.id;
               }));
+              item.pinnedItemCount = _itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length;
               item.canAddToComparisonList = !item.hiddenDateTime && (_itemModelPack.itemsOfInterestModel.getItemsOfInterest().pinnedItems.length < 4);
               item.isHidden = !!(item.hiddenDateTime);
               item.isHideable = !(item.bookmarkDateTime); // && !_itemModelPack.actionedItemsModel.isActioned(item.id);

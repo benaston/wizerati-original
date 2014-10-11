@@ -10,7 +10,7 @@
         <li class="i" data-count="0" id="tab-bookmarks">
             <form action="/bookmarks" method="GET">
                 <button id="btn-nav-bookmarks" class="btn btn-s" title="Bookmarks">&#xf25d;</button>
-                <label for="btn-nav-bookmarks" class="lbl">Bookmarks</label>
+                <label for="btn-nav-bookmarks" class="lbl">Saved</label>
             </form>
         </li>
     </ul>
@@ -24,17 +24,18 @@
         </li>
     </ul>
 </nav>
-<nav id="comparison-list-heads-up" data-count="0/4">
-    <form action="/comparison" method="GET">
-    <button id="btn-comparison-list" style="display:none;"></button>
-    <label for="btn-comparison-list">
-    <ul class="menu">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
-    <div class="label">Comparison List</div>
-    </label>
-    </form>
-</nav>
+<nav class="comparison-list-heads-up" data-count="{{=model.pinnedItemCount || '0'}}/4">
+        <form action="/comparison" method="GET">
+        <button id="btn-comparison-list" style="display:none;"></button>
+        <label for="btn-comparison-list">
+        <ul class="menu">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="label">Comparison List</div>
+        </label>
+        </form>
+    </nav>
+
