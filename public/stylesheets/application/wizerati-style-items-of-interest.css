@@ -165,11 +165,22 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 #items-of-interest-panel .menu {
+    background: rgba(249,249,249,.9);
     /*text-align: left;
     margin-left: 12px;
      attempt to nudge away from the search result list, inline with start of title of item*/
     text-align: right;
-    right: 24px;
+    /*right: 24px;*/
+    position: relative;
+border-radius: 0 0 0 15px;
+border-bottom: 1px solid rgba(0,95,167,.35);
+border-left: 1px solid rgba(0,95,167,.35);
+width: 190px;
+margin: 0;
+padding: 0;
+right: 0;
+left: auto;
+height: 62px;
 }
 
 .table-location-industry {
@@ -304,27 +315,16 @@ body[data-ui-mode='1'] #items-of-interest-panel {
 }
 
 .menu-container {
-    /*min-width: 305px;*/
-    position: relative; /*required to ensure infront of surrounding paragraphs (Chrome bug?)*/
-    background: rgba(249, 249, 249, 1);
-    /*required to circumvent transform z-index bug in webkit when transforms applied*/
-    z-index: 1; /*required to circumvent transform z-index bug in webkit when transforms applied*/
-    -webkit-backface-visibility: hidden;
-    box-sizing: border-box;
-    border-bottom: 1px solid rgba(0, 95, 167, 0.35); /*we have a subtly blue hue to the border at the top of the page. We avoid box-shadow for perf reasons.*/
 
-position: absolute; 
-right: 5px; 
-top:0; 
-padding-top:5px;
- width: 194px; 
-   background:rgba(255,255,255,.95);
-   border-bottom:0;
-
-
-    background: -webkit-radial-gradient(205px -1px,ellipse cover,rgba(255,255,255,.94) 37%,rgba(255,255,255,0) 65%);
-    height: 146px;
-    width: 304px;
+z-index: 1;
+-webkit-backface-visibility: hidden;
+box-sizing: border-box;
+position: absolute;
+right: 0;
+top: 0;
+padding-top: 0;
+border-bottom: 0;
+width: 190px;
 }
 
 #selected-item-container-2 {
