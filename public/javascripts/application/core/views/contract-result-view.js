@@ -40,6 +40,7 @@
 
       if (!!(that.Model.bookmarkDateTime)) {
         that.$el.attr('data-is-bookmark', 'true');
+        that.$el.find('.is-bookmark').css('display', 'inline-block');
       }
 
       if (that.Model.isPinned) {

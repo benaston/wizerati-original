@@ -41,6 +41,7 @@
         var sortedBookmarks = bookmarks.sort(function (b1, b2) {
           return -(+Date.parse(b1.bookmarkDateTime) - +Date.parse(b2.bookmarkDateTime));
         });
+        
         sortedBookmarks[0] && _uiModelPack.itemsOfInterestModel.setSelectedItemId(sortedBookmarks[0].id);
       }
 

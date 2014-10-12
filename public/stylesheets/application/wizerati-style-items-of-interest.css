@@ -204,10 +204,11 @@ height: 62px;
 
 .s-i table td:nth-of-type(1):nth-last-of-type(2),
 .p-i table td:nth-of-type(1):nth-last-of-type(2) {
-    width: 70px;
+    width: 60px;
     text-align: right;
     /*padding-right: 31px;*/
     color: silver;
+    font-size: .9rem;
 }
 
 .item-metadata, .item-metadata code {
@@ -233,7 +234,7 @@ height: 62px;
 .p-i table td:nth-of-type(2):nth-last-of-type(1) {
     width: calc(100% - 70px);
     text-align: left;
-    padding-left: 31px;
+    padding-left: 20px;
 }
 
 .item-of-interest table {
@@ -332,10 +333,13 @@ width: 173px;
     display: none;
 }
 
+.summary-table {
+    min-height: 215px; /*better change of correct horizontal alignment*/
+}
+
 .s-i-c .summary-inline,
 .p-i .summary-table {
     display: block;
-    min-height: 240px;
 }
 
 #selected-item-container-2 {

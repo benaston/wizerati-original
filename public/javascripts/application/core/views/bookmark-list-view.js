@@ -83,12 +83,25 @@
 
     this.renderAddItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
+      var $el = $(_el).find(selector);
+      
+      /* Animation is done in CSS becasue it is far simpler (no cancelling of timeouts) */
+      $el.find('.is-in-comparison-list').css('display', 'inline-block');      
+
+      setTimeout(function() {
+        $el.attr('data-is-in-comparison-list', 'true');
+      }, 0);
     };
 
+    //Icons start as display:none for performance reasons,
+    //Making a change to an item will leave them in display:inline-block
+    //because dealing with the animation of the display:none adds more 
+    //complication than benefit.
     this.renderRemoveItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
+      var $el = $(_el).find(selector);
+
+      $el.attr('data-is-in-comparison-list', 'false');
     };
 
     this.renderAddHiddenItem = function (id) {
