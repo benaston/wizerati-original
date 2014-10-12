@@ -21,7 +21,7 @@
       var $bookmarkListEl = that.$el.find('.bookmark-list');
       that.Model.bookmarkArr.forEach(function (bookmark) {
         _resultViewFactory.create(bookmark.id, function done($v) {
-          $bookmarkListEl.append($v);
+          $bookmarkListEl.prepend($v);
         });
       });
 

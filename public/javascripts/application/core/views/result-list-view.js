@@ -97,7 +97,6 @@
 
       var $el = $(_el).find(selector);
 
-      debugger;
       $el.find('.is-bookmark').css('display', 'inline-block');
       
       setTimeout(function() {

@@ -202,9 +202,9 @@ label[for='btn-change-search'] {
 .ti.is-unread:after {
     display: inline-block;
     content: '';
-    top: 0px;
+    top: -2px;
     position: relative;
-    left: 0px;
+    left: 3px;
     border-bottom: 12px solid transparent;
     border-left: 12px solid #007aff;
     width: 0;

@@ -7422,7 +7422,7 @@ window.wizerati = {
       var selector = '.t[data-id="' + id + '"]';
       var $el = $(_el).find(selector);
       
-      
+
       /* Animation is done in CSS becasue it is far simpler (no cancelling of timeouts) */
       $el.find('.is-in-comparison-list').css('display', 'inline-block');      
 
@@ -7582,7 +7582,7 @@ window.wizerati = {
       var $bookmarkListEl = that.$el.find('.bookmark-list');
       that.Model.bookmarkArr.forEach(function (bookmark) {
         _resultViewFactory.create(bookmark.id, function done($v) {
-          $bookmarkListEl.append($v);
+          $bookmarkListEl.prepend($v);
         });
       });
 
@@ -7825,7 +7825,6 @@ window.wizerati = {
 
       if (!!(that.Model.bookmarkDateTime)) {
         that.$el.attr('data-is-bookmark', 'true');
-        that.$el.find('.is-bookmark').css('display', 'inline-block');
       }
 
       if (that.Model.isPinned) {
@@ -7836,6 +7835,12 @@ window.wizerati = {
           _templateName,
           that.Model,
           {});
+
+      //DOM must be modified after the DOM has been created by the templating process.
+      if (!!(that.Model.bookmarkDateTime)) {
+        // debugger;
+        that.$el.find('.is-bookmark').css('display', 'inline-block');
+      }
 
       return that;
     };
@@ -8271,7 +8276,6 @@ window.wizerati = {
 
       var $el = $(_el).find(selector);
 
-      debugger;
       $el.find('.is-bookmark').css('display', 'inline-block');
       
       setTimeout(function() {
