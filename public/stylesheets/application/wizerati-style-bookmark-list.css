@@ -26,6 +26,10 @@ body[data-items-of-interest-mode='1'] #bookmark-list-panel {
     box-shadow: none !important;
 }
 
+.bookmark-list {
+    width: 100%; /* Empirically needed. */
+}
+
 .bookmark-period,
 .bookmark-list {
     font-size: 0;

@@ -39,11 +39,19 @@
     };
 
     this.renderAddOrRemoveBookmark = function (item, count) {
-      $('#tab-bookmarks').attr('data-count', (count ? count : '0'));
-      $('#btn-nav-bookmarks').addClass('pulse');
+      var $el = $('#tab-bookmarks');
+      var $btnEl = $('#btn-nav-bookmarks');
+
+      $el.attr('data-count', (count ? count : '0'));
+      console.log('count: ', count );
+      $btnEl.text(count || 0);
+
+      // $('#btn-nav-bookmarks').addClass('pulse');
+      $el.addClass('pulse');
       setTimeout(function () {
-        $('#btn-nav-bookmarks').removeClass('pulse');
-      }, 300);
+        // $('#btn-nav-bookmarks').removeClass('pulse');
+        $el.removeClass('pulse');
+      }, 401);
     };
 
     this.renderAddOrRemoveItemOfInterest = function (id, count) {

@@ -4,8 +4,25 @@
 }
 
 .pulse {
-    -webkit-animation: pulse .2s 1 0;
+    -webkit-animation: pulse-foo .4s 1 0;
     -moz-animation-name: pulse .2s 1 0;
+}
+
+@-webkit-keyframes pulse-sun-12-oct {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    50% {
+        -webkit-transform: scale(1.3);
+        transform: scale(1.3);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
 }
 
 @-webkit-keyframes rotate {
@@ -43,6 +60,23 @@
         -webkit-transform: scale(1);
         transform: scale(1);
         -webkit-filter: opacity(100%);
+    }
+}
+
+@-webkit-keyframes pulse-foo {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    50% {
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
 }
 
@@ -143,7 +177,7 @@
     }
 
     50% {
-        -webkit-transform: scale(1.1);
+        -webkit-transform: scale(1.4);
         transform: scale(1.1);
     }
 

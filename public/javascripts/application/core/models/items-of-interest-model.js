@@ -86,6 +86,7 @@
     };
 
     this.addItemOfInterest = function (id) {
+      console.log('addItemOfInterest', id);
       if (!id) {
         throw 'id not supplied';
       }
@@ -95,7 +96,6 @@
       }
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
-
       $.publish(that.eventUris.addItemOfInterest, id, _itemsOfInterest.pinnedItems.length);
     };
 

@@ -4406,7 +4406,7 @@ window.wizerati = {
         var sortedBookmarks = bookmarks.sort(function (b1, b2) {
           return -(+Date.parse(b1.bookmarkDateTime) - +Date.parse(b2.bookmarkDateTime));
         });
-        _uiModelPack.itemsOfInterestModel.setSelectedItemId(sortedBookmarks[0].id);
+        sortedBookmarks[0] && _uiModelPack.itemsOfInterestModel.setSelectedItemId(sortedBookmarks[0].id);
       }
 
 
@@ -5184,7 +5184,7 @@ window.wizerati = {
 
       _bookmarks[bookmark.id] = bookmark;
 
-      $.publish(that.eventUris.addBookmark, bookmark, _bookmarks.length);
+      $.publish(that.eventUris.addBookmark, bookmark, Object.keys(_bookmarks).length);
     };
 
     //When removing a bookmark, the SERVICE should be used (which in-turn calls this).
@@ -5299,6 +5299,7 @@ window.wizerati = {
     };
 
     this.addItemOfInterest = function (id) {
+      console.log('addItemOfInterest', id);
       if (!id) {
         throw 'id not supplied';
       }
@@ -5308,7 +5309,6 @@ window.wizerati = {
       }
 
       _itemsOfInterest.pinnedItems.unshift(id); //insert at first index of array
-
       $.publish(that.eventUris.addItemOfInterest, id, _itemsOfInterest.pinnedItems.length);
     };
 
@@ -7645,7 +7645,7 @@ window.wizerati = {
       that.$el.addClass('pulse');
       setTimeout(function () {
         that.$el.removeClass('pulse');
-      }, 201);
+      }, 401);
     };
 
     this.renderRemoveItemOfInterest = function (id, count) {
@@ -8217,6 +8217,10 @@ window.wizerati = {
       that.$elH1.html('<span id="search-desc-preamble">' + count + ' results for <br/></span><span id="search-desc" title="'+ searchDesc+'">\'' +searchDesc + '\'</span>');
     }
 
+    var nextTick = function(cb) {
+      return setTimeout(cb, 10);
+    };
+
     this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
       var selectorNew = '.t[data-id="' + selectedItemId + '"]';
@@ -8225,12 +8229,49 @@ window.wizerati = {
 
     this.renderAddItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
+      var $el = $(_el).find(selector);
+
+      setTimeout(function() {
+        $el.find('.is-in-comparison-list').css('display', 'inline-block');
+        nextTick(function () { $el.attr('data-is-in-comparison-list', 'true'); });
+      }, 3000); /* CSS delays the */
+
+      // setTimeout(function() {
+      //   $el.attr('data-is-in-comparison-list', 'true');
+      // }, 0);
     };
 
     this.renderRemoveItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
+      var $el = $(_el).find(selector);
+
+      $el.find('.is-in-comparison-list').css('display', '');
+
+      $el.attr('data-is-in-comparison-list', 'false');
+    };
+
+    this.renderAddBookmark = function (bookmark) {
+      var selector = '.t[data-id="' + bookmark.id + '"]';
+      var $el = $(_el).find(selector);
+
+      // $el.find('.is-bookmark').css('display', 'inline-block');
+
+      setTimeout(function() {
+        $el.find('.is-bookmark').css('display', 'inline-block');
+        nextTick(function () { $el.attr('data-is-bookmark', 'true'); });
+      }, 3000); /* CSS delays the */
+      
+      // setTimeout(function() {
+      //   $el.attr('data-is-bookmark', 'true');
+      // },0);
+    };
+
+    this.renderRemoveBookmark = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      var $el = $(_el).find(selector);
+
+      $el.find('.is-bookmark').css('display', '');
+      $el.attr('data-is-bookmark', 'false');
     };
 
     this.renderAddHiddenItem = function (id) {
@@ -8244,16 +8285,6 @@ window.wizerati = {
       var selector = '.t[data-id="' + id + '"]';
       var $selector = $(_el).find(selector);
       $selector.removeClass('hidden');
-    };
-
-    this.renderAddBookmark = function (bookmark) {
-      var selector = '.t[data-id="' + bookmark.id + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'true');
-    };
-
-    this.renderRemoveBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'false');
     };
 
     this.renderSetMode = function (mode) {
@@ -8547,11 +8578,19 @@ window.wizerati = {
     };
 
     this.renderAddOrRemoveBookmark = function (item, count) {
-      $('#tab-bookmarks').attr('data-count', (count ? count : '0'));
-      $('#btn-nav-bookmarks').addClass('pulse');
+      var $el = $('#tab-bookmarks');
+      var $btnEl = $('#btn-nav-bookmarks');
+
+      $el.attr('data-count', (count ? count : '0'));
+      console.log('count: ', count );
+      $btnEl.text(count || 0);
+
+      // $('#btn-nav-bookmarks').addClass('pulse');
+      $el.addClass('pulse');
       setTimeout(function () {
-        $('#btn-nav-bookmarks').removeClass('pulse');
-      }, 300);
+        // $('#btn-nav-bookmarks').removeClass('pulse');
+        $el.removeClass('pulse');
+      }, 401);
     };
 
     this.renderAddOrRemoveItemOfInterest = function (id, count) {

@@ -59,6 +59,10 @@
       that.$elH1.html('<span id="search-desc-preamble">' + count + ' results for <br/></span><span id="search-desc" title="'+ searchDesc+'">\'' +searchDesc + '\'</span>');
     }
 
+    var nextTick = function(cb) {
+      return setTimeout(cb, 10);
+    };
+
     this.renderSetSelectedItemId = function (selectedItemId) {
       $(_el).find('.t.selected').removeClass('selected');
       var selectorNew = '.t[data-id="' + selectedItemId + '"]';
@@ -67,12 +71,49 @@
 
     this.renderAddItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'true');
+      var $el = $(_el).find(selector);
+
+      setTimeout(function() {
+        $el.find('.is-in-comparison-list').css('display', 'inline-block');
+        nextTick(function () { $el.attr('data-is-in-comparison-list', 'true'); });
+      }, 3000); /* CSS delays the */
+
+      // setTimeout(function() {
+      //   $el.attr('data-is-in-comparison-list', 'true');
+      // }, 0);
     };
 
     this.renderRemoveItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
-      $(_el).find(selector).attr('data-is-in-comparison-list', 'false');
+      var $el = $(_el).find(selector);
+
+      $el.find('.is-in-comparison-list').css('display', '');
+
+      $el.attr('data-is-in-comparison-list', 'false');
+    };
+
+    this.renderAddBookmark = function (bookmark) {
+      var selector = '.t[data-id="' + bookmark.id + '"]';
+      var $el = $(_el).find(selector);
+
+      // $el.find('.is-bookmark').css('display', 'inline-block');
+
+      setTimeout(function() {
+        $el.find('.is-bookmark').css('display', 'inline-block');
+        nextTick(function () { $el.attr('data-is-bookmark', 'true'); });
+      }, 3000); /* CSS delays the */
+      
+      // setTimeout(function() {
+      //   $el.attr('data-is-bookmark', 'true');
+      // },0);
+    };
+
+    this.renderRemoveBookmark = function (itemId) {
+      var selector = '.t[data-id="' + itemId + '"]';
+      var $el = $(_el).find(selector);
+
+      $el.find('.is-bookmark').css('display', '');
+      $el.attr('data-is-bookmark', 'false');
     };
 
     this.renderAddHiddenItem = function (id) {
@@ -86,16 +127,6 @@
       var selector = '.t[data-id="' + id + '"]';
       var $selector = $(_el).find(selector);
       $selector.removeClass('hidden');
-    };
-
-    this.renderAddBookmark = function (bookmark) {
-      var selector = '.t[data-id="' + bookmark.id + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'true');
-    };
-
-    this.renderRemoveBookmark = function (itemId) {
-      var selector = '.t[data-id="' + itemId + '"]';
-      $(_el).find(selector).attr('data-is-bookmark', 'false');
     };
 
     this.renderSetMode = function (mode) {

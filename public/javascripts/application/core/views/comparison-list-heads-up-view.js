@@ -42,7 +42,7 @@
       that.$el.addClass('pulse');
       setTimeout(function () {
         that.$el.removeClass('pulse');
-      }, 201);
+      }, 401);
     };
 
     this.renderRemoveItemOfInterest = function (id, count) {

@@ -233,6 +233,10 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     -webkit-animation: fly-in .5s 1 0.2s;
 }
 
+#btn-nav-bookmarks {
+    font-family: inherit; /* not ionicons because we are displaying the bookmark count here */
+}
+
 #btn-nav-bookmarks.pulse {
     -webkit-animation: pulse-l .5s 1 0;
 }
