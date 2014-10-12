@@ -85,6 +85,7 @@
       var selector = '.t[data-id="' + id + '"]';
       var $el = $(_el).find(selector);
       
+      
       /* Animation is done in CSS becasue it is far simpler (no cancelling of timeouts) */
       $el.find('.is-in-comparison-list').css('display', 'inline-block');      
 
