@@ -7666,7 +7666,7 @@ window.wizerati = {
 
     function hide() {
       console.log('ComparisonListHeadsUpView::hide');
-      $el.css('display', 'none');
+      that.$el.css('display', 'none');
     }
 
     function init() {
@@ -8000,7 +8000,7 @@ window.wizerati = {
       $bFrm.attr('action', '/bookmarks/destroy');
       $bFrm.find('.btn').addClass('checked');
       $bFrm.find('.btn').html('&#xf26b;');
-      $bFrm.find('.lbl').text('Un-bookmark');
+      // $bFrm.find('.lbl').text('Forget');
 
       //Bookmarked items cannot be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -8013,7 +8013,7 @@ window.wizerati = {
       $bFrm.attr('action', '/bookmarks/create');
       $bFrm.find('.btn').removeClass('checked');
       $bFrm.find('.btn').html('&#xf25d;');
-      $bFrm.find('.lbl').text('Bookmark');
+      // $bFrm.find('.lbl').text('Save');
 
       //Non-bookmarked items can be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -8058,7 +8058,7 @@ window.wizerati = {
       $frm.attr('action', '/itemsofinterest/destroy');
       $frm.find('.btn').addClass('checked');
       $frm.find('.btn').html('&#xf40d;');
-      $frm.find('.lbl').text('Un-compare');
+      // $frm.find('.lbl').text('Compare');
 
       _itemOfInterestViewFactory.createComparisonListItem(id,
           that.Model.getLayout().widthItemOfInterest,
@@ -8075,7 +8075,7 @@ window.wizerati = {
       $frmPin.attr('action', '/itemsofinterest/create');
       $frmPin.find('.btn').removeClass('checked');
       $frmPin.find('.btn').html('&#xf30e;');
-      $frmPin.find('.lbl').text('Compare');
+      // $frmPin.find('.lbl').text('Compare');
 
       //If the item is hidden, ensure the add to comparison list button is disabled immediately upon removal from the list.
       if ($item.find('.frm-hide .btn.checked').length) {

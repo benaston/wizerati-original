@@ -63,7 +63,7 @@
 
     function hide() {
       console.log('ComparisonListHeadsUpView::hide');
-      $el.css('display', 'none');
+      that.$el.css('display', 'none');
     }
 
     function init() {

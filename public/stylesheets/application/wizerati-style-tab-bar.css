@@ -110,23 +110,25 @@ color: #007aff;
 }
 
 .comparison-list-heads-up .menu li::before {
-    content: '\f25c';
+    content: '\f25a';    
     display: block;
     font-family: ionicons;
     font-size: 2rem;
     color: #007aff;
 }
 .comparison-list-heads-up[data-count='3/4'] .menu li:nth-child(4)::before {
-    /*color: rgba(204,204,206,.5);*/
+    content: '\f25c';
     color: silver;
 }
 .comparison-list-heads-up[data-count='2/4'] .menu li:nth-child(3)::before, 
 .comparison-list-heads-up[data-count='2/4'] .menu li:nth-child(4)::before {
+    content: '\f25c';
     color: silver;
 }
 .comparison-list-heads-up[data-count='1/4'] .menu li:nth-child(2)::before, 
 .comparison-list-heads-up[data-count='1/4'] .menu li:nth-child(3)::before, 
 .comparison-list-heads-up[data-count='1/4'] .menu li:nth-child(4)::before {
+    content: '\f25c';
     color: silver;
 }
 
