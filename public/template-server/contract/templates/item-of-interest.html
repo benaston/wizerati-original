@@ -23,8 +23,9 @@
             </form></li>
         </ul>
     </header><div class="flex-item" style="position:absolute;overflow-y: scroll;height:100%;"><article class="i-o-i-c {{=model.isHidden ? 'hidden' : '' }}" style="position:relative; top: 0;"><div class="i-o-i-p-c">
-                <div style="vertical-align:top;display:block; ">
+                <div style="vertical-align:top; ">
                     <h3 class="i-o-i-t">{{= model.title }}</h3>
+                    <div class="summary-inline">
                     <ul class="info">
                         <li>Posted {{= moment(model.updatedDateTime).fromNow() }}</li>
                         <li><a href="#">{{= model.organization }}</a></li>
@@ -36,6 +37,33 @@
                     </ul>
                     
                     <p class="skills">{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</p>
+                    </div>
+                    <table class="summary-table">
+    <tr>
+    <td>Posted</td>
+    <td>{{= moment(model.updatedDateTime).fromNow() }}</td>
+    </tr>
+    <tr>
+    <td>Recruiter</td>
+    <td>{{= model.organization }}</td>
+    </tr>
+    <tr>
+    <td>Rate</td>
+    <td>{{= model.rateLower }} - {{= model.rateUpper }} GBP/day</td>
+    </tr>
+    <tr>
+    <td>Contract Length</td>
+    <td>{{= model.contractLength }} {{= model.isRolling && 'rolling' }}</td>
+    </tr>
+    <tr>
+    <td>Location</td>
+    <td>{{= model.location }}, <span class="country">{{= model.country }}</span></td>
+    </tr>
+    <tr>
+    <td>Skills</td>
+    <td>{{= model.skills.split(',').map(function(s){ return '<code>' + s.trim() + '</code>'; }).join(' ') }}</td>
+    </tr>
+</table>
                 </div>
 
 
