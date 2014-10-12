@@ -70,7 +70,7 @@
 
     function renderCount() {
       var count = that.Model.getBookmarks().length || 'no';
-      var noun = count === 1 ? 'bookmark' : 'bookmarks';
+      var noun = count === 1 ? 'saved item' : 'saved items';
       var postscript = count === 'no' ? ' Create bookmarks using the "bookmark" button.' : '';
       that.$elSummary.html('<h1>You have ' + count + ' ' + noun + '.' + postscript + '</h1>');
     }

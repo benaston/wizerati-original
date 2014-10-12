@@ -84,7 +84,7 @@
     this.removeBookmark = function (id) {
       delete _bookmarks[id];
 
-      $.publish(that.eventUris.removeBookmark, id, _bookmarks.length);
+      $.publish(that.eventUris.removeBookmark, id, Object.keys(_bookmarks).length);
     };
 
     this.isBookmark = function (id) {

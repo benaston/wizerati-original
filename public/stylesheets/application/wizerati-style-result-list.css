@@ -14,12 +14,16 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-devic
     transition: -webkit-transform .5s ease-in, max-height .5s cubic-bezier(0.2, 0.3, 0.25, 0.9) 1s; /* we use max-height because involve transition to auto height*/
 }
 
-body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-device='false'] .t[data-is-in-comparison-list='true'] .is-in-comparison-list {
-    transition: opacity .5s ease-in 0s; /*Delay the appearance of the icon, to avoid two areas of the UI updating at once. We want the user to notice the comparison list heads-up. */
+body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-device='false'] .t[data-is-in-comparison-list='true'] .is-in-comparison-list,
+body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-device='false'] .t[data-is-in-comparison-list='false'] .is-in-comparison-list
+ {
+    transition: opacity .5s ease-in 3s, height .5s ease-out 3s; /*Delay the appearance of the icon, to avoid two areas of the UI updating at once. We want the user to notice the comparison list heads-up. */
 }
 
-body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-device='false'] .t[data-is-bookmark='true'] .is-bookmark {
-    transition: opacity .5s ease-in 0s; /*Delay the appearance of the icon, to avoid two areas of the UI updating at once.*/
+body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-device='false'] .t[data-is-bookmark='true'] .is-bookmark,
+body[data-ui-mode='1'][data-are-transitions-enabled='true'][data-is-mobile-device='false'] .t[data-is-bookmark='false'] .is-bookmark
+ {
+    transition: opacity .5s ease-in 3s, height .5s ease-out 3s;; /*Delay the appearance of the icon, to avoid two areas of the UI updating at once.*/
 }
 
 #search-desc-preamble {
@@ -229,14 +233,15 @@ label[for='btn-change-search'] {
     float: left;
     opacity: 0; /* Display controlled by JS */
     display: none;
+    height: 0;
 }
 
 .t[data-is-bookmark='true'] .is-bookmark,
 .t[data-is-in-comparison-list='true'] .is-in-comparison-list,
 .is-unread,
 .t[data-is-actioned='true'] .actioned {
-    /*display: inline-block;*/
     opacity: 1; /* Display controlled by JS */
+    height: 45px; /* Height is transitioned by CSS */
 }
 
 .t[data-is-read='true'] .is-unread {

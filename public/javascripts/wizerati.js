@@ -5192,7 +5192,7 @@ window.wizerati = {
     this.removeBookmark = function (id) {
       delete _bookmarks[id];
 
-      $.publish(that.eventUris.removeBookmark, id, _bookmarks.length);
+      $.publish(that.eventUris.removeBookmark, id, Object.keys(_bookmarks).length);
     };
 
     this.isBookmark = function (id) {
@@ -7406,7 +7406,7 @@ window.wizerati = {
 
     function renderCount() {
       var count = that.Model.getBookmarks().length || 'no';
-      var noun = count === 1 ? 'bookmark' : 'bookmarks';
+      var noun = count === 1 ? 'saved item' : 'saved items';
       var postscript = count === 'no' ? ' Create bookmarks using the "bookmark" button.' : '';
       that.$elSummary.html('<h1>You have ' + count + ' ' + noun + '.' + postscript + '</h1>');
     }
@@ -8230,22 +8230,22 @@ window.wizerati = {
     this.renderAddItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
       var $el = $(_el).find(selector);
+      
+      /* Animation is done in CSS becasue it is far simpler (no cancelling of timeouts) */
+      $el.find('.is-in-comparison-list').css('display', 'inline-block');      
 
       setTimeout(function() {
-        $el.find('.is-in-comparison-list').css('display', 'inline-block');
-        nextTick(function () { $el.attr('data-is-in-comparison-list', 'true'); });
-      }, 3000); /* CSS delays the */
-
-      // setTimeout(function() {
-      //   $el.attr('data-is-in-comparison-list', 'true');
-      // }, 0);
+        $el.attr('data-is-in-comparison-list', 'true');
+      }, 0);
     };
 
+    //Icons start as display:none for performance reasons,
+    //Making a change to an item will leave them in display:inline-block
+    //because dealing with the animation of the display:none adds more 
+    //complication than benefit.
     this.renderRemoveItemOfInterest = function (id) {
       var selector = '.t[data-id="' + id + '"]';
       var $el = $(_el).find(selector);
-
-      $el.find('.is-in-comparison-list').css('display', '');
 
       $el.attr('data-is-in-comparison-list', 'false');
     };
@@ -8254,23 +8254,17 @@ window.wizerati = {
       var selector = '.t[data-id="' + bookmark.id + '"]';
       var $el = $(_el).find(selector);
 
-      // $el.find('.is-bookmark').css('display', 'inline-block');
-
-      setTimeout(function() {
-        $el.find('.is-bookmark').css('display', 'inline-block');
-        nextTick(function () { $el.attr('data-is-bookmark', 'true'); });
-      }, 3000); /* CSS delays the */
+      $el.find('.is-bookmark').css('display', 'inline-block');
       
-      // setTimeout(function() {
-      //   $el.attr('data-is-bookmark', 'true');
-      // },0);
+      setTimeout(function() {
+        $el.attr('data-is-bookmark', 'true');
+      },0);
     };
 
     this.renderRemoveBookmark = function (itemId) {
       var selector = '.t[data-id="' + itemId + '"]';
       var $el = $(_el).find(selector);
 
-      $el.find('.is-bookmark').css('display', '');
       $el.attr('data-is-bookmark', 'false');
     };
 
