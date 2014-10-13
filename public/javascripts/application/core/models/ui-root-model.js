@@ -14,7 +14,7 @@
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
-        _areTransitionsEnabled = 'true',
+        _areTransitionsEnabled = false, //was 'true'!
         _previousUrl = null;
 
     this.eventUris = { default: 'update://uirootmodel',

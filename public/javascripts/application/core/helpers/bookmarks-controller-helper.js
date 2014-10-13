@@ -29,12 +29,17 @@
       _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+      /* Attempt to ensure that bookmarks DOM is configured completely (visibility/opacity), before fading in - so everything fades in together. */
+      setTimeout(function () {
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      });
     };
 
     this.bookmarkRetrievalSuccess = function (bookmarks) {
       _bookmarkListModel.setBookmarks(bookmarks);
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+      console.log(_uiModelPack.uiRootModel.getUIMode());
 
       //If nothing is currently selected then set select the first bookmark (occurs with external visits to bookmarks).
       if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
@@ -48,7 +53,7 @@
 
       _layoutCoordinator.layOut();
       that.resetUIForBookmarks();
-
+      debugger;
       _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 

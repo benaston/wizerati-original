@@ -1,4 +1,4 @@
-<div id="result-list-panel-container">
+<div id="result-list-panel-container" data-mode="1" style="display: none;">
     <section id="result-list-panel">
     <header>
     	<input type="text" placeholder="e.g. javascript london" style="margin: 0;
@@ -13,13 +13,15 @@ height: 30px;">
     
     <div class="search-button-container">
         <div class="rotating-button-container">
-            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" style="height:62px;"  data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon" style="height: 62px;
+            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" style="height:62px;"  data-is-waiting="false"></button><span class="focus-indicator"></span>
+<form id="frm-edit-search" action="/searchformmode/update"><input name="mode" type="hidden" value="0" ><label for="btn-filters" class="button-icon" style="height: 62px;
 line-height: 38px;
-left: 69px;
 top: 30px;
 line-height: 38px;
 font-family: ionicons;
-font-size: 2rem;" >&#xf100;</span>
+font-size: 2rem;" >&#xf100;</label>
+<button id="btn-filters" style="display:none;"></button>
+</form>
         </div>
     </div>
     </div>

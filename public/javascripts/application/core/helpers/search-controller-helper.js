@@ -28,6 +28,7 @@
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 

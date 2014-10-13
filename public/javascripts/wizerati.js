@@ -4395,12 +4395,17 @@ window.wizerati = {
       _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
       _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+      /* Attempt to ensure that bookmarks DOM is configured completely (visibility/opacity), before fading in - so everything fades in together. */
+      setTimeout(function () {
       _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+      });
     };
 
     this.bookmarkRetrievalSuccess = function (bookmarks) {
       _bookmarkListModel.setBookmarks(bookmarks);
       _bookmarkListModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
+
+      console.log(_uiModelPack.uiRootModel.getUIMode());
 
       //If nothing is currently selected then set select the first bookmark (occurs with external visits to bookmarks).
       if (!_uiModelPack.itemsOfInterestModel.getSelectedItemId()) {
@@ -4414,7 +4419,7 @@ window.wizerati = {
 
       _layoutCoordinator.layOut();
       that.resetUIForBookmarks();
-
+      debugger;
       _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 
@@ -4537,6 +4542,7 @@ window.wizerati = {
       _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
       _uiModelPack.uiRootModel.clearModal();
       _uiModelPack.accountModel.setMode(_accountModeEnum.Minimized);
+
       _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
     };
 
@@ -5565,7 +5571,7 @@ window.wizerati = {
         _uiMode = _uiModeEnum.NotReady,
         _modal = _modalEnum.None,
         _visibilityMode = _mainContainerVisibilityModeEnum.Hidden,
-        _areTransitionsEnabled = 'true',
+        _areTransitionsEnabled = false, //was 'true'!
         _previousUrl = null;
 
     this.eventUris = { default: 'update://uirootmodel',
@@ -6280,7 +6286,7 @@ window.wizerati = {
       try {
         var mod = w.mod('views');
         mod.applyToContractDialogView = new w.ApplyToContractDialogView(m.applyToContractDialogModel);
-        mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel, f.resultViewFactory, p.itemModelPack);
+        mod.bookmarkListView = new w.BookmarkListView(m.bookmarkListModel, f.resultViewFactory, p.itemModelPack, m.uiRootModel);
         mod.comparisonListHeadsUpView = new w.ComparisonListHeadsUpView(m.tabBarModel, m.itemsOfInterestModel, m.uiRootModel);
         mod.itemsOfInterestView = new w.ItemsOfInterestView(m.itemsOfInterestModel, f.itemOfInterestViewFactory, p.itemModelPack, l.layoutCoordinator, m.uiRootModel);
         mod.myAccountView = new w.AccountView(m.accountModel);
@@ -7339,11 +7345,7 @@ window.wizerati = {
 ;(function (app, $, inv) {
   'use strict';
 
-  function BookmarkListView(model, resultViewFactory, itemModelPack) {
-
-    if (!(this instanceof app.BookmarkListView)) {
-      return new app.BookmarkListView(model, resultViewFactory, itemModelPack);
-    }
+  function BookmarkListView(model, resultViewFactory, itemModelPack, uiRootModel) {
 
     var that = this,
         _el = '#bookmark-list-panel',
@@ -7353,7 +7355,8 @@ window.wizerati = {
         _resultViewFactory = null,
         _renderOptimizations = {},
         _modeEnum = app.mod('enum').BookmarkPanelMode,
-        _displayTimeout = null;
+        _displayTimeout = null,
+        _uiRootModel = null;
 
     this.$el = null;
     this.$elContainer = null;
@@ -7498,9 +7501,16 @@ window.wizerati = {
       } else {
         clearTimeout(_displayTimeout);
         that.$elContainer.css('display', '');
-        setTimeout(function () {
+
+        debugger;
+        if(_uiRootModel.getAreTransitionsEnabled()) {
+          setTimeout(function () {
+            that.$elContainer.attr('data-mode', mode);
+          }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+        } else {
           that.$elContainer.attr('data-mode', mode);
-        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+        }
+        
       }
     };
 
@@ -7526,6 +7536,7 @@ window.wizerati = {
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
         _resultViewFactory = resultViewFactory;
+        _uiRootModel = uiRootModel;
 
         _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;
@@ -8195,7 +8206,9 @@ window.wizerati = {
         _elH1 = '#r-l-s-s-c-h1',
         _resultViewFactory = null,
         _searchFormModel = null,
-        _renderOptimizations = {};
+        _renderOptimizations = {},
+        _setModeTimeoutId = null,
+        _resultListModeEnum = app.mod('enum').ResultListMode;
 
     this.$el = null;
     this.$elContainer = null;
@@ -8306,6 +8319,18 @@ window.wizerati = {
     };
 
     this.renderSetMode = function (mode) {
+      clearTimeout(_setModeTimeoutId);
+
+      //TODO: check to see if transitions are enabled?
+      // debugger;
+      //Template starts in display none state.
+      if(mode === _resultListModeEnum.Minimized) {        
+        _setModeTimeoutId = setTimeout(function() { that.$elContainer.css('display', 'none'); }, 200); //mode changes have 200ms transition
+      } else {
+        that.$elContainer.css('display', '');
+      }
+
+
       mode = mode || that.Model.getMode();
       that.$elContainer.attr('data-mode', mode);
     };

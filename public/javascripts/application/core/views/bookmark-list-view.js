@@ -1,11 +1,7 @@
 (function (app, $, inv) {
   'use strict';
 
-  function BookmarkListView(model, resultViewFactory, itemModelPack) {
-
-    if (!(this instanceof app.BookmarkListView)) {
-      return new app.BookmarkListView(model, resultViewFactory, itemModelPack);
-    }
+  function BookmarkListView(model, resultViewFactory, itemModelPack, uiRootModel) {
 
     var that = this,
         _el = '#bookmark-list-panel',
@@ -15,7 +11,8 @@
         _resultViewFactory = null,
         _renderOptimizations = {},
         _modeEnum = app.mod('enum').BookmarkPanelMode,
-        _displayTimeout = null;
+        _displayTimeout = null,
+        _uiRootModel = null;
 
     this.$el = null;
     this.$elContainer = null;
@@ -160,9 +157,16 @@
       } else {
         clearTimeout(_displayTimeout);
         that.$elContainer.css('display', '');
-        setTimeout(function () {
+
+        debugger;
+        if(_uiRootModel.getAreTransitionsEnabled()) {
+          setTimeout(function () {
+            that.$elContainer.attr('data-mode', mode);
+          }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+        } else {
           that.$elContainer.attr('data-mode', mode);
-        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+        }
+        
       }
     };
 
@@ -188,6 +192,7 @@
         that = $.decorate(that, app.mod('decorators').decorators.trace);
         that.Model = model;
         _resultViewFactory = resultViewFactory;
+        _uiRootModel = uiRootModel;
 
         _renderOptimizations[that.Model.eventUris.setMode] = that.renderSetMode;
         _renderOptimizations[itemModelPack.itemsOfInterestModel.eventUris.setSelectedItemId] = that.renderSetSelectedItemId;

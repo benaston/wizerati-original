@@ -14,7 +14,9 @@
         _elH1 = '#r-l-s-s-c-h1',
         _resultViewFactory = null,
         _searchFormModel = null,
-        _renderOptimizations = {};
+        _renderOptimizations = {},
+        _setModeTimeoutId = null,
+        _resultListModeEnum = app.mod('enum').ResultListMode;
 
     this.$el = null;
     this.$elContainer = null;
@@ -125,6 +127,18 @@
     };
 
     this.renderSetMode = function (mode) {
+      clearTimeout(_setModeTimeoutId);
+
+      //TODO: check to see if transitions are enabled?
+      // debugger;
+      //Template starts in display none state.
+      if(mode === _resultListModeEnum.Minimized) {        
+        _setModeTimeoutId = setTimeout(function() { that.$elContainer.css('display', 'none'); }, 200); //mode changes have 200ms transition
+      } else {
+        that.$elContainer.css('display', '');
+      }
+
+
       mode = mode || that.Model.getMode();
       that.$elContainer.attr('data-mode', mode);
     };
