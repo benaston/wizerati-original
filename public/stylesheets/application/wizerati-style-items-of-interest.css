@@ -430,15 +430,14 @@ body[data-items-of-interest-mode='1'] .empty-message-container:only-child {
 }
 
 .empty-message-container {
-    /*visibility: hidden;*/
     display: none;
     width: 285px; /*empirical - because we are maintaining this in the flow of the document, we need to make it narrow enough to ensure it never pushes pushes beyond a narrow selected item*/
-    position: absolute; /*avoid affecting pinned items*/
-    top: 38%;
-    left: 65px;
-    color: #999;
-    margin-top: -58px;
-    -webkit-backface-visibility: hidden;
+position: absolute;
+top: 0;
+left: 42px;
+color: slategray;
+margin-top: 17px;
+-webkit-backface-visibility: hidden;
 }
 
 .menu .lbl.pulse {

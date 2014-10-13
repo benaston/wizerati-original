@@ -29,6 +29,7 @@
     };
 
     function init() {
+      console.log('TODO: ensure bookmarks page renders as one (fade in) when hit from URL');
       try {
         if (!model) {
           throw 'model not supplied';
