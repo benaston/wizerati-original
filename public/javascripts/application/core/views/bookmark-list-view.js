@@ -151,7 +151,7 @@
     this.renderSetMode = function (mode) {
       mode = mode || that.Model.getMode();
 
-      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+      //What follows is a 60fps performance optimization.
       if (mode === _modeEnum.Minimized) {
         that.$elContainer.attr('data-mode', mode);
         _displayTimeout = setTimeout(function () {

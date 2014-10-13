@@ -2866,8 +2866,9 @@ window.wizerati = {
       var chrome30PlusWin = /^Mozilla\/5\.0 \(Windows .* Chrome\/[3-9][0-9]/g;
       var safariMavericks = /^Mozilla\/5\.0 \(Macintosh; .* Safari\/[5-9][0-9][0-9]/g;
       var linuxAndModernAndroid = /^Mozilla\/5\.0 \(Linux; .* Safari\/[5-9][0-9][0-9]/g;
+      var googlebot = /^Googlebot/g;
 
-      var supportedUAs  = [ iOS7iPhone, iOS7iPad, chrome30PlusOSX, chrome30PlusWin, safariMavericks, linuxAndModernAndroid ];
+      var supportedUAs  = [ iOS7iPhone, iOS7iPad, chrome30PlusOSX, chrome30PlusWin, safariMavericks, linuxAndModernAndroid, googlebot ];
 
       return supportedUAs.reduce(function(previousValue, currentValue, index, array) {
           return previousValue || currentValue.test(ua);
@@ -7488,7 +7489,7 @@ window.wizerati = {
     this.renderSetMode = function (mode) {
       mode = mode || that.Model.getMode();
 
-      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+      //What follows is a 60fps performance optimization.
       if (mode === _modeEnum.Minimized) {
         that.$elContainer.attr('data-mode', mode);
         _displayTimeout = setTimeout(function () {
