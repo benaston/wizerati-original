@@ -22,6 +22,8 @@
     };
 
     this.render = function (e) {
+
+      console.log('get direct rendering of comparison list working, and back and forward behaviors for comp list')
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;

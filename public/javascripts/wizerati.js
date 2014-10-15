@@ -3651,13 +3651,15 @@ window.wizerati = {
       try {
         _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
 
-        if (dto.__isInvertebrateExternal__) {
+        // if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
-        }
+        // }
 
         //Ensure scroll position is reset gracefully.
-        //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+        //We use the callback to wait for the scroll 
+        //to complete before proceeding to avoid jank 
+        //wrt other animations (particularly on iPhone).
         _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
           var currentSearchHash = '' + dto.keywords + dto.r;
           if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
@@ -3692,9 +3694,12 @@ window.wizerati = {
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
+    /**
+    * Dto is instantiated from the URL supplied.
+    */
     function dtoPopulatorShow(dto) {
-      dto.keywords = _uiModelPack.searchFormModel.getKeywords();
-      dto.r = _uiModelPack.searchFormModel.getRate();
+      dto.keywords = _uiModelPack.searchFormModel.getKeywords() || dto.keywords;
+      dto.r = _uiModelPack.searchFormModel.getRate() || dto.r;
       return dto;
     }
 
@@ -8216,6 +8221,44 @@ window.wizerati = {
     this.$elH1 = null;
     this.Model = null;
 
+    // this.bindEvents = function () {
+    //   //We update the model only on click of search to enable trivial cancelling of unwanted changes.
+    //   var $btn = that.$el.find('#btn-search');
+    //   $btn.on('click', function (e) {
+    //     var $k = that.$el.find('#keywords');
+    //     if(!$k.val()) {
+    //       e.preventDefault();
+    //       $k.addClass('shake');
+    //       setTimeout(function(){
+    //         $k.removeClass('shake');
+    //       }, 1000);
+    //     } else {
+    //       that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
+    //       that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+    //       $('body').scrollToX({duration: 100});
+    //     }
+    //   });
+
+    //   //values in the form elements must be reset to those of the backing model
+    //   //if the user cancels the form. This is mainly redundant due to similar
+    //   //logic in the renderSetMode method.
+    //   //needed?
+    //   var $btn = that.$el.find('#btn-cancel-search');
+    //   $btn.on('click', function () {
+    //     that.renderSetKeywords();
+    //     that.renderSetRate();
+    //   });
+
+    //   var $form = that.$el.find('#search-form');
+    //   $form.on('submit', function () {
+    //     that.$el.find('#keywords').blur(); //Ensure keypad is minimised on iOS should it be used to invoke search.
+    //   });
+    // };
+
+    // this.postRender = function () {
+    //   that.bindEvents();
+    // };
+
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
@@ -8431,8 +8474,8 @@ window.wizerati = {
             $k.removeClass('shake');
           }, 1000);
         } else {
-          that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
-          that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+          // that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
+          // that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
           $('body').scrollToX({duration: 100});
         }
       });
@@ -8722,6 +8765,8 @@ window.wizerati = {
     };
 
     this.render = function (e) {
+
+      console.log('get direct rendering of comparison list working, and back and forward behaviors for comp list')
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
         return;

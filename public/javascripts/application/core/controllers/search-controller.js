@@ -22,13 +22,15 @@
       try {
         _uiModelPack.uiRootModel.setPreviousUrl(location.pathname + location.search); //required to enable repeatable use of back button on modals
 
-        if (dto.__isInvertebrateExternal__) {
+        // if (dto.__isInvertebrateExternal__) {
           _uiModelPack.searchFormModel.setKeywords(dto.keywords, {silent: true});
           _uiModelPack.searchFormModel.setRate(dto.r, {silent: true});
-        }
+        // }
 
         //Ensure scroll position is reset gracefully.
-        //We use the callback to wait for the scroll to complete before proceeding to avoid jank wrt other animations (particularly on iPhone).
+        //We use the callback to wait for the scroll 
+        //to complete before proceeding to avoid jank 
+        //wrt other animations (particularly on iPhone).
         _uiModelPack.uiRootModel.setScrollLeft(0, function done() {
           var currentSearchHash = '' + dto.keywords + dto.r;
           if (_previousSearchHash === null || _previousSearchHash !== currentSearchHash) {
@@ -63,9 +65,12 @@
       return uri + '?keywords=' + encodeURIComponent(dto.keywords) + '&r=' + encodeURIComponent(dto.r);
     }
 
+    /**
+    * Dto is instantiated from the URL supplied.
+    */
     function dtoPopulatorShow(dto) {
-      dto.keywords = _uiModelPack.searchFormModel.getKeywords();
-      dto.r = _uiModelPack.searchFormModel.getRate();
+      dto.keywords = _uiModelPack.searchFormModel.getKeywords() || dto.keywords;
+      dto.r = _uiModelPack.searchFormModel.getRate() || dto.r;
       return dto;
     }
 

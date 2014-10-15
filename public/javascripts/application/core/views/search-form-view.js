@@ -32,8 +32,8 @@
             $k.removeClass('shake');
           }, 1000);
         } else {
-          that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
-          that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
+          // that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
+          // that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
           $('body').scrollToX({duration: 100});
         }
       });
