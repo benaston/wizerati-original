@@ -53,6 +53,26 @@ body[data-ui-mode='0'] #search-form-panel {
 #keywords {
     width: 460px;
     padding-right: 79px; /*space for search button*/
+    font-size: 1.2rem;
+}
+/*body[data-ui-mode='1'] #keywords {
+max-width: 360px;
+}
+*/
+body[data-ui-mode='1'] #keywords {
+        width: 100%;
+        padding-right: 0;
+    }
+
+body[data-ui-mode='1'] #keywords {
+    /*width:100%;
+margin: 20px 0 0 0;
+padding-right: 68px;  /*space for search button*/
+margin: 20px 0 0 17px;
+}
+
+body[data-ui-mode='1'] #search-form {
+    max-width: 600px;
 }
 
 #search-form {
@@ -68,8 +88,20 @@ body[data-ui-mode='0'] #search-form-panel hr {
     display: none;
 }
 
-body[data-ui-mode='1'] #search-form {
-    left: 96px; /*width of tab bar*/
+
+body[data-ui-mode='1'] .search-fields {
+
+
+margin-left: 73px;
+width: calc(100% - 73px);
+padding-left: 3px;
+padding-right: 20px;
+box-sizing: border-box;
+margin-top: 42px;
+}
+
+body[data-ui-mode='1'] .search-button-container {
+top: -17px;
 }
 
 body[data-ui-mode='1'] #search-form-panel {
@@ -81,6 +113,10 @@ body[data-ui-mode='1'] #search-form-panel {
     text-align: left;
     background: rgba(255, 255, 255, .97);
     -webkit-backface-visibility: hidden; /*this fixes a chrome bug whereby the content remains blurry after the filter transition is complete*/
+}
+
+body[data-ui-mode='1'] #search-form {
+    width: inherit;
 }
 
 .search-buttons-container {
@@ -111,10 +147,10 @@ body[data-ui-mode='0'] .cancel-button-container {
 }
 
 .cancel-button-container {
-    position: absolute;
-    left: 100px;
-    top: -17px;
-    width: 100%;
+position: absolute;
+left: 78px;
+top: -17px;
+width: 100px;
 }
 
 body[data-ui-mode='0'] #search-form-panel .search-filters {
@@ -123,6 +159,10 @@ body[data-ui-mode='0'] #search-form-panel .search-filters {
 
 body[data-ui-mode='0'] .search-form-title {
     display: block;
+}
+
+body[data-ui-mode='0'] .search-filters {
+    display: none;
 }
 
 body[data-ui-mode='0'] form[name='search-form'] {
@@ -165,11 +205,23 @@ body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
 }
 
 .search-button-container {
-    position: absolute;
-    left: 0; /*important to ensure correct placement*/
-    top: -17px;
-    width: 100%;
+    /*position: absolute;
+right: 0;
+top: -17px;
+width: 100px;*/
+
+position: absolute;
+right: 12px;
+
+top: -6px;
+width: 100px;
 }
+
+body[data-ui-mode='1'] .search-button-container {
+top: -17px;
+right: 0px;
+}
+
 
 .search-filters > :first-child {
     display: inline-block;
@@ -177,10 +229,10 @@ body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
 }
 
 .search-filters {
-    margin: 20px 20px 20px 21px;
-    text-align: center;
-    display: inline-block;
-    position: relative;
+    margin: 20px 20px 20px 75px;
+text-align: center;
+display: inline-block;
+position: relative;
 }
 
 .search-form-title {
@@ -198,22 +250,21 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
 
 .search-filters label {
     font-size: 14px;
-    font-weight: normal;
-    line-height: 26px;
-    border: 0;
-    text-align: center;
-    height: 25px;
-    width: 45px;
-    /*border-radius: 45px;*/
-    margin: 8px 2px 0 0;
-    color: rgba(0, 122, 255, 1);
+font-weight: 400;
+line-height: 26px;
+border: 0;
+text-align: center;
+height: 24px;
+width: 45px;
+margin: 8px 2px 0 0;
+color: rgba(0,122,255,1);
 }
 
 #search-buttons-container {
-    position: absolute;
-    height: 88px;
-    top: 9px;
-    right: 110px;
+    /*position: absolute;*/
+/*height: 88px;*/
+/*top: 9px;
+right: 110px;*/
 }
 
 /*"narrow-screen" devices like iphone*/
@@ -264,7 +315,10 @@ body[data-hover-is-enabled='true'] .search-filters input[type=radio]:not(:checke
         left: 45px;
     }
 
+
+
     #keywords {
+        z-index: 1; /*attempt to move infront of the buttons for search and cancel in the in use state*/
         padding-right: 69px;
     }
 

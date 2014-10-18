@@ -9,9 +9,21 @@ var keywords = model.getKeywords();
     <div class="search-fields">
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
-    <!-- <div class="search-filters">
-      <span>Show me jobs paying more than (GBP/day)</span>
-        <ol>
+    <div class="search-filters">
+<!--     <h3 style="
+    display: block;
+    text-align: left;
+    margin-left: 17px;
+">Filters</h3>
+ -->
+      <span style="
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+    margin-left: 17px;
+    margin-bottom: 7px;
+">Minimum rate</span>
+        <ol style="margin: 0 17px;display: block;">
             <li><input id="r200" class="radio" name="r" type="radio" value=">200" tabindex="1" {{= rate ? rate === "200" ? "checked='checked'" : ""  : "" }}>
                 <label for="r200" class="lbl">200</label></li>
             <li><input id="r250" class="radio" name="r" type="radio" value=">250" tabindex="1" {{= rate ? rate === "250" ? "checked='checked'" : ""  : "checked='checked'" }}>
@@ -31,7 +43,7 @@ var keywords = model.getKeywords();
             <li><input id="r600" class="radio" name="r" type="radio" value=">600" tabindex="1" {{= rate ? rate === "600" ? "checked='checked'" : ""  : "" }}>
                 <label for="r600" class="lbl">600</label></li>
         </ol>
-    </div> -->
+    </div>
     <div id="search-buttons-container">
     <div class="cancel-button-container">
         <div class="rotating-button-container">

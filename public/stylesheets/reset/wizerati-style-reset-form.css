@@ -21,6 +21,7 @@ html input[type="tel"] {
 }
 
 form {
+    display: inline; /* Attempt at making form tags "invisible". Form tags are not designed to be rendered themselves? */
     -webkit-user-select: none;
 }
 

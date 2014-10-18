@@ -334,7 +334,7 @@ width: 175px;
 }
 
 .summary-table {
-    min-height: 215px; /*better change of correct horizontal alignment*/
+    min-height: 172px; /*better change of correct horizontal alignment*/
 }
 
 .s-i-c .summary-inline,
