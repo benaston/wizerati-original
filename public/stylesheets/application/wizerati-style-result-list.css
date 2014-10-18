@@ -177,9 +177,7 @@ body[data-ui-mode='0'] #result-list-panel {
 }
 
 #frm-edit-search {
-    position: absolute;
-    top: 0;
-    right: 0;
+    
 }
 
 label[for='btn-change-search'] {
@@ -403,9 +401,7 @@ body[data-is-mobile-device='false'] .t.hidden {
     pointer-events: none;
 }
 
-#frm-edit-search {
-    float: right;
-}
+
 
 /*Here because I want to avoid other buttons having this behavior.*/
 .t a:focus, .t a:active {

@@ -3695,11 +3695,12 @@ window.wizerati = {
     }
 
     /**
-    * Dto is instantiated from the URL supplied.
+    * DTO is instantiated from the URL supplied.
+    * URL takes precedence over model state.
     */
     function dtoPopulatorShow(dto) {
-      dto.keywords = _uiModelPack.searchFormModel.getKeywords() || dto.keywords;
-      dto.r = _uiModelPack.searchFormModel.getRate() || dto.r;
+      dto.keywords = dto.keywords || _uiModelPack.searchFormModel.getKeywords();
+      dto.r = dto.r || _uiModelPack.searchFormModel.getRate();
       return dto;
     }
 
@@ -8474,6 +8475,7 @@ window.wizerati = {
             $k.removeClass('shake');
           }, 1000);
         } else {
+          //commenting these out has made the dto populator more complicated
           // that.model.setKeywords(that.$el.find('#keywords').val(), { silent: true });
           // that.model.setRate(that.$el.find('input[name="r"]:checked').val(), { silent: true });
           $('body').scrollToX({duration: 100});

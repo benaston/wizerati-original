@@ -66,11 +66,12 @@
     }
 
     /**
-    * Dto is instantiated from the URL supplied.
+    * DTO is instantiated from the URL supplied.
+    * URL takes precedence over model state.
     */
     function dtoPopulatorShow(dto) {
-      dto.keywords = _uiModelPack.searchFormModel.getKeywords() || dto.keywords;
-      dto.r = _uiModelPack.searchFormModel.getRate() || dto.r;
+      dto.keywords = dto.keywords || _uiModelPack.searchFormModel.getKeywords();
+      dto.r = dto.r || _uiModelPack.searchFormModel.getRate();
       return dto;
     }
 
