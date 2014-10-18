@@ -133,6 +133,7 @@
         that.$elContainer.css('display', '');
         setTimeout(function () {
           that.$elContainer.attr('data-mode', mode);
+          that.$el.find('#keywords').focus();
         }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
       }
 

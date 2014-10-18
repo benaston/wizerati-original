@@ -7418,7 +7418,7 @@ window.wizerati = {
     function renderCount() {
       var count = that.Model.getBookmarks().length || 'no';
       var noun = count === 1 ? 'saved item' : 'saved items';
-      var postscript = count === 'no' ? ' Create bookmarks using the "bookmark" button.' : '';
+      var postscript = count === 'no' ? '' : '';
       that.$elSummary.html('<h1>You have ' + count + ' ' + noun + '.' + postscript + '</h1>');
     }
 
@@ -8576,6 +8576,7 @@ window.wizerati = {
         that.$elContainer.css('display', '');
         setTimeout(function () {
           that.$elContainer.attr('data-mode', mode);
+          that.$el.find('#keywords').focus();
         }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
       }
 
