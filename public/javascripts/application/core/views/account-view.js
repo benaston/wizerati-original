@@ -15,7 +15,8 @@
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false,
         _modeEnum = app.mod('enum').AccountMode,
-        _displayTimeout = null;
+        _displayTimeout = null,
+        _modeTimeout = null;
 
     this.$el = null;
     this.$elContainer = null;
@@ -36,11 +37,11 @@
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
-      this.render();
+      this.render(null, { async: false }); //Avoid complications surrounding deferred execution, by making synchronous.
     };
 
-    this.render = function (e) {
-      var options = { done: that.postRender, postRenderScriptName: null };
+    this.render = function (e, options) {
+      var options = _.extend({ done: that.postRender, postRenderScriptName: null, async: true }, options);
 
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -48,7 +49,7 @@
       }
 
       app.instance.renderTemplate(that.$el, _templateName, that.model, options);
-      that.renderSetMode(that.model.getMode());
+      that.renderSetMode(that.model.getMode(), { async: options.async }); 
     };
 
     this.renderSetIsWaiting = function (value) {
@@ -63,20 +64,46 @@
       that.$el.attr('data-selected-tab', tab);
     };
 
-    //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
-    this.renderSetMode = function (mode) {
-      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+
+    this.renderSetMode = function (mode, options) {
+      var displayNoneDelayMs = 300;
+
+      clearTimeout(_displayTimeout); //Important to do on all invocations to avoid stacking up multiple setTimeouts.
+      clearTimeout(_modeTimeout);
+      options = options || { async: true };      
+      mode = mode || that.Model.getMode();
+
+      //display:none is a 60fps performance optimization.
       if (mode === _modeEnum.Minimized) {
         that.$elContainer.attr('data-mode', mode);
-        _displayTimeout = setTimeout(function () {
-          that.$elContainer.css('display', 'none');
-        }, 300);
+                
+        if(options.async) {
+          _displayTimeout = setTimeout(setDisplayNone, displayNoneDelayMs);  
+        } else {
+          setDisplayNone();
+        }        
       } else {
-        clearTimeout(_displayTimeout);
+        setDisplayEmpty();
+
+        if(options.async) {
+          _modeTimeout = setTimeout(function () {
+            setMode();
+          }, 0); //If you set the mode at the same time as the display being changed to '', then you lose the CSS transitions.
+        } else {
+          setMode();
+        } 
+      }
+
+      function setDisplayEmpty() {
         that.$elContainer.css('display', '');
-        setTimeout(function () {
-          that.$elContainer.attr('data-mode', mode);
-        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+      }
+
+      function setDisplayNone() {
+        that.$elContainer.css('display', 'none');
+      }
+
+      function setMode() {
+        that.$elContainer.attr('data-mode', mode);
       }
     };
 

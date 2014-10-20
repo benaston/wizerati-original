@@ -1,14 +1,14 @@
 <div id="security">
-    <div class="security-heading">
-        Change Password
-    </div>
-    <form id="frm-change-password" action="/myaccount/password/update" method="POST">
+    
+    <section id="frm-change-password">
+    <form action="/myaccount/password/update" method="POST">
+
         <div id="my-account-buttons-container-my-details">
             <div id="cancel-my-account-button-container">
                 <div class="rotating-button-container">
                     <button type="submit" form="form-cancel-change-password" id="btn-cancel-my-account" tabindex="1"
                             class="btn btn-s"></button>
-                    <span class="focus-indicator"></span><span class="button-icon">cancel</span>
+                    <span class="focus-indicator"></span><span class="button-icon">Cancel</span>
                 </div>
             </div>
             <div id="save-my-account-button-container">
@@ -16,7 +16,7 @@
                     <button type="submit" id="btn-save-my-account" tabindex="1"
                             class="btn btn-s btn-primary btn-rotating"
                             data-is-waiting="false"></button>
-                    <span class="focus-indicator"></span><span class="button-icon">done</span>
+                    <span class="focus-indicator"></span><span class="button-icon">Done</span>
                 </div>
             </div>
         </div>
@@ -32,7 +32,9 @@
             <input id="password-n2" type="text" placeholder="required" value=""/>
             <label class="lbl" for="password-n2">New password again</label>
         </div>
+
     </form>
+    </section>
     <div class="security-heading">
         Delete Account
     </div>
@@ -41,7 +43,7 @@
         <div id="delete-account-button-container">
             <button type="submit" id="btn-delete-my-account" tabindex="1"
                     class="btn btn-s btn-critical"
-                    data-is-waiting="false">delete my account</button>
+                    data-is-waiting="false">Delete My Account</button>
             <span class="focus-indicator"></span>
         </div>
     </div>

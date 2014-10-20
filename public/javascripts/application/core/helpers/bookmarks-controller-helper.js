@@ -53,7 +53,7 @@
 
       _layoutCoordinator.layOut();
       that.resetUIForBookmarks();
-      debugger;
+      
       _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 

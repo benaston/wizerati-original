@@ -4285,89 +4285,109 @@ window.wizerati = {
   app.WizeratiRequestFactory = WizeratiRequestFactory;
 
 }(wizerati));
-;(function (app) {
-  'use strict';
+;(function(app) {
+    'use strict';
 
-  function AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel) {
+    function AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel) {
 
-    if (!(this instanceof app.AccountControllerHelper)) {
-      return new app.AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel);
+        if (!(this instanceof app.AccountControllerHelper)) {
+            return new app.AccountControllerHelper(uiModelPack, layoutCoordinator, accountModel);
+        }
+
+        var that = this,
+            _uiModeEnum = app.mod('enum').UIMode,
+            _searchFormModeEnum = app.mod('enum').SearchFormMode,
+            _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
+            _resultListModeEnum = app.mod('enum').ResultListMode,
+            _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
+            _accountModeEnum = app.mod('enum').AccountMode,
+            _tabEnum = app.mod('enum').Tab,
+            _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
+            _uiModelPack = null,
+            _layoutCoordinator = null,
+            _accountModel = null;
+
+        this.resetUIForAccount = function() {
+            try {
+                _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+                _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+                _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+                _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
+                _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+                _uiModelPack.uiRootModel.clearModal();
+                _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
+
+                _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+
+                /* Attempt to ensure that bookmarks DOM is configured completely (visibility/opacity), before fading in - so everything fades in together. */
+                setTimeout(function () {
+                _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+                }, 0);
+            } catch (e) {
+                throw 'AccountControllerHelper::resetUIForAccount ' + e;
+            }
+            // try {
+            //   //Delaying the resetting of the remainder of the UI avoid the user seeing
+            //   //the user interface move around unnecessarily.
+            //   setTimeout(function () {
+            //     _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
+            //     _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
+            //     _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
+            //     _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
+            //     _uiModelPack.uiRootModel.clearModal();
+            //     _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
+            //     _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
+            //   }, 400);
+            //   _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
+            //   _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
+            //   _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
+            // } catch (e) {
+            //   throw 'AccountControllerHelper::resetUIForAccount ' + e;
+            // }
+        };
+
+        this.accountRetrievalSuccess = function(account) {
+            try {
+                _accountModel.setAccount(account);
+                _accountModel.setIsWaiting('false', {
+                    silent: true
+                }); //silent to because we are taking special control over the rendering of the wait state.
+                _layoutCoordinator.layOut();
+                that.resetUIForAccount();
+                _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
+            } catch (e) {
+                throw 'AccountControllerHelper::accountRetrievalSuccess ' + e;
+            }
+        };
+
+        function init() {
+            try {
+                if (!uiModelPack) {
+                    throw 'uiModelPack not supplied.';
+                }
+
+                if (!layoutCoordinator) {
+                    throw 'layoutCoordinator not supplied.';
+                }
+
+                if (!accountModel) {
+                    throw 'accountModel not supplied.';
+                }
+
+                _uiModelPack = uiModelPack;
+                _layoutCoordinator = layoutCoordinator;
+                _accountModel = accountModel;
+
+                return that;
+            } catch (e) {
+                throw 'AccountControllerHelper::init ' + e;
+            }
+        }
+
+        return init();
     }
 
-    var that = this,
-        _uiModeEnum = app.mod('enum').UIMode,
-        _searchFormModeEnum = app.mod('enum').SearchFormMode,
-        _bookmarkPanelModeEnum = app.mod('enum').BookmarkPanelMode,
-        _resultListModeEnum = app.mod('enum').ResultListMode,
-        _itemsOfInterestModeEnum = app.mod('enum').ItemsOfInterestMode,
-        _accountModeEnum = app.mod('enum').AccountMode,
-        _tabEnum = app.mod('enum').Tab,
-        _mainContainerVisibilityModeEnum = app.mod('enum').MainContainerVisibilityMode,
-        _uiModelPack = null,
-        _layoutCoordinator = null,
-        _accountModel = null;
-
-    this.resetUIForAccount = function () {
-      try {
-        //Delaying the resetting of the remainder of the UI avoid the user seeing
-        //the user interface move around unnecessarily.
-        setTimeout(function () {
-          _uiModelPack.bookmarkPanelModel.setMode(_bookmarkPanelModeEnum.Minimized);
-          _uiModelPack.resultListModel.setMode(_resultListModeEnum.Minimized);
-          _uiModelPack.itemsOfInterestModel.setMode(_itemsOfInterestModeEnum.Default);
-          _uiModelPack.uiRootModel.setUIMode(_uiModeEnum.InUse);
-          _uiModelPack.uiRootModel.clearModal();
-          _uiModelPack.searchFormModel.setMode(_searchFormModeEnum.Minimized);
-          _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
-        }, 400);
-        _uiModelPack.tabBarModel.setSelectedTab(_tabEnum.Account);
-        _uiModelPack.accountModel.setMode(_accountModeEnum.Default);
-        _uiModelPack.uiRootModel.setVisibilityMode(_mainContainerVisibilityModeEnum.Visible);
-      } catch (e) {
-        throw 'AccountControllerHelper::resetUIForAccount ' + e;
-      }
-    };
-
-    this.accountRetrievalSuccess = function (account) {
-      try {
-        _accountModel.setAccount(account);
-        _accountModel.setIsWaiting('false', {silent: true}); //silent to because we are taking special control over the rendering of the wait state.
-        _layoutCoordinator.layOut();
-        that.resetUIForAccount();
-        _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
-      } catch (e) {
-        throw 'AccountControllerHelper::accountRetrievalSuccess ' + e;
-      }
-    };
-
-    function init() {
-      try {
-        if (!uiModelPack) {
-          throw 'uiModelPack not supplied.';
-        }
-
-        if (!layoutCoordinator) {
-          throw 'layoutCoordinator not supplied.';
-        }
-
-        if (!accountModel) {
-          throw 'accountModel not supplied.';
-        }
-
-        _uiModelPack = uiModelPack;
-        _layoutCoordinator = layoutCoordinator;
-        _accountModel = accountModel;
-
-        return that;
-      } catch (e) {
-        throw 'AccountControllerHelper::init ' + e;
-      }
-    }
-
-    return init();
-  }
-
-  app.AccountControllerHelper = AccountControllerHelper;
+    app.AccountControllerHelper = AccountControllerHelper;
 
 }(wizerati));
 ;(function (app) {
@@ -4425,7 +4445,7 @@ window.wizerati = {
 
       _layoutCoordinator.layOut();
       that.resetUIForBookmarks();
-      debugger;
+      
       _uiModelPack.uiRootModel.setAreTransitionsEnabled(true);
     };
 
@@ -7203,7 +7223,8 @@ window.wizerati = {
         _renderOptimizations = {},
         _waitStateIsBeingMonitored = false,
         _modeEnum = app.mod('enum').AccountMode,
-        _displayTimeout = null;
+        _displayTimeout = null,
+        _modeTimeout = null;
 
     this.$el = null;
     this.$elContainer = null;
@@ -7224,11 +7245,11 @@ window.wizerati = {
     this.onDomReady = function () {
       that.$el = $(_el);
       that.$elContainer = $(_elContainer);
-      this.render();
+      this.render(null, { async: false }); //Avoid complications surrounding deferred execution, by making synchronous.
     };
 
-    this.render = function (e) {
-      var options = { done: that.postRender, postRenderScriptName: null };
+    this.render = function (e, options) {
+      var options = _.extend({ done: that.postRender, postRenderScriptName: null, async: true }, options);
 
       if (e && _renderOptimizations[e.type]) {
         _renderOptimizations[e.type].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -7236,7 +7257,7 @@ window.wizerati = {
       }
 
       app.instance.renderTemplate(that.$el, _templateName, that.model, options);
-      that.renderSetMode(that.model.getMode());
+      that.renderSetMode(that.model.getMode(), { async: options.async }); 
     };
 
     this.renderSetIsWaiting = function (value) {
@@ -7251,20 +7272,46 @@ window.wizerati = {
       that.$el.attr('data-selected-tab', tab);
     };
 
-    //THIS METHOD IS LIKELY IMPACTFUL ON ANIMATION RENDERING PERFORMANCE.
-    this.renderSetMode = function (mode) {
-      //What follows is a 60fps performance optimization. Using `display:none` the containing div, enables 6
+
+    this.renderSetMode = function (mode, options) {
+      var displayNoneDelayMs = 300;
+
+      clearTimeout(_displayTimeout); //Important to do on all invocations to avoid stacking up multiple setTimeouts.
+      clearTimeout(_modeTimeout);
+      options = options || { async: true };      
+      mode = mode || that.Model.getMode();
+
+      //display:none is a 60fps performance optimization.
       if (mode === _modeEnum.Minimized) {
         that.$elContainer.attr('data-mode', mode);
-        _displayTimeout = setTimeout(function () {
-          that.$elContainer.css('display', 'none');
-        }, 300);
+                
+        if(options.async) {
+          _displayTimeout = setTimeout(setDisplayNone, displayNoneDelayMs);  
+        } else {
+          setDisplayNone();
+        }        
       } else {
-        clearTimeout(_displayTimeout);
+        setDisplayEmpty();
+
+        if(options.async) {
+          _modeTimeout = setTimeout(function () {
+            setMode();
+          }, 0); //If you set the mode at the same time as the display being changed to '', then you lose the CSS transitions.
+        } else {
+          setMode();
+        } 
+      }
+
+      function setDisplayEmpty() {
         that.$elContainer.css('display', '');
-        setTimeout(function () {
-          that.$elContainer.attr('data-mode', mode);
-        }, 0); //Required so that the mode change takes effect after the DOM has been updated to have the element inline-block (otherwise the CSS transitions are lost).
+      }
+
+      function setDisplayNone() {
+        that.$elContainer.css('display', 'none');
+      }
+
+      function setMode() {
+        that.$elContainer.attr('data-mode', mode);
       }
     };
 
@@ -7508,7 +7555,7 @@ window.wizerati = {
         clearTimeout(_displayTimeout);
         that.$elContainer.css('display', '');
 
-        debugger;
+    
         if(_uiRootModel.getAreTransitionsEnabled()) {
           setTimeout(function () {
             that.$elContainer.attr('data-mode', mode);

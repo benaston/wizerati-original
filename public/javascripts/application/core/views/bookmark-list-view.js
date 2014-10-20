@@ -158,7 +158,7 @@
         clearTimeout(_displayTimeout);
         that.$elContainer.css('display', '');
 
-        debugger;
+    
         if(_uiRootModel.getAreTransitionsEnabled()) {
           setTimeout(function () {
             that.$elContainer.attr('data-mode', mode);

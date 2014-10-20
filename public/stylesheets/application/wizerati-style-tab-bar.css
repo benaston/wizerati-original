@@ -186,9 +186,13 @@ color: #007aff;
 #tab-bar[data-selected-tab='1'] .i:nth-of-type(2) label,
 #tab-bar[data-selected-tab='2'] .i-my-account label,
 #tab-bar[data-selected-tab='0'] .i:nth-of-type(1) .btn,
-#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) .btn,
-#tab-bar[data-selected-tab='2'] .i-my-account .btn {
+#tab-bar[data-selected-tab='1'] .i:nth-of-type(2) .btn {
     color: rgb(0, 122, 255);
+}
+
+#tab-bar[data-selected-tab='2'] .i-my-account label {
+    background-color: #007aff;
+    color: rgba(249,249,249,1);
 }
 
 body[data-ui-mode='1'] #tab-bar {
@@ -270,12 +274,26 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
     -webkit-animation: pulse-l .5s 1 0;
 }
 
+
+
 #btn-nav-my-account {
     font-size: 2.5rem;
+
 }
 
 #tab-bar ul {
     width: 100%; /*ensure buttons centered even when labels not present*/
+}
+
+#tab-bar label[for='btn-nav-my-account'] {
+    font-size: 1.6rem;
+color: rgba(249,249,249,1);
+border-radius: 50px;
+display: inline-block;
+width: 50px;
+height: 50px;
+background: slategray;
+line-height: 54px;
 }
 
 @media only screen and (max-device-height: 568px) {
@@ -375,6 +393,8 @@ body[data-hover-is-enabled='true'] #tab-bar .btn:enabled:hover {
         border-radius: 0;
     }
 }
+
+
 
 @media only screen and (max-device-height: 568px ) and (orientation: landscape) {
     #tab-bar ul:first-of-type {

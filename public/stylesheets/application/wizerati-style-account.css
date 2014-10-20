@@ -73,7 +73,7 @@ body[data-ui-mode='1'] #my-account-panel {
 }
 
 #my-details, #security, #my-cvs, #job-applications, #job-adverts, #billing {
-    width: 500px;
+    width: 600px; /* Empirical. Less than width of account section header. */
     position: absolute;
     -webkit-backface-visibility: hidden;
     -webkit-filter: opacity(0%);
@@ -83,9 +83,16 @@ body[data-ui-mode='1'] #my-account-panel {
 }
 
 #my-account-panel-header {
-    height: 80px;
+    height: 97px;
     text-align: center;
     width: 100%;
+    display: table;
+}
+
+#my-account-panel-header nav {
+
+    display: table-cell;
+    vertical-align: middle;
 }
 
 #my-account-panel-header-item-list .ni:not(:last-child) {
@@ -123,21 +130,39 @@ body[data-ui-mode='1'] #my-account-panel {
     height: 44px;
     box-shadow: 0 0 0 1px rgba(0, 122, 255, 1);
     border-radius: 5px;
-    position: relative;
-    top: 36px;
+    position: relative;    
 }
 
 #my-account-tabs-container {
     position: relative;
-    width: 500px;
+    width: 559px;
     margin: auto;
 }
 
+.btn-critical {
+    color: red;
+}
+
+#btn-delete-my-account:hover {
+    text-decoration: underline;
+}
+
+.input-label-group:nth-of-type(1) {
+    margin-top:20px;
+}
+
+#frm-change-password > form > div:nth-of-type(2) {
+    margin-top: 30px; /* Nudge form fields down for space for cancel/done buttons. */
+}
+
 #my-account-buttons-container-my-details {
-    width: 500px;
-    height: 20px;
-    margin: auto;
-    position: relative;
+    
+   top:-32px;
+    width: 559px;
+height: 62px;
+margin: auto;
+position: absolute; /* Take buttons out of the flow to minimize wasted height. */
+display: block;
 
 }
 
@@ -175,7 +200,7 @@ body[data-ui-mode='1'] #my-account-panel {
 
 .input-label-group .lbl {
     position: absolute;
-    left: 95px;
+    left: 91px;
     top: 33px;
 }
 
@@ -199,8 +224,9 @@ body[data-ui-mode='1'] #my-account-panel {
 #btn-nav-job-adverts,
 #btn-nav-billing {
     width: 100%;
-    padding: 0 10px 0 10px;
+    padding: 0 20px 0 20px;
     height: 44px;
+    line-height: 46px;
     font-family: helvetica-pro-light;
     border: none;
     font-size: 1rem;
@@ -212,8 +238,8 @@ body[data-ui-mode='1'] #my-account-panel {
 #job-applications #my-account-buttons-container-job-applications,
 #job-applications #my-account-buttons-container-job-adverts,
 #job-applications #my-account-buttons-container-billing {
-    -webkit-filter: opacity(0%);
-    pointer-events: none;
+    /*-webkit-filter: opacity(0%);
+    pointer-events: none;*/
 }
 
 #my-details[data-is-dirty='true'] #my-account-buttons-container-my-details,
@@ -222,8 +248,8 @@ body[data-ui-mode='1'] #my-account-panel {
 #job-applications[data-is-dirty='true']  #my-account-buttons-container-job-applications,
 #job-applications[data-is-dirty='true']  #my-account-buttons-container-job-adverts,
 #job-applications[data-is-dirty='true']  #my-account-buttons-container-billing {
-    -webkit-filter: opacity(100%);
-    pointer-events: auto;
+    /*-webkit-filter: opacity(100%);
+    pointer-events: auto;*/
 }
 
 #cv-list {
@@ -333,13 +359,13 @@ body[data-ui-mode='1'] #my-account-panel {
 }
 
 #my-account-buttons-container-my-details {
-    -webkit-filter: opacity(0%);
-    pointer-events: none;
+    /*-webkit-filter: opacity(0%);
+    pointer-events: none;*/
 }
 
 #my-account-buttons-container-my-cvs {
     display: block;
-    height: 80px;
+    height: 62px;
 }
 
 .added {
@@ -384,7 +410,7 @@ body[data-ui-mode='1'] #my-account-panel {
     width: 167px;
     height: 41px;
     font-size: 1rem;
-    color: #900;
+    color: red;
     border-radius: 5px;
     line-height: 41px;
     margin-top: 20px;
