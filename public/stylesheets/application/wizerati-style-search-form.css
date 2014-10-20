@@ -52,8 +52,10 @@ body[data-ui-mode='0'] #search-form-panel {
 
 #keywords {
     width: 460px;
-    padding-right: 79px; /*space for search button*/
-    font-size: 1.2rem;
+padding-right: 79px;
+font-size: 1.2rem;
+padding: 17px 10px 12px;
+line-height: 1.4rem;
 }
 /*body[data-ui-mode='1'] #keywords {
 max-width: 360px;
@@ -200,7 +202,7 @@ body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
 }
 
 .search-button-container .label {
-    top: -6px;
+    top: -4px;
     position: relative;
 }
 
@@ -213,7 +215,7 @@ width: 100px;*/
 position: absolute;
 right: 12px;
 
-top: -6px;
+top: -4px;
 width: 100px;
 }
 
