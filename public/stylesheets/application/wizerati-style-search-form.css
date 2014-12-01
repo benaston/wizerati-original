@@ -55,7 +55,7 @@ body[data-ui-mode='0'] #search-form-panel {
     width: 460px;
 padding-right: 79px;
 font-size: 1.2rem;
-padding: 17px 10px 12px;
+/*padding: 17px 10px 12px;*/
 line-height: normal;
 }
 /*body[data-ui-mode='1'] #keywords {
@@ -66,7 +66,7 @@ max-width: 360px;
 #keywords::-webkit-input-placeholder {
     font-size: 1.2rem;
     line-height: normal;
-    color: gold;
+    /*color: gold;*/
     vertical-align: middle;
 }
 
@@ -212,7 +212,7 @@ body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
 }
 
 .search-button-container .label {
-    top: -4px;
+    top: -5px;
     position: relative;
 }
 
