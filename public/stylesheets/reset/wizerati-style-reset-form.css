@@ -16,7 +16,7 @@ html input[type="tel"] {
     color: #333;
     font-size: 1rem;
     border-radius: 5px;
-    box-shadow: 0 0 0 1px rgba(0,95,167,.35);
+    box-shadow: 0 0 0 1px rgba(0,95,167,.15);
     padding: 15px 5px 12px 5px;
 }
 

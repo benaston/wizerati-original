@@ -1,24 +1,23 @@
 {{ try {  }}
 
 <div class="flex-containerr {{= model.isSelected ? 's-i-content' : 'p-i-content' }}" style="width: {{=model.width}}px; overflow:hidden; position:relative;">
-    <!--<div id="top1" class="in-page-anchor-target"></div>-->
-    <header class="menu-container flex-itemm" style="">
-
+    <header class="menu-container flex-itemm">
     <ul class="menu" style="position: relative;
 ">        <li><form class="frm-bookmark" method="POST" action="/bookmarks/{{=model.isBookmark ? 'destroy' : 'create' }}">
                 <input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button type="submit" id="btn-bookmark-{{= model.id}}" class="btn btn-s a {{=model.isBookmarkable || model.isBookmark ? '' : 'disabled' }} {{ if(model.isBookmark) {}}checked{{} }}"
-                            title="{{=model.isBookmarkable ? 'Save' : 'Un-save' }}" {{=model.isHidden ? 'disabled' : '' }}>{{=model.isBookmark ? '&#xf26b;' : '&#xf25d;' }}</button>
-                    <label class="lbl" for="btn-bookmark-{{= model.id}}">Save</label>
+                             {{=model.isHidden ? 'disabled' : '' }}></button>
+                    <label style="font-size:1rem;" class="lbl" for="btn-bookmark-{{= model.id}}"><div class="lbl-content selected">{{=model.isBookmarkable ? 'Save' : 'Forget' }}</div></label>
                 </div>
             </form></li>
             <li><form class= "frm-pin" method="POST" action="/itemsofinterest/{{=!model.isInComparisonList ? 'create' : 'destroy' }}"><input type="hidden" name="id" value="{{=model.id}}" />
                 <div class="m-i">
                     <button id="btn-pin-{{= model.id}}" class="btn btn-s a {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }} {{ if(model.isInComparisonList) {}}checked{{} }} btn-pin"
-                             {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }}>{{=model.isInComparisonList ? '&#xf40d;' : '&#xf30e;' }}</button>
-                    <label class="lbl" for="btn-pin-{{= model.id}}">Compare</label>
+                             {{=model.canAddToComparisonList || model.isInComparisonList ? '' : 'disabled' }}></button>                    
+                    <label  style="font-size:1rem;"  class="lbl" for="btn-pin-{{= model.id}}"><div class="lbl-content">Compare</div></label>
                 </div>
+                
             </form></li>            
         </ul>
     </header><div class="flex-item" style="position:absolute;overflow-y: scroll;height:100%;"><article class="i-o-i-c {{=model.isHidden ? 'hidden' : '' }}" style="position:relative; top: 0;"><div class="i-o-i-p-c">

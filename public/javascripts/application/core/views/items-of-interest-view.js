@@ -150,9 +150,11 @@
       var $frms = $('.p-i[data-id="' + bookmark.id + '"], .s-i[data-id="' + bookmark.id + '"]')
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/destroy');
-      $bFrm.find('.btn').addClass('checked');
-      $bFrm.find('.btn').html('&#xf26b;');
-      // $bFrm.find('.lbl').text('Forget');
+      
+      // $bFrm.find('.btn').addClass('checked');
+      // $bFrm.find('.btn').html('&#xf26b;');
+
+      $bFrm.find('.lbl').text('Forget');
 
       //Bookmarked items cannot be hidden.
       var $hFrm = $frms.find('.frm-hide');
@@ -163,9 +165,12 @@
       var $frms = $('.p-i[data-id="' + itemId + '"], .s-i[data-id="' + itemId + '"]')
       var $bFrm = $frms.find('.frm-bookmark');
       $bFrm.attr('action', '/bookmarks/create');
-      $bFrm.find('.btn').removeClass('checked');
-      $bFrm.find('.btn').html('&#xf25d;');
-      // $bFrm.find('.lbl').text('Save');
+      
+      // $bFrm.find('.btn').removeClass('checked');
+      
+      // $bFrm.find('.btn').html('&#xf25d;');
+
+      $bFrm.find('.lbl').text('Save');
 
       //Non-bookmarked items can be hidden.
       var $hFrm = $frms.find('.frm-hide');

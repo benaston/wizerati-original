@@ -7,8 +7,8 @@
 </div>
 <a tabindex="1" href="/selecteditem/update?id={{=model.id}}&source=0">
 <span class="c">
-<h3>{{= model.title }}</h3>
-<p class="tld">{{= model.organization }}, <span class="u">{{= moment(model.updatedDateTime).fromNow() }}</span></p>
+<h3 class="title">{{= model.title }}</h3>
+<p class="tld"><span class="organisation">{{= model.organization }}</span><span class="u"> {{= moment(model.updatedDateTime).fromNow() }}</span></p>
 <p class="rate"><span class="rate-new"><span class="rate-value">{{= model.rateLower }}</span> <span class="rate-currency">GBP</span><span class="rate-unit">/day</span></span><span class="location">{{= model.location }}</span></p>
 </span>
 </a>

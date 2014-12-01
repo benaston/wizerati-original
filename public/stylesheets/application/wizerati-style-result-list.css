@@ -64,6 +64,11 @@ font-size: .65rem; /*empirical*/
 }
 
 .u {
+    font-size:.8rem;
+    margin-left:10px; /*Ensure separation from organization.*/
+    display: inline-block;
+    overflow: hidden;
+    float:right;
     white-space: nowrap !important; /*Prevents breaking the last updated across lines.*/
 }
 
@@ -291,9 +296,22 @@ top: 6px;
 pointer-events: none;
 }
 
-.t h3 {
+/*ID specifier to increase specificity for the whitespace style.*/
+#result-list .t .title {
     color: black;
     margin: 0 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#result-list .t .organisation {
+    display: inline-block;
+    width: 155px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size:.8rem;
 }
 
 .location-and-posted {

@@ -6,6 +6,18 @@ var keywords = model.getKeywords();
 <div class="tag-line">UK IT contract job search</div>
 
 <form id="search-form" name="search-form" action="/search" method="GET">
+<div id="search-buttons-container">
+    <div class="cancel-button-container">
+        <div class="rotating-button-container">
+            <button type="submit" form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-s"></button><span class="focus-indicator"></span><span class="button-icon">Cancel</span>
+        </div>
+    </div>
+    <div class="search-button-container">
+        <div class="rotating-button-container">
+            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">Search</span>
+        </div>
+    </div>
+    </div>
     <div class="search-fields">
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
@@ -44,18 +56,7 @@ var keywords = model.getKeywords();
                 <label for="r600" class="lbl">600</label></li>
         </ol>
     </div>
-    <div id="search-buttons-container">
-    <div class="cancel-button-container">
-        <div class="rotating-button-container">
-            <button type="submit" form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-s"></button><span class="focus-indicator"></span><span class="button-icon">Cancel</span>
-        </div>
-    </div>
-    <div class="search-button-container">
-        <div class="rotating-button-container">
-            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">Search</span>
-        </div>
-    </div>
-    </div>
+    
 </form>
 <form id="frm-cancel-search" name="frm-cancel-search" action="/searchformmode/update" method="POST">
     <input type="hidden" name="mode" value="1"/>
