@@ -212,7 +212,7 @@ body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
 }
 
 .search-button-container .label {
-    top: -5px;
+    top: -4px;
     position: relative;
 }
 
@@ -225,7 +225,7 @@ width: 100px;*/
 position: absolute;
 right: 12px;
 
-top: -4px;
+top: -5px;
 width: 100px;
 }
 
