@@ -216,6 +216,10 @@ body[data-hover-is-enabled='true'] .cancel-button-container:hover .button-icon {
     position: relative;
 }
 
+.search-button-container .btn~.button-icon {
+    font-size:1.2rem;
+}
+
 .search-button-container {
     /*position: absolute;
 right: 0;
@@ -223,9 +227,9 @@ top: -17px;
 width: 100px;*/
 
 position: absolute;
-right: 12px;
+right: 21px;
 
-top: -5px;
+top: -8px;
 width: 100px;
 }
 
