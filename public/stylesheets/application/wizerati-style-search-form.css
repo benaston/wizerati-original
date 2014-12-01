@@ -62,6 +62,13 @@ line-height: 1.4rem;
 max-width: 360px;
 }
 */
+
+#keywords::-webkit-input-placeholder {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    color: gold;
+}
+
 body[data-ui-mode='1'] #keywords {
         width: 100%;
         padding-right: 0;
