@@ -36,6 +36,7 @@ module.exports = function (grunt) {
           'public/stylesheets/reset/wizerati-style-reset-form.css',
           'public/stylesheets/reset/wizerati-style-reset-non-form.css',
           'public/stylesheets/vendor/lucid-style-buttons.css',
+          'public/stylesheets/vendor/lucid-style-buttons-rotating.css',
           'public/stylesheets/vendor/lucid-style-form-elements.css',
           'public/stylesheets/vendor/lucid-style-typography.css',
           'public/stylesheets/application/*.css',

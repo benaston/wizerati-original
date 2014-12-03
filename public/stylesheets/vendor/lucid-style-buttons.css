@@ -78,9 +78,9 @@ a.btn:hover,
     display: inline-block;
 }
 
-.btn:not(.btn-rotating):enabled:focus:after,
-.btn.btn-rotating:enabled:focus + .focus-indicator:after,
-input[type='radio']:enabled:focus + label:after {
+/*.btn:not(.btn-rotating):enabled:focus:after,*/
+/*.btn.btn-rotating:enabled:focus + .focus-indicator:after,*/
+/*input[type='radio']:enabled:focus + label:after {
     content: ' ';
     display: block;
     background-color: rgba(2, 86, 244, .1);
@@ -90,7 +90,7 @@ input[type='radio']:enabled:focus + label:after {
     position: absolute;
     right: 0;
     bottom: 0;
-}
+}*/
 
 .lbl:focus,
 label:focus {
@@ -98,18 +98,13 @@ label:focus {
     outline-offset: 2px;
 }
 
-.rotating-button-container {
-    display: inline-block;
-    position: relative;
-}
-
 .btn ~ .button-icon {
     display: inline-block;
     font-family: 'helvetica-pro-light';
     position: relative;
     pointer-events: none;
-    left: 26px;
-    top: 41px;
+    /*left: 26px;*/
+    /*top: 41px;*/
     color: rgba(0, 122, 255, 1);
     position: absolute;
 }
@@ -156,14 +151,7 @@ a.btn-primary:not(.disabled):not(.checked):hover {
     -webkit-animation-timing-function: linear;
 }
 
-/*Rotates and border-color changes when waiting*/
-.rotating-button-container > .btn[data-is-waiting='true'] {
-    box-shadow: 0 2px 0 2px rgba(0, 0, 0, .05) inset;
-    -webkit-animation-duration: 2.5s;
-    -webkit-animation-name: rotate;
-    -webkit-animation-iteration-count: 1;
-    -webkit-animation-timing-function: ease-out-in;
-}
+
 
 .radio:enabled + .lbl:active.halo, .btn.halo:enabled:active {
     box-shadow: 0 0px 0px 45px rgba(0, 109, 204, .2);

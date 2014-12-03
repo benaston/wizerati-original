@@ -3,7 +3,7 @@ var rate = model.getRate();
 var keywords = model.getKeywords();
 }}
 <div class="logo">wizerati</div>
-<div class="tag-line">UK IT contract job search</div>
+<div class="tag-line">Global IT contract job search</div>
 
 <form id="search-form" name="search-form" action="/search" method="GET">
 <div id="search-buttons-container">
@@ -14,7 +14,8 @@ var keywords = model.getKeywords();
     </div>
     <div class="search-button-container">
         <div class="rotating-button-container">
-            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button><span class="focus-indicator"></span><span class="button-icon">Search</span>
+            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button>
+            <span class="focus-indicator"></span><span class="button-icon">Search</span>
         </div>
     </div>
     </div>
@@ -62,8 +63,40 @@ var keywords = model.getKeywords();
     <input type="hidden" name="mode" value="1"/>
 </form>
 
+
+<div class="experiment">
+    <div class="rotating-button-container small test">
+        <button type="submit" id="x" data-label="Search" tabindex="1" class="btn btn-s btn-primary bordered" data-is-waiting="false"></button>
+        <span class="focus-indicator"></span><span class="icon">Search</span><label for="x" class="icon lower">Search</label>
+    </div>
+    <div class="rotating-button-container medium test">
+        <button type="submit" id="y" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true"></button>
+        <span class="focus-indicator"></span><span class="icon">Search</span><label for="y" class="icon lower">Search</label>
+    </div>
+    <div class="rotating-button-container large test">
+        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true"></button>
+        <span class="focus-indicator"></span><span class="icon">Search</span><label for="z" class="icon lower">Search</label>
+    </div>
+
+    <div class="rotating-button-container small test">
+        <button type="submit" id="x" data-label="Search" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
+        <span class="focus-indicator"></span><span class="icon">Search</span><label for="x" class="icon lower">Search</label>
+    </div>
+    <div class="rotating-button-container medium test">
+        <button type="submit" id="y" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
+        <span class="focus-indicator"></span><span class="icon">Search</span><label for="y" class="icon lower">Search</label>
+    </div>
+    <div class="rotating-button-container large test">
+        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
+        <span class="focus-indicator"></span><span class="icon">Search</span><label for="z" class="icon lower">Search</label>
+    </div>
+</div>
+
+
 {{
 } catch(e) {
 throw "template exception: contract/search-form. " + e;
 }
 }}
+
+
