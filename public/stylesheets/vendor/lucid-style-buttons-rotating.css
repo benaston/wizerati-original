@@ -110,9 +110,12 @@
     font-size: 2rem;
     top: calc(50% - 1rem);
 }
+/* Label for centered label covers the area taken by the containing box. */
 .rotating-button-container.long.centered-label > .icon {
     font-size: 1rem;
-    top: calc(50% - .5rem);
+    top: 0;
+    height: 100%;
+    line-height: 67px;
 }
 .rotating-button-container.long > .icon.lower {
     top: calc(50% - .6rem); /* Empirical. Repeated due to specificity. */
@@ -126,9 +129,9 @@
     white-space: nowrap;
 }
 .rotating-button-container.long.centered-label > .icon.lower {
-display: none;
+    display: none;
 }
-.rotating-button-container > .btn:enabled:focus+.focus-indicator {
+.rotating-button-container > .btn + .focus-indicator {
     pointer-events: none;
 }
 .rotating-button-container > .btn:enabled:focus+.focus-indicator::after {
@@ -158,10 +161,14 @@ display: none;
 .rotating-button-container > .btn:hover::after {
     text-decoration: underline;
 }
-.rotating-button-container.small > .btn:enabled:focus+.focus-indicator::after {
+.rotating-button-container.small > .btn:enabled:focus+.focus-indicator::after,
+.rotating-button-container.long > .btn:enabled:focus+.focus-indicator::after {
     width: 75px;
     height: 75px;
     border-radius: 75px;
+}
+.rotating-button-container.long.centered-label > .btn:enabled:focus+.focus-indicator::after {
+    left: calc(50% - 37px);
 }
 .rotating-button-container.medium > .btn:enabled:focus+.focus-indicator::after, 
 .rotating-button-container.large > .btn:enabled:focus+.focus-indicator::after,
