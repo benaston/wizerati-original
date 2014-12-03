@@ -23,12 +23,6 @@ var keywords = model.getKeywords();
       <input type="search" id="keywords" name="keywords" {{= keywords ? "value='" + keywords + "'" : "''" }} class="field" required placeholder="e.g. 'javascript london'" autocorrect="off" autocapitalize="none" tabindex="1">
     </div>
     <div class="search-filters">
-<!--     <h3 style="
-    display: block;
-    text-align: left;
-    margin-left: 17px;
-">Filters</h3>
- -->
       <span style="
     text-align: left;
     display: inline-block;
@@ -89,6 +83,18 @@ var keywords = model.getKeywords();
     <div class="rotating-button-container large test">
         <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
         <span class="focus-indicator"></span><span class="icon">Search</span><label for="z" class="icon lower">Search</label>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div class="rotating-button-container long test">
+        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="false"></button>
+        <span class="focus-indicator"></span><span class="icon ionicons">&#xf100;</span><label for="z" class="icon lower">javascript london</label>
+    </div>
+    
+    <div class="rotating-button-container long centered-label test">
+        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="false"></button>
+        <span class="focus-indicator"></span><span class="icon">Personal Details</span><label for="z" class="icon lower">javascript london</label>
     </div>
 </div>
 

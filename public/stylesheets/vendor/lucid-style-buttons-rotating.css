@@ -11,7 +11,8 @@
 .rotating-button-container.small::after, 
 .rotating-button-container.medium::after, 
 .rotating-button-container.large::after, 
-.rotating-button-container.x-large::after {
+.rotating-button-container.x-large::after,
+.rotating-button-container.long::after {
     content: none; /* Clear the error message. */
 }
 .rotating-button-container.small {
@@ -30,6 +31,13 @@
     width: 100px;
     height: 100px;
 }
+.rotating-button-container.long {
+    width: 67px;
+    height: 67px;
+}
+.rotating-button-container.long.centered-label {
+    width: 200px;
+}
 .rotating-button-container > .icon {
     position: absolute;
     display: inline-block;
@@ -41,6 +49,10 @@
     line-height: normal; /* Normal gives a better vertical centering on OSX. */
     /* Enables the label to be transparent, enabling the underlying button to be clicked. */
 }
+
+.rotating-button-container > .icon.black {
+    color: black;
+}
 .rotating-button-container > .btn:active ~ .icon {
     color: #094e96;
 }
@@ -51,9 +63,6 @@
     border-radius: 5px;
     background: rgba(0,122,255,1);
     color: white;
-    /*padding: 0 1rem;*/
-    /*height: 100%;*/
-    /*display: inline-block; *//* Required for the height to take effect. */
 }
 .rotating-button-container > .icon.lower {
     pointer-events: auto;
@@ -97,11 +106,31 @@
     top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
     font-size: 1.25rem;
 }
-
+.rotating-button-container.long > .icon {
+    font-size: 2rem;
+    top: calc(50% - 1rem);
+}
+.rotating-button-container.long.centered-label > .icon {
+    font-size: 1rem;
+    top: calc(50% - .5rem);
+}
+.rotating-button-container.long > .icon.lower {
+    top: calc(50% - .6rem); /* Empirical. Repeated due to specificity. */
+    left: calc(-100% - 192px);
+    font-size: 1.2rem;
+    width: 260px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: initial;
+    white-space: nowrap;
+}
+.rotating-button-container.long.centered-label > .icon.lower {
+display: none;
+}
 .rotating-button-container > .btn:enabled:focus+.focus-indicator {
     pointer-events: none;
 }
-
 .rotating-button-container > .btn:enabled:focus+.focus-indicator::after {
     content: ' ';
     display: block;
@@ -122,6 +151,9 @@
     width: 100px;
     height: 100px;
     border-radius: 100px;
+}
+.rotating-button-container.long.centered-label > .btn {
+    left: calc(50% - 33px);
 }
 .rotating-button-container > .btn:hover::after {
     text-decoration: underline;
@@ -157,4 +189,7 @@
     -webkit-animation-name: rotate;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: ease-out-in;
+}
+.ionicons {
+    font-family: ionicons !important;
 }
