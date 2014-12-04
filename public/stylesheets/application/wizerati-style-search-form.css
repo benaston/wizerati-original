@@ -4,6 +4,13 @@ body[data-ui-mode='1'][data-are-transitions-enabled='true'] #search-form-panel-c
 body[data-ui-mode='1'][data-are-transitions-enabled='true'] #search-form-panel-container[data-mode='1'] #search-form-panel {
     transition: -webkit-filter .2s ease-out, z-index 0 linear .3s;
 }
+body[data-ui-mode='0'] #search-form-container {
+    display: inline-block; /* This shrink-wraps the container around the contents width. */
+}
+#search-form-container.test, 
+#search-form-container.test * {
+    box-shadow: 0 0 0 1px inset;
+}
 #search-form-panel-container {
     vertical-align: top;
     width: 0;
@@ -23,7 +30,7 @@ body[data-ui-mode='1'] #search-form-panel-container[data-mode='1'] #search-form-
     /*Transition ensures this change in the z-index is not observed - it merely helps with inspecting DOM elements during development. */
 }
 #search-form {
-    width: 500px;
+    /*width: 500px;*/
 }
 #search-form-panel {
     z-index: 3;
@@ -62,6 +69,7 @@ body[data-ui-mode='0'] #search-form-panel {
     See: http://stackoverflow.com/questions/17597964/why-is-there-a-font-face-difference-in-line-height-on-windows-and-mac-os-x 
     */
     height: 53px;
+    margin: 0; /* Force a reset on this. */
 }
 
 /*body[data-ui-mode='1'] #keywords {
@@ -87,11 +95,11 @@ padding-right: 68px;  /*space for search button*/
     
     margin: 20px 0 0 0px;
 }
-body[data-ui-mode='1'] #search-form {
-    max-width: 600px;
+body[data-ui-mode='1'] #search-form-container {
+    max-width: 650px; /* Empirical, so the filters can flow in a single line. */
 }
 #search-form {
-    position: relative;
+    /*position: relative;*/
     /*enables absolute positioning of buttons in brownfield mode (given that the container is fixed position*/
 }
 #search-form-panel hr {
@@ -102,8 +110,8 @@ body[data-ui-mode='0'] #search-form-panel hr {
     display: none;
 }
 body[data-ui-mode='1'] .search-fields {
-    margin-left: 73px;
-    width: calc(100% - 73px);
+    /*margin-left: 73px;*/
+    width: 100%;
     padding-left: 22px;
     padding-right: 22px;
     box-sizing: border-box;
@@ -111,6 +119,7 @@ body[data-ui-mode='1'] .search-fields {
     z-index: 9;
     position: relative;
     /*req for z index to be infront of buttons*/
+    display: inline-block; /* Attempt to ensure the vertical positioning of buttons and fields is correct. */
 }
 body[data-ui-mode='1'] .search-button-container {
     top: -17px;
@@ -131,11 +140,11 @@ body[data-ui-mode='1'] #search-form-panel {
 body[data-ui-mode='1'] #search-form {
     width: inherit;
 }
-.search-buttons-container {
+body[data-ui-mode='1'] #search-buttons-container {
     position: relative;
     /*to give context to absolutely positioned buttons*/
     
-    height: 88px;
+    /*height: 88px;*/
     /*to enable correct positioning of hr after*/
 }
 .search-panel[data-mode='1'] #search-form-panel {
@@ -157,7 +166,7 @@ body[data-ui-mode='0'] .cancel-button-container {
 }
 .cancel-button-container {
     position: absolute;
-    left: 72px;
+    /*left: 72px;*/
     top: -17px;
     width: 100px;
 }
@@ -171,9 +180,13 @@ body[data-ui-mode='0'] .search-filters {
     display: none;
 }
 body[data-ui-mode='0'] form[name='search-form'] {
-    top: 20px;
+    /*top: 20px;*/
     /*empirical*/
     
+    /*position: relative;*/
+}
+body[data-ui-mode='0'] #search-form-container {
+    top: 20px; /*empirical*/
     position: relative;
 }
 #btn-cancel-search {
@@ -211,15 +224,13 @@ body[data-hover-is-enabled='true'] .search-button-container:hover .button-icon, 
     font-size: 1.2rem;
 }
 .search-button-container {
-    /*position: absolute;
-right: 0;
-top: -17px;
-width: 100px;*/
-    
     position: absolute;
-    right: 21px;
-    top: -8px;
+    /*right: 21px;*/
+    right: -8px;
+    /*top: -8px;*/
+    top: calc(100% - 77px); /* Search button container is 100px high. We need to move up half height of search field (53/2) plus half height of button (100/2) === 77px. */
     width: 100px;
+    height: 100px;
 }
 body[data-ui-mode='1'] .search-button-container {
     top: -17px;
@@ -230,7 +241,8 @@ body[data-ui-mode='1'] .search-button-container {
     float: left;
 }
 .search-filters {
-    margin: 20px 20px 20px 75px;
+    /*margin: 20px 20px 20px 75px;*/
+    margin: 20px 20px 20px 0px;
     text-align: center;
     display: inline-block;
     position: relative;

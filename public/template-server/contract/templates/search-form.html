@@ -8,14 +8,16 @@ var keywords = model.getKeywords();
 <form id="search-form" name="search-form" action="/search" method="GET">
 <div id="search-buttons-container">
     <div class="cancel-button-container">
-        <div class="rotating-button-container">
-            <button type="submit" form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-s"></button><span class="focus-indicator"></span><span class="button-icon">Cancel</span>
+        <div class="r-b-c">
+            <button type="submit" form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn btn-s"></button><span class="focus-indicator"></span>
+            <span class="button-icon">Cancel</span>
         </div>
     </div>
     <div class="search-button-container">
-        <div class="rotating-button-container">
-            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-primary btn-rotating" data-is-waiting="false"></button>
-            <span class="focus-indicator"></span><span class="button-icon">Search</span>
+        <div class="r-b-c">
+            <button type="submit" id="btn-search" tabindex="1" class="btn btn-s btn-rotating" data-is-waiting="false"></button>
+            <span class="focus-indicator"></span>
+            <span class="button-icon">Search</span>
         </div>
     </div>
     </div>
@@ -59,42 +61,54 @@ var keywords = model.getKeywords();
 
 
 <div class="experiment">
-    <div class="rotating-button-container small test">
-        <button type="submit" id="x" data-label="Search" tabindex="1" class="btn btn-s btn-primary bordered" data-is-waiting="false"></button>
-        <span class="focus-indicator"></span><span class="icon">Search</span><label for="x" class="icon lower">Search</label>
+    <div class="r-b-c small test">
+        <button type="submit" id="x" data-label="Search" tabindex="1" class="btn bordered" data-is-waiting="false"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon">Search</span><label for="x" class="icon lower">Search</label>
     </div>
-    <div class="rotating-button-container medium test">
-        <button type="submit" id="y" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true"></button>
-        <span class="focus-indicator"></span><span class="icon">Search</span><label for="y" class="icon lower">Search</label>
+    <div class="r-b-c medium test">
+        <button type="submit" id="y" tabindex="1" class="btn" data-is-waiting="true"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon">Search</span><label for="y" class="icon lower">Search</label>
     </div>
-    <div class="rotating-button-container large test">
-        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true"></button>
-        <span class="focus-indicator"></span><span class="icon">Search</span><label for="z" class="icon lower">Search</label>
+    <div class="r-b-c large test">
+        <button type="submit" id="z" tabindex="1" class="btn" data-is-waiting="true"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon">Search</span>
+        <label for="z" class="icon lower">Search</label>
     </div>
 
-    <div class="rotating-button-container small test">
-        <button type="submit" id="x" data-label="Search" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
-        <span class="focus-indicator"></span><span class="icon">Search</span><label for="x" class="icon lower">Search</label>
+    <div class="r-b-c small test">
+        <button type="submit" id="x" data-label="Search" tabindex="1" class="btn" data-is-waiting="true" data-is-selected="true"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon">Search</span><label for="x" class="icon lower">Search</label>
     </div>
-    <div class="rotating-button-container medium test">
-        <button type="submit" id="y" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
-        <span class="focus-indicator"></span><span class="icon">Search</span><label for="y" class="icon lower">Search</label>
+    <div class="r-b-c medium test">
+        <button type="submit" id="y" tabindex="1" class="btn" data-is-waiting="true" data-is-selected="true"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon">Search</span><label for="y" class="icon lower">Search</label>
     </div>
-    <div class="rotating-button-container large test">
-        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="true"></button>
-        <span class="focus-indicator"></span><span class="icon">Search</span><label for="z" class="icon lower">Search</label>
+    <div class="r-b-c large test">
+        <button type="submit" id="z" tabindex="1" class="btn" data-is-waiting="true" data-is-selected="true"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon">Search</span>
+        <label for="z" class="icon lower">Search</label>
     </div>
     <br/>
     <br/>
     <br/>
-    <div class="rotating-button-container long test">
-        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="false"></button>
-        <span class="focus-indicator"></span><span class="icon ionicons">&#xf100;</span><label for="z" class="icon lower">javascript london</label>
+    <div class="r-b-c long test">
+        <button type="submit" id="z2" tabindex="1" class="btn" data-is-waiting="true" data-is-selected="false"></button>
+        <span class="focus-indicator"></span>
+        <span class="icon ionicons">&#xf100;</span>
+        <label for="z2" class="icon lower">javascript london</label>
     </div>
     
-    <div class="rotating-button-container long centered-label test">
-        <button type="submit" id="z" tabindex="1" class="btn btn-s btn-primary" data-is-waiting="true" data-is-selected="false"></button>
-        <span class="focus-indicator"></span><label for="z" class="icon">Personal Details</label><label for="z" class="icon lower">javascript london</label>
+    <div class="r-b-c long centered-label test">
+        <button type="submit" id="z1" tabindex="1" class="btn" data-is-waiting="true" data-is-selected="false"></button>
+        <span class="focus-indicator"></span>
+        <label for="z1" class="icon">Personal Details</label>        
+        <label for="z1" class="icon lower">javascript london</label>
     </div>
 </div>
 

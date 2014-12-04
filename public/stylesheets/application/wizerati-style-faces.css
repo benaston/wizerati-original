@@ -1,13 +1,13 @@
 @font-face {
     font-family: ionicons;
-    src: url('../fonts/ionicons.woff');
+    src: url('../fonts/ionicons.woff'), url('../../fonts/ionicons.woff'); /* Second URL for test pages served from filesystem. */
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: helvetica-pro-light;
-    src: url('../fonts/helvetica-pro-light.woff');
+    src: url('../fonts/helvetica-pro-light.woff'), url('../../fonts/helvetica-pro-light.woff'); /* Second URL for test pages served from filesystem. */
     font-weight: normal;
     font-style: normal;
 }
