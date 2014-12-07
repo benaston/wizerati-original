@@ -1,80 +1,74 @@
-/* RBC stands for rotating button container. */
-@-webkit-keyframes rotate {
-    0% {
-        -webkit-transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
+/* c--r-b stands for component--rotating-button. */
+/* Proposal: components be created by having a 
+namespacing DOM element with a prefix 'c--' 
+standing for component. TODO: correct for the 
+hover-is-enabled situation for touch devices. */
+body.test * {
+    box-shadow: 0 0 0 1px inset;
 }
-
-.r-b-c > label {
-    cursor: pointer; /* Ensure the hand icon is shown when hovering over labels. */
-}
-.r-b-c > .btn:enabled:focus {
-    outline: 0;    
-}
-.r-b-c > .btn {
-width: 67px;
-border-radius: 85px;
-line-height: 67px;
-height: 67px;
-font-size: 2rem;
-color: rgba(0,109,204,.95);
-padding: 0;
-cursor: pointer;
-margin: 0;
-font-family: ionicons;
-background-color: transparent;
--webkit-user-select: none;
-text-align: center;
-box-sizing: border-box;
-border: 0;
-display: inline-block;
--webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-.r-b-c {
+.c--r-b {
     display: inline-block;
     position: relative;
 }
-.r-b-c.test, 
-.r-b-c.test * {
-    box-shadow: 0 0 0 1px inset;
+.c--r-b > label {
+    cursor: pointer; /* Ensure the hand icon is shown when hovering over labels. */
 }
-.r-b-c::after {
+.c--r-b > .btn:enabled:focus {
+    outline: 0;    
+}
+.c--r-b > .btn {
+    display: inline-block;
+    width: 72px;
+    height: 72px;
+    border-radius: 85px;
+    line-height: 72px;
+    font-size: 2rem;
+    color: rgba(0,109,204,.95);
+    padding: 0;
+    cursor: pointer;
+    margin: 0;
+    font-family: ionicons;
+    background-color: transparent;
+    -webkit-user-select: none;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.c--r-b::after {
     content: 'You must use a size class with this container class.';
 }
-.r-b-c.small::after, 
-.r-b-c.medium::after, 
-.r-b-c.large::after, 
-.r-b-c.x-large::after,
-.r-b-c.long::after {
+.c--r-b.small::after, 
+.c--r-b.medium::after, 
+.c--r-b.large::after, 
+.c--r-b.x-large::after,
+.c--r-b.long::after {
     content: none; /* Clear the error message. */
 }
-.r-b-c.small {
-    width: 67px; /* Empirical. */    
-    height: 67px;
+.c--r-b.small {
+    width: 72px; /* Empirical. */    
+    height: 72px;
 }
-.r-b-c.medium {
+.c--r-b.medium {
     width: 100px;
     height: 100px;
 }
-.r-b-c.large {
+.c--r-b.large {
     width: 100px;
     height: 100px;
 }
-.r-b-c.x-large {
+.c--r-b.x-large {
     width: 100px;
     height: 100px;
 }
-.r-b-c.long {
-    width: 67px;
-    height: 67px;
+.c--r-b.long {
+    width: 72px;
+    height: 72px;
 }
-.r-b-c.long.centered-label {
+.c--r-b.long.centered-label {
     width: 200px;
 }
-.r-b-c > .icon {
+.c--r-b > .icon {
     position: absolute;
     display: inline-block;
     width: 100%;
@@ -85,100 +79,109 @@ display: inline-block;
     line-height: normal; /* Normal gives a better vertical centering on OSX. */
     text-align: center;
 }
-.r-b-c.long.centered-label > .icon {
+.c--r-b.long.centered-label > .icon {
     pointer-events: auto;
 }
-.r-b-c > .icon.black {
+.c--r-b > .icon.black {
     color: black;
 }
-.r-b-c > .btn:hover ~ .icon {
+/* If the button is selected, then we do not want to change the icon font color on hover (we want it to stay white). */
+body[data-hover-is-enabled='true'] .c--r-b > .btn:not([data-is-selected='true']):hover ~ .icon {
     color: #0063cc;
 }
-.r-b-c > .btn:active ~ .icon {
+.c--r-b > .btn:active ~ .icon {
     color: #094e96;
 }
-.r-b-c > .btn[data-is-selected='true'] ~ .icon {
+.c--r-b > .btn[data-is-selected='true'] ~ .icon {
     border-radius: 5px;
     background-color: rgba(0,122,255,1);
     color: white;
 }
-.r-b-c > .btn.bordered[data-is-selected='true']:hover ~ .icon {
+body[data-hover-is-enabled='true'] .c--r-b > .btn[data-is-selected='true']:hover ~ .icon {
     background-color: #0063cc;
 }
-.r-b-c > .btn.bordered[data-is-selected='true']:active ~ .icon {
-    background-color: #094e96;
+.c--r-b > .btn[data-is-selected='true']:active ~ .icon {
+    background-color: #094e96 !important; /* Important to override the hover state without a complicated selector to improve specificity. */
 }
-.r-b-c > .icon.lower {
+.c--r-b > .icon.lower {
     pointer-events: auto;
 }
 /* This is because we have pointer events none set on the .icon, so we cannot detect hovering on the element itself. */
-.r-b-c > .btn:hover ~ .icon {
+body[data-hover-is-enabled='true'] .c--r-b > .btn:hover ~ .icon:not(.ionicons) {
     text-decoration: underline;
 }
-.r-b-c > .icon.lower:hover {
+body[data-hover-is-enabled='true'] .c--r-b > .icon.lower:hover {
     text-decoration: underline; 
 }
-.r-b-c.small > .icon {
-    font-size: .9rem;    
-    top: calc(50% - .45rem);
+.c--r-b.small > .icon {
+    font-size: 1rem;    
+    top: calc(50% - .5rem - 4px); /* 4px is to compensate for the padding. */
+    padding: 4px 0;
 }
-.r-b-c.small > .icon.lower {
-    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
+.c--r-b.small > .icon.ionicons {
+    font-size: 2rem;    
+    top: calc(50% - 1rem);
+}
+.c--r-b.small > .icon.lower {
     font-size: .9rem;
+    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
 }
-.r-b-c.medium > .icon {
+.c--r-b.medium > .icon {
     font-size: 1rem;
     top: calc(50% - .5rem);
 }
-.r-b-c.medium > .icon.lower {
-    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
+.c--r-b.medium > .icon.lower {
     font-size: 1rem;
+    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
 }
-.r-b-c.large > .icon {
+.c--r-b.large > .icon {
     font-size: 1.2rem;
     top: calc(50% - .6rem);
 }
-.r-b-c.large > .icon.lower {
-    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
+.c--r-b.large > .icon.lower {
     font-size: 1.2rem;
+    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
 }
-.r-b-c.x-large > .icon {
+.c--r-b.x-large > .icon {
     font-size: 1.25rem;
     top: calc(50% - .625rem);
 }
-.r-b-c.x-large > .icon.lower {
-    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
+.c--r-b.x-large > .icon.lower {
     font-size: 1.25rem;
+    top: calc(100% - .65rem); /* Empirical. Repeated due to specificity. */
 }
-.r-b-c.long > .icon {
+.c--r-b.long > .icon {
     font-size: 2rem;
     top: calc(50% - 1rem);
 }
 /* Label for centered label covers the area taken by the containing box. */
-.r-b-c.long.centered-label > .icon {
+.c--r-b.long.centered-label > .icon {
     font-size: 1rem;
     top: 0;
     height: 100%;
-    line-height: 67px;
+    line-height: 72px;
 }
-.r-b-c.long > .icon.lower {
-    top: calc(50% - .6rem); /* Empirical. Repeated due to specificity. */
-    left: calc(-100% - 192px);
+.c--r-b.long > .icon.lower {
+    top: 0;
+    height: 100%;
+    line-height: 72px;
+    left: -254px;
     font-size: 1.2rem;
-    width: 260px;
+    width: 254px;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: initial;
     white-space: nowrap;
+    box-sizing: border-box; /* Enables convenient application of borders. */
 }
-.r-b-c.long.centered-label > .icon.lower {
+.c--r-b.long.centered-label > .icon.lower {
     display: none;
 }
-.r-b-c > .btn + .focus-indicator {
+.c--r-b > .btn + .focus-indicator {
     pointer-events: none;
 }
-.r-b-c > .btn:enabled:focus+.focus-indicator::after {
+.c--r-b > .btn:enabled:focus+.focus-indicator::after {
     content: ' ';
     display: block;
     background-color: transparent;
@@ -187,57 +190,57 @@ display: inline-block;
     right: -4px;
     bottom: -4px;
 }
-.r-b-c > .btn {
+.c--r-b > .btn {
     left: 0;
     position: absolute;
 }
-.r-b-c.small > .btn {
-    width: 67px;
-    height: 67px;
-    border-radius: 67px;
+.c--r-b.small > .btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 72px;
 }
-.r-b-c.medium > .btn, 
-.r-b-c.large > .btn,
-.r-b-c.x-large > .btn {
+.c--r-b.medium > .btn, 
+.c--r-b.large > .btn,
+.c--r-b.x-large > .btn {
     width: 100px;
     height: 100px;
     border-radius: 100px;
 }
-.r-b-c.long.centered-label > .btn {
+.c--r-b.long.centered-label > .btn {
     left: calc(50% - 33px);
 }
-.r-b-c > .btn:hover::after {
+body[data-hover-is-enabled='true'] .c--r-b > .btn:hover::after {
     text-decoration: underline;
 }
-.r-b-c.small > .btn:enabled:focus+.focus-indicator::after,
-.r-b-c.long > .btn:enabled:focus+.focus-indicator::after {
-    width: 75px;
-    height: 75px;
-    border-radius: 75px;
+.c--r-b.small > .btn:enabled:focus+.focus-indicator::after,
+.c--r-b.long > .btn:enabled:focus+.focus-indicator::after {
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
 }
-.r-b-c.long.centered-label > .btn:enabled:focus+.focus-indicator::after {
+.c--r-b.long.centered-label > .btn:enabled:focus+.focus-indicator::after {
     left: calc(50% - 37px);
 }
-.r-b-c.medium > .btn:enabled:focus+.focus-indicator::after, 
-.r-b-c.large > .btn:enabled:focus+.focus-indicator::after,
-.r-b-c.x-large > .btn:enabled:focus+.focus-indicator::after {
+.c--r-b.medium > .btn:enabled:focus+.focus-indicator::after, 
+.c--r-b.large > .btn:enabled:focus+.focus-indicator::after,
+.c--r-b.x-large > .btn:enabled:focus+.focus-indicator::after {
     width: 108px;
     height: 108px;
     border-radius: 108px;
 }
-.r-b-c > .btn.bordered {
+.c--r-b > .btn.bordered {
     border: 1px solid rgba(0,122,255,1);
 }
-.r-b-c > .btn.bordered:hover {
+body[data-hover-is-enabled='true'] .c--r-b > .btn.bordered:not([data-is-waiting='true']):hover {
     border-color: #0063cc;
 }
-.r-b-c > .btn.bordered:active {
+.c--r-b > .btn.bordered:not([data-is-waiting='true']):active {
     border-color: #094e96;
 }
-.r-b-c > .btn {
+.c--r-b > .btn {
     -webkit-transition: border-color .1s ease-in-out;    
 }
-.r-b-c > .btn[data-is-waiting='true'] {
+.c--r-b > .btn[data-is-waiting='true'] {
     border-color: rgba(0,0,0,0);
     box-shadow: 0 2px 0 2px rgba(0, 0, 0, .05) inset;
     -webkit-animation-duration: 2.5s;
@@ -248,9 +251,17 @@ display: inline-block;
 .ionicons {
     font-family: ionicons !important;
 }
+@-webkit-keyframes rotate {
+    0% {
+        -webkit-transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
 /*media queries must be on a single line to avoid safari bug*/
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-    .r-b-c > .btn, .lbl {
+    .c--r-b > .btn, .lbl {
         /*delay on border-color avoids a flash during the interval between resetting the is-waiting flag on waiting buttons*/
         transition: border-color 0.1s ease-out .2s, box-shadow .3s ease-out, border-left-width .2s ease-out;
     }

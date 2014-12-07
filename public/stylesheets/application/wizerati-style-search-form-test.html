@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../reset/wizerati-style-reset-form.css" />
     <link rel="stylesheet" href="../vendor/lucid-style-buttons-rotating.css" />
     <link rel="stylesheet" href="../vendor/lucid-style-form-elements.css" />
-    <link rel="stylesheet" href="./wizerati-style-faces.css" />
+    <link rel="stylesheet" href="../vendor/lucid-style-faces.css" />
     <link rel="stylesheet" href="./wizerati-style-search-form.css" />
 </head>
 <body 
@@ -19,20 +19,23 @@
 <div id="search-form-container" class="test">
     <form id="search-form" class="test" name="search-form" action="/search" method="GET">
     <div id="search-buttons-container"><div class="cancel-button-container">
-            
-            
             <div class="r-b-c large">
                 <button form="frm-cancel-search" id="btn-cancel-search" tabindex="1" class="btn" data-is-waiting="true"></button>
                 <span class="focus-indicator"></span>
                 <span class="icon">Cancel</span>
             </div>
-
         </div><div class="search-button-container">    
-            <div class="r-b-c large">
+            <div class="c--r-b large">
+                <button type="submit" id="btn-search" tabindex="1" class="btn" data-is-waiting="false"></button>
+                <span class="focus-indicator"></span>
+                <span class="icon">Search</span>                
+            </div>
+
+            <!-- <div class="r-b-c large">
                 <button type="submit" id="btn-search" tabindex="1" class="btn" data-is-waiting="true"></button>
                 <span class="focus-indicator"></span>
                 <span class="icon">Search</span>
-            </div>
+            </div> -->
         </div>
         </div>
         <div class="search-fields">

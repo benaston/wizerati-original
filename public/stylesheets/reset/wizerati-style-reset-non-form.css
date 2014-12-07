@@ -9,11 +9,9 @@ a, .a {
 
 body[data-hover-is-enabled='true'] a:hover, body[data-hover-is-enabled='true'] .a:hover {
     outline: 0;
-    /*color: #005580;*/
     color: rgb(0, 99, 204);
     text-decoration: none;
 }
-
 
 a:active, .a:active {
     color: rgb(9, 78, 150) !important;
@@ -22,7 +20,6 @@ a:active, .a:active {
 a:focus, a:active, .a:focus, .a:active {
     outline: 0;
     outline-offset: 2px; /*why?*/
-    /*box-shadow: 0 0 0 2px rgb(244, 244, 248) inset;*/
 }
 
 blockquote {

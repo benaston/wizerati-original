@@ -5,7 +5,6 @@
 
 .pulse {
     -webkit-animation: pulse-foo .4s 1 0;
-    -moz-animation-name: pulse .2s 1 0;
 }
 
 @-webkit-keyframes pulse-sun-12-oct {

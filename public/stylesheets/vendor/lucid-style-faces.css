@@ -14,7 +14,7 @@
 
 @font-face {
     font-family: helvetica-bold;
-    src: url('../fonts/helvetica-bold.woff');
+    src: url('../fonts/helvetica-bold.woff'), url('../../fonts/helvetica-bold.woff');
     font-weight: normal;
     font-style: normal;
 }

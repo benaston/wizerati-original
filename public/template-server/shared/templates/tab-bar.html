@@ -3,8 +3,15 @@
     <ul>
         <li class="i">
             <form action="/search" method="GET">
-                <button id="btn-nav-search" class="btn btn-s" title="Search">&#xf1da;</button>
-                <label for="btn-nav-search" class="lbl">Search</label>
+                <!-- <button id="btn-nav-search" class="btn btn-s" title="Search">&#xf1da;</button>
+                <label for="btn-nav-search" class="lbl">Search</label> -->
+
+                <div class="c--r-b small">
+                    <button type="submit" id="btn-nav-search" data-label="Search" tabindex="1" class="btn" data-is-waiting="false"></button>
+                    <span class="focus-indicator"></span>
+                    <span class="icon ionicons">&#xf1da;</span><label for="btn-nav-search" class="icon lower">Search</label>
+                </div>
+
             </form>
         </li>
         <li class="i" data-count="0" id="tab-bookmarks">
@@ -38,4 +45,3 @@
         </label>
         </form>
     </nav>
-
